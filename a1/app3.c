@@ -22,13 +22,25 @@ void main(void)
   {
     for(int i = 0; i < SIZE; i++)
     {
-    	display(&letters[i], 1);
+	if(i % 2 == 0)
+	{
+		display(&letters[0], 1);
+		display(&letters[2], 1);
+	}
+    	else
+	{
+		display(&letters[1], 1);
+		display(&letters[3], 1);	
+	}
     	delay(myDelay);
-        printf("%c", 0x0d);
+        printf("%c", 0x0d); 
+        fflush(stdout); 
+        undisplay(1);
         undisplay(1);
         delay(myDelay);
+        printf("%c", 0x0d);
+        fflush(stdout);
     }
-
 
   }
 }

@@ -1,3 +1,6 @@
+app3: app3.c
+	gcc -Wall -g -o app3 app3.c
+
 app2: app2.c
 	gcc -Wall -g -o app2 app2.c
 
