@@ -8,7 +8,7 @@ void delay(unsigned long aValue);
 void undisplay(int size);
 void display(char letters[], int size);
 
-const unsigned long myDelay = 5000;
+const unsigned long myDelay = 1000;
 
 /*
   @modifies console window

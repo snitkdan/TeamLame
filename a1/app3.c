@@ -8,7 +8,7 @@ void delay(unsigned long aValue);
 void undisplay(int size);
 void display(char letters[], int size);
 
-const unsigned long myDelay = 5000;
+const unsigned long myDelay = 1000;
 
 /*
   @modifies console window
@@ -21,31 +21,33 @@ void main(void)
   char spaces[SIZE] = "    ";
   while(TRUE)
   {
-    for(int i = 0; i < SIZE; i++)
-    {
-	if(i % 2 == 0)
-	{
-		spaces[0] = letters[0];
-		spaces[2] = letters[2];
-		display(spaces, SIZE);
-		delay(myDelay);
-		spaces[0] = ' ';
-		spaces[2] = ' ';
-		display(spaces, SIZE);
-	}
-    	else
-	{
-		spaces[1] = letters[1];
-		spaces[3] = letters[3];
-		display(spaces, SIZE);
-		delay(myDelay*5);
-		spaces[1] = ' ';
-		spaces[3] = ' ';
-		display(spaces, SIZE);	
-	}
-    }
-    printf("%c", 0x0d);
-  }
+      for(int i = 0; i < SIZE; i++)
+      {
+	  if(i == 0)
+	  {
+              spaces[0] = letters[0];
+	      spaces[2] = letters[2]; 
+              spaces[1] = ' ';
+              spaces[3] = ' '; 
+	  }
+    	  else if (i == 2) 
+	  {
+	      spaces[0] = letters[0];
+              spaces[1] = letters[1];
+              spaces[2] = letters[2]; 
+              spaces[3] = letters[3];
+  	  }
+          else {
+              spaces[0] = ' ';
+              spaces[1] = ' ';
+              spaces[2] = ' ';
+              spaces[3] = ' ';
+          }
+          display(spaces, SIZE);
+          printf("%c", 0x0d);
+          delay(myDelay);
+      }
+   }
 }
 
 /*
@@ -77,23 +79,6 @@ void display(char letters[], int size)
   for(i = 0; i < size; i++)
   {
     printf("%c", letters[i]);
-    fflush(stdout);
-  }
-}
-
-/*
-  @param size
-    size of the output to erase
-  @modifies console window
-  @effects
-    erases all size characters from the window
-*/
-void undisplay(int size)
-{
-  int i;
-  for(i = 0; i < size; i++)
-  {
-    printf(" ");
     fflush(stdout);
   }
 }
