@@ -2,6 +2,7 @@
 
 #define TRUE 1
 #define FALSE 0
+#define SIZE 4
 
 void delay(unsigned long aValue);
 void undisplay(int size);
@@ -16,17 +17,21 @@ const unsigned long myDelay = 5000;
 */
 void main(void)
 {
-  char letters[4] = "ABCD";
+  char letters[SIZE] = "ABCD";
   while(TRUE)
   {
-    display(letters, 4);
-    delay(myDelay);
-    printf("%c", 0x0d);
-    fflush(stdout);
-    undisplay(4);
-    delay(myDelay);
-    printf("%c", 0x0d);
-    fflush(stdout);
+    for(int i = 0; i < SIZE; i++)
+    {
+    	display(&letters[i], 1);
+    	delay(myDelay);
+        printf("%c", 0x0d); 
+        fflush(stdout); 
+        undisplay(1);
+        delay(myDelay);
+        printf("%c", 0x0d);
+        fflush(stdout);
+    }
+
   }
 }
 
