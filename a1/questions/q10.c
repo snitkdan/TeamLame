@@ -31,7 +31,7 @@
 void delay(unsigned long *aPtr);
 void printChar(unsigned long *delay1, char toPrint);
 
-// Print "0123456789" 
+// Print "0123456789"
 //
 //*****************************************************************************
 int main(void)
@@ -43,22 +43,22 @@ int main(void)
     //
     //  print the digits 9 8 7 6 5 4 3 2 1 0
     long unsigned int d1 = 1000;
-    long unsigned int d2 = 1000;  
+    long unsigned int d2 = 1000;
     long unsigned int *d1ptr = &d1;
-    long unsigned int *d2ptr = &d2; 
+    long unsigned int *d2ptr = &d2;
     while(TRUE)
     {
         for (volatile int i = 9; i >=0; i--)
         {
             printChar(d1ptr, i);
         }
-        printf("%c", 0x0d);           //  print a carridge return 
+        printf("%c", 0x0d);           //  print a carridge return
         for (volatile int i = 9; i >=0; i--)
         {
             printChar(d2ptr, ' ');
         }
-        printf("%c", 0x0d);           //  print a carridge return 
-    } 
+        printf("%c", 0x0d);           //  print a carridge return
+    }
 }
 
 /*
@@ -72,8 +72,9 @@ int main(void)
 */
 void printChar(unsigned long *delay1, char toPrint)
 {
-      char myData[3];
-      myData[0] = toPrint == ' ' ? toPrint : toPrint + '0';        
+      char myData[3];  // string to print.
+      myData[0] = toPrint == ' ' ? toPrint : toPrint + '0';
+         // add a '0' character to non-space values of toPrint
       myData[1] = '\0';           //  terminate the string
       printf("%s ", myData);
       fflush(stdout);
