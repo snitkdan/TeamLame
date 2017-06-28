@@ -24,11 +24,11 @@ void main(void)
     {
     	display(&letters[i], 1);
     	delay(myDelay);
-        printf("%c", 0x0d);
-        undisplay(1);
+    	printf("%c", 0x0d);
+        undisplay(i+1);
         delay(myDelay);
     }
-
+    printf("%c", 0x0d);
 
   }
 }
@@ -78,7 +78,7 @@ void undisplay(int size)
   int i;
   for(i = 0; i < size; i++)
   {
-    printf(" ");
+    printf("%c", ' ');
     fflush(stdout);
   }
 }
