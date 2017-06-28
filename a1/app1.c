@@ -22,11 +22,9 @@ void main(void)
     display(letters, 4);
     delay(myDelay);
     printf("%c", 0x0d);
-    fflush(stdout);
     undisplay(4);
     delay(myDelay);
     printf("%c", 0x0d);
-    fflush(stdout);
   }
 }
 

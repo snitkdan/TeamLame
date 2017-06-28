@@ -18,30 +18,33 @@ const unsigned long myDelay = 5000;
 void main(void)
 {
   char letters[SIZE] = "ABCD";
+  char spaces[SIZE] = "    ";
   while(TRUE)
   {
     for(int i = 0; i < SIZE; i++)
     {
 	if(i % 2 == 0)
 	{
-		display(&letters[0], 1);
-		display(&letters[2], 1);
+		spaces[0] = letters[0];
+		spaces[2] = letters[2];
+		display(spaces, SIZE);
+		delay(myDelay);
+		spaces[0] = ' ';
+		spaces[2] = ' ';
+		display(spaces, SIZE);
 	}
     	else
 	{
-		display(&letters[1], 1);
-		display(&letters[3], 1);	
+		spaces[1] = letters[1];
+		spaces[3] = letters[3];
+		display(spaces, SIZE);
+		delay(myDelay*5);
+		spaces[1] = ' ';
+		spaces[3] = ' ';
+		display(spaces, SIZE);	
 	}
-    	delay(myDelay);
-        printf("%c", 0x0d); 
-        fflush(stdout); 
-        undisplay(1);
-        undisplay(1);
-        delay(myDelay);
-        printf("%c", 0x0d);
-        fflush(stdout);
     }
-
+    printf("%c", 0x0d);
   }
 }
 
