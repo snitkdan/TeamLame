@@ -9,6 +9,8 @@ void display(char letters[], int size);
 
 const unsigned long myDelay = 1000;
 
+#define SIZE 4;  // demo size for output string.
+
 /*
   @modifies console window
   @effects
@@ -16,13 +18,13 @@ const unsigned long myDelay = 1000;
 */
 void main(void)
 {
-  char letters[4] = "ABCD";
+  char letters[SIZE] = "ABCD";
   while(TRUE)
   {
-    display(letters, 4);
+    display(letters, SIZE);  // print A B C D to the console.
     delay(myDelay);
-    printf("%c", 0x0d);
-    undisplay(4);
+    printf("%c", 0x0d);  // return to the beginning of the console.
+    undisplay(SIZE);  // erase A B C D from the console
     delay(myDelay);
     printf("%c", 0x0d);
   }
@@ -56,8 +58,8 @@ void display(char letters[], int size)
   int i;
   for(i = 0; i < size; i++)
   {
-    printf("%c", letters[i]);
-    fflush(stdout);
+    printf("%c", letters[i]);  // print a character
+    fflush(stdout);  // add output to console
   }
 }
 
@@ -73,7 +75,7 @@ void undisplay(int size)
   int i;
   for(i = 0; i < size; i++)
   {
-    printf(" ");
-    fflush(stdout);
+    printf(" ");  // print a space character
+    fflush(stdout);  // add output to console
   }
 }
