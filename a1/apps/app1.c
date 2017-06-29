@@ -1,7 +1,7 @@
-#include <stdio.h>
+#include <stdio.h>  // for printf()
+#include <stdbool.h>  // for bool data type
 
-#define TRUE 1
-#define FALSE 0
+#define SIZE 4  // demo size for output string.
 
 void delay(unsigned long aValue);
 void undisplay(int size);
@@ -9,7 +9,6 @@ void display(char letters[], int size);
 
 const unsigned long myDelay = 1000;
 
-#define SIZE 4;  // demo size for output string.
 
 /*
   @modifies console window
@@ -19,14 +18,14 @@ const unsigned long myDelay = 1000;
 void main(void)
 {
   char letters[SIZE] = "ABCD";
-  while(TRUE)
+  while(true)
   {
     display(letters, SIZE);  // print A B C D to the console.
-    delay(myDelay);
     printf("%c", 0x0d);  // return to the beginning of the console.
+    delay(myDelay);  // 1 sec delay
     undisplay(SIZE);  // erase A B C D from the console
-    delay(myDelay);
     printf("%c", 0x0d);
+    delay(myDelay);
   }
 }
 

@@ -1,8 +1,9 @@
-#include <stdio.h>
+#include <stdio.h>  // for printf()
+#include <stdbool.h>  // for bool data type
 
-#define TRUE 1
-#define FALSE 0
-#define SIZE 4
+#define SIZE 4 // demo size for output string.
+
+
 
 void delay(unsigned long aValue);
 void undisplay(int size);
@@ -18,15 +19,15 @@ const unsigned long myDelay = 1000;
 void main(void)
 {
   char letters[SIZE] = "ABCD";
-  while(TRUE)
+  while(true)
   {
     for(int i = 0; i < SIZE; i++)
     {
-    	display(&letters[i], 1);
-    	delay(myDelay);
-    	printf("%c", 0x0d);
-        undisplay(i+1);
-        delay(myDelay);
+    	display(&letters[i], 1);  // print i'th character to the console
+    	printf("%c", 0x0d);  // return to the beginning of the console.
+      delay(myDelay);  // 1 sec delay
+      undisplay(1);  // erase i'th character from the console
+      delay(myDelay);
     }
     printf("%c", 0x0d);
 
@@ -61,8 +62,8 @@ void display(char letters[], int size)
   int i;
   for(i = 0; i < size; i++)
   {
-    printf("%c", letters[i]);
-    fflush(stdout);
+    printf("%c", letters[i]);  // print a character
+    fflush(stdout);  // add output to console
   }
 }
 
@@ -78,7 +79,7 @@ void undisplay(int size)
   int i;
   for(i = 0; i < size; i++)
   {
-    printf("%c", ' ');
-    fflush(stdout);
+    printf(" ");  // print a space character
+    fflush(stdout);  // add output to console
   }
 }
