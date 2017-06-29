@@ -75,10 +75,10 @@ void printChar(unsigned long *delay1, char toPrint)
       char myData[3];  // string to print.
       myData[0] = toPrint == ' ' ? toPrint : toPrint + '0';
          // add a '0' character to non-space values of toPrint
-      myData[1] = '\0';           //  terminate the string
+      myData[1] = '\0';  //  terminate the string
       printf("%s ", myData);
       fflush(stdout);
-      delay(delay1);            //  delay so we can read the display
+      delay(delay1);  //  delay so we can read the display
 }
 
 

@@ -26,7 +26,7 @@ void main(void)
     	display(&letters[i], 1);  // print i'th character to the console
     	printf("%c", 0x0d);  // return to the beginning of the console.
       delay(myDelay);  // 1 sec delay
-      undisplay(1);  // erase i'th character from the console
+      undisplay(i+1);  // erase i'th character from the console
       delay(myDelay);
     }
     printf("%c", 0x0d);
@@ -40,11 +40,11 @@ void main(void)
   @effects
     delays execution by
 */
-void delay(unsigned long aValue)
+void delay(unsigned long delay)
 {
   volatile unsigned long i = 0;
   volatile unsigned int j = 0;
-  for(i = aValue; i > 0; i--)
+  for(i = delay; i > 0; i--)
   {
     for(j = 0; j < 100000; j++);
   }
