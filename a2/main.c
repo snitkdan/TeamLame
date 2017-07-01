@@ -8,24 +8,38 @@ void main(void)
     TCB* queue[6];
 
     // Declare some TCBs
-    TCB powerSubsystem;
-    TCB thrusterSubsystem;
-    TCB satelliteComs;
-    TCB consoleDisplay;
-    TCB warningAlarm;
+    TCB powerSubsystemData;
+    TCB thrusterSubsystemData;
+    TCB satelliteComsData;
+    TCB consoleDisplayData;
+    TCB warningAlarmData;
 
     // Declare a working TCB pointer
     TCB* aTCBPtr;
 
     // Initialize the TCBs
-    // For example, managePower.taskPtr = someFunction;
+    // PowerSubsystemData.taskDataPtr = (void*)&data;
+    // PowerSubsystemData.taskPtr = someFunction;
+    //
+  
+    // thrusterSubsystemData.taskDataPtr = (void*)&data;
+    // thrusterSubsystemData.taskPtr = someFunction;
     
+    // satelliteComsData.taskDataPtr = (void*)&data;
+    // satelliteComsData.taskPtr = someFunction;
+
+    // consoleDisplayData.taskDataPtr = (void*)&data;
+    // consoleDisplayData.taskPtr = someFunction;
+    //
+    // warningAlarmData.taskDataPtr = (void*)&data;
+    // warningAlarmData.taskPtr = someFunction;
+
     // Initialize the task queue
-    queue[0] = powerSubsystem;
-    queue[1] = thrusterSubsystem;
-    queue[2] = &satelliteComs;
-    queue[3] = &consoleDisplay;
-    queue[4] = &warningAlarm;
+    queue[0] = &powerSubsystemiData;
+    queue[1] = &thrusterSubsystemData;
+    queue[2] = &satelliteComsData;
+    queue[3] = &consoleDisplayData;
+    queue[4] = &warningAlarmDataOA;
 
 
 
