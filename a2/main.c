@@ -14,7 +14,7 @@ void main(void)
     TCB consoleDisplayData;
     TCB warningAlarmData;
 
-    // Declare a working TCB pointer
+    // Declare a working TCB pointer (is this needed?)
     TCB* aTCBPtr;
 
     // Initialize the TCBs
@@ -35,13 +35,11 @@ void main(void)
     // warningAlarmData.taskPtr = someFunction;
 
     // Initialize the task queue
-    queue[0] = &powerSubsystemiData;
+    queue[0] = &powerSubsystemData;
     queue[1] = &thrusterSubsystemData;
     queue[2] = &satelliteComsData;
     queue[3] = &consoleDisplayData;
-    queue[4] = &warningAlarmDataOA;
-
-
+    queue[4] = &warningAlarmData;
 
     return;
 }    
