@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include "TCB.h"
-
+#include "dataStructs.h"
 void main(void)
 {
     // Defines a task queue 

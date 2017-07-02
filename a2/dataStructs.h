@@ -1,8 +1,10 @@
 #ifndef DATASTRUCTS
 #define DATASTRUCTS
+#include "TCB.h" // need to include TCB because of the Bool type
 
+//
 // Could be wrong...unsure how to declare the shared data
-
+//
 struct powerSubsystemData 
 {
   unsigned short *batteryLvl;
