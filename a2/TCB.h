@@ -3,10 +3,6 @@
 #ifndef HEAD_TCB
 #define HEAD_TCB
 
-// function prototypes
-// --- Insert here ---
-
-
 // Declares a TCB structure
 struct myStruct
 {
