@@ -14,8 +14,4 @@ struct myStruct
 };
 typedef struct myStruct TCB;
 
-// Enumerates the Boolean type
-enum myBool { FALSE = 0, TRUE = 1 };
-typedef enum _myBool Bool;
-
 #endif

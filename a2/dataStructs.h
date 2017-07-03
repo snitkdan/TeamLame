@@ -1,58 +1,58 @@
 #ifndef DATASTRUCTS
 #define DATASTRUCTS
-#include "TCB.h" // need to include TCB because of the Bool type
+#include "Bool.h"  // need to include TCB because of the Bool type
 
 //
 // Could be wrong...unsure how to declare the shared data
 //
 struct powerSubsystemData 
 {
-  unsigned short *batteryLvl;
-  unsigned short *fuelLvl;
-  unsigned short *pConsume;
-  unsigned short *pGenerate;
+  unsigned short *batteryLvlPtr;
+  unsigned short *fuelLvlPtr;
+  unsigned short *pConsumePtr;
+  unsigned short *pGeneratePtr;
 };
 typedef struct powerSubsystemData powerData;
 
 
 struct thrusterSubsystemData
 {
-  unsigned int *thrustCommand;
-  unsigned short *fuelLvl;
+  unsigned int *thrusterCommandPtr;
+  unsigned short *fuelLvlPtr;
 };
 typedef struct thrusterSubsystemData thrustData;
 
 struct satelliteComsData
 {
-  Bool *fuelLow;
-  Bool *batteryLow;
-  Bool *solarPanelState;
-  unsigned short *batteryLvl;
-  unsigned short *fuelLvl;
-  unsigned short *pConsume;
-  unsigned short *pGenerate;
-  unsigned int *thrusterCommand;
+  Bool *fuelLowPtr;
+  Bool *batteryLowPtr;
+  Bool *solarPanelStatePtr;
+  unsigned short *batteryLvlPtr;
+  unsigned short *fuelLvlPtr;
+  unsigned short *pConsumePtr;
+  unsigned short *pGeneratePtr;
+  unsigned int *thrusterCommandPtr;
 };
 typedef struct satelliteComsData satData;
 
 struct consoleDisplayData
 {
-  Bool *fuelLow;
-  Bool *batteryLow;
-  Bool *solarPanelState;
-  unsigned short *batteryLvl;
-  unsigned short *fuelLvl;
-  unsigned short *pConsume;
-  unsigned short *pGenerate;
+  Bool *fuelLowPtr;
+  Bool *batteryLowPtr;
+  Bool *solarPanelStatePtr;
+  unsigned short *batteryLvlPtr;
+  unsigned short *fuelLvlPtr;
+  unsigned short *pConsumePtr;
+  unsigned short *pGeneratePtr;
 };
 typedef struct consoleDisplayData consoleData;
 
 struct warningAlarmData
 {
-  Bool *fuelLow;
-  Bool *batteryLow;
-  unsigned short *batteryLvl;
-  unsigned short *fuelLvl;
+  Bool *fuelLowPtr;
+  Bool *batteryLowPtr;
+  unsigned short *batteryLvlPtr;
+  unsigned short *fuelLvlPtr;
 };
 typedef struct warningAlarmData warnData;
 
