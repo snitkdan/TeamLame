@@ -5,3 +5,7 @@ A Makefile has been provided within each subdirectory to run the necessary gcc c
 ```
 make
 ```
+
+## Subdirectory Catalog:
+questions/ - source code for Project1a
+apps/ - source code for Applications 1-3
