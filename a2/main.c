@@ -1,45 +1,52 @@
 #include <stdio.h>
 #include "TCB.h"
 #include "dataStructs.h"
+#define TRUE 1
 void main(void)
 {
     // Defines a task queue 
     // Note: only using 5, (the extra index will be used in future projects)	
     TCB* queue[6];
 
-    // Declare some TCBs
-    TCB powerSubsystemData;
-    TCB thrusterSubsystemData;
-    TCB satelliteComsData;
-    TCB consoleDisplayData;
-    TCB warningAlarmData;
+    // Defines some TCBs
+    TCB powerSubsystemTCB;
+    TCB thrusterSubsystemTCB;
+    TCB satelliteComsTCB;
+    TCB consoleDisplayTCB;
+    TCB warningAlarmTCB;
 
-    // Declare a working TCB pointer (is this needed?)
+    // Defines a TCB pointer
     TCB* aTCBPtr;
 
     // Initialize the TCBs
-    // PowerSubsystemData.taskDataPtr = (void*)&data;
-    // PowerSubsystemData.taskPtr = someFunction;
-    //
+    // powerSubsystemTCB.taskDataPtr = (void*)&powerSubsystemData;
+    // powerSubsystemTCB.taskPtr = powerSubsystem;
   
-    // thrusterSubsystemData.taskDataPtr = (void*)&data;
-    // thrusterSubsystemData.taskPtr = someFunction;
+    // thrusterSubsystemTCB.taskDataPtr = (void*)&thrusterSubsystemData;
+    // thrusterSubsystemTCB.taskPtr = thrusterSubsystem;
     
-    // satelliteComsData.taskDataPtr = (void*)&data;
-    // satelliteComsData.taskPtr = someFunction;
+    // satelliteComsTCB.taskDataPtr = (void*)&satelliteComsData;
+    // satelliteComsTCB.taskPtr = satelliteComs;
 
-    // consoleDisplayData.taskDataPtr = (void*)&data;
-    // consoleDisplayData.taskPtr = someFunction;
+    // consoleDisplayTCB.taskDataPtr = (void*)&consoleDisplayData;
+    // consoleDisplayTCB.taskPtr = consoleDisplay;
     //
-    // warningAlarmData.taskDataPtr = (void*)&data;
-    // warningAlarmData.taskPtr = someFunction;
+    // warningAlarmTCB.taskDataPtr = (void*)&warningAlarmData;
+    // warningAlarmTCB.taskPtr = warningAlarm;
 
     // Initialize the task queue
-    queue[0] = &powerSubsystemData;
-    queue[1] = &thrusterSubsystemData;
-    queue[2] = &satelliteComsData;
-    queue[3] = &consoleDisplayData;
-    queue[4] = &warningAlarmData;
+    queue[0] = &powerSubsystemTCB;
+    queue[1] = &thrusterSubsystemTCB;
+    queue[2] = &satelliteComsTCB;
+    queue[3] = &consoleDisplayTCB;
+    queue[4] = &warningAlarmTCB;
 
+    int i = 0;   // queue index
+    while (TRUE) 
+    {
+        aTCBPtr = queue[i];
+	aTCBPtr->taskPtr((aTCBPtr->taskDataPtr));
+	i = (i+1)%5;  // cycles through queue
+    }	    
     return;
 }    
