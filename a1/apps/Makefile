@@ -1,3 +1,5 @@
+all: app1 app2 app3
+
 app3: app3.c
 	gcc -Wall -std=c99 -g -o app3 app3.c
 
