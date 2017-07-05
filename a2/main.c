@@ -1,10 +1,9 @@
 #include <stdio.h>
 #include "TCB.h"
 #include "dataStructs.h"
-#include "Bool.h"
 #include <stdbool.h>
-#define TRUE 1
-
+#include <stdlib.h>
+#include <unistd.h>
 
 void main(void)
 {
@@ -31,16 +30,21 @@ void main(void)
     // Defines a TCB pointer
     TCB* aTCBPtr;
 
+    // Allocate them structs
+    powerData *pData = (powerData*)malloc(sizeof(powerData));
+    satData *sData = (satData*)malloc(sizeof(satData));
+
     // Initialize the TCBs
-    // powerSubsystemTCB.taskDataPtr = (void*)&powerData;
-    powerData->pGeneratePtr = &pGenerate;
-    // powerSubsystemTCB.taskPtr = powerSubsystem;
+    powerSubsystemTCB.taskDataPtr = (void*)&pData;
+    pData->pGeneratePtr = &pGenerate;
+    powerSubsystemTCB.myTask = powerSubsystem;
   
     // thrusterSubsystemTCB.taskDataPtr = (void*)&thrustData;
     // thrusterSubsystemTCB.taskPtr = thrusterSubsystem;
     
-    // satelliteComsTCB.taskDataPtr = (void*)&satData;
-    // satelliteComsTCB.taskPtr = satelliteComs;
+    satelliteComsTCB.taskDataPtr = (void*)&sData;
+    sData->pGeneratePtr = &pGenerate;
+    satelliteComsTCB.myTask = satelliteComs;
 
     // consoleDisplayTCB.taskDataPtr = (void*)&consoleData;
     // consoleDisplayTCB.taskPtr = consoleDisplay;
@@ -59,9 +63,10 @@ void main(void)
     while (true) 
     {
         aTCBPtr = queue[i];
-	aTCBPtr->taskPtr((aTCBPtr->taskDataPtr));
+	aTCBPtr->myTask((aTCBPtr->taskDataPtr));
 	//i = (i + 1) % 5;  // cycles through queue
 	i = (i + 1) % 2;
+	usleep(500000);
     }	    
     return;
 }    

@@ -14,4 +14,8 @@ struct myStruct
 };
 typedef struct myStruct TCB;
 
+
+void powerSubsystem(void *powerStruct);
+void satelliteComs(void *satStruct);
+
 #endif
