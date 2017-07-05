@@ -12,7 +12,7 @@ void main(void)
     unsigned short fuelLvl;
     Bool solarPanelState;
     unsigned short pConsume;
-    unsigned short pGenerate;
+    unsigned short pGenerate = 0;
     Bool fuelLow;
     Bool batteryLow;
 
@@ -32,6 +32,7 @@ void main(void)
 
     // Initialize the TCBs
     // powerSubsystemTCB.taskDataPtr = (void*)&powerData;
+    powerData->pGeneratePtr = &pGenerate;
     // powerSubsystemTCB.taskPtr = powerSubsystem;
   
     // thrusterSubsystemTCB.taskDataPtr = (void*)&thrustData;
