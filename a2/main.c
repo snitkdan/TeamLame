@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include "TCB.h"
 #include "dataStructs.h"
+#include "Bool.h"
 #define TRUE 1
 
 
@@ -30,19 +31,19 @@ void main(void)
     TCB* aTCBPtr;
 
     // Initialize the TCBs
-    // powerSubsystemTCB.taskDataPtr = (void*)&powerSubsystemData;
+    // powerSubsystemTCB.taskDataPtr = (void*)&powerData;
     // powerSubsystemTCB.taskPtr = powerSubsystem;
   
-    // thrusterSubsystemTCB.taskDataPtr = (void*)&thrusterSubsystemData;
+    // thrusterSubsystemTCB.taskDataPtr = (void*)&thrustData;
     // thrusterSubsystemTCB.taskPtr = thrusterSubsystem;
     
-    // satelliteComsTCB.taskDataPtr = (void*)&satelliteComsData;
+    // satelliteComsTCB.taskDataPtr = (void*)&satData;
     // satelliteComsTCB.taskPtr = satelliteComs;
 
-    // consoleDisplayTCB.taskDataPtr = (void*)&consoleDisplayData;
+    // consoleDisplayTCB.taskDataPtr = (void*)&consoleData;
     // consoleDisplayTCB.taskPtr = consoleDisplay;
     //
-    // warningAlarmTCB.taskDataPtr = (void*)&warningAlarmData;
+    // warningAlarmTCB.taskDataPtr = (void*)&warnData;
     // warningAlarmTCB.taskPtr = warningAlarm;
 
     // Initialize the task queue
@@ -57,7 +58,7 @@ void main(void)
     {
         aTCBPtr = queue[i];
 	aTCBPtr->taskPtr((aTCBPtr->taskDataPtr));
-	i = (i+1)%5;  // cycles through queue
+	i = (i + 1) % 5;  // cycles through queue
     }	    
     return;
 }    

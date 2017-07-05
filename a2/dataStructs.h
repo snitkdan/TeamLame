@@ -1,10 +1,8 @@
+// Structs associated with each task hold the shared data
 #ifndef DATASTRUCTS
 #define DATASTRUCTS
-#include "Bool.h"  // need to include TCB because of the Bool type
+#include "Bool.h"  // need to include Bool.h for the Bool type
 
-//
-// Could be wrong...unsure how to declare the shared data
-//
 struct powerSubsystemData 
 {
   unsigned short *batteryLvlPtr;
