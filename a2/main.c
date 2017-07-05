@@ -2,8 +2,19 @@
 #include "TCB.h"
 #include "dataStructs.h"
 #define TRUE 1
+
+
 void main(void)
 {
+    // Declare shared variables
+    unsigned int thrusterCommand;
+    unsigned short fuelLvl;
+    Bool solarPanelState;
+    unsigned short pConsume;
+    unsigned short pGenerate;
+    Bool fuelLow;
+    Bool batteryLow;
+
     // Defines a task queue 
     // Note: only using 5, (the extra index will be used in future projects)	
     TCB* queue[6];
