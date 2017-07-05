@@ -12,7 +12,7 @@ void main(void)
     unsigned short fuelLvl;
     bool solarPanelState;
     unsigned short pConsume;
-    unsigned short pGenerate = 0;
+    unsigned short pGenerate = 500;
     bool fuelLow;
     bool batteryLow;
 
@@ -35,14 +35,14 @@ void main(void)
     satData *sData = (satData*)malloc(sizeof(satData));
 
     // Initialize the TCBs
-    powerSubsystemTCB.taskDataPtr = (void*)&pData;
+    powerSubsystemTCB.taskDataPtr = (void*)pData;
     pData->pGeneratePtr = &pGenerate;
     powerSubsystemTCB.myTask = powerSubsystem;
   
     // thrusterSubsystemTCB.taskDataPtr = (void*)&thrustData;
     // thrusterSubsystemTCB.taskPtr = thrusterSubsystem;
     
-    satelliteComsTCB.taskDataPtr = (void*)&sData;
+    satelliteComsTCB.taskDataPtr = (void*)sData;
     sData->pGeneratePtr = &pGenerate;
     satelliteComsTCB.myTask = satelliteComs;
 

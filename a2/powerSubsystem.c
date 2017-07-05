@@ -7,5 +7,5 @@ void powerSubsystem(void *powerStruct) {
 	unsigned short *pGeneratePtr = pData->pGeneratePtr;
 	unsigned short pGenerateData = *pGeneratePtr;
 	printf("From powerSubsystem: %hu\n", pGenerateData);
-	*pGeneratePtr++;
+	++(*pGeneratePtr);
 }

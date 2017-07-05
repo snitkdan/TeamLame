@@ -7,5 +7,5 @@ void satelliteComs(void *satStruct) {
     unsigned short *pGeneratePtr = pData->pGeneratePtr;
     unsigned short pGenerateData = *pGeneratePtr;
     printf("From satCom: %hu\n", pGenerateData);
-    *pGeneratePtr++;
+    ++(*pGeneratePtr);
 }
