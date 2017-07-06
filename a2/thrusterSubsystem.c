@@ -1,6 +1,6 @@
 #include <stdio.h>
 
 // Refer to p.13
-void thrusterSubsystem() {
+void thrusterSubsystem(void *thrustStruct) {
 
 }

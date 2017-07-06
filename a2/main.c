@@ -38,15 +38,20 @@ void main(void)
     consoleData *cData = (consoleData*)malloc(sizeof(consoleData));
     warnData *wData = (warnData*)malloc(sizeof(warnData));
 
-    // Assign shared variables to pointers
+    //.....................................
+    //  Assign shared variables to pointers
+    //.....................................
+    // powerSubsystem
     pData->batteryLvlPtr = &batteryLvl;
     pData->fuelLvlPtr = &fuelLvl;
     pData->pConsumePtr = &pConsume;
     pData->pGeneratePtr = &pGenerate;
 
+    // thrusterSubsystem
     tData->thrusterCommandPtr = &thrusterCommand;
     tData->fuelLvlPtr = &fuelLvl;
 
+    // satelliteComs
     sData->fuelLowPtr = &fuelLow;
     sData->batteryLowPtr = &batteryLow;
     sData->solarPanelStatePtr = &solarPanelState;
@@ -56,38 +61,51 @@ void main(void)
     sData->pGeneratePtr = &pGenerate;
     sData->thrusterCommandPtr = &thrusterCommand;
 
+    // consoleDisplay
+    cData->fuelLowPtr = &fuelLow;
+    cData->batteryLowPtr = &batteryLow;
+    cData->solarPanelStatePtr = &solarPanelState;
+    cData->batteryLvlPtr = &batteryLvl;
+    cData->fuelLvlPtr = &fuelLvl;
+    cData->pConsumePtr = &pConsume;
     cData->pGeneratePtr = &pGenerate;
+
+    // warningAlarm
+    wData->fuelLowPtr = &fuelLow;
+    wData->batteryLowPtr = &batteryLow;
+    wData->batteryLvlPtr = &batteryLvl;
+    wData->fuelLvlPtr = &fuelLvl;
+
 
     // Initialize the TCBs
     powerSubsystemTCB.taskDataPtr = (void*)pData;
     powerSubsystemTCB.myTask = powerSubsystem;
   
-    // thrusterSubsystemTCB.taskDataPtr = (void*)thrustData;
-    // thrusterSubsystemTCB.myTask = thrusterSubsystem;
+    thrusterSubsystemTCB.taskDataPtr = (void*)tData;
+    thrusterSubsystemTCB.myTask = thrusterSubsystem;
     
     satelliteComsTCB.taskDataPtr = (void*)sData;
     satelliteComsTCB.myTask = satelliteComs;
 
     consoleDisplayTCB.taskDataPtr = (void*)cData;
     consoleDisplayTCB.myTask = consoleDisplay;
-    //
-    // warningAlarmTCB.taskDataPtr = (void*)warnData;
-    // warningAlarmTCB.myTask = warningAlarm;
+    
+    warningAlarmTCB.taskDataPtr = (void*)wData;
+    warningAlarmTCB.myTask = warningAlarm;
 
     // Initialize the task queue
     queue[0] = &powerSubsystemTCB;
-    //queue[1] = &thrusterSubsystemTCB;
-    queue[1] = &satelliteComsTCB;
-    queue[2] = &consoleDisplayTCB;
-    //queue[4] = &warningAlarmTCB;
+    queue[1] = &thrusterSubsystemTCB;
+    queue[2] = &satelliteComsTCB;
+    queue[3] = &consoleDisplayTCB;
+    queue[4] = &warningAlarmTCB;
 
     int i = 0;   // queue index
     while (true) 
     {
         aTCBPtr = queue[i];
 	aTCBPtr->myTask((aTCBPtr->taskDataPtr));
-	//i = (i + 1) % 5;  // cycles through queue
-	i = (i + 1) % 3;
+	i = (i + 1) % 5;  // cycles through queue
 	usleep(500000);
     }	    
     return;
