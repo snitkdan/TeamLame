@@ -1,13 +1,13 @@
 #include <stdio.h>
+//#include <stdbool.h>
+#include <stdlib.h> // included for malloc
+#include <unistd.h> // included for usleep
 #include "TCB.h"
 #include "dataStructs.h"
-//#include <stdbool.h>
-#include <stdlib.h>
-#include <unistd.h>
 #include "Bool.h"
 void main(void)
 {
-    // Declare shared variables
+    // Define shared variables
     unsigned int thrusterCommand = 0;
     unsigned short batteryLvl = 100;
     unsigned short fuelLvl = 100;
@@ -31,7 +31,7 @@ void main(void)
     // Defines a TCB pointer
     TCB* aTCBPtr;
 
-    // Allocate them structs for the taskDataPtr
+    // Allocate the structs for the taskDataPtr
     powerData *pData = (powerData*)malloc(sizeof(powerData));
     thrustData *tData = (thrustData*)malloc(sizeof(thrustData));
     satData *sData = (satData*)malloc(sizeof(satData));
@@ -75,7 +75,6 @@ void main(void)
     wData->batteryLowPtr = &batteryLow;
     wData->batteryLvlPtr = &batteryLvl;
     wData->fuelLvlPtr = &fuelLvl;
-
 
     // Initialize the TCBs
     powerSubsystemTCB.taskDataPtr = (void*)pData;
