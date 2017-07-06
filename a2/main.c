@@ -1,10 +1,10 @@
 #include <stdio.h>
 #include "TCB.h"
 #include "dataStructs.h"
-#include <stdbool.h>
+//#include <stdbool.h>
 #include <stdlib.h>
 #include <unistd.h>
-
+#include "Bool.h"
 void main(void)
 {
     // Declare shared variables
@@ -50,7 +50,7 @@ void main(void)
     sData->fuelLowPtr = &fuelLow;
     sData->batteryLowPtr = &batteryLow;
     sData->solarPanelStatePtr = &solarPanelState;
-    sData->batteryLvlPtr = &batteryLevel;
+    sData->batteryLvlPtr = &batteryLvl;
     sData->fuelLvlPtr = &fuelLvl;
     sData->pConsumePtr = &pConsume;
     sData->pGeneratePtr = &pGenerate;
