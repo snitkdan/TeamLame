@@ -9,10 +9,11 @@ void main(void)
 {
     // Declare shared variables
     unsigned int thrusterCommand = 0;
+    unsigned short batteryLvl = 100;
     unsigned short fuelLvl = 100;
-    bool solarPanelState = false;
     unsigned short pConsume = 0;
     unsigned short pGenerate = 0;
+    bool solarPanelState = false;
     bool fuelLow = false;
     bool batteryLow = false;
 
@@ -32,14 +33,29 @@ void main(void)
 
     // Allocate them structs for the taskDataPtr
     powerData *pData = (powerData*)malloc(sizeof(powerData));
-    satData *sData = (satData*)malloc(sizeof(satData));
     thrustData *tData = (thrustData*)malloc(sizeof(thrustData));
+    satData *sData = (satData*)malloc(sizeof(satData));
     consoleData *cData = (consoleData*)malloc(sizeof(consoleData));
     warnData *wData = (warnData*)malloc(sizeof(warnData));
 
     // Assign shared variables to pointers
+    pData->batteryLvlPtr = &batteryLvl;
+    pData->fuelLvlPtr = &fuelLvl;
+    pData->pConsumePtr = &pConsume;
     pData->pGeneratePtr = &pGenerate;
+
+    tData->thrusterCommandPtr = &thrusterCommand;
+    tData->fuelLvlPtr = &fuelLvl;
+
+    sData->fuelLowPtr = &fuelLow;
+    sData->batteryLowPtr = &batteryLow;
+    sData->solarPanelStatePtr = &solarPanelState;
+    sData->batteryLvlPtr = &batteryLevel;
+    sData->fuelLvlPtr = &fuelLvl;
+    sData->pConsumePtr = &pConsume;
     sData->pGeneratePtr = &pGenerate;
+    sData->thrusterCommandPtr = &thrusterCommand;
+
     cData->pGeneratePtr = &pGenerate;
 
     // Initialize the TCBs
