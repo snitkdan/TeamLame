@@ -8,13 +8,13 @@
 void main(void)
 {
     // Declare shared variables
-    unsigned int thrusterCommand;
-    unsigned short fuelLvl;
-    bool solarPanelState;
-    unsigned short pConsume;
-    unsigned short pGenerate = 500;
-    bool fuelLow;
-    bool batteryLow;
+    unsigned int thrusterCommand = 0;
+    unsigned short fuelLvl = 100;
+    bool solarPanelState = false;
+    unsigned short pConsume = 0;
+    unsigned short pGenerate = 0;
+    bool fuelLow = false;
+    bool batteryLow = false;
 
     // Defines a task queue 
     // Note: only using 5, (the extra index will be used in future projects)	
@@ -30,27 +30,33 @@ void main(void)
     // Defines a TCB pointer
     TCB* aTCBPtr;
 
-    // Allocate them structs
+    // Allocate them structs for the taskDataPtr
     powerData *pData = (powerData*)malloc(sizeof(powerData));
     satData *sData = (satData*)malloc(sizeof(satData));
+    thrustData *tData = (thrustData*)malloc(sizeof(thrustData));
+    consoleData *cData = (consoleData*)malloc(sizeof(consoleData));
+    warnData *wData = (wData*)malloc(sizeof(warnData));
+
+    // Assign shared variables to pointers
+    pData->pGeneratePtr = &pGenerate;
+    sData->pGeneratePtr = &pGenerate;
+    wData->pGeneratePtr = &pGenerate;
 
     // Initialize the TCBs
     powerSubsystemTCB.taskDataPtr = (void*)pData;
-    pData->pGeneratePtr = &pGenerate;
     powerSubsystemTCB.myTask = powerSubsystem;
   
     // thrusterSubsystemTCB.taskDataPtr = (void*)&thrustData;
-    // thrusterSubsystemTCB.taskPtr = thrusterSubsystem;
+    // thrusterSubsystemTCB.myTask = thrusterSubsystem;
     
     satelliteComsTCB.taskDataPtr = (void*)sData;
-    sData->pGeneratePtr = &pGenerate;
     satelliteComsTCB.myTask = satelliteComs;
 
     // consoleDisplayTCB.taskDataPtr = (void*)&consoleData;
-    // consoleDisplayTCB.taskPtr = consoleDisplay;
+    // consoleDisplayTCB.myTask = consoleDisplay;
     //
     // warningAlarmTCB.taskDataPtr = (void*)&warnData;
-    // warningAlarmTCB.taskPtr = warningAlarm;
+    // warningAlarmTCB.myTask = warningAlarm;
 
     // Initialize the task queue
     queue[0] = &powerSubsystemTCB;
