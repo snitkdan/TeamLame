@@ -40,7 +40,7 @@ void main(void)
     // Assign shared variables to pointers
     pData->pGeneratePtr = &pGenerate;
     sData->pGeneratePtr = &pGenerate;
-    wData->pGeneratePtr = &pGenerate;
+    cData->pGeneratePtr = &pGenerate;
 
     // Initialize the TCBs
     powerSubsystemTCB.taskDataPtr = (void*)pData;
@@ -52,8 +52,8 @@ void main(void)
     satelliteComsTCB.taskDataPtr = (void*)sData;
     satelliteComsTCB.myTask = satelliteComs;
 
-    // consoleDisplayTCB.taskDataPtr = (void*)&consoleData;
-    // consoleDisplayTCB.myTask = consoleDisplay;
+    consoleDisplayTCB.taskDataPtr = (void*)&cData;
+    consoleDisplayTCB.myTask = consoleDisplay;
     //
     // warningAlarmTCB.taskDataPtr = (void*)&warnData;
     // warningAlarmTCB.myTask = warningAlarm;
@@ -62,7 +62,7 @@ void main(void)
     queue[0] = &powerSubsystemTCB;
     //queue[1] = &thrusterSubsystemTCB;
     queue[1] = &satelliteComsTCB;
-    //queue[3] = &consoleDisplayTCB;
+    queue[2] = &consoleDisplayTCB;
     //queue[4] = &warningAlarmTCB;
 
     int i = 0;   // queue index
@@ -71,7 +71,7 @@ void main(void)
         aTCBPtr = queue[i];
 	aTCBPtr->myTask((aTCBPtr->taskDataPtr));
 	//i = (i + 1) % 5;  // cycles through queue
-	i = (i + 1) % 2;
+	i = (i + 1) % 3;
 	usleep(500000);
     }	    
     return;
