@@ -17,5 +17,5 @@ typedef struct myStruct TCB;
 
 void powerSubsystem(void *powerStruct);
 void satelliteComs(void *satStruct);
-
+void consoleDisplay(void *consoleStruct);
 #endif

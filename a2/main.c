@@ -35,7 +35,7 @@ void main(void)
     satData *sData = (satData*)malloc(sizeof(satData));
     thrustData *tData = (thrustData*)malloc(sizeof(thrustData));
     consoleData *cData = (consoleData*)malloc(sizeof(consoleData));
-    warnData *wData = (wData*)malloc(sizeof(warnData));
+    warnData *wData = (warnData*)malloc(sizeof(warnData));
 
     // Assign shared variables to pointers
     pData->pGeneratePtr = &pGenerate;
@@ -46,16 +46,16 @@ void main(void)
     powerSubsystemTCB.taskDataPtr = (void*)pData;
     powerSubsystemTCB.myTask = powerSubsystem;
   
-    // thrusterSubsystemTCB.taskDataPtr = (void*)&thrustData;
+    // thrusterSubsystemTCB.taskDataPtr = (void*)thrustData;
     // thrusterSubsystemTCB.myTask = thrusterSubsystem;
     
     satelliteComsTCB.taskDataPtr = (void*)sData;
     satelliteComsTCB.myTask = satelliteComs;
 
-    consoleDisplayTCB.taskDataPtr = (void*)&cData;
+    consoleDisplayTCB.taskDataPtr = (void*)cData;
     consoleDisplayTCB.myTask = consoleDisplay;
     //
-    // warningAlarmTCB.taskDataPtr = (void*)&warnData;
+    // warningAlarmTCB.taskDataPtr = (void*)warnData;
     // warningAlarmTCB.myTask = warningAlarm;
 
     // Initialize the task queue
