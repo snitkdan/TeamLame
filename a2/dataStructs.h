@@ -2,9 +2,8 @@
 #ifndef DATASTRUCTS
 #define DATASTRUCTS
 #include "Bool.h"  // need to include Bool.h for the Bool type
-//#include <stdbool.h>
 
-struct powerSubsystemData 
+struct powerSubsystemData
 {
   bool *solarPanelStatePtr;
   unsigned short *batteryLvlPtr;
