@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include "dataStructs.h"
+#include "Bool.h"
 
 // Refer to p.14
 void consoleDisplay(void *consoleStruct) {

@@ -32,70 +32,64 @@ void main(void)
     TCB* aTCBPtr;
 
     // Allocate the structs for the taskDataPtr
-    /*powerData *pData = (powerData*)malloc(sizeof(powerData));
+    powerData *pData = (powerData*)malloc(sizeof(powerData));
     thrustData *tData = (thrustData*)malloc(sizeof(thrustData));
     satData *sData = (satData*)malloc(sizeof(satData));
     consoleData *cData = (consoleData*)malloc(sizeof(consoleData));
     warnData *wData = (warnData*)malloc(sizeof(warnData));
-    */
-    powerData pData;
-    thrustData tData;
-    satData sData;
-    consoleData cData;
-    warnData wData; 
 
     //.....................................
     //  Assign shared variables to pointers
     //.....................................
     // powerSubsystem
-    pData.batteryLvlPtr = &batteryLvl;
-    pData.fuelLvlPtr = &fuelLvl;
-    pData.pConsumePtr = &pConsume;
-    pData.pGeneratePtr = &pGenerate;
+    pData->batteryLvlPtr = &batteryLvl;
+    pData->fuelLvlPtr = &fuelLvl;
+    pData->pConsumePtr = &pConsume;
+    pData->pGeneratePtr = &pGenerate;
 
     // thrusterSubsystem
-    tData.thrusterCommandPtr = &thrusterCommand;
-    tData.fuelLvlPtr = &fuelLvl;
+    tData->thrusterCommandPtr = &thrusterCommand;
+    tData->fuelLvlPtr = &fuelLvl;
 
     // satelliteComs
-    sData.fuelLowPtr = &fuelLow;
-    sData.batteryLowPtr = &batteryLow;
-    sData.solarPanelStatePtr = &solarPanelState;
-    sData.batteryLvlPtr = &batteryLvl;
-    sData.fuelLvlPtr = &fuelLvl;
-    sData.pConsumePtr = &pConsume;
-    sData.pGeneratePtr = &pGenerate;
-    sData.thrusterCommandPtr = &thrusterCommand;
+    sData->fuelLowPtr = &fuelLow;
+    sData->batteryLowPtr = &batteryLow;
+    sData->solarPanelStatePtr = &solarPanelState;
+    sData->batteryLvlPtr = &batteryLvl;
+    sData->fuelLvlPtr = &fuelLvl;
+    sData->pConsumePtr = &pConsume;
+    sData->pGeneratePtr = &pGenerate;
+    sData->thrusterCommandPtr = &thrusterCommand;
 
     // consoleDisplay
-    cData.fuelLowPtr = &fuelLow;
-    cData.batteryLowPtr = &batteryLow;
-    cData.solarPanelStatePtr = &solarPanelState;
-    cData.batteryLvlPtr = &batteryLvl;
-    cData.fuelLvlPtr = &fuelLvl;
-    cData.pConsumePtr = &pConsume;
-    cData.pGeneratePtr = &pGenerate;
+    cData->fuelLowPtr = &fuelLow;
+    cData->batteryLowPtr = &batteryLow;
+    cData->solarPanelStatePtr = &solarPanelState;
+    cData->batteryLvlPtr = &batteryLvl;
+    cData->fuelLvlPtr = &fuelLvl;
+    cData->pConsumePtr = &pConsume;
+    cData->pGeneratePtr = &pGenerate;
 
     // warningAlarm
-    wData.fuelLowPtr = &fuelLow;
-    wData.batteryLowPtr = &batteryLow;
-    wData.batteryLvlPtr = &batteryLvl;
-    wData.fuelLvlPtr = &fuelLvl;
+    wData->fuelLowPtr = &fuelLow;
+    wData->batteryLowPtr = &batteryLow;
+    wData->batteryLvlPtr = &batteryLvl;
+    wData->fuelLvlPtr = &fuelLvl;
 
     // Initialize the TCBs
-    powerSubsystemTCB.taskDataPtr = (void*)&pData;
+    powerSubsystemTCB.taskDataPtr = (void*)pData;
     powerSubsystemTCB.myTask = powerSubsystem;
   
-    thrusterSubsystemTCB.taskDataPtr = (void*)&tData;
+    thrusterSubsystemTCB.taskDataPtr = (void*)tData;
     thrusterSubsystemTCB.myTask = thrusterSubsystem;
     
-    satelliteComsTCB.taskDataPtr = (void*)&sData;
+    satelliteComsTCB.taskDataPtr = (void*)sData;
     satelliteComsTCB.myTask = satelliteComs;
 
-    consoleDisplayTCB.taskDataPtr = (void*)&cData;
+    consoleDisplayTCB.taskDataPtr = (void*)cData;
     consoleDisplayTCB.myTask = consoleDisplay;
     
-    warningAlarmTCB.taskDataPtr = (void*)&wData;
+    warningAlarmTCB.taskDataPtr = (void*)wData;
     warningAlarmTCB.myTask = warningAlarm;
 
     // Initialize the task queue

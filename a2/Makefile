@@ -22,8 +22,5 @@ powerSubsystem.o: powerSubsystem.c
 satelliteComs.o: satelliteComs.c
 	gcc -Wall -g -c -o satelliteComs.o satelliteComs.c
 
-test: TCB.h dataStructs.h
-	gcc main.c -o test -g -Wall
-
 clean:
 	rm main *.o
