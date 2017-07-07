@@ -6,8 +6,8 @@
 
 struct powerSubsystemData 
 {
+  bool *solarPanelStatePtr;
   unsigned short *batteryLvlPtr;
-  unsigned short *fuelLvlPtr;
   unsigned short *pConsumePtr;
   unsigned short *pGeneratePtr;
 };
