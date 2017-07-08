@@ -9,12 +9,11 @@
 #include <stdio.h>
 #include <stdbool.h>
 #include "dataStructs.h"
-#include "Bool.h"
 #include "powerSubsystem.h"
 
 void powerSubsystem(void *pData) {
   // 1. Assign the data of pData into local variables
-  (powerData*) powerStruct = (powerData*)pData;
+  powerData *powerStruct = (powerData*)pData;
   bool *solarPanelState = powerStruct->solarPanelStatePtr;
   unsigned short *batteryLvl = powerStruct->batteryLvlPtr;
   unsigned short *pConsume = powerStruct->pConsumePtr;
@@ -31,13 +30,13 @@ void powerSubsystem(void *pData) {
   }
 }
 
-bool useSolarPanels(bool *solarPanelState, unsigned short *pGenerate) {
+bool useSolarPanels(bool *solarPanelState, unsigned short *pGenerate, unsigned short *batteryLvl) {
   // 1. If solarPanelState == ON
-  if(*solarPanelState == TRUE) {
+  if(*solarPanelState == true) {
     // 1.1: If  batteryLvl > 95%
     if(*batteryLvl > 95) {
       // 1.1.1: Retract solar panels
-      *solarPanelState = FALSE;
+      *solarPanelState = true;
     } else {
       // 1.2: Update powerGeneration
       powerGeneration(pGenerate, batteryLvl);
@@ -46,9 +45,9 @@ bool useSolarPanels(bool *solarPanelState, unsigned short *pGenerate) {
   // 2. If solarPanelState == OFF
   else {
       // 2.1: If batteryLvl <= 10%
-      if(batteryLvl <= 10) {
+      if(*batteryLvl <= 10) {
         // 2.1.1: Deploy solar panels
-        *solarPanelState = TRUE;
+        *solarPanelState = true;
       }
   }
   // 3. Return the current state of the solar panel
@@ -57,7 +56,6 @@ bool useSolarPanels(bool *solarPanelState, unsigned short *pGenerate) {
 
 void powerGeneration(unsigned short *pGenerate, unsigned short *batteryLvl) {
   // 1. Define static variables to track function state
-  static bool halfCapacity = false;
   static short numCalls = 1;
   // 2. If battery level <= 95%
   if(*batteryLvl <= 95) {
@@ -95,7 +93,7 @@ void powerConsumption(unsigned short *pConsume) {
       }
     }
     // 4. If calls is even
-    if(calls % 2 == 0) {
+    if(numCalls % 2 == 0) {
       *pConsume += isReversed ? -2 : 2;
         // if reversed -> -2; else -> +2
     }

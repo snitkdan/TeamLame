@@ -1,26 +1,36 @@
-objects = satelliteComs.o powerSubsystem.o consoleDisplay.o \
+# Define Compilers
+AR = ar
+ARFLAGS = rcs
+CC = gcc
+CXX = g++
+
+# Define useful flags
+CFLAGS += -g -Wall -Wpedantic -I. -I.. -O0
+LDFLAGS += -L. -la2
+CPPUNITFLAGS = -L../gtest -lgtest
+
+# Define common dependencies
+OBJS = satelliteComs.o powerSubsystem.o consoleDisplay.o \
           thrusterSubsystem.o warningAlarm.o
-headers = Bool.h dataStructs.h TCB.h
+HEADERS = dataStructs.h TCB.h powerSubsystem.h
+TESTOBJS = powerSubsystemTest.o test_suite.o
+TESTHEADERS = powerSubsystemTest.h
 
-all: main 
+# Default
+all: test_suite main
 
-main: main.c $(objects) $(headers)
-	gcc -Wall -g -o main main.c $(objects)
+main: main.c $(OBJS) $(HEADERS)
+	$(CC) $(CFLAGS) -o main $(OBJS)
 
-warningAlarm.o: warningAlarm.c
-	gcc -Wall -g -c -o warningAlarm.o warningAlarm.c
+test_suite: $(TESTOBJS) $(TESTHEADERS)
+	$(CXX) $(CFLAGS) -o test_suite $(TESTOBJS)\
+	$(CPPUNITFLAGS) $(LDFLAGS) -lpthread $(LDFLAGS)
 
-thrusterSubsystem.o: thrusterSubsystem.c
-	gcc -Wall -g -c -o thrusterSubsystem.o thrusterSubsystem.c
+%.o: %.c $(HEADERS)
+	$(CC) $(CFLAGS) -c $<
 
-consoleDisplay.o: consoleDisplay.c
-	gcc -Wall -g -c -o consoleDisplay.o consoleDisplay.c
-
-powerSubsystem.o: powerSubsystem.c
-	gcc -Wall -g -c -o powerSubsystem.o powerSubsystem.c
-
-satelliteComs.o: satelliteComs.c
-	gcc -Wall -g -c -o satelliteComs.o satelliteComs.c
+%.o: %.cc $(HEADERS)
+	$(CXX) $(CFLAGS) -c $<
 
 clean:
-	rm main *.o
+	rm main test_suite *.o
