@@ -5,9 +5,9 @@
 
 */
 
-#include "../gtest/gtest.h"
+#include "gtest/gtest.h"
 extern "C" {
-  #include "powerSubsystem.h"  
+    #include "./powerSubsystem.h"
 }
 
 
