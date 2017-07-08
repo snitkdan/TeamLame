@@ -1,17 +1,16 @@
 # Define Compilers
-AR = ar
-ARFLAGS = rcs
 CC = gcc
 CXX = g++
 
 # Define useful flags
 CFLAGS += -g -Wall -Wpedantic -I. -I.. -O0
-LDFLAGS += -L. -la2
 CPPUNITFLAGS = -L../gtest -lgtest
 
 # Define common dependencies
-OBJS = satelliteComs.o powerSubsystem.o consoleDisplay.o \
-          thrusterSubsystem.o warningAlarm.o
+OBJS = powerSubsystem.o
+# consoleDisplay.o satelliteComs.o \
+#          thrusterSubsystem.o warningAlarm.o
+
 HEADERS = dataStructs.h TCB.h powerSubsystem.h
 TESTOBJS = powerSubsystemTest.o test_suite.o
 
