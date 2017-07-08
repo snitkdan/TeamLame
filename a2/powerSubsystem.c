@@ -96,12 +96,12 @@ void powerConsumption(unsigned short *pConsume) {
     }
     // 4. If calls is even
     if(calls % 2 == 0) {
-      *pConsume += isReversed ? -1 : 2;
-        // if reversed -> -1; else -> +2
+      *pConsume += isReversed ? -2 : 2;
+        // if reversed -> -2; else -> +2
     }
     // 5. If calls is odd
     else {
-      *pConsume += isReversed ? 2 : -1;
+      *pConsume += isReversed ? 1 : -1;
         // if reversed -> +2; else -> -1
     }
     // 6. Update the function call number

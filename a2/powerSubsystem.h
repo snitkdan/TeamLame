@@ -1,3 +1,11 @@
+/*
+
+  powerSubsystem.h - This file contains the
+  declaration & specification of powerSubsystem.
+  (see powerSubsystem.c for implementation).
+
+*/
+
 #include <stdbool.h>
 
 /*
