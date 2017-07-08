@@ -16,7 +16,7 @@ HEADERS = dataStructs.h TCB.h powerSubsystem.h
 TESTOBJS = powerSubsystemTest.o test_suite.o
 
 # Default
-all: test_suite main
+all: main test_suite
 
 main: main.c $(OBJS) $(HEADERS)
 	$(CC) $(CFLAGS) -o main $(OBJS)
