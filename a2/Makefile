@@ -14,7 +14,6 @@ OBJS = satelliteComs.o powerSubsystem.o consoleDisplay.o \
           thrusterSubsystem.o warningAlarm.o
 HEADERS = dataStructs.h TCB.h powerSubsystem.h
 TESTOBJS = powerSubsystemTest.o test_suite.o
-TESTHEADERS = powerSubsystemTest.h
 
 # Default
 all: test_suite main
@@ -22,7 +21,7 @@ all: test_suite main
 main: main.c $(OBJS) $(HEADERS)
 	$(CC) $(CFLAGS) -o main $(OBJS)
 
-test_suite: $(TESTOBJS) $(TESTHEADERS) FORCE
+test_suite: $(TESTOBJS)
 	$(CXX) $(CFLAGS) -o test_suite $(TESTOBJS)\
 	$(CPPUNITFLAGS) $(LDFLAGS) -lpthread $(LDFLAGS)
 
