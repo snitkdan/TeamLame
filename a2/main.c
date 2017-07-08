@@ -1,10 +1,10 @@
 #include <stdio.h>
-//#include <stdbool.h>
-#include <stdlib.h> // included for malloc
-#include <unistd.h> // included for usleep
+#include <stdbool.h>
+#include <stdlib.h>
+#include <unistd.h>
 #include "TCB.h"
 #include "dataStructs.h"
-#include "Bool.h"
+
 void main(void)
 {
     // Define shared variables
@@ -17,8 +17,8 @@ void main(void)
     bool fuelLow = false;
     bool batteryLow = false;
 
-    // Defines a task queue 
-    // Note: only using 5, (the extra index will be used in future projects)	
+    // Defines a task queue
+    // Note: only using 5, (the extra index will be used in future projects)
     TCB* queue[6];
 
     // Defines some TCBs
@@ -42,7 +42,7 @@ void main(void)
     thrustData tData;
     satData sData;
     consoleData cData;
-    warnData wData; 
+    warnData wData;
 
     //.....................................
     //  Assign shared variables to pointers
@@ -85,16 +85,16 @@ void main(void)
     // Initialize the TCBs
     powerSubsystemTCB.taskDataPtr = (void*)&pData;
     powerSubsystemTCB.myTask = powerSubsystem;
-  
+
     thrusterSubsystemTCB.taskDataPtr = (void*)&tData;
     thrusterSubsystemTCB.myTask = thrusterSubsystem;
-    
+
     satelliteComsTCB.taskDataPtr = (void*)&sData;
     satelliteComsTCB.myTask = satelliteComs;
 
     consoleDisplayTCB.taskDataPtr = (void*)&cData;
     consoleDisplayTCB.myTask = consoleDisplay;
-    
+
     warningAlarmTCB.taskDataPtr = (void*)&wData;
     warningAlarmTCB.myTask = warningAlarm;
 
@@ -106,12 +106,12 @@ void main(void)
     queue[4] = &warningAlarmTCB;
 
     int i = 0;   // queue index
-    while (true) 
+    while (true)
     {
         aTCBPtr = queue[i];
 	aTCBPtr->myTask((aTCBPtr->taskDataPtr));
 	i = (i + 1) % 5;  // cycles through queue
 	usleep(500000);
-    }	    
+    }
     return;
-}    
+}
