@@ -30,7 +30,7 @@ GTEST_HEADERS = $(GTEST_DIR)/include/gtest/*.h \
 
 # House-keeping build targets.
 
-all : $(TESTS)
+all : $(TESTS) main
 
 clean :
 	rm -f $(TESTS) gtest.a gtest_main.a *.o
@@ -79,5 +79,5 @@ test_suite : sample1.o sample1_unittest.o powerSubsystemTest.o powerSubsystem.o 
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -lpthread $^ -o $@
 
 # Build main
-main: powerSubsystem.o main.c
-	$(CC) $(CPPFLAGS) $(CXXFLAGS) -c $(USER_DIR)/main.c powerSubsystem.o
+main: #powerSubsystem.o main.c
+	#$(CC) $(CPPFLAGS) $(CXXFLAGS) -c $(USER_DIR)/main.c powerSubsystem.o
