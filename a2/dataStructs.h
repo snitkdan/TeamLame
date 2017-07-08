@@ -2,6 +2,8 @@
 #ifndef DATASTRUCTS
 #define DATASTRUCTS
 
+#include <stdbool.h>
+
 struct powerSubsystemData
 {
   bool *solarPanelStatePtr;
