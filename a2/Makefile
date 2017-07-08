@@ -75,6 +75,13 @@ gtest_main.a : gtest-all.o gtest_main.o
 # gtest_main.a, depending on whether it defines its own main()
 # function.
 
+sample1.o : $(GTEST_DIR)/samples/sample1.cc $(GTEST_DIR)/samples/sample1.h $(GTEST_HEADERS)
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $(GTEST_DIR)/samples/sample1.cc
+
+sample1_unittest.o : $(GTEST_DIR)/samples/sample1_unittest.cc \
+                     $(GTEST_DIR)/samples/sample1.h $(GTEST_HEADERS)
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $(GTEST_DIR)/samples/sample1_unittest.cc
+
 powerSubsystem.o : $(USER_DIR)/powerSubsystem.c $(USER_DIR)/powerSubsystem.h $(GTEST_HEADERS)
 	$(CC) $(CPPFLAGS) $(CXXFLAGS) -c $(USER_DIR)/powerSubsystem.c
 
@@ -82,5 +89,5 @@ powerSubsystemTest.o : $(USER_DIR)/powerSubsystemTest.cc \
                      $(USER_DIR)/powerSubsystem.h $(GTEST_HEADERS)
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $(USER_DIR)/powerSubsystemTest.cc
 
-test_suite : powerSubsystemTest.o powerSubsystem.o gtest_main.a
+test_suite : sample1.o sample1_unittest.o powerSubsystemTest.o powerSubsystem.o gtest_main.a
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -lpthread $^ -o $@
