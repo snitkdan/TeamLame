@@ -27,10 +27,10 @@ test_suite: $(TESTOBJS) $(TESTHEADERS)
 	$(CPPUNITFLAGS) $(LDFLAGS) -lpthread $(LDFLAGS)
 
 %.o: %.c $(HEADERS)
-	$(CC) $(CFLAGS) -c $<
+	$(CC) $(CFLAGS) -std=c11 -c $<
 
 %.o: %.cc $(HEADERS)
-	$(CXX) $(CFLAGS) -c $<
+	$(CXX) $(CFLAGS) -std=c++11 -c $<
 
 clean:
 	rm main test_suite *.o
