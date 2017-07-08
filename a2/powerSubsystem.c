@@ -58,7 +58,7 @@ bool useSolarPanels(bool *solarPanelState, unsigned short *pGenerate) {
 void powerGeneration(unsigned short *pGenerate, unsigned short *batteryLvl) {
   // 1. Define static variables to track function state
   static bool halfCapacity = false;
-  static short numCalls = 0;
+  static short numCalls = 1;
   // 2. If battery level <= 95%
   if(*batteryLvl <= 95) {
     // 2.1: If battery level <= 50%
@@ -79,7 +79,7 @@ void powerGeneration(unsigned short *pGenerate, unsigned short *batteryLvl) {
 void powerConsumption(unsigned short *pConsume) {
     // 1. Define static variables to track function state
     static bool isReversed = true;
-    static short numCalls = 0;
+    static short numCalls = 1;
     // 2. If in reversed condition
     if(isReversed) {
       // 2.1: Reinstate original condition.
