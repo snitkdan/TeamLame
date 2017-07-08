@@ -22,8 +22,7 @@ main: main.c $(OBJS) $(HEADERS)
 	$(CC) $(CFLAGS) -o main $(OBJS)
 
 test_suite: $(TESTOBJS)
-	$(CXX) $(CFLAGS) -o test_suite $(TESTOBJS)\
-	$(CPPUNITFLAGS) $(LDFLAGS) -lpthread $(LDFLAGS)
+	$(CXX) $(CFLAGS) -o test_suite $(TESTOBJS)
 
 %.o: %.c $(HEADERS)
 	$(CC) $(CFLAGS) -std=c11 -c $<
@@ -32,4 +31,4 @@ test_suite: $(TESTOBJS)
 	$(CXX) $(CFLAGS) -std=c++11 -c $<
 
 clean:
-	rm main test_suite *.o
+	rm *.o main test_suite
