@@ -1,4 +1,4 @@
-# Project 2: Introducing the Lab Environment
+# Project 2: Learning the Development Environment – The Next Step
 This directory contains the source code for [Project 2](https://class.ee.washington.edu/474/peckol/assignments/lab2/)
 
 A Makefile has been provided to run the necessary commands to compile the source files into binary executables for testing and deployment.
