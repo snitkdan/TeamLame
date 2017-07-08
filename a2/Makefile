@@ -22,7 +22,7 @@ all: test_suite main
 main: main.c $(OBJS) $(HEADERS)
 	$(CC) $(CFLAGS) -o main $(OBJS)
 
-test_suite: $(TESTOBJS) $(TESTHEADERS)
+test_suite: $(TESTOBJS) $(TESTHEADERS) FORCE
 	$(CXX) $(CFLAGS) -o test_suite $(TESTOBJS)\
 	$(CPPUNITFLAGS) $(LDFLAGS) -lpthread $(LDFLAGS)
 
