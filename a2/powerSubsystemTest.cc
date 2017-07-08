@@ -93,7 +93,7 @@ TEST(PowerSubsystemTest, Test_PowerGeneration) {
     // Case 3: batteryLvl > 95%
     if(numCall >= 75) {
       ASSERT_EQ(old_pGenerate, *curr_pGeneratePtr);
-      *curr_batteryLvlPtr -= curr_pGeneratePtr;
+      *curr_batteryLvlPtr -= *curr_pGeneratePtr;
     }
     // Add pGenerate to batteryLvl
     *curr_batteryLvlPtr += *curr_pGeneratePtr;
