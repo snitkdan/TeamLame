@@ -23,7 +23,7 @@ TEST(PowerSubsystemTest, Test_PowerConsumption) {
   // Execute call 1
   powerConsumption(curr_pConsumePtr);
 
-  for(numCall = 0; numCall < 40; numCall++) {
+  for(numCall = 0; numCall < 39; numCall++) {
     // Case 1: If pConsume <= 10 (w/o double reverse)
     // or pConsume < 5 (w/ double reverse)
     if(numCall < 19 || numCall >= 33) {
@@ -70,7 +70,7 @@ TEST(PowerSubsystemTest, Test_PowerGeneration) {
   // Execute call 1
   powerGeneration(curr_pGeneratePtr, curr_batteryLvlPtr);
 
-  for(numCall = 0; numCall < 21; numCall++) {
+  for(numCall = 0; numCall < 20; numCall++) {
     // Case 1: batteryLvl <= 50%
     if(numCall < 8) {
       // Case 1.1: If call == even -> +2
