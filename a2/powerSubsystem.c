@@ -23,11 +23,12 @@ void powerSubsystem(void *pData) {
   powerConsumption(pConsume);
   // 3. Check the solar panels & update batteryLvl accordingly
   if (useSolarPanels(solarPanelState, pGenerate, batteryLvl)) {
-    // 3,1: batteryLvl = batteryLvl - pConsume + pGenerate
-    if ((*batteryLvl - *pConsume + *pGenerate) > 0)
-        *batteryLvl += *pGenerate - *pConsume;
-    else
-        *batteryLvl = 0;
+    // 3.1: batteryLvl = batteryLvl - pConsume + pGenerate
+    if ((*batteryLvl + *pGenerate) < *pConsume) {
+      *batteryLvl = 0;
+    } else {
+      *batteryLvl += *pGenerate - *pConsume;
+    }
   } else {
     // 3.2: batteryLvl = batteryLvl - pConsume
     *batteryLvl -= *pConsume;

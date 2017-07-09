@@ -11,7 +11,7 @@ extern "C" {
 }
 
 
-// This tests the "powerConsumption" method in "powerSubsystem"
+// This tests the "powerConsumption" method in "powerSubsystem.c"
 TEST(PowerSubsystemTest, Test_PowerConsumption) {
 
   // Convenience variables
@@ -53,7 +53,7 @@ TEST(PowerSubsystemTest, Test_PowerConsumption) {
 
 }
 
-// This tests the "powerGeneration" method in "powerSubsystem"
+// This tests the "powerGeneration" method in "powerSubsystem.c"
 TEST(PowerSubsystemTest, Test_PowerGeneration) {
 
   // NOTE: Assumes powerConsumption is always 0.
@@ -105,7 +105,43 @@ TEST(PowerSubsystemTest, Test_PowerGeneration) {
     ASSERT_TRUE(*curr_batteryLvlPtr <= 100);
 
     powerGeneration(curr_pGeneratePtr, curr_batteryLvlPtr);
-
   }
+}
+
+// This tests the "useSolarPanels" method in "powerSubsystem.c"
+TEST(PowerSubsystemTest, Test_UseSolarPanels) {
+
+  // Convenience variables (values)
+  bool solarPanelState = false;
+  unsigned short pGenerate = 0;
+  unsigned short pConsume = 0;
+  unsigned short batteryLvl = 100;
+
+  // Convenience variables (pointers)
+  bool *solarPanelStatePtr = &solarPanelState;
+  unsigned short *pGeneratePtr = &pGenerate;
+  unsigned short *pConsumePtr = &pConsume;
+  unsigned short *batteryLvlPtr = &batteryLvl;
+
+  int numCall;
+
+  powerConsumption(pConsumePtr);
+
+  for(numCall = 0; numCall < 40; numCall++) {
+    if(useSolarPanels(solarPanelStatePtr, pGeneratePtr, batteryLvlPtr)) {
+      // Case 1: Solar panels deployed
+      ASSERT_TRUE(*batteryLvlPtr <= 95);
+      *batteryLvlPtr += *pGeneratePtr - *pConsumePtr;
+    } else {
+      // Case 2: Solar panels retracted
+      ASSERT_TRUE(*batteryLvlPtr > 95);
+      *batteryLvlPtr -= *pConsumePtr;
+    }
+    ASSERT_TRUE(*batteryLvlPtr > 0);
+    ASSERT_TRUE(*batteryLvlPtr <= 100);
+
+    powerConsumption(pConsumePtr);
+  }
+
 
 }
