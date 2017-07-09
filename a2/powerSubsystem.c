@@ -39,7 +39,7 @@ bool useSolarPanels(bool *solarPanelState, unsigned short *pGenerate, unsigned s
   // 1. If solarPanelState == ON
   if(*solarPanelState == true) {
     // 1.1: If  batteryLvl > 95%
-    if(*batteryLvl > 95 || (*pGenerate + *batteryLvl > 100)) {
+    if(*batteryLvl > 95) {
       // 1.1.1: Retract solar panels
       *solarPanelState = false;
       *pGenerate = 0;
