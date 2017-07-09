@@ -131,13 +131,17 @@ TEST(PowerSubsystemTest, Test_UseSolarPanels) {
     if(useSolarPanels(solarPanelStatePtr, pGeneratePtr, batteryLvlPtr)) {
       // Case 1: Solar panels deployed
       ASSERT_TRUE(*batteryLvlPtr < 10 || *batteryLvlPtr <= 95);
-      *batteryLvlPtr += *pGeneratePtr - *pConsumePtr;
+      if ((*batteryLvlPtr + *pGeneratePtr) < *pConsumePtr) {
+        *batteryLvlPtr = 0;
+      } else {
+        *batteryLvlPtr += *pGeneratePtr - *pConsumePtr;
+      }
     } else {
       // Case 2: Solar panels retracted
       ASSERT_TRUE(*batteryLvlPtr >= 10);
       *batteryLvlPtr -= *pConsumePtr;
     }
-    ASSERT_TRUE(*batteryLvlPtr > 0);
+    ASSERT_TRUE(*batteryLvlPtr >= 0);
     ASSERT_TRUE(*batteryLvlPtr <= 100);
 
     powerConsumption(pConsumePtr);
