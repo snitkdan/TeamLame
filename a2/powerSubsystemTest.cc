@@ -127,7 +127,7 @@ TEST(PowerSubsystemTest, Test_UseSolarPanels) {
 
   powerConsumption(pConsumePtr);
 
-  for(numCalls = 0; numCalls < 100; numCalls++) {
+  for(numCalls = 0; numCalls < 1000; numCalls++) {
     if(useSolarPanels(solarPanelStatePtr, pGeneratePtr, batteryLvlPtr)) {
       // Case 1: Solar panels deployed
       ASSERT_TRUE(*batteryLvlPtr < 10 || *batteryLvlPtr <= 95);
