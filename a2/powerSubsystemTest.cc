@@ -112,7 +112,7 @@ TEST(PowerSubsystemTest, Test_PowerGeneration) {
 TEST(PowerSubsystemTest, Test_UseSolarPanels) {
 
   // Convenience variables (values)
-  bool solarPanelState = false;
+  bool solarPanelState = true;
   unsigned short pGenerate = 0;
   unsigned short pConsume = 0;
   unsigned short batteryLvl = 100;
@@ -123,11 +123,11 @@ TEST(PowerSubsystemTest, Test_UseSolarPanels) {
   unsigned short *pConsumePtr = &pConsume;
   unsigned short *batteryLvlPtr = &batteryLvl;
 
-  int numCall;
+  int numCalls;
 
   powerConsumption(pConsumePtr);
 
-  for(numCall = 0; numCall < 40; numCall++) {
+  for(numCalls = 0; numCall < 40; numCall++) {
     if(useSolarPanels(solarPanelStatePtr, pGeneratePtr, batteryLvlPtr)) {
       // Case 1: Solar panels deployed
       ASSERT_TRUE(*batteryLvlPtr <= 95);
