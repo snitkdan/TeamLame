@@ -141,8 +141,6 @@ TEST(PowerSubsystemTest, Test_UseSolarPanels) {
       ASSERT_TRUE(*batteryLvlPtr >= 10);
       *batteryLvlPtr -= *pConsumePtr;
     }
-    ASSERT_TRUE(*batteryLvlPtr <= 100);
-
     powerConsumption(pConsumePtr);
   }
 
