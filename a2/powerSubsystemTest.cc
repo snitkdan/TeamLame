@@ -17,7 +17,7 @@ TEST(PowerSubsystemTest, Test_PowerConsumption) {
   // Convenience variables
   unsigned short curr_pConsume = 0;
   unsigned short *curr_pConsumePtr = &curr_pConsume;
-  unsigned short old_pConsume = *curr_pConsumePtr;
+  unsigned short old_pConsume = 0;
   int numCall;
 
   // Execute call 1
