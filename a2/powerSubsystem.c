@@ -26,7 +26,7 @@ void powerSubsystem(void *pData) {
     // 3,1: batteryLvl = batteryLvl - pConsume + pGenerate
     if ((*batteryLvl - *pConsume + *pGenerate) > 0)
         *batteryLvl += *pGenerate - *pConsume;
-    else 
+    else
         *batteryLvl = 0;
   } else {
     // 3.2: batteryLvl = batteryLvl - pConsume
@@ -66,12 +66,12 @@ void powerGeneration(unsigned short *pGenerate, unsigned short *batteryLvl) {
   if(*batteryLvl <= 95) {
     // 2.1: If battery level <= 50%
     if(*batteryLvl <= 50) {
-      *pGenerate += numCalls % 2 ? 2 : 1;
+      *pGenerate += (numCalls % 2) ? 2 : 1;
        // if even call -> +2; else -> +1
     }
     // 2.2: If battery level > 50%
     else {
-      *pGenerate += numCalls % 2 ? 2 : 0;
+      *pGenerate += (numCalls % 2) ? 2 : 0;
         // if even call -> +2; else -> +0
     }
   }
