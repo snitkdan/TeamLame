@@ -47,7 +47,7 @@ TEST(PowerSubsystemTest, Test_PowerConsumption) {
         ASSERT_EQ(old_pConsume + 1, *curr_pConsumePtr);
       }
     }
-    old_pConsume = *curr_pConsumePtr + 0;
+    old_pConsume = *curr_pConsumePtr + 1 - 1;
     powerConsumption(curr_pConsumePtr);
   }
 
