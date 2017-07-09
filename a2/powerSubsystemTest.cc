@@ -47,8 +47,7 @@ TEST(PowerSubsystemTest, Test_PowerConsumption) {
         ASSERT_EQ(old_pConsume + 1, *curr_pConsumePtr);
       }
     }
-    unsigned short val = *curr_pConsumePtr;
-    old_pConsume = val;
+    old_pConsume = *curr_pConsumePtr;
     powerConsumption(curr_pConsumePtr);
   }
 
@@ -71,7 +70,7 @@ TEST(PowerSubsystemTest, Test_PowerGeneration) {
   // Execute call 1
   powerGeneration(curr_pGeneratePtr, curr_batteryLvlPtr);
 
-  for(numCall = 1; numCall < 80; numCall++) {
+  for(numCall = 0; numCall < 80; numCall++) {
     // Case 1: batteryLvl <= 50%
     if(numCall < 35) {
       // Case 1.1: If call == even -> +2
@@ -84,7 +83,7 @@ TEST(PowerSubsystemTest, Test_PowerGeneration) {
       }
     }
     // Case 2: 50% < batteryLvl <= 95%
-    if(numCall < 75 && numCall >= 35) {
+    else if(numCall < 75 && numCall >= 35) {
       // Case 1.1: If call == even -> +2
       if(numCall % 2 == 0) {
         ASSERT_EQ(old_pGenerate + 2, *curr_pGeneratePtr);
@@ -95,7 +94,7 @@ TEST(PowerSubsystemTest, Test_PowerGeneration) {
       }
     }
     // Case 3: batteryLvl > 95%
-    if(numCall >= 75) {
+    else {
       ASSERT_EQ(old_pGenerate, *curr_pGeneratePtr);
       *curr_batteryLvlPtr -= *curr_pGeneratePtr;
     }
@@ -103,7 +102,7 @@ TEST(PowerSubsystemTest, Test_PowerGeneration) {
     *curr_batteryLvlPtr += *curr_pGeneratePtr;
     old_pGenerate = *curr_pGeneratePtr;
 
-    ASSERT_TRUE(*curr_batteryLvlPtr < 100);
+    ASSERT_TRUE(*curr_batteryLvlPtr <= 100);
 
     powerGeneration(curr_pGeneratePtr, curr_batteryLvlPtr);
 
