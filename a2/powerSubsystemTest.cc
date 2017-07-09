@@ -47,7 +47,8 @@ TEST(PowerSubsystemTest, Test_PowerConsumption) {
         ASSERT_EQ(old_pConsume + 1, *curr_pConsumePtr);
       }
     }
-    old_pConsume = *curr_pConsumePtr + 1 - 1;
+    unsigned short val = *curr_pConsumePtr;
+    old_pConsume = val;
     powerConsumption(curr_pConsumePtr);
   }
 
