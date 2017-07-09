@@ -23,7 +23,7 @@ TEST(PowerSubsystemTest, Test_PowerConsumption) {
   // Execute call 1
   powerConsumption(curr_pConsumePtr);
 
-  for(numCall = 1; numCall < 40; numCall++) {
+  for(numCall = 0; numCall < 40; numCall++) {
     // Case 1: If pConsume <= 10 (w/o double reverse)
     // or pConsume < 5 (w/ double reverse)
     if(numCall < 20 || numCall >= 29) {
@@ -47,8 +47,8 @@ TEST(PowerSubsystemTest, Test_PowerConsumption) {
         ASSERT_EQ(old_pConsume + 1, *curr_pConsumePtr);
       }
     }
-    powerConsumption(curr_pConsumePtr);
     old_pConsume = *curr_pConsumePtr;
+    powerConsumption(curr_pConsumePtr);
   }
 
 }
