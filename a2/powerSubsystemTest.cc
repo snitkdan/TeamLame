@@ -70,7 +70,7 @@ TEST(PowerSubsystemTest, Test_PowerGeneration) {
   // Execute call 1
   powerGeneration(curr_pGeneratePtr, curr_batteryLvlPtr);
 
-  for(numCall = 0; numCall < 80; numCall++) {
+  for(numCall = 0; numCall < 20; numCall++) {
     // Case 1: batteryLvl <= 50%
     if(numCall < 8) {
       // Case 1.1: If call == even -> +2
@@ -83,7 +83,7 @@ TEST(PowerSubsystemTest, Test_PowerGeneration) {
       }
     }
     // Case 2: 50% < batteryLvl <= 95%
-    else if(numCall >= 8) {
+    else if(numCall >= 8 && numCall < 11) {
       // Case 1.1: If call == even -> +2
       if(numCall % 2 == 0) {
         ASSERT_EQ(old_pGenerate + 2, *curr_pGeneratePtr);
