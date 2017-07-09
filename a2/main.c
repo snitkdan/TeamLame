@@ -111,7 +111,7 @@ void main(void)
         aTCBPtr = queue[i];
 	aTCBPtr->myTask((aTCBPtr->taskDataPtr));
 	i = (i + 1) % 5;  // cycles through queue
-	usleep(100000);
+	usleep(50000);
     }
     return;
 }

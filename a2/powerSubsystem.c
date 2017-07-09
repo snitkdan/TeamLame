@@ -24,7 +24,10 @@ void powerSubsystem(void *pData) {
   // 3. Check the solar panels & update batteryLvl accordingly
   if (useSolarPanels(solarPanelState, pGenerate, batteryLvl)) {
     // 3,1: batteryLvl = batteryLvl - pConsume + pGenerate
-    *batteryLvl += *pGenerate - *pConsume;
+    if ((*batteryLvl - *pConsume + *pGenerate) > 0)
+        *batteryLvl += *pGenerate - *pConsume;
+    else 
+        *batteryLvl = 0;
   } else {
     // 3.2: batteryLvl = batteryLvl - pConsume
     *batteryLvl -= *pConsume;
@@ -35,9 +38,10 @@ bool useSolarPanels(bool *solarPanelState, unsigned short *pGenerate, unsigned s
   // 1. If solarPanelState == ON
   if(*solarPanelState == true) {
     // 1.1: If  batteryLvl > 95%
-    if(*batteryLvl > 95) {
+    if(*batteryLvl > 95 || (*pGenerate + *batteryLvl > 100)) {
       // 1.1.1: Retract solar panels
       *solarPanelState = false;
+      *pGenerate = 0;
     } else {
       // 1.2: Update powerGeneration
       powerGeneration(pGenerate, batteryLvl);
