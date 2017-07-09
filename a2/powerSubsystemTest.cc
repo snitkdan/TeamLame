@@ -26,7 +26,7 @@ TEST(PowerSubsystemTest, Test_PowerConsumption) {
   for(numCall = 0; numCall < 40; numCall++) {
     // Case 1: If pConsume <= 10 (w/o double reverse)
     // or pConsume < 5 (w/ double reverse)
-    if(numCall < 19 || numCall >= 40) {
+    if(numCall < 19 || numCall >= 33) {
       // Case 1.1: If call == even -> +2
       if(numCall % 2 == 0) {
         ASSERT_EQ(old_pConsume + 2, *curr_pConsumePtr);
