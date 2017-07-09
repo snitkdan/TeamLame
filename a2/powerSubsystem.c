@@ -19,7 +19,6 @@ void powerSubsystem(void *pData) {
   unsigned short *pConsume = powerStruct->pConsumePtr;
   unsigned short *pGenerate = powerStruct->pGeneratePtr;
   // 2. Update powerConsumption
-  printf("pConsume = %hu pGenerate = %hu batteryLvl = %hu sps  = %d\n", *pConsume, *pGenerate, *batteryLvl, *solarPanelState);
   powerConsumption(pConsume);
   // 3. Check the solar panels & update batteryLvl accordingly
   if (useSolarPanels(solarPanelState, pGenerate, batteryLvl)) {
