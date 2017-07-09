@@ -19,6 +19,7 @@ void powerSubsystem(void *pData) {
   unsigned short *pConsume = powerStruct->pConsumePtr;
   unsigned short *pGenerate = powerStruct->pGeneratePtr;
   // 2. Update powerConsumption
+  printf("pConsume = %hu pGenerate = %hu batteryLvl = %hu sps  = %d\n", *pConsume, *pGenerate, *batteryLvl, *solarPanelState);
   powerConsumption(pConsume);
   // 3. Check the solar panels & update batteryLvl accordingly
   if (useSolarPanels(solarPanelState, pGenerate, batteryLvl)) {
@@ -36,7 +37,7 @@ bool useSolarPanels(bool *solarPanelState, unsigned short *pGenerate, unsigned s
     // 1.1: If  batteryLvl > 95%
     if(*batteryLvl > 95) {
       // 1.1.1: Retract solar panels
-      *solarPanelState = true;
+      *solarPanelState = false;
     } else {
       // 1.2: Update powerGeneration
       powerGeneration(pGenerate, batteryLvl);
@@ -56,7 +57,7 @@ bool useSolarPanels(bool *solarPanelState, unsigned short *pGenerate, unsigned s
 
 void powerGeneration(unsigned short *pGenerate, unsigned short *batteryLvl) {
   // 1. Define static variables to track function state
-  static short numCalls = 1;
+  static short numCalls = 0;
   // 2. If battery level <= 95%
   if(*batteryLvl <= 95) {
     // 2.1: If battery level <= 50%
@@ -77,7 +78,7 @@ void powerGeneration(unsigned short *pGenerate, unsigned short *batteryLvl) {
 void powerConsumption(unsigned short *pConsume) {
     // 1. Define static variables to track function state
     static bool isReversed = true;
-    static short numCalls = 1;
+    static short numCalls = 0;
     // 2. If in reversed condition
     if(isReversed) {
       // 2.1: Reinstate original condition.
