@@ -69,6 +69,6 @@ TEST(ThrusterSubsystemTest, Test_GetCost) {
   // 1. Cycle through all thrusterCommands and
   // compare to returned value.
   cleanCommands cc = {0xFF, 0xF, 0x0};
-  getFuelCost(&cc);
+  unsigned short fCost = (unsigned short)getFuelCost(&cc);
   ASSERT_EQ(1,1);
 }

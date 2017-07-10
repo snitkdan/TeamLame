@@ -39,5 +39,6 @@ void parseCommands(unsigned int *thrusterCommand, cleanCommands *cc) {
 }
 
 double getFuelCost(cleanCommands *cc) {
-  return (double)0.0001284522 * (double)(cc->magnitude * cc->duration);
+  double cost = (double)0.0001284522 * (double)(cc->magnitude * cc->duration);
+  return cost;
 }
