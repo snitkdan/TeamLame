@@ -49,8 +49,6 @@ int terminalComs(char *satelliteStatus, char *annunciation)
      *   Transmit a second test string to terminal1
      */ 
      dprintf(fd0, "%s", buffer);
-     // IS THERE A BETTER WAY OF CLEARING THE BUFFER THEN THIS?
-     dprintf(fd1, "                                 \r");
      dprintf(fd1, "%s", annunciation);
 
      fclose(fp);

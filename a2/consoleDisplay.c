@@ -25,18 +25,18 @@ void consoleDisplay(void *consoleStruct) {
     char satelliteStatus[100];
     char annunciation[100];
     snprintf(satelliteStatus, 100, 
-           "Solar Panels: %9s, " 
+           "\rSolar Panels: %9s, " 
            "Battery Level: %3hu, "
            "Fuel Level: %3hu, "
-           "Power Consumption: %2hu\r", 
+           "Power Consumption: %2hu", 
            solarPanelString, *batteryLvl, *fuelLvl, *pConsume); 
     snprintf(annunciation, 100,
-           "ANNUNCIATION: "
+           "\rANNUNCIATION: "
            "Battery Low: %3s " 
-           "Fuel Low: %3s\r",
+           "Fuel Low: %3s",
            fuelString, battString);
      
-    //terminalComs(satelliteStatus, annunciation);
-    terminalComs(annunciation, satelliteStatus);
+    terminalComs(satelliteStatus, annunciation);
+    //terminalComs(annunciation, satelliteStatus);
     fflush(stdout);
 }
