@@ -15,10 +15,10 @@ extern "C" {
 // This tests the "" method in "thrusterSubsystem.c"
 TEST(satelliteComsTest, Test_maskBit) {
   // 1. Declare test variables
-  unsigned int thrusterCommand = 12; 
+  unsigned int thrusterCommand = 10; 
   unsigned int *thrusterCommandPtr = &thrusterCommand;
   maskBit(thrusterCommandPtr);
-  ASSERT_EQ(*thrusterCommandPtr, 0);
+  ASSERT_EQ(*thrusterCommandPtr, 2);
   // 2. Construct thrust commands from
   // all combinations of test variables
 }
