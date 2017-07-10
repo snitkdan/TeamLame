@@ -68,6 +68,13 @@ thrusterSubsystemTest.o : $(USER_DIR)/thrusterSubsystemTest.cc \
                      $(USER_DIR)/thrusterSubsystem.h $(GTEST_HEADERS)
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $(USER_DIR)/thrusterSubsystemTest.cc
 
+satelliteComs.o : $(USER_DIR)/satelliteComs.c $(USER_DIR)/satelliteComs.h $(USER_DIR)/TCB.h $(GTEST_HEADERS)
+	$(CC) $(CPPFLAGS) $(CXXFLAGS) -c $(USER_DIR)/satelliteComs.c
+
+satelliteComsTest.o : $(USER_DIR)/satelliteComsTest.cc \
+                     $(USER_DIR)/satelliteComs.h $(GTEST_HEADERS)
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $(USER_DIR)/satelliteComsTest.cc
+
 powerSubsystem.o : $(USER_DIR)/powerSubsystem.c $(USER_DIR)/powerSubsystem.h $(GTEST_HEADERS)
 	$(CC) $(CPPFLAGS) $(CXXFLAGS) -c $(USER_DIR)/powerSubsystem.c
 
@@ -75,7 +82,8 @@ powerSubsystemTest.o : $(USER_DIR)/powerSubsystemTest.cc \
                      $(USER_DIR)/powerSubsystem.h $(GTEST_HEADERS)
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $(USER_DIR)/powerSubsystemTest.cc
 
-test_suite : thrusterSubsystemTest.o thrusterSubsystem.o powerSubsystemTest.o powerSubsystem.o gtest_main.a
+test_suite : thrusterSubsystemTest.o thrusterSubsystem.o powerSubsystemTest.o powerSubsystem.o gtest_main.a \
+             satelliteComs.o satelliteComsTest.o
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -lpthread $^ -o $@
 
 # Build main

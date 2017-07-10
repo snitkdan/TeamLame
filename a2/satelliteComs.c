@@ -7,6 +7,7 @@
 #include <stdio.h>
 #include <stdbool.h>
 #include <stdint.h>
+#include "satelliteComs.h"
 #include "dataStructs.h"
 #include "TCB.h"
 #define MAX 65536 // upper bound for 16 bit
@@ -26,8 +27,12 @@ void satelliteComs(void *sData) {
     unsigned int *thrusterCommand = satStruct->thrusterCommandPtr;
 
     // 2. Retrieve random number, mask and assign thrusterCommand to it
-    uint16_t MASK = 0xFFF3; // used to set last 4 bits to 00XX 
-    *thrusterCommand = randomInteger(0,MAX)%MAX & MASK;
+    //*thrusterCommand = randomInteger(0, MAX) % MAX;
+    maskBit(thrusterCommand);
     // printf("thrusterCommand = %d\n", *thrusterCommand);
-  printf("value is b%s\n", mask); 
+}
+
+void maskBit(unsigned int *thrusterCommand) {
+    uint16_t MASK = 0xFFF3; // used to set last 4 bits to 00XX 
+    *thrusterCommand &= MASK;
 }
