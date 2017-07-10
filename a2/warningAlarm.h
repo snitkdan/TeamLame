@@ -1,3 +1,11 @@
+/*
+
+  warningAlarm.h - This file contains the
+  declaration & specification of warningAlarm.
+  (see warningAlarm.c for implementation).
+
+*/
+
 #include <stdio.h>
 
 // Structure for holding LED metadata
@@ -57,6 +65,6 @@ void display(LED *led);
     turns off the beaglebone LED
     specified in led, and updates
     the relevant fields in led
-    to indicate deactivation. 
+    to indicate deactivation.
 */
 void deactivate(LED *led);

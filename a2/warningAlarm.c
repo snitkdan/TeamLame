@@ -1,15 +1,15 @@
-#include <stdio.h>
+/*
+
+  warningAlarm.c - This file contains
+  the implementation of warningAlarm.
+  (see warningAlarm.h for specification).
+
+*/
+
 #include <stdbool.h>
 #include <stdio.h>
 #include "dataStructs.h"
-
-// Structure for holding LED metadata
-typedef struct LED_STRUCT {
-  char *path;  // system file path to LED
-  FILE *file;  // file pointer (NULL if not open)
-  unsigned int sec;  // blink duration (-1 if continuous)
-  bool active;  // true of on, false otherwise
-} LED;
+#include "warningAlarm.h"
 
 void warningAlarm(void *warnStruct) {
   // 0. Store warning data in local variables
