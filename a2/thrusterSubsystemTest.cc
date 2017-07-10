@@ -8,6 +8,7 @@
 #include "gtest/gtest.h"
 extern "C" {
     #include "./thrusterSubsystem.h"
+    #include "dataStructs.h"
     #include <stdint.h>
 }
 
