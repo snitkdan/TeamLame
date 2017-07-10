@@ -25,6 +25,7 @@ void powerSubsystem(void *powerStruct) {
     // 3.1: batteryLvl = batteryLvl - pConsume + pGenerate
     if ((*batteryLvl + *pGenerate) < *pConsume) {
       *batteryLvl = 0;
+      *pConsume = 0;
     } else {
       *batteryLvl += *pGenerate - *pConsume;
       // 3.1.1: batteryLvl maxes out at 100

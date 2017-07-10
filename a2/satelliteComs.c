@@ -14,17 +14,19 @@
 
 
 
-void satelliteComs(void *sData) {
-    // 1. Assign the data of satStruct into local variables
-    satData *satStruct = (satData*)sData;
-    bool *fuelLow = satStruct->fuelLowPtr;
-    bool *batteryLow = satStruct->batteryLowPtr;
-    bool *solarPanelState = satStruct->solarPanelStatePtr;
-    unsigned short *batteryLvl = satStruct->batteryLvlPtr;
-    unsigned short *fuelLvl = satStruct->fuelLvlPtr;
-    unsigned short *pConsume = satStruct->pConsumePtr;
-    unsigned short *pGenerate = satStruct->pGeneratePtr;
-    unsigned int *thrusterCommand = satStruct->thrusterCommandPtr;
+void satelliteComs(void *satStruct) {
+    // 1. Assign the data of sData into local variables
+    satData *sData = (satData*)satStruct;
+    /* TO BE USED IN FUTURE PROJECTS******************** 
+    bool *fuelLow = sData->fuelLowPtr;
+    bool *batteryLow = sData->batteryLowPtr;
+    bool *solarPanelState = sData->solarPanelStatePtr;
+    unsigned short *batteryLvl = sData->batteryLvlPtr;
+    unsigned short *fuelLvl = sData->fuelLvlPtr;
+    unsigned short *pConsume = sData->pConsumePtr;
+    unsigned short *pGenerate = sData->pGeneratePtr;
+    */
+    unsigned int *thrusterCommand = sData->thrusterCommandPtr;
 
     // 2. Retrieve random number, mask and assign thrusterCommand to it
     *thrusterCommand = randomInteger(0, MAX) % MAX;
