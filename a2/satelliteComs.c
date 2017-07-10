@@ -7,10 +7,9 @@
 #include <stdio.h>
 #include <stdbool.h>
 #include <stdint.h>
-#include "satelliteComs.h"
-#include "dataStructs.h"
 #include "TCB.h"
-#include "rand2.h"
+#include "dataStructs.h"
+#include "satelliteComs.h"
 #define MAX 65536 // upper bound for 16 bit
 
 

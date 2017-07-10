@@ -68,8 +68,8 @@ thrusterSubsystemTest.o : $(USER_DIR)/thrusterSubsystemTest.cc \
                      $(USER_DIR)/thrusterSubsystem.h $(GTEST_HEADERS)
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $(USER_DIR)/thrusterSubsystemTest.cc
 
-satelliteComs.o : $(USER_DIR)/satelliteComs.c $(USER_DIR)/satelliteComs.h $(USER_DIR)/TCB.h $(GTEST_HEADERS)
-	$(CC) $(CPPFLAGS) $(CXXFLAGS) -c $(USER_DIR)/satelliteComs.c
+satelliteComs.o : $(USER_DIR)/satelliteComs.c $(USER_DIR)/rand2.c $(USER_DIR)/rand2.h $(USER_DIR)/satelliteComs.h $(USER_DIR)/TCB.h $(GTEST_HEADERS)
+	$(CC) $(CPPFLAGS) $(CXXFLAGS) -c $(USER_DIR)/satelliteComs.c $(USER_DIR)/rand2.c
 
 satelliteComsTest.o : $(USER_DIR)/satelliteComsTest.cc \
                      $(USER_DIR)/satelliteComs.h $(GTEST_HEADERS)

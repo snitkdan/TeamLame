@@ -9,7 +9,6 @@ unsigned int multiplier = 2743;
 unsigned int addOn = 5923;
 double max = INT_MAX + 1.0;
 
-//  demonstrate the generators
 unsigned int randomInteger(unsigned int low, unsigned int high) {
     return (low > high) ? randomInteger(high, low) : (((unsigned int)((high-low+1)*randomReal()))+low);
 }
@@ -19,7 +18,6 @@ unsigned int reseed(void) {
     return seed;
 }
 
-//  generate a real random number
 double randomReal(void) {
     double temp = reseed();
     return temp/max;
