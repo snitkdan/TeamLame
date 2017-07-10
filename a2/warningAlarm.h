@@ -35,13 +35,34 @@ typedef struct LED_STRUCT {
       1. 10 < fuelLvl <= 50: blink LED1 every 2 sec.
       2. fuelLvl <= 10: blink LED1 every 1 sec.
       3. 10 < batteryLvl <= 50: blink LED2 every 2 sec.
-      4. fuelLvl <= 10: blink LED1 every 1 sec.
+      4. batteryLvl <= 10: blink LED2 every 1 sec.
 
     "Safe Cases":
       1. batteryLvl && fuelLvl > 50: Illuminate LED3 continuously
 
 */
 void warningAlarm(void *warnStruct);
+
+/*
+
+  @param wData
+    Struct containing necessary
+    data for the warningAlarm
+  @modifies
+    *warnStruct.fuelLowPtr
+    && *warnStruct.batteryLowPtr
+    && leds[1-3]
+  @effects
+    updates fuelLowPtr && batteryLowPtr
+    based on fuelLvlPtr && batteryLvlPtr,
+    respectively. The appropriate
+    LED structure in leds will have its
+    metadata updated to reflect these updates.
+    (see "warningAlarm" spec for specific cases)
+
+*/
+void update(warnData *wData, LED *leds);
+
 
 /*
   @param led
