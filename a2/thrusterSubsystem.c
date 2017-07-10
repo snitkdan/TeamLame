@@ -41,7 +41,7 @@ void parseCommands(unsigned int *thrusterCommand, cleanCommands *cc) {
   // 2. Assign the fields of the struct.
   cc->duration = duration;
   cc->magnitude = magnitude;
-  cc->thurster_dir = thruster_dir;
+  cc->thruster_dir = thruster_dir;
 }
 
 unsigned short getCost(cleanCommands *cc) {
