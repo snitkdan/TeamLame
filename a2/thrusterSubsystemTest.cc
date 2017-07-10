@@ -39,7 +39,7 @@ TEST(ThrusterSubsystemTest, Test_ParseCommands) {
       uint8_t mag = magnitude[j];
       for(k = 0; k < 3; k++) {
         uint8_t dur = duration[k];
-        unsigned int thrusterCommand = (duration << 8)|(mag << 4)|(dir);
+        unsigned int thrusterCommand = (dur << 8)|(mag << 4)|(dir);
         thrusterCommands[i][j][k] = thrusterCommand;
       }
     }
