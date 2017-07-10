@@ -27,12 +27,15 @@ void satelliteComs(void *sData) {
     unsigned int *thrusterCommand = satStruct->thrusterCommandPtr;
 
     // 2. Retrieve random number, mask and assign thrusterCommand to it
-    //*thrusterCommand = randomInteger(0, MAX) % MAX;
+    *thrusterCommand = randomInteger(0, MAX) % MAX;
     maskBit(thrusterCommand);
     // printf("thrusterCommand = %d\n", *thrusterCommand);
 }
 
 void maskBit(unsigned int *thrusterCommand) {
-    uint16_t MASK = 0xFFF3; // used to set last 4 bits to 00XX 
+    // 0. Define a mask 1111111111110011
+    uint16_t MASK = 0xFFF3;
+    
+    // 1. Mask the bit 2 and 3 to 0
     *thrusterCommand &= MASK;
 }
