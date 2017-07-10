@@ -17,7 +17,8 @@ void thrusterSubsystem(void *thrustStruct) {
   parseCommands(thrusterCommand, &cc);
 
   // 3. Calculate the fuel cost
-  static double fuelCost = ((static double)*fuelLvl) - getFuelCost(&cc);
+  static double fuelCost = 100;
+  fuelCost -= getFuelCost(&cc);
 
   // 4. Update the fuelLvl
   *fuelLvl -= (unsigned short)fuelCost;
