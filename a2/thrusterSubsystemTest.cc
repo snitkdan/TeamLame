@@ -82,7 +82,8 @@ TEST(ThrusterSubsystemTest, Test_ThrusterSubsystem) {
     thrusterSubsystem(tDataPtr);
     fuelAsDouble = (double)fuelLvl;
     diff = fuelAsDouble - actual_fuelLvl;
-    ASSERT_TRUE(diff < 0.5 || diff >= 0.5);
+    diff = diff < 0 ? diff * -1 : diff;
+    ASSERT_TRUE(diff < 0.5);
     actual_fuelLvl -= actual_cost;
   }
 }
