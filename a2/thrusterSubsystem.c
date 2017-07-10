@@ -1,10 +1,16 @@
+/*
+
+  thrusterSubsystem.c - This file contains
+  the implementation of thrusterSubsystem.
+  (see thrusterSubsystem.h for specification).
+
+*/
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdint.h>
 #include "dataStructs.h"
 #include "thrusterSubsystem.h"
-
-
 
 void thrusterSubsystem(void *thrustStruct) {
   // 1. Assign the data of thrustStruct into local variables

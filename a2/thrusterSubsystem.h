@@ -1,3 +1,11 @@
+/*
+
+  thrusterSubsystem.h - This file contains the
+  declaration & specification of thrusterSubsystem.
+  (see thrusterSubsystem.c for implementation).
+
+*/
+
 #include <stdint.h>
 
 // For parsed thruster command data
