@@ -16,7 +16,7 @@ typedef struct myStruct TCB;
 
 // Declares function prototypes
 int terminalComs(char* satelliteStatus, char *annunciation);
-int randomInteger(int low, int high);
+unsigned int randomInteger(unsigned int low, unsigned int high);
 void powerSubsystem(void *powerStruct);
 void satelliteComs(void *satStruct);
 void consoleDisplay(void *consoleStruct);
