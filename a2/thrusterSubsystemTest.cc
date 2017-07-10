@@ -56,6 +56,7 @@ TEST(ThrusterSubsystemTest, Test_ParseCommands) {
         uint8_t dur = duration[k];
         unsigned int thrusterCommand = thrusterCommands[i][j][k];
         parseCommands(&thrusterCommand, &cc);
+        getFuelCost(&cc);
         ASSERT_EQ(cc.duration, dur);
         ASSERT_EQ(cc.thruster_dir, dir);
         ASSERT_EQ(cc.magnitude, mag);
@@ -68,20 +69,5 @@ TEST(ThrusterSubsystemTest, Test_ParseCommands) {
 TEST(ThrusterSubsystemTest, Test_GetCost) {
   // 1. Cycle through all thrusterCommands and
   // compare to returned value.
-  int i, j, k;
-  cleanCommands cc;
-  for(i = 0; i < 3; i++) {
-    //uint8_t dir = thrust_dir[i];
-    for(j = 0; j < 3; j++) {
-      //uint8_t mag = magnitude[j];
-      for(k = 0; k < 3; k++) {
-        //uint8_t dur = duration[k];
-        /*unsigned int thrusterCommand = thrusterCommands[i][j][k];
-        parseCommands(&thrusterCommand, &cc);
-        unsigned short fuelCost = getFuelCost(&cc);*/
-        unsigned short expectedFuelCost = 1;
-        ASSERT_EQ(expectedFuelCost, 1);
-      }
-    }
-  }
+  ASSERT_EQ(1,1);
 }

@@ -37,4 +37,4 @@ void parseCommands(unsigned int *thrusterCommand, cleanCommands *cc);
   @returns
     Fuel cost given the commands in cc
 */
-unsigned short getFuelCost(cleanCommands *cc);
+unsigned double getFuelCost(cleanCommands *cc);
