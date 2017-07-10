@@ -1,5 +1,5 @@
 objects = satelliteComs.o powerSubsystem.o consoleDisplay.o \
-          thrusterSubsystem.o warningAlarm.o
+          thrusterSubsystem.o warningAlarm.o rand2.o
 headers = Bool.h dataStructs.h TCB.h
 
 all: main 
@@ -21,6 +21,9 @@ powerSubsystem.o: powerSubsystem.c powerSubsystem.h
 
 satelliteComs.o: satelliteComs.c
 	gcc -Wall -g -c -o satelliteComs.o satelliteComs.c
+
+rand1.o: rand1.c
+	gcc -Wall -g -c -o rand1.o rand1.c
 
 test: TCB.h dataStructs.h
 	gcc main.c -o test -g -Wall
