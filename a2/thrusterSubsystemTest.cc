@@ -6,6 +6,7 @@
 */
 
 #include "gtest/gtest.h"
+#include <stdint.h>
 extern "C" {
     #include "./thrusterSubsystem.h"
     #include <stdint.h>

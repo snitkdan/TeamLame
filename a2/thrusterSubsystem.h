@@ -1,3 +1,5 @@
+#include <stdint.h>
+
 // For parsed thruster command data
 typedef struct parsedThrusterCommands {
   uint8_t duration, magnitude, thruster_dir;
