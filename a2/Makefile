@@ -1,29 +1,76 @@
-objects = satelliteComs.o powerSubsystem.o consoleDisplay.o \
-          thrusterSubsystem.o warningAlarm.o
-headers = Bool.h dataStructs.h TCB.h
+# Builds tests & main files for Project 2
 
-all: main 
+# Points to the root of Google Test, relative to where this file is.
+# Remember to tweak this if you move this file.
+GTEST_DIR = ../gtest
 
-main: main.c $(objects) $(headers)
-	gcc -Wall -g -o main main.c $(objects)
+# Where to find user code.
+USER_DIR = .
 
-warningAlarm.o: warningAlarm.c
-	gcc -Wall -g -c -o warningAlarm.o warningAlarm.c
+# Flags passed to the preprocessor.
+# Set Google Test's header directory as a system directory, such that
+# the compiler doesn't generate warnings in Google Test headers.
+CPPFLAGS += -isystem $(GTEST_DIR)/include
 
-thrusterSubsystem.o: thrusterSubsystem.c
-	gcc -Wall -g -c -o thrusterSubsystem.o thrusterSubsystem.c
+# Flags passed to the C++ compiler.
+CXXFLAGS += -g -Wall -Wextra -pthread
 
-consoleDisplay.o: consoleDisplay.c
-	gcc -Wall -g -c -o consoleDisplay.o consoleDisplay.c
+# Compilers
+CC = gcc
+CXX = g++
 
-powerSubsystem.o: powerSubsystem.c powerSubsystem.h
-	gcc -Wall -g -c -o powerSubsystem.o powerSubsystem.c
+# All tests produced by this Makefile.  Remember to add new tests you
+# created to the list.
+TESTS = test_suite
 
-satelliteComs.o: satelliteComs.c
-	gcc -Wall -g -c -o satelliteComs.o satelliteComs.c
+# All Google Test headers.  Usually you shouldn't change this
+# definition.
+GTEST_HEADERS = $(GTEST_DIR)/include/gtest/*.h \
+                $(GTEST_DIR)/include/gtest/internal/*.h
 
-test: TCB.h dataStructs.h
-	gcc main.c -o test -g -Wall
+# House-keeping build targets.
 
-clean:
-	rm main *.o
+all : $(TESTS) main
+
+clean :
+	rm -f $(TESTS) main gtest.a gtest_main.a *.o
+
+# Builds gtest.a and gtest_main.a.
+
+# Usually you shouldn't tweak such internal variables, indicated by a
+# trailing _.
+GTEST_SRCS_ = $(GTEST_DIR)/src/*.cc $(GTEST_DIR)/src/*.h $(GTEST_HEADERS)
+
+# For simplicity and to avoid depending on Google Test's
+# implementation details, the dependencies specified below are
+# conservative and not optimized.  This is fine as Google Test
+# compiles fast and for ordinary users its source rarely changes.
+gtest-all.o : $(GTEST_SRCS_)
+	$(CXX) $(CPPFLAGS) -I$(GTEST_DIR) $(CXXFLAGS) -c \
+            $(GTEST_DIR)/src/gtest-all.cc
+
+gtest_main.o : $(GTEST_SRCS_)
+	$(CXX) $(CPPFLAGS) -I$(GTEST_DIR) $(CXXFLAGS) -c \
+            $(GTEST_DIR)/src/gtest_main.cc
+
+gtest.a : gtest-all.o
+	$(AR) $(ARFLAGS) $@ $^
+
+gtest_main.a : gtest-all.o gtest_main.o
+	$(AR) $(ARFLAGS) $@ $^
+
+
+# Builds tests
+powerSubsystem.o : $(USER_DIR)/powerSubsystem.c $(USER_DIR)/powerSubsystem.h $(GTEST_HEADERS)
+	$(CC) $(CPPFLAGS) $(CXXFLAGS) -c $(USER_DIR)/powerSubsystem.c
+
+powerSubsystemTest.o : $(USER_DIR)/powerSubsystemTest.cc \
+                     $(USER_DIR)/powerSubsystem.h $(GTEST_HEADERS)
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $(USER_DIR)/powerSubsystemTest.cc
+
+test_suite : powerSubsystemTest.o powerSubsystem.o gtest_main.a
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -lpthread $^ -o $@
+
+# Build main
+main: #powerSubsystem.o main.c
+	#$(CC) $(CPPFLAGS) $(CXXFLAGS) -c $(USER_DIR)/main.c powerSubsystem.o
