@@ -23,7 +23,7 @@ powerSubsystem.o: powerSubsystem.c powerSubsystem.h
 satelliteComs.o: satelliteComs.c satelliteComs.h
 	gcc -Wall -g -c -o satelliteComs.o satelliteComs.c
 
-terminalComs.o: terminalComs.c
+terminalComs.o: terminalComs.c TCB.h
 	gcc -Wall -g -c -o terminalComs.o terminalComs.c
 
 rand2.o: rand2.c

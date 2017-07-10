@@ -9,7 +9,7 @@
 #include <fcntl.h>
 #include <string.h>
 #include <stdio.h>
-#include <unistd.h>
+// #include <unistd.h> // don't need sleep
 #include "TCB.h"
 int terminalComs(char *satelliteStatus, char *annunciation)
 {
