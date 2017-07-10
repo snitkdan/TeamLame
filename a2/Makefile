@@ -65,7 +65,7 @@ thrusterSubsystem.o : $(USER_DIR)/thrusterSubsystem.c $(USER_DIR)/thrusterSubsys
 	$(CC) $(CPPFLAGS) $(CXXFLAGS) -c $(USER_DIR)/thrusterSubsystem.c
 
 thrusterSubsystemTest.o : $(USER_DIR)/thrusterSubsystemTest.cc \
-                     $(USER_DIR)/thrusterSubsystemTest.h $(GTEST_HEADERS)
+                     $(USER_DIR)/thrusterSubsystem.h $(GTEST_HEADERS)
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $(USER_DIR)/thrusterSubsystemTest.cc
 
 powerSubsystem.o : $(USER_DIR)/powerSubsystem.c $(USER_DIR)/powerSubsystem.h $(GTEST_HEADERS)
