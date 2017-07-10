@@ -72,9 +72,9 @@ TEST(ThrusterSubsystemTest, Test_ThrusterSubsystem) {
   unsigned int thrusterCommand = 0xFFF0;
   unsigned short fuelLvl = 100;
   thrustData tData = {&thrusterCommand, &fuelLvl};
-  thrustData *tDataPtr = &tData;
+  void *tDataPtr = (void*)&tData;
   while(fuelLvl > 0) {
-    thrusterSubsystem((void*)thrustData);
+    thrusterSubsystem(tDataPtr);
   }
   ASSERT_EQ(1,1);
 }
