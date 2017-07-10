@@ -14,7 +14,8 @@ struct myStruct
 };
 typedef struct myStruct TCB;
 
-
+// Declares function prototypes
+int randomInteger(int low, int high);
 void powerSubsystem(void *powerStruct);
 void satelliteComs(void *satStruct);
 void consoleDisplay(void *consoleStruct);
