@@ -9,21 +9,21 @@
 #include <stdbool.h>
 
 /*
-  @param pData
+  @param powerStruct
     Struct containing necessary
     data for the powerSubsystem.
   @modifies
-    *pData.batteryLvlPtr &&
-    *pData.solarPanelStatePtr &&
-    *pData.pConsumePtr &&
-    *pData.pGeneratePtr
+    *powerStruct.batteryLvlPtr &&
+    *powerStruct.solarPanelStatePtr &&
+    *powerStruct.pConsumePtr &&
+    *powerStruct.pGeneratePtr
   @effects
     changes batteryLvlPtr based
     on solarPanelStatePtr, pConsumePtr,
     and pGeneratePtr.
     (see sub-methods for details.)
 */
-void powerSubsystem(void *pData);
+void powerSubsystem(void *powerStruct);
 
 /*
   @param solarPanelState

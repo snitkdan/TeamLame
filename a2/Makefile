@@ -61,6 +61,13 @@ gtest_main.a : gtest-all.o gtest_main.o
 
 
 # Builds tests
+thrusterSubsystem.o : $(USER_DIR)/thrusterSubsystem.c $(USER_DIR)/thrusterSubsystem.h $(GTEST_HEADERS)
+	$(CC) $(CPPFLAGS) $(CXXFLAGS) -c $(USER_DIR)/thrusterSubsystem.c
+
+thrusterSubsystemTest.o : $(USER_DIR)/thrusterSubsystemTest.cc \
+                     $(USER_DIR)/thrusterSubsystemTest.h $(GTEST_HEADERS)
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $(USER_DIR)/thrusterSubsystemTest.cc
+
 powerSubsystem.o : $(USER_DIR)/powerSubsystem.c $(USER_DIR)/powerSubsystem.h $(GTEST_HEADERS)
 	$(CC) $(CPPFLAGS) $(CXXFLAGS) -c $(USER_DIR)/powerSubsystem.c
 
@@ -68,7 +75,7 @@ powerSubsystemTest.o : $(USER_DIR)/powerSubsystemTest.cc \
                      $(USER_DIR)/powerSubsystem.h $(GTEST_HEADERS)
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $(USER_DIR)/powerSubsystemTest.cc
 
-test_suite : powerSubsystemTest.o powerSubsystem.o gtest_main.a
+test_suite : thrusterSubsystemTest.o thrusterSubsystem.o powerSubsystemTest.o powerSubsystem.o gtest_main.a
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -lpthread $^ -o $@
 
 # Build main

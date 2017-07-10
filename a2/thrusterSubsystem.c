@@ -4,12 +4,7 @@
 #include "dataStructs.h"
 #include "thrusterSubsystem.h"
 
-typedef struct parsedThrusterCommands {
-  uint16_t duration, magnitude, thruster_dir;
-} cleanCommands;
 
-void parseCommands(unsigned int *thrusterCommand, cleanCommands *cc);
-unsigned short getCost(cleanCommands *cc);
 
 void thrusterSubsystem(void *thrustStruct) {
   // 1. Assign the data of thrustStruct into local variables
@@ -26,7 +21,6 @@ void thrusterSubsystem(void *thrustStruct) {
 
   // 4. Update the fuelLvl
   *fuelLvl -= fuelCost;
-
 }
 
 void parseCommands(unsigned int *thrusterCommand, cleanCommands *cc) {
@@ -34,9 +28,9 @@ void parseCommands(unsigned int *thrusterCommand, cleanCommands *cc) {
   uint16_t MASK = 0xF;
 
   // 1. Extract duration, magnitude, and thruster direction
-  uint16_t duration = *thrusterCommand & (((MASK << 4) | MASK) << 4);
-  uint16_t magnitude = *thrusterCommand & (MASK << 4);
-  uint16_t thruster_dir = *thrusterCommand & MASK;
+  uint8_t duration = *thrusterCommand >> 8;
+  uint8_t magnitude = (*thrusterCommand >> 4) & MASK;
+  uint8_t thruster_dir = *thrusterCommand & MASK;
 
   // 2. Assign the fields of the struct.
   cc->duration = duration;
