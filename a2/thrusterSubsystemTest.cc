@@ -68,6 +68,7 @@ TEST(ThrusterSubsystemTest, Test_ParseCommands) {
 TEST(ThrusterSubsystemTest, Test_GetCost) {
   // 1. Cycle through all thrusterCommands and
   // compare to returned value.
+  int i, j, k;
   cleanCommands cc;
   for(i = 0; i < 3; i++) {
     //uint8_t dir = thrust_dir[i];
