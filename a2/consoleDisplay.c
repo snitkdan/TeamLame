@@ -1,9 +1,13 @@
+/*
+ * consoleDisplay.c - This file contains
+ * the implementation of consoleDisplay
+ */
+
 #include <stdio.h>
 #include <stdbool.h>
 #include "dataStructs.h"
 #include "TCB.h"
 
-// Refer to p.14
 void consoleDisplay(void *consoleStruct) {
     // 1.1 Assign the data of consoleStruct into local variables
     consoleData *cData = (consoleData*)consoleStruct;
