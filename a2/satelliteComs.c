@@ -10,6 +10,7 @@
 #include "satelliteComs.h"
 #include "dataStructs.h"
 #include "TCB.h"
+#include "rand2.h"
 #define MAX 65536 // upper bound for 16 bit
 
 
@@ -17,7 +18,7 @@
 void satelliteComs(void *satStruct) {
     // 1. Assign the data of sData into local variables
     satData *sData = (satData*)satStruct;
-    /* TO BE USED IN FUTURE PROJECTS******************** 
+    /* TO BE USED IN FUTURE PROJECTS********************
     bool *fuelLow = sData->fuelLowPtr;
     bool *batteryLow = sData->batteryLowPtr;
     bool *solarPanelState = sData->solarPanelStatePtr;
@@ -37,7 +38,7 @@ void satelliteComs(void *satStruct) {
 void maskBit(unsigned int *thrusterCommand) {
     // 0. Define a mask 1111111111110011
     uint16_t MASK = 0xFFF3;
-    
+
     // 1. Mask the bit 2 and 3 to 0
     *thrusterCommand &= MASK;
 }
