@@ -20,7 +20,7 @@ void satelliteComs(void *sData) {
     unsigned short *pConsume = satStruct->pConsumePtr;
     unsigned short *pGenerate = satStruct->pGeneratePtr;
     unsigned int *thrusterCommand = satStruct->thrusterCommandPtr;
-    
+
     // 2. Retrieve random number and assign thrusterCommand to it
     *thrusterCommand = randomInteger(0,10)%7;
     printf("thrusterCommand = %d\n", *thrusterCommand);
