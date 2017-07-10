@@ -74,9 +74,10 @@ TEST(ThrusterSubsystemTest, Test_ThrusterSubsystem) {
   void *tDataPtr = (void*)&tData;
   // 2. Store absolute cost for each iteration
   double actual_cost = 0.49132966499999997;
-  unsigned short oldFuelLvl = fuelLvl;
+  double actual_fuelLvl = 100.00;
   while(fuelLvl > 0) {
     thrusterSubsystem(tDataPtr);
-    ASSERT_TRUE(oldFuelLvl - actual_cost <= fuelLvl);
+    ASSERT_TRUE(fuelLvl <= actual_fuelLvl);
+    actual_fuelLvl -= actual_cost;
   }
 }
