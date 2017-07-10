@@ -67,14 +67,16 @@ TEST(ThrusterSubsystemTest, Test_ParseCommands) {
 
 // This tests the "thrusterSubsystem" method in "thrusterSubsystem.c"
 TEST(ThrusterSubsystemTest, Test_ThrusterSubsystem) {
-  // 1. Cycle through all thrusterCommands and
-  // compare to returned value.
+  // 1. Set up data struct
   unsigned int thrusterCommand = 0xFFF0;
   unsigned short fuelLvl = 100;
   thrustData tData = {&thrusterCommand, &fuelLvl};
   void *tDataPtr = (void*)&tData;
+  // 2. Store absolute cost for each iteration
+  double actual_cost = 0.49132966499999997;
+  unsigned short oldFuelLvl = fuelLvl;
   while(fuelLvl > 0) {
     thrusterSubsystem(tDataPtr);
+    ASSERT_TRUE(oldFuelLvl - actual_cost <= fuelLvl);
   }
-  ASSERT_EQ(1,1);
 }
