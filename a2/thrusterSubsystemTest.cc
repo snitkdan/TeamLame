@@ -75,7 +75,7 @@ TEST(ThrusterSubsystemTest, Test_GetCost) {
   while(fuelLvl > 0) {
     fCost = getFuelCost(&cc);
     roundedCost = (unsigned short)fCost;
-    fuelLvl -= cost;
+    fuelLvl -= roundedCost;
   }
   ASSERT_EQ(1,1);
 }
