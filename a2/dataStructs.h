@@ -4,25 +4,19 @@
 
 #include <stdbool.h>
 
-struct powerSubsystemData
-{
+typedef struct powerSubsystemData {
   bool *solarPanelStatePtr;
   unsigned short *batteryLvlPtr;
   unsigned short *pConsumePtr;
   unsigned short *pGeneratePtr;
-};
-typedef struct powerSubsystemData powerData;
+} powerData;
 
-
-struct thrusterSubsystemData
-{
+typedef struct thrusterSubsystemData {
   unsigned int *thrusterCommandPtr;
   unsigned short *fuelLvlPtr;
-};
-typedef struct thrusterSubsystemData thrustData;
+} thrustData;
 
-struct satelliteComsData
-{
+typedef struct satelliteComsData {
   bool *fuelLowPtr;
   bool *batteryLowPtr;
   bool *solarPanelStatePtr;
@@ -31,11 +25,9 @@ struct satelliteComsData
   unsigned short *pConsumePtr;
   unsigned short *pGeneratePtr;
   unsigned int *thrusterCommandPtr;
-};
-typedef struct satelliteComsData satData;
+} satData;
 
-struct consoleDisplayData
-{
+typedef struct consoleDisplayData {
   bool *fuelLowPtr;
   bool *batteryLowPtr;
   bool *solarPanelStatePtr;
@@ -43,16 +35,13 @@ struct consoleDisplayData
   unsigned short *fuelLvlPtr;
   unsigned short *pConsumePtr;
   unsigned short *pGeneratePtr;
-};
-typedef struct consoleDisplayData consoleData;
+} consoleData;
 
-struct warningAlarmData
-{
+typedef struct warningAlarmData {
   bool *fuelLowPtr;
   bool *batteryLowPtr;
   unsigned short *batteryLvlPtr;
   unsigned short *fuelLvlPtr;
-};
-typedef struct warningAlarmData warnData;
+} warnData;
 
 #endif

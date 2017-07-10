@@ -11,13 +11,13 @@
 #include "dataStructs.h"
 #include "powerSubsystem.h"
 
-void powerSubsystem(void *pData) {
-  // 1. Assign the data of pData into local variables
-  powerData *powerStruct = (powerData*)pData;
-  bool *solarPanelState = powerStruct->solarPanelStatePtr;
-  unsigned short *batteryLvl = powerStruct->batteryLvlPtr;
-  unsigned short *pConsume = powerStruct->pConsumePtr;
-  unsigned short *pGenerate = powerStruct->pGeneratePtr;
+void powerSubsystem(void *powerStruct) {
+  // 1. Assign the data of powerStruct into local variables
+  powerData *pData = (powerData*)powerStruct;
+  bool *solarPanelState = pData->solarPanelStatePtr;
+  unsigned short *batteryLvl = pData->batteryLvlPtr;
+  unsigned short *pConsume = pData->pConsumePtr;
+  unsigned short *pGenerate = pData->pGeneratePtr;
   // 2. Update powerConsumption
   powerConsumption(pConsume);
   // 3. Check the solar panels & update batteryLvl accordingly
@@ -27,6 +27,8 @@ void powerSubsystem(void *pData) {
       *batteryLvl = 0;
     } else {
       *batteryLvl += *pGenerate - *pConsume;
+      // 3.1.1: batteryLvl maxes out at 100
+      *batteryLvl = (*batteryLvl > 100) ? 100 : *batteryLvl;
     }
   } else {
     // 3.2: batteryLvl = batteryLvl - pConsume
