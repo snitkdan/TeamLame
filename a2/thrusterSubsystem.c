@@ -38,10 +38,6 @@ void parseCommands(unsigned int *thrusterCommand, cleanCommands *cc) {
   cc->thruster_dir = thruster_dir;
 }
 
-unsigned double getFuelCost(cleanCommands *cc) {
-  if(cc->magnitude == 0 || cc->duration == 0) {
-    return 0;
-  } else {
-    return (double)0.0001284522 * (double)(cc->magnitude * cc->duration);
-  }
+double getFuelCost(cleanCommands *cc) {
+  return (double)0.0001284522 * (double)(cc->magnitude * cc->duration);
 }
