@@ -75,9 +75,13 @@ TEST(ThrusterSubsystemTest, Test_ThrusterSubsystem) {
   // 2. Store absolute cost for each iteration
   double actual_cost = 0.49132966499999997;
   double actual_fuelLvl = 100.00;
+  // 3. Store the difference between the
+  // rounded and actual cost.
+  double diff;
   while(fuelLvl > 0) {
     thrusterSubsystem(tDataPtr);
-    ASSERT_TRUE(fuelLvl <= actual_fuelLvl);
+    diff = abs((double)fuelLvl - actual_fuelLvl);
+    ASSERT_TRUE(diff < 0.5);
     actual_fuelLvl -= actual_cost;
   }
 }
