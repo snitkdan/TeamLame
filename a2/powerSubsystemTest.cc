@@ -144,6 +144,4 @@ TEST(PowerSubsystemTest, Test_UseSolarPanels) {
     }
     powerConsumption(pConsumePtr);
   }
-
-
 }
