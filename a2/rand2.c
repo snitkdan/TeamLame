@@ -1,3 +1,11 @@
+/*
+ * Filename: rand2.c
+ *
+ * Author: James K. Peckol
+ * Contact: jkp@ee.washington.edu 
+ * 
+ */
+
 #include <stdio.h>
 #include <math.h>
 #include <float.h>
