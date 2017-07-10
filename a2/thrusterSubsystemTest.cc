@@ -6,7 +6,6 @@
 */
 
 #include "gtest/gtest.h"
-#include <stdint.h>
 extern "C" {
     #include "./thrusterSubsystem.h"
     #include <stdint.h>
@@ -28,7 +27,7 @@ TEST(ThrusterSubsystemTest, Test_ParseCommands) {
   uint8_t zero_sec = 0x00;
   uint8_t oneeighty_sec  = 0xB4;
   uint8_t twofiftyfive_sec = 0xFF;
-  utint8_t duration[3] = {zero_sec, oneeighty_sec, twofiftyfive_sec};
+  uint8_t duration[3] = {zero_sec, oneeighty_sec, twofiftyfive_sec};
 
   // 2. Construct thrust commands from
   // all combinations of test variables
@@ -57,9 +56,9 @@ TEST(ThrusterSubsystemTest, Test_ParseCommands) {
         uint8_t dur = duration[k];
         unsigned int thrusterCommand = thrusterCommands[i][j][k];
         parseCommands(&thrusterCommand, &cc);
-        ASSERT_EQ(cc->duration, dur);
-        ASSERT_EQ(cc->thruster_dir, dir);
-        ASSERT_EQ(cc->magnitude, mag);
+        ASSERT_EQ(cc.duration, dur);
+        ASSERT_EQ(cc.thruster_dir, dir);
+        ASSERT_EQ(cc.magnitude, mag);
       }
     }
   }
