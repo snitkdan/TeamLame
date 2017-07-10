@@ -8,7 +8,7 @@ all: main
 main: main.c $(objects) $(headers)
 	gcc -Wall -g -o main main.c $(objects)
 
-warningAlarm.o: warningAlarm.c
+warningAlarm.o: warningAlarm.c warningAlarm.h
 	gcc -Wall -g -c -o warningAlarm.o warningAlarm.c
 
 thrusterSubsystem.o: thrusterSubsystem.c thrusterSubsystem.h
