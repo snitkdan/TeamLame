@@ -20,8 +20,12 @@ void thrusterSubsystem(void *thrustStruct) {
   static double fuelCost = 0;
   fuelCost += getFuelCost(&cc);
 
+
   // 4. Update the fuelLvl
   *fuelLvl -= (unsigned short)fuelCost;
+
+  // 5. Recalibrate fuelCost
+  fuelCost -= (unsigned short)fuelCost;
 }
 
 void parseCommands(unsigned int *thrusterCommand, cleanCommands *cc) {
