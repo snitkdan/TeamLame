@@ -17,7 +17,7 @@ void thrusterSubsystem(void *thrustStruct) {
   parseCommands(thrusterCommand, &cc);
 
   // 3. Calculate the fuel cost
-  unsigned short fuelCost = getCost(&cc);
+  unsigned short fuelCost = getFuelCost(&cc);
 
   // 4. Update the fuelLvl
   *fuelLvl -= fuelCost;
@@ -38,6 +38,6 @@ void parseCommands(unsigned int *thrusterCommand, cleanCommands *cc) {
   cc->thruster_dir = thruster_dir;
 }
 
-unsigned short getCost(cleanCommands *cc) {
+unsigned short getFuelCost(cleanCommands *cc) {
   return 1;
 }

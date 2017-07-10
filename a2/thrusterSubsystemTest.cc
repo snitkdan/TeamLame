@@ -11,7 +11,7 @@ extern "C" {
     #include <stdint.h>
 }
 
-// This tests the "" method in "thrusterSubsystem.c"
+// This tests the "parseCommands" method in "thrusterSubsystem.c"
 TEST(ThrusterSubsystemTest, Test_ParseCommands) {
   // 1. Declare test variables
   uint8_t left = 0x00;
@@ -62,4 +62,9 @@ TEST(ThrusterSubsystemTest, Test_ParseCommands) {
       }
     }
   }
+}
+
+// This tests the "getFuelCost" method in "thrusterSubsystem.c"
+TEST(ThrusterSubsystemTest, Test_GetCost) {
+
 }
