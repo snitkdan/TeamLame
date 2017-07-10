@@ -64,18 +64,16 @@ TEST(ThrusterSubsystemTest, Test_ParseCommands) {
   }
 }
 
-// This tests the "getFuelCost" method in "thrusterSubsystem.c"
-TEST(ThrusterSubsystemTest, Test_GetCost) {
+// This tests the "thrusterSubsystem" method in "thrusterSubsystem.c"
+TEST(ThrusterSubsystemTest, Test_ThrusterSubsystem) {
   // 1. Cycle through all thrusterCommands and
   // compare to returned value.
-  cleanCommands cc = {0xFF, 0xF, 0x0};
-  double fuelLvl = 100;
-  double fCost;
-  unsigned short roundedCost;
+  unsigned int thrusterCommand = 0xFFF0;
+  unsigned short fuelLvl = 100;
+  thrustData tData = {&thrusterCommand, &fuelLvl};
+  thrustData *tDataPtr = &tData;
   while(fuelLvl > 0) {
-    fCost = getFuelCost(&cc);
-    roundedCost = (unsigned short)fCost;
-    fuelLvl -= roundedCost;
+    thrusterSubsystem((void*)thrustData);
   }
   ASSERT_EQ(1,1);
 }
