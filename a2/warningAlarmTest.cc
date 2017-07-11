@@ -36,10 +36,7 @@ TEST(WarningAlarmTest, Test_Update) {
   unsigned short *seventyFive_prct = &seventyFive;
   unsigned short *full = &hundred;
 
-  unsigned short *warningStates[7] = {
-    empty, ten_prct, eleven_prct, half_empty,
-    fiftyOne_prct, seventyFive_prct, full
-  };
+  unsigned short *warningStates[7] = {empty, ten_prct, eleven_prct, half_empty,fiftyOne_prct, seventyFive_prct, full};
 
   // 3. Cycle through each warning state.
   int i, j;
@@ -47,10 +44,11 @@ TEST(WarningAlarmTest, Test_Update) {
   unsigned short batteryLvl = 0;
   unsigned short *fuelLvlPtr = &fuelLvl;
   unsigned short *batteryLvlPtr = &batteryLvl;
+  bool batteryLow = false;
+  bool fuelLow = false;
 
-  bool batteryLow = false, fuelLow = false;
   for(i = 0; i < 7; i++) { // batteryLvl states loop
-    batteryLvlPtr = warningStates[j];
+    batteryLvlPtr = warningStates[i];
     for(j = 0; j < 7; j++) { // fuelLvl states loop
       fuelLvlPtr = warningStates[j];
 
