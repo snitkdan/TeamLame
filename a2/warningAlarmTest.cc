@@ -51,7 +51,6 @@ TEST(WarningAlarmTest, Test_Update) {
     batteryLvlPtr = warningStates[i];
     for(j = 0; j < 7; j++) { // fuelLvl states loop
       fuelLvlPtr = warningStates[j];
-
       warnData warnStruct = {&batteryLow, &fuelLow, batteryLvlPtr, fuelLvlPtr};
       update(&warnStruct, leds);
       // Case 1: Safe
