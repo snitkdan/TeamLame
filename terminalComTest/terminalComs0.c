@@ -4,10 +4,11 @@
 #include <string.h>
 #include <stdio.h>
 #include <unistd.h>
+
 int main(void)
 {
     FILE *fp;										//  working file
-    char c[] = "text here...";						//  test string
+    char c[] = "test string";						//  test string
     char buffer[100];								//  working buffer			
 
     int fd0;										//  device / terminal0
@@ -19,8 +20,10 @@ int main(void)
     fp = fopen("file.txt", "w+");
 
     /* open terminal ports for writing */
-    fd0 = open("/dev/pts/1", O_WRONLY);
-    fd1 = open("/dev/pts/0", O_WRONLY);
+    fd0 = open("/dev/pts/1", O_RDWR);
+    fd1 = open("/dev/pts/0", O_RDWR);
+    printf("fd0 = %d\n", fd0);
+    printf("fd1 = %d\n", fd1);
 
     /*  
      *    write data to the file 
@@ -47,9 +50,10 @@ int main(void)
      */ 
     while (1) 
     {
-        dprintf(fd0, "If you see %s\n", buffer);
-        dprintf(fd1, "...and here, the terminal comm is linked\n");
+        dprintf(fd0, "guten abend %s\n", buffer);
+        dprintf(fd1, "bonjour\n");
         sleep(2);
+        printf("reached it here\n");
     }
 
     fclose(fp);

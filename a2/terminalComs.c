@@ -6,6 +6,7 @@
 
 // http://man7.org/linux/man-pages/man2/open.2.html
 
+#include <unistd.h>
 #include <fcntl.h>
 #include <string.h>
 #include <stdio.h>
@@ -21,12 +22,11 @@ int terminalComs(char *satelliteStatus, char *annunciation) {
     /*
      *   open file for reading and writing
      */
-    fp = fopen("file.txt", "w+");
-
+        fp = fopen("file.txt", "w+");
     /* open terminal ports for writing */
-    fd0 = open("/dev/pts/1", O_WRONLY);
-    fd1 = open("/dev/pts/0", O_WRONLY);
-
+        fd0 = open("/dev/pts/1", O_WRONLY);
+    
+        fd1 = open("/dev/pts/0", O_WRONLY);
     /*
      *    write data to the file
      */
@@ -49,8 +49,8 @@ int terminalComs(char *satelliteStatus, char *annunciation) {
      */
      dprintf(fd0, "%s", buffer);
      dprintf(fd1, "%s", annunciation);
-
      fclose(fp);
-     remove("file.txt");
+     close(fd0);
+     close(fd1);
      return(0);
 }
