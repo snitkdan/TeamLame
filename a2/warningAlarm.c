@@ -29,6 +29,7 @@ void warningAlarm(void *warnStruct) {
     } else {
       deactivate(leds[i]);
     }
+    i++;
   }
 }
 
@@ -72,7 +73,7 @@ void display(LED *led) {
 
 void deactivate(LED *led) {
   // 0. Close the connection (turn off LED)
-  fclose(led->file);
+  // fclose(led->file);
   // 1. Reassign struct fields
   led->file = NULL;
   led->active = false;
