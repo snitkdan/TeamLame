@@ -47,8 +47,8 @@ int terminalComs(char *satelliteStatus, char *annunciation) {
      *   Append the buffer contents to a test string and transmit to terminal0
      *   Transmit a second test string to terminal1
      */
-     dprintf(fd0, "%s\n", buffer);
-     dprintf(fd1, "%s\n", annunciation);
+     dprintf(fd0, "%s", buffer);
+     dprintf(fd1, "%s", annunciation);
 
      fclose(fp);
      remove("file.txt");
