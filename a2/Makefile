@@ -96,6 +96,9 @@ test_suite : thrusterSubsystemTest.o thrusterSubsystem.o powerSubsystemTest.o po
              satelliteComs.o satelliteComsTest.o rand2.o warningAlarm.o warningAlarmTest.o
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -lpthread $^ -o $@
 
+copy:
+	scp -r ../a2 root@192.168.7.2:/dev
+
 # Build main
 main: #powerSubsystem.o main.c
 	#$(CC) $(CPPFLAGS) $(CXXFLAGS) -c $(USER_DIR)/main.c powerSubsystem.o
