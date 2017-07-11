@@ -1,7 +1,7 @@
 /*
 
-  warningSubsystemTest - This file contains
-  unit tests for the warningSubsystem.
+  warningAlarmTest - This file contains
+  unit tests for the warningAlarmTest.
 
 */
 

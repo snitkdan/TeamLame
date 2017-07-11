@@ -61,12 +61,12 @@ gtest_main.a : gtest-all.o gtest_main.o
 
 
 # Builds tests
-warningSubsystem.o : $(USER_DIR)/warningSubsystem.c $(USER_DIR)/warningSubsystem.h $(GTEST_HEADERS)
-	$(CC) $(CPPFLAGS) $(CXXFLAGS) -c $(USER_DIR)/warningSubsystem.c
+warningAlarm.o : $(USER_DIR)/warningAlarm.c $(USER_DIR)/warningAlarm.h $(GTEST_HEADERS)
+	$(CC) $(CPPFLAGS) $(CXXFLAGS) -c $(USER_DIR)/warningAlarm.c
 
-warningSubsystemTest.o : $(USER_DIR)/warningSubsystemTest.cc \
-                     $(USER_DIR)/warningSubsystem.h $(GTEST_HEADERS)
-	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $(USER_DIR)/warningSubsystemTest.cc
+warningAlarmTest.o : $(USER_DIR)/warningAlarmTest.cc \
+                     $(USER_DIR)/warningAlarm.h $(GTEST_HEADERS)
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $(USER_DIR)/warningAlarmTest.cc
 
 thrusterSubsystem.o : $(USER_DIR)/thrusterSubsystem.c $(USER_DIR)/thrusterSubsystem.h $(GTEST_HEADERS)
 	$(CC) $(CPPFLAGS) $(CXXFLAGS) -c $(USER_DIR)/thrusterSubsystem.c
@@ -93,7 +93,7 @@ powerSubsystemTest.o : $(USER_DIR)/powerSubsystemTest.cc \
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $(USER_DIR)/powerSubsystemTest.cc
 
 test_suite : thrusterSubsystemTest.o thrusterSubsystem.o powerSubsystemTest.o powerSubsystem.o gtest_main.a \
-             satelliteComs.o satelliteComsTest.o rand2.o warningSubsystem.o warningSubsystemTest.o
+             satelliteComs.o satelliteComsTest.o rand2.o warningAlarm.o warningAlarmTest.o
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -lpthread $^ -o $@
 
 # Build main
