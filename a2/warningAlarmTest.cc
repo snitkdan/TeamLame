@@ -43,7 +43,11 @@ TEST(WarningAlarmTest, Test_Update) {
 
   // 3. Cycle through each warning state.
   int i, j;
-  unsigned short *fuelLvlPtr, *batteryLvlPtr;
+  unsigned short fuelLvl = 0;
+  unsigned short batteryLvl = 0;
+  unsigned short *fuelLvlPtr = &fuelLvl;
+  unsigned short *batteryLvlPtr = &batteryLvl;
+
   bool batteryLow = false, fuelLow = false;
   for(i = 0; i < 7; i++) { // batteryLvl states loop
     batteryLvlPtr = warningStates[j];
