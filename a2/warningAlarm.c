@@ -12,15 +12,10 @@
 #include "warningAlarm.h"
 
 void warningAlarm(void *warnStruct) {
-  // 1. Declare file paths for LEDs
-  static char *l1 = "sys/class/leds/beaglebone:green:usr1/brightness";
-  static char *l2 = "sys/class/leds/beaglebone:green:usr2/brightness";
-  static char *l3 = "sys/class/leds/beaglebone:green:usr3/brightness";
-
-  // 2. Declare structures to store LED metadata
-  static LED led1 = {l1, NULL, 0, FALSE};
-  static LED led2 = {l2, NULL, 0, FALSE};
-  static LED led3 = {l3, NULL, 0, FALSE};
+  // 1. Declare structures to store LED metadata
+  static LED led1 = {"sys/class/leds/beaglebone:green:usr1/brightness", NULL, 0, false};
+  static LED led2 = {"sys/class/leds/beaglebone:green:usr2/brightness", NULL, 0, false};
+  static LED led3 = {"sys/class/leds/beaglebone:green:usr3/brightness", NULL, 0, false};
   static LED *leds[3] = {&led1, &led2, &led3};
 
   // 3. Update warnStruct && LED state.
@@ -37,9 +32,8 @@ void warningAlarm(void *warnStruct) {
   }
 }
 
-void update(warnData *wData, LED **leds) {
+void update(warnData *wData, LED *leds[]) {
   // 1. Store warning data in local variables
-  warnData *wData = (warnData *)warnStruct;
   bool *fuelLowPtr = wData->fuelLowPtr;
   bool *batteryLowPtr = wData->batteryLowPtr;
   unsigned short *batteryLvlPtr = wData->batteryLvlPtr;
@@ -55,14 +49,14 @@ void update(warnData *wData, LED **leds) {
   }
   // 3. If alert
   else {
-    if(*batteryLvl <= 50) {
+    if(*batteryLvlPtr <= 50) {
       // 3.1: Battery level low
       //led2.file = fopen(led2.path);
       leds[1]->active = true;
-      leds[1]->sec = (*batteryLvl <= 10) ? 1 : 2;
-      *batteryLowPtr = (*batteryLvl <= 10) ? true : false;
+      leds[1]->sec = (*batteryLvlPtr <= 10) ? 1 : 2;
+      *batteryLowPtr = (*batteryLvlPtr <= 10) ? true : false;
     }
-    if(*fuelLvl <= 50) {
+    if(*fuelLvlPtr <= 50) {
       // 3.2: Fuel level low
       //led1.file = fopen(led1.path);
       leds[0]->active = true;

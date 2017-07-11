@@ -7,10 +7,11 @@
 */
 
 #include <stdio.h>
+#include "dataStructs.h"
 
 // Structure for holding LED metadata
 typedef struct LED_STRUCT {
-  char *path;  // system file path to LED
+  const char *path;  // system file path to LED
   FILE *file;  // file pointer (NULL if not open)
   unsigned int sec;  // blink duration (-1 if continuous)
   bool active;  // true of on, false otherwise
@@ -61,7 +62,7 @@ void warningAlarm(void *warnStruct);
     (see "warningAlarm" spec for specific cases)
 
 */
-void update(warnData *wData, LED *leds);
+void update(warnData *wData, LED *leds[]);
 
 
 /*

@@ -13,42 +13,47 @@ extern "C" {
 
 // This tests the "update" method in "warningAlarm.c"
 TEST(WarningAlarmTest, Test_Update) {
-  // 1. Declare dummy LED file paths
-  static char *l1 = "LED1";
-  static char *l2 = "LED2";
-  static char *l3 = "LED3";
+  // 1. Declare structures to store dummy LED metadata
+  LED led1 = {"LED1", NULL, 0, false};
+  LED led2 = {"LED2", NULL, 0, false};
+  LED led3 = {"LED3", NULL, 0, false};
+  LED *leds[3] = {&led1, &led2, &led3};
 
-  // 2. Declare structures to store dummy LED metadata
-  static LED led1 = {l1, NULL, 0, false};
-  static LED led2 = {l2, NULL, 0, false};
-  static LED led3 = {l3, NULL, 0, false};
-  static LED *leds[3] = {&led1, &led2, &led3};
+  // 2. Declare dummy variables for each warning state
+  unsigned short zero = 0;
+  unsigned short ten = 10;
+  unsigned short eleven = 11;
+  unsigned short fifty = 50;
+  unsigned short fiftyOne = 51;
+  unsigned short seventyFive = 75;
+  unsigned short hundred = 100;
 
-  // 3. Declare dummy variables for each warning state
-  unsigned short *empty = &0;
-  unsigned short *ten_prct = &10;
-  unsigned short *eleven_prct = &11;
-  unsigned short *half_empty = &50;
-  unsigned short *fiftyOne_prct = &51;
-  unsigned short *seventyFive_prct = &75;
-  unsigned short *full = &100;
+  unsigned short *empty = &zero;
+  unsigned short *ten_prct = &ten;
+  unsigned short *eleven_prct = &eleven;
+  unsigned short *half_empty = &fifty;
+  unsigned short *fiftyOne_prct = &fiftyOne;
+  unsigned short *seventyFive_prct = &seventyFive;
+  unsigned short *full = &hundred;
 
   unsigned short *warningStates[7] = {
     empty, ten_prct, eleven_prct, half_empty,
     fiftyOne_prct, seventyFive_prct, full
-  }
+  };
 
-  // 4. Cycle through each warning state.
+  // 3. Cycle through each warning state.
   int i, j;
   unsigned short *fuelLvlPtr, *batteryLvlPtr;
+  bool batteryLow = false, fuelLow = false;
   for(i = 0; i < 7; i++) { // batteryLvl states loop
     batteryLvlPtr = warningStates[j];
     for(j = 0; j < 7; j++) { // fuelLvl states loop
       fuelLvlPtr = warningStates[j];
-      warnData warnStruct = {&false, &false, batteryLvlPtr, fuelLvlPtr};
+
+      warnData warnStruct = {&batteryLow, &fuelLow, batteryLvlPtr, fuelLvlPtr};
       update(&warnStruct, leds);
       // Case 1: Safe
-      if(*batteryLvlPtr > 50 && *fuelLvlptr > 50) {
+      if(*batteryLvlPtr > 50 && *fuelLvlPtr > 50) {
         ASSERT_TRUE(led3.active);
         ASSERT_EQ(-1, led3.sec);
         ASSERT_FALSE(*(warnStruct.batteryLowPtr) && *(warnStruct.fuelLowPtr));
