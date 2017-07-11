@@ -29,17 +29,16 @@ void consoleDisplay(void *consoleStruct) {
     unsigned short *fuelLvl = cData->fuelLvlPtr;
     unsigned short *pConsume = cData->pConsumePtr;
     // unsigned short *pGenerate = cData->pGeneratePtr; // FOR FUTURE PROJECTS
-
-    // DEBUG. Temporary flipping of 1 and 0 (won't be part of the final code)
-    static int numCalls = 0;
-    numCalls = 1 - numCalls;
+   
+ 
+    FILE **fp = cData->fpPtr;
+    int *fd0 = cData->fd0Ptr;
+    int *fd1 = cData->fd1Ptr;
 
     // 1.2 Define necessary string storage 
     char *solarPanelString = (*solarPanelState) ? "Deployed":"Retracted";
     char *fuelString = (*fuelLow)? "YES":"NO";
     char *battString = (*batteryLow)? "YES":"NO";
-    //char *fuelString = (numCalls == 0)? "YES":"NO";
-    //char *battString = (numCalls == 1)? "YES":"NO";
     char satelliteStatus[100];
     char annunciation[100];
     
@@ -60,6 +59,6 @@ void consoleDisplay(void *consoleStruct) {
     
     // 4. Pass in the strings to terminalComs, which will
     //    be displayed on this terminal and another terminal. 
-    terminalComs(satelliteStatus, annunciation);
+    terminalComs(satelliteStatus, annunciation, fp, fd0, fd1);
     //terminalComs(annunciation, satelliteStatus);
 }

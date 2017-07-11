@@ -35,6 +35,9 @@ typedef struct consoleDisplayData {
   unsigned short *fuelLvlPtr;
   unsigned short *pConsumePtr;
   unsigned short *pGeneratePtr;
+  FILE **fpPtr;
+  int *fd0Ptr;
+  int *fd1Ptr;
 } consoleData;
 
 typedef struct warningAlarmData {

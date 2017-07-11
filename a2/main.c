@@ -2,6 +2,7 @@
 #include <stdbool.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include <fcntl.h>
 #include "TCB.h"
 #include "dataStructs.h"
 
@@ -105,13 +106,23 @@ void main(void)
     queue[3] = &consoleDisplayTCB;
     queue[4] = &warningAlarmTCB;
 
+
+    FILE *fp = fopen("file.txt", "w+");
+    int fd0 = open("/dev/pts/0", O_WRONLY);
+    int fd1 = open("/dev/pts/1", O_WRONLY);
+    cData.fpPtr = &fp;
+    cData.fd0Ptr = &fd0;
+    cData.fd1Ptr = &fd1;
+
+
     int i = 0;   // queue index
     while (true)
     {
         aTCBPtr = queue[i];
 	aTCBPtr->myTask((aTCBPtr->taskDataPtr));
 	i = (i + 1) % 5;  // cycles through queue
-	usleep(500000);
+	usleep(5000);
     }
+    printf("exiting....\n");
     return;
 }
