@@ -106,12 +106,25 @@ void main(void)
     queue[4] = &warningAlarmTCB;
 
     int i = 0;   // queue index
+
+    int timeTask = 0;
+    FILE *gpio = fopen("/sys/class/gpio/gpio48/value", "w");
+    if(!gpio){
+	 printf("Could not open GPIO");
+	 return EXIT_FAILURE;
+    }
     while (true)
     {
+	if(i == timeTask) {
+		fprintf(gpio, "%d", 1);
+	}
         aTCBPtr = queue[i];
 	aTCBPtr->myTask((aTCBPtr->taskDataPtr));
-	i = (i + 1) % 5;  // cycles through queue
-	usleep(7000);
+	if(i == timeTask) {
+		fprintf(gpio, "%d", 0);	
+	}
+	i = (i + 1) % 5;
     }
+    fclose(gpio);
     return;
 }
