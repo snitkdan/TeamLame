@@ -12,6 +12,7 @@
 #include "warningAlarm.h"
 #define PATH "sys/class/leds/beaglebone:green:usr"
 
+
 void warningAlarm(void *warnStruct) {
   // 1. Declare structures to store LED metadata
   /*

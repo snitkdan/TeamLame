@@ -10,6 +10,7 @@
 #include <fcntl.h>
 #include <string.h>
 #include <stdio.h>
+#include <stdlib.h> // for exit
 #include "TCB.h"
 
 FILE *fp = NULL; // declare file here
@@ -35,7 +36,7 @@ int terminalComs(char *satelliteStatus, char *annunciation) {
 		firstTime++;
 	}
 	// 3. error handling: check if file and terminal ports exist 
-    if (fp & fd0 & fd1) {
+    if (fp && fd0 && fd1) {
 		
 	    // 3.1 Write data to the file 
         fseek(fp, 0, SEEK_SET); // seeks pointer back to beginning for overwriting
@@ -43,7 +44,7 @@ int terminalComs(char *satelliteStatus, char *annunciation) {
 
 	    //3.2 Read and print the data from the file
 	    fseek(fp, 0, SEEK_SET);	 
-        fread(buffer, 1, 99, fp);
+        fread(buffer, 1, 150, fp);
 	
         // 3.3 Transmit buffer to terminal0
         //     Transmit annunciation to terminal1
@@ -51,7 +52,7 @@ int terminalComs(char *satelliteStatus, char *annunciation) {
         dprintf(fd1, "%s\r", annunciation);
 		return (0);
 	} else {
-		fprintf(stderr, "ERROR, fd0 and fd1 not opened correctly \n");
+		fprintf(stderr, "ERROR, fp, fd0 and/or fd1 not opened correctly \n");
 		exit(1);
 	}
 }

@@ -7,6 +7,7 @@
 #include <stdbool.h>
 #include "dataStructs.h"
 #include "TCB.h"
+#define MAX 200
 
 /*
   @param consoleStruct
@@ -28,7 +29,7 @@ void consoleDisplay(void *consoleStruct) {
     unsigned short *batteryLvl = cData->batteryLvlPtr;
     unsigned short *fuelLvl = cData->fuelLvlPtr;
     unsigned short *pConsume = cData->pConsumePtr;
-    // unsigned short *pGenerate = cData->pGeneratePtr; // FOR FUTURE PROJECTS
+    unsigned short *pGenerate = cData->pGeneratePtr;
 
     // DEBUG. Temporary flipping of 1 and 0 (won't be part of the final code)
     static int numCalls = 0;
@@ -40,19 +41,20 @@ void consoleDisplay(void *consoleStruct) {
     char *battString = (*batteryLow)? "YES":"NO";
     //char *fuelString = (numCalls == 0)? "YES":"NO";
     //char *battString = (numCalls == 1)? "YES":"NO";
-    char satelliteStatus[100];
-    char annunciation[100];
+    char satelliteStatus[MAX];
+    char annunciation[MAX];
     
     // 2. Store print statements for satellite status into variable
-    snprintf(satelliteStatus, 100, 
+    snprintf(satelliteStatus, MAX, 
            "Solar Panels: %9s, " 
            "Battery Level: %3hu, "
            "Fuel Level: %3hu, "
-           "Power Consumption: %2hu\r", 
-           solarPanelString, *batteryLvl, *fuelLvl, *pConsume); 
+           "Power Consumption: %2hu, "
+		   "Power Generation: %2hu\r", 
+           solarPanelString, *batteryLvl, *fuelLvl, *pConsume, *pGenerate); 
 
     // 3. Store print statement for annunciation mode into variable
-    snprintf(annunciation, 100,
+    snprintf(annunciation, MAX,
            "ANNUNCIATION: "
            "Battery Low: %3s " 
            "Fuel Low: %3s\r",
