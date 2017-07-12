@@ -12,25 +12,8 @@
 #include "warningAlarm.h"
 
 void warningAlarm(void *warnStruct) {
-  // 1. Declare structures to store LED metadata
-  static LED led1 = {"/sys/class/leds/beaglebone:green:usr1/brightness", NULL, 0, false};
-  static LED led2 = {"/sys/class/leds/beaglebone:green:usr2/brightness", NULL, 0, false};
-  static LED led3 = {"/sys/class/leds/beaglebone:green:usr3/brightness", NULL, 0, false};
-  static LED *leds[3] =+- {&led1, &led2, &led3};
-
-  // 3. Update warnStruct && LED state.
+  // Update warnStruct && LED state.
   update((warnData*)warnStruct, leds);
-
-  // 4. Display/Deactive appropriate LEDs.
-  int i = 0;
-  while(i < 3) {
-    if(leds[i]->active) {
-      display(leds[i]);
-    } else {
-      deactivate(leds[i]);
-    }
-    i++;
-  }
 }
 
 void update(warnData *wData, LED *leds[]) {
@@ -43,7 +26,7 @@ void update(warnData *wData, LED *leds[]) {
   // 2: If no alert.
   if(*batteryLvlPtr > 50 && *fuelLvlPtr > 50) {
     leds[2]->active = true;
-    leds[2]->sec = -1; // "infinity"
+    leds[2]->sec = 0;
     *fuelLowPtr = false;
     *batteryLowPtr = false;
   }

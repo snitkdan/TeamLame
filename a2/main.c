@@ -5,9 +5,13 @@
 #include "TCB.h"
 #include "dataStructs.h"
 #include "warningAlarm.h"
+#include <time.h>
 
-void main(void)
-{
+void pauseSec(int sec);
+void deactive(LED *led);
+void blink(LED *led);
+
+void main(void) {
     // Define shared variables
     unsigned int thrusterCommand = 0;
     unsigned short batteryLvl = 100;
@@ -44,9 +48,9 @@ void main(void)
     LED led2 = {"/sys/class/leds/beaglebone:green:usr2/brightness", NULL, 0, false};
     LED led3 = {"/sys/class/leds/beaglebone:green:usr3/brightness", NULL, 0, false};
     LED *leds[3] = {&led1, &led2, &led3};
-    
+
     // 2. Turn off all 3 LEDs
-    char *command = strcat("echo > 0", led1.path);
+    char *command = strcat("echo 0 > ", led1.path);
     system(command);
 
     //.....................................
@@ -111,25 +115,48 @@ void main(void)
     queue[4] = &warningAlarmTCB;
 
     int i = 0;   // queue index
-
-    int timeTask = 0;
-    FILE *gpio = fopen("/sys/class/gpio/gpio48/value", "w");
-    if(!gpio){
-	 printf("Could not open GPIO");
-	 return EXIT_FAILURE;
+    while (true) {
+       aTCBPtr = queue[i];
+	     aTCBPtr->myTask((aTCBPtr->taskDataPtr));
+	     i = (i + 1) % 5;
+       // Fuel Lvl Status
+       if(led1.active) {
+         blink(&led1);
+       } else {
+         deactive(&led1);
+       }
+       // Battery Lvl Status
+       if(led2.active) {
+         blink(&led2);
+       } else {
+         deactive(&led2);
+       }
+       // Okay
+       if(led3.active) {
+         blink(&led3);
+       } else {
+         deactive(&led3);
+       }
     }
-    while (true)
-    {
-	if(i == timeTask) {
-		fprintf(gpio, "%d", 1);
-	}
-        aTCBPtr = queue[i];
-	aTCBPtr->myTask((aTCBPtr->taskDataPtr));
-	if(i == timeTask) {
-		fprintf(gpio, "%d", 0);	
-	}
-	i = (i + 1) % 5;
-    }
-    fclose(gpio);
     return;
+}
+
+void blink(LED *led) {
+  char *led_command = strcat("echo 1 > ", led->path);
+  system(led_command);
+  pauseSec(led->sec);
+}
+
+void deactive(LED *led) {
+  char *led_command = strcat("echo 0 > ", led->path);
+  system(led_command);
+}
+
+void pauseSec(int sec) {
+  time_t now, later;
+  now = time(NULL);
+  later = time(NULL);
+  while((later - now) < (double)sec) {
+    later = time(NULL);
+  }
 }
