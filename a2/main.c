@@ -55,13 +55,26 @@ void main(void) {
     wData.leds[2] = leds[2];
 
     // 2. Turn off all 3 LEDs
-    char *command1 = strcat("echo 0 > ", led1.path);
-    char *command2 = strcat("echo 0 > ", led2.path);
-    char *command3 = strcat("echo 0 > ", led3.path);
+    char *echoCommand = "echo 0 > ";
+    char command1[strlen(echoCommand) + strlen(led1.path) + 1]; 
+    char command2[strlen(echoCommand) + strlen(led2.path) + 1]; 
+    char command3[strlen(echoCommand) + strlen(led3.path) + 1]; 
+    sprintf(command1, "%s%s", echoCommand, led1.path);
+    sprintf(command2, "%s%s", echoCommand, led2.path);
+    sprintf(command3, "%s%s", echoCommand, led3.path);
+    
+//    strcat(command1, echoCommand);
+//    strcat(command2, echoCommand);
+//    strcat(command3, echoCommand);
+//
+//    strcat(command1, led1.path);
+//    strcat(command2, led2.path);
+//    strcat(command3, led3.path);
+//
     system(command1);
     system(command2);
     system(command3);
-
+    system("echo 0 > /sys/class/leds/beaglebone:green:usr0/brightness");
 
     //.....................................
     //  Assign shared variables to pointers
@@ -118,11 +131,11 @@ void main(void) {
     warningAlarmTCB.myTask = warningAlarm;
 
     // Initialize the task queue
-    queue[0] = &powerSubsystemTCB;
-    queue[1] = &thrusterSubsystemTCB;
-    queue[2] = &satelliteComsTCB;
-    queue[3] = &consoleDisplayTCB;
-    queue[4] = &warningAlarmTCB;
+    queue[3] = &powerSubsystemTCB;
+    queue[2] = &thrusterSubsystemTCB;
+    queue[1] = &satelliteComsTCB;
+    queue[4] = &consoleDisplayTCB;
+    queue[0] = &warningAlarmTCB;
 
     int i = 0;   // queue index
     while (true) {
@@ -152,14 +165,21 @@ void main(void) {
 }
 
 void blink(LED *led) {
-  char *led_command = strcat("echo 1 > ", led->path);
-  system(led_command);
-  pauseSec(led->sec);
+    char *echoCommand = "echo 1 > ";
+    char ledCommand[strlen(echoCommand) + strlen(led->path)];
+    sprintf(ledCommand, "%s%s", echoCommand, led->path);
+   // strcat(ledCommand, echoCommand);
+   // strcat(ledCommand, led->path);
+    system(ledCommand);
+    deactive(led);
+    pauseSec(led->sec);
 }
 
 void deactive(LED *led) {
-  char *led_command = strcat("echo 0 > ", led->path);
-  system(led_command);
+    char *echoCommand = "echo 0 > ";
+    char ledCommand[strlen(echoCommand) + strlen(led->path)];
+    sprintf(ledCommand, "%s%s", echoCommand, led->path);
+    system(ledCommand);
 }
 
 void pauseSec(int sec) {
