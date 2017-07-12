@@ -14,11 +14,9 @@
 void warningAlarm(void *warnStruct) {
   // Update warnStruct && LED state.
   warnData *wData = (warnData*) warnStruct;
-  LED *leds[3] = wData->leds; 
-  update(wData, leds);
-}
+  LED **led = &wData->leds; 
+  LED *leds[3] = *led;
 
-void update(warnData *wData, LED *leds[]) {
   // 1. Store warning data in local variables
   bool *fuelLowPtr = wData->fuelLowPtr;
   bool *batteryLowPtr = wData->batteryLowPtr;

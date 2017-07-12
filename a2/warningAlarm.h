@@ -63,7 +63,7 @@ void warningAlarm(void *warnStruct);
     (see "warningAlarm" spec for specific cases)
 
 */
-void update(warnData *wData, LED *leds[]);
+//void update(void *wData, LED *leds[]);
 
 
 /*
@@ -76,7 +76,7 @@ void update(warnData *wData, LED *leds[]);
     blinks beaglebone LED specified in
     led every led.sec seconds.
 */
-void display(LED *led);
+//void display(LED *led);
 
 /*
   @param led
@@ -90,5 +90,5 @@ void display(LED *led);
     the relevant fields in led
     to indicate deactivation.
 */
-void deactivate(LED *led);
+//void deactivate(LED *led);
 #endif
