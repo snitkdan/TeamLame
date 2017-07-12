@@ -40,7 +40,7 @@ void main(void)
     warnData wData;
 
     // 1. Declare structures to store LED metadata
-	FILE *led0 = fopen("/sys/class/leds/beaglebone:green:usr0/brightness", "w");
+	/*FILE *led0 = fopen("/sys/class/leds/beaglebone:green:usr0/brightness", "w");
 	FILE *led1 = fopen("/sys/class/leds/beaglebone:green:usr1/brightness", "w");
 	FILE *led2 = fopen("/sys/class/leds/beaglebone:green:usr2/brightness", "w");
 	FILE *led3 = fopen("/sys/class/leds/beaglebone:green:usr3/brightness", "w");
@@ -48,6 +48,7 @@ void main(void)
 	fprintf(led1, "%d", 0); fflush(led1);
 	fprintf(led2, "%d", 0); fflush(led2);
 	fprintf(led3, "%d", 0); fflush(led3);
+	*/
 
 	
     //.....................................

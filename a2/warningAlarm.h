@@ -64,7 +64,7 @@ void warningAlarm(void *warnStruct);
     (see "warningAlarm" spec for specific cases)
 
 */
-void update(void *wData);
+// void update(void *wData);
 
 
 /*
