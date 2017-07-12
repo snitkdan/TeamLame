@@ -12,12 +12,9 @@
 #include <stdlib.h> // for system
 #include "dataStructs.h"
 #include "warningAlarm.h"
-#define LED0 "sys/class/leds/beaglebone:green:usr0"
+#define LOW 10
+#define LED_PATH "sys/class/leds/beaglebone:green:usr"
 
-FILE *led0 = NULL; // brightness
-FILE *led1 = NULL;
-FILE *led2 = NULL;
-FILE *led3 = NULL;
 
 
 void warningAlarm(void *warnStruct) {
@@ -27,23 +24,20 @@ void warningAlarm(void *warnStruct) {
   bool *batteryLowPtr = wData->batteryLowPtr;
   unsigned short *batteryLvlPtr = wData->batteryLvlPtr;
   unsigned short *fuelLvlPtr = wData->fuelLvlPtr;
-  static int state1 = 0;
-  static int state2 = 0;
+
+  // check alert
+  *batteryLowPtr = checkLow(batteryLvlPtr);
+  *fuelLowPtr = checkLow(fuelLvlPtr);	
+}
+  
 
 
-  // 2: If no alert.
-  if(*batteryLvlPtr > 50 && *fuelLvlPtr > 50) {
-    *fuelLowPtr = false;
-    *batteryLowPtr = false;
-	system("echo 1 > /sys/class/leds/beaglebone:green:usr3/brightness");
-	system("echo none > /sys/class/leds/beaglebone:green:usr2/trigger");
-	state1 = 0; state2 = 0;
+bool checkLow(unsigned short *lvlPtr) {
+	return (*lvlPtr <= LOW);
 	
-  }
-  // 3. If alert
-  else {
-	system("echo 0 > /sys/class/leds/beaglebone:green:usr3/brightness");	  
-    if(*batteryLvlPtr > 10 && *batteryLvlPtr <= 50) {
+}
+
+    /* if(*batteryLvlPtr > 10 && *batteryLvlPtr <= 50) {
       // 3.1: Battery level low
 	  *batteryLowPtr = false;
 	  if (state1 == 0) {
@@ -66,17 +60,4 @@ void warningAlarm(void *warnStruct) {
       // 3.2: Fuel level low
       *fuelLowPtr = (*fuelLvlPtr <= 10) ? true : false;
     }
-  }
-}
-
-void display(FILE *led) {
-
-}
-
-void deactivate(FILE *led) {
-  // 0. Close the connection (turn off LED)
-  // fclose(led->file);
-  // 1. Reassign struct fields
-  // led->file = NULL;
-  // led->active = false;
-}
+	*/

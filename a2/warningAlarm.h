@@ -46,6 +46,9 @@
 */
 void warningAlarm(void *warnStruct);
 
+bool checkLow(unsigned short *lvlPtr);
+
+
 /*
 
   @param wData

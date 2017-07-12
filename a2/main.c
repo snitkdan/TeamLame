@@ -39,17 +39,15 @@ void main(void)
     consoleData cData;
     warnData wData;
 
-    // 1. Declare structures to store LED metadata
-	/*FILE *led0 = fopen("/sys/class/leds/beaglebone:green:usr0/brightness", "w");
+    // 1. Turn off all lights initially
+	FILE *led0 = fopen("/sys/class/leds/beaglebone:green:usr0/brightness", "w");
 	FILE *led1 = fopen("/sys/class/leds/beaglebone:green:usr1/brightness", "w");
 	FILE *led2 = fopen("/sys/class/leds/beaglebone:green:usr2/brightness", "w");
 	FILE *led3 = fopen("/sys/class/leds/beaglebone:green:usr3/brightness", "w");
 	fprintf(led0, "%d", 0); fflush(led0); fclose(led0);
-	fprintf(led1, "%d", 0); fflush(led1);
-	fprintf(led2, "%d", 0); fflush(led2);
-	fprintf(led3, "%d", 0); fflush(led3);
-	*/
-
+	fprintf(led1, "%d", 0); fflush(led1); fclose(led1);
+	fprintf(led2, "%d", 0); fflush(led2); fclose(led2);
+	fprintf(led3, "%d", 0); fflush(led3); fclose(led3);
 	
     //.....................................
     //  Assign shared variables to pointers
@@ -119,19 +117,6 @@ void main(void)
         aTCBPtr = queue[i];
 	    aTCBPtr->myTask((aTCBPtr->taskDataPtr));
 	    i = (i + 1) % 5;
-        // if (batteryLvl < 50) {
-			// if (calls == 0) {
-			// system("echo timer > /sys/class/leds/beaglebone:green:usr3/trigger");
-			// system("echo 1000 > /sys/class/leds/beaglebone:green:usr3/delay_on");
-			// system("echo 1000 > /sys/class/leds/beaglebone:green:usr3/delay_off");
-			// calls++;
-			// }
-		// } else {
-			// system("echo none > /sys/class/leds/beaglebone:green:usr3/trigger");			
-			// fprintf(led3, "%d", 0);
-			// calls = 0;
-
-		// }
 		usleep(100000);
 		
     }
