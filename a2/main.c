@@ -48,6 +48,7 @@ void main(void) {
     LED led2 = {"/sys/class/leds/beaglebone:green:usr2/brightness", NULL, 0, false};
     LED led3 = {"/sys/class/leds/beaglebone:green:usr3/brightness", NULL, 0, false};
     LED *leds[3] = {&led1, &led2, &led3};
+    wData.leds = leds;
 
     // 2. Turn off all 3 LEDs
     char *command = strcat("echo 0 > ", led1.path);

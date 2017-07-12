@@ -5,7 +5,8 @@
   (see warningAlarm.c for implementation).
 
 */
-
+#ifndef WARNINGALARM
+#define WARNINGALARM
 #include <stdio.h>
 #include "dataStructs.h"
 
@@ -90,3 +91,4 @@ void display(LED *led);
     to indicate deactivation.
 */
 void deactivate(LED *led);
+#endif

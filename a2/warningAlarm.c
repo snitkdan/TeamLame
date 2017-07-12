@@ -13,7 +13,9 @@
 
 void warningAlarm(void *warnStruct) {
   // Update warnStruct && LED state.
-  update((warnData*)warnStruct, leds);
+  warnData *wData = (warnData*) warnStruct;
+  LED *leds[3] = wData->leds; 
+  update(wData, leds);
 }
 
 void update(warnData *wData, LED *leds[]) {
