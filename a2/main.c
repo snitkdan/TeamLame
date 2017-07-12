@@ -4,6 +4,7 @@
 #include <unistd.h>
 #include "TCB.h"
 #include "dataStructs.h"
+#include "warningAlarm.h"
 
 void main(void)
 {
@@ -31,18 +32,22 @@ void main(void)
     // Defines a TCB pointer
     TCB* aTCBPtr;
 
-    // Allocate the structs for the taskDataPtr
-    /*powerData *pData = (powerData*)malloc(sizeof(powerData));
-    thrustData *tData = (thrustData*)malloc(sizeof(thrustData));
-    satData *sData = (satData*)malloc(sizeof(satData));
-    consoleData *cData = (consoleData*)malloc(sizeof(consoleData));
-    warnData *wData = (warnData*)malloc(sizeof(warnData));
-    */
+    // Defines data structures
     powerData pData;
     thrustData tData;
     satData sData;
     consoleData cData;
     warnData wData;
+
+    // 1. Declare structures to store LED metadata
+    LED led1 = {"/sys/class/leds/beaglebone:green:usr1/brightness", NULL, 0, false};
+    LED led2 = {"/sys/class/leds/beaglebone:green:usr2/brightness", NULL, 0, false};
+    LED led3 = {"/sys/class/leds/beaglebone:green:usr3/brightness", NULL, 0, false};
+    LED *leds[3] = {&led1, &led2, &led3};
+    
+    // 2. Turn off all 3 LEDs
+    char *command = strcat("echo > 0", led1.path);
+    system(command);
 
     //.....................................
     //  Assign shared variables to pointers
