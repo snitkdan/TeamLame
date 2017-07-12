@@ -2,6 +2,7 @@
 #include <stdbool.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include <string.h>
 #include "TCB.h"
 #include "dataStructs.h"
 #include "warningAlarm.h"
@@ -48,11 +49,19 @@ void main(void) {
     LED led2 = {"/sys/class/leds/beaglebone:green:usr2/brightness", NULL, 0, false};
     LED led3 = {"/sys/class/leds/beaglebone:green:usr3/brightness", NULL, 0, false};
     LED *leds[3] = {&led1, &led2, &led3};
-    wData.leds = leds;
+
+    wData.leds[0] = leds[0];
+    wData.leds[1] = leds[1];
+    wData.leds[2] = leds[2];
 
     // 2. Turn off all 3 LEDs
-    char *command = strcat("echo 0 > ", led1.path);
-    system(command);
+    char *command1 = strcat("echo 0 > ", led1.path);
+    char *command2 = strcat("echo 0 > ", led2.path);
+    char *command3 = strcat("echo 0 > ", led3.path);
+    system(command1);
+    system(command2);
+    system(command3);
+
 
     //.....................................
     //  Assign shared variables to pointers
