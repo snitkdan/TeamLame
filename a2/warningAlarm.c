@@ -10,16 +10,26 @@
 #include <stdio.h>
 #include "dataStructs.h"
 #include "warningAlarm.h"
+#define PATH "sys/class/leds/beaglebone:green:usr"
 
 void warningAlarm(void *warnStruct) {
-  // Update warnStruct && LED state.
-  warnData *wData = (warnData*) warnStruct;
-  LED *leds[3];
-  leds[0] = wData->leds[0];
-  leds[1] = wData->leds[1];
-  leds[2] = wData->leds[2];
+  // 1. Declare structures to store LED metadata
+  /*
+  static LED led1 = {"sys/class/leds/beaglebone:green:usr1/brightness", NULL, 0, false};
+  static LED led2 = {"sys/class/leds/beaglebone:green:usr2/brightness", NULL, 0, false};
+  static LED led3 = {"sys/class/leds/beaglebone:green:usr3/brightness", NULL, 0, false};
+  static LED *leds[3] = {&led1, &led2, &led3};
+  */
+  //static FILE *leds[4] = {&led0, &led1, &led2, &led3};
+  
+  
+	// 3. Update warnStruct && LED state.
+	update(warnStruct);
+}
 
+void update(void *warnStruct) {
   // 1. Store warning data in local variables
+  warnData *wData = (warnData*)warnStruct;
   bool *fuelLowPtr = wData->fuelLowPtr;
   bool *batteryLowPtr = wData->batteryLowPtr;
   unsigned short *batteryLvlPtr = wData->batteryLvlPtr;
@@ -27,8 +37,6 @@ void warningAlarm(void *warnStruct) {
 
   // 2: If no alert.
   if(*batteryLvlPtr > 50 && *fuelLvlPtr > 50) {
-    leds[2]->active = true;
-    leds[2]->sec = 0;
     *fuelLowPtr = false;
     *batteryLowPtr = false;
   }
@@ -36,15 +44,23 @@ void warningAlarm(void *warnStruct) {
   else {
     if(*batteryLvlPtr <= 50) {
       // 3.1: Battery level low
-      leds[1]->active = true;
-      leds[1]->sec = (*batteryLvlPtr <= 10) ? 1 : 2;
       *batteryLowPtr = (*batteryLvlPtr <= 10) ? true : false;
     }
     if(*fuelLvlPtr <= 50) {
       // 3.2: Fuel level low
-      leds[0]->active = true;
-      leds[0]->sec = (*fuelLvlPtr <= 10) ? 1 : 2;
       *fuelLowPtr = (*fuelLvlPtr <= 10) ? true : false;
     }
   }
+}
+
+void display(FILE *led) {
+
+}
+
+void deactivate(FILE *led) {
+  // 0. Close the connection (turn off LED)
+  // fclose(led->file);
+  // 1. Reassign struct fields
+  // led->file = NULL;
+  // led->active = false;
 }

@@ -2,17 +2,12 @@
 #include <stdbool.h>
 #include <stdlib.h>
 #include <unistd.h>
-#include <string.h>
 #include "TCB.h"
 #include "dataStructs.h"
 #include "warningAlarm.h"
-#include <time.h>
 
-void pauseSec(int sec);
-void deactive(LED *led);
-void blink(LED *led);
-
-void main(void) {
+void main(void)
+{
     // Define shared variables
     unsigned int thrusterCommand = 0;
     unsigned short batteryLvl = 100;
@@ -45,37 +40,16 @@ void main(void) {
     warnData wData;
 
     // 1. Declare structures to store LED metadata
-    LED led1 = {"/sys/class/leds/beaglebone:green:usr1/brightness", NULL, 0, false};
-    LED led2 = {"/sys/class/leds/beaglebone:green:usr2/brightness", NULL, 0, false};
-    LED led3 = {"/sys/class/leds/beaglebone:green:usr3/brightness", NULL, 0, false};
-    LED *leds[3] = {&led1, &led2, &led3};
+	FILE *led0 = fopen("/sys/class/leds/beaglebone:green:usr0/brightness", "w");
+	FILE *led1 = fopen("/sys/class/leds/beaglebone:green:usr1/brightness", "w");
+	FILE *led2 = fopen("/sys/class/leds/beaglebone:green:usr2/brightness", "w");
+	FILE *led3 = fopen("/sys/class/leds/beaglebone:green:usr3/brightness", "w");
+	fprintf(led0, "%d", 0); fflush(led0); fclose(led0);
+	fprintf(led1, "%d", 0); fflush(led1);
+	fprintf(led2, "%d", 0); fflush(led2);
+	fprintf(led3, "%d", 0); fflush(led3);
 
-    wData.leds[0] = leds[0];
-    wData.leds[1] = leds[1];
-    wData.leds[2] = leds[2];
-
-    // 2. Turn off all 3 LEDs
-    char *echoCommand = "echo 0 > ";
-    char command1[strlen(echoCommand) + strlen(led1.path) + 1]; 
-    char command2[strlen(echoCommand) + strlen(led2.path) + 1]; 
-    char command3[strlen(echoCommand) + strlen(led3.path) + 1]; 
-    sprintf(command1, "%s%s", echoCommand, led1.path);
-    sprintf(command2, "%s%s", echoCommand, led2.path);
-    sprintf(command3, "%s%s", echoCommand, led3.path);
-    
-//    strcat(command1, echoCommand);
-//    strcat(command2, echoCommand);
-//    strcat(command3, echoCommand);
-//
-//    strcat(command1, led1.path);
-//    strcat(command2, led2.path);
-//    strcat(command3, led3.path);
-//
-    system(command1);
-    system(command2);
-    system(command3);
-    system("echo 0 > /sys/class/leds/beaglebone:green:usr0/brightness");
-
+	
     //.....................................
     //  Assign shared variables to pointers
     //.....................................
@@ -131,62 +105,38 @@ void main(void) {
     warningAlarmTCB.myTask = warningAlarm;
 
     // Initialize the task queue
-    queue[3] = &powerSubsystemTCB;
-    queue[2] = &thrusterSubsystemTCB;
-    queue[1] = &satelliteComsTCB;
-    queue[4] = &consoleDisplayTCB;
-    queue[0] = &warningAlarmTCB;
+    queue[0] = &powerSubsystemTCB;
+    queue[1] = &thrusterSubsystemTCB;
+    queue[2] = &satelliteComsTCB;
+    queue[3] = &consoleDisplayTCB;
+    queue[4] = &warningAlarmTCB;
 
     int i = 0;   // queue index
-    while (true) {
-       aTCBPtr = queue[i];
-	     aTCBPtr->myTask((aTCBPtr->taskDataPtr));
-	     i = (i + 1) % 5;
-       // Fuel Lvl Status
-       if(led1.active) {
-         blink(&led1);
-       } else {
-         deactive(&led1);
-       }
-       // Battery Lvl Status
-       if(led2.active) {
-         blink(&led2);
-       } else {
-         deactive(&led2);
-       }
-       // Okay
-       if(led3.active) {
-         blink(&led3);
-       } else {
-         deactive(&led3);
-       }
+	// static int calls = 0;
+    while (true)
+    {
+        aTCBPtr = queue[i];
+	    aTCBPtr->myTask((aTCBPtr->taskDataPtr));
+	    i = (i + 1) % 5;
+        // if (batteryLvl < 50) {
+			// if (calls == 0) {
+			// system("echo timer > /sys/class/leds/beaglebone:green:usr3/trigger");
+			// system("echo 1000 > /sys/class/leds/beaglebone:green:usr3/delay_on");
+			// system("echo 1000 > /sys/class/leds/beaglebone:green:usr3/delay_off");
+			// calls++;
+			// }
+		// } else {
+			// system("echo none > /sys/class/leds/beaglebone:green:usr3/trigger");			
+			// fprintf(led3, "%d", 0);
+			// calls = 0;
+
+		// }
+		usleep(100000);
+		
     }
+	//fclose(led0);
+	//fclose(led1);
+	//fclose(led2);
+	//fclose(led3);
     return;
-}
-
-void blink(LED *led) {
-    char *echoCommand = "echo 1 > ";
-    char ledCommand[strlen(echoCommand) + strlen(led->path)];
-    sprintf(ledCommand, "%s%s", echoCommand, led->path);
-   // strcat(ledCommand, echoCommand);
-   // strcat(ledCommand, led->path);
-    system(ledCommand);
-    deactive(led);
-    pauseSec(led->sec);
-}
-
-void deactive(LED *led) {
-    char *echoCommand = "echo 0 > ";
-    char ledCommand[strlen(echoCommand) + strlen(led->path)];
-    sprintf(ledCommand, "%s%s", echoCommand, led->path);
-    system(ledCommand);
-}
-
-void pauseSec(int sec) {
-  time_t now, later;
-  now = time(NULL);
-  later = time(NULL);
-  while((later - now) < (double)sec) {
-    later = time(NULL);
-  }
 }

@@ -5,18 +5,19 @@
   (see warningAlarm.c for implementation).
 
 */
-#ifndef WARNINGALARM
-#define WARNINGALARM
+#ifndef WARNING
+#define WARNING
 #include <stdio.h>
 #include "dataStructs.h"
 
 // Structure for holding LED metadata
-typedef struct LED_STRUCT {
+/*typedef struct LED_STRUCT {
   const char *path;  // system file path to LED
   FILE *file;  // file pointer (NULL if not open)
   unsigned int sec;  // blink duration (-1 if continuous)
   bool active;  // true of on, false otherwise
 } LED;
+*/
 
 /*
   @param warnStruct
@@ -63,7 +64,7 @@ void warningAlarm(void *warnStruct);
     (see "warningAlarm" spec for specific cases)
 
 */
-//void update(void *wData, LED *leds[]);
+void update(void *wData);
 
 
 /*
@@ -76,7 +77,7 @@ void warningAlarm(void *warnStruct);
     blinks beaglebone LED specified in
     led every led.sec seconds.
 */
-//void display(LED *led);
+void display(FILE *led);
 
 /*
   @param led
@@ -90,5 +91,6 @@ void warningAlarm(void *warnStruct);
     the relevant fields in led
     to indicate deactivation.
 */
-//void deactivate(LED *led);
+void deactivate(FILE *led);
+
 #endif

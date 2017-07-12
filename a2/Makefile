@@ -97,7 +97,7 @@ test_suite : thrusterSubsystemTest.o thrusterSubsystem.o powerSubsystemTest.o po
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -lpthread $^ -o $@
 
 copy:
-	scp -r ~/Desktop/TeamLame root@192.168.7.2:/dev
+	scp -r ../a2 root@192.168.7.2:/dev
 
 # Build main
 main: #powerSubsystem.o main.c

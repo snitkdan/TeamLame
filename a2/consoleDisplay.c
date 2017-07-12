@@ -45,17 +45,17 @@ void consoleDisplay(void *consoleStruct) {
     
     // 2. Store print statements for satellite status into variable
     snprintf(satelliteStatus, 100, 
-           "\rSolar Panels: %9s, " 
+           "Solar Panels: %9s, " 
            "Battery Level: %3hu, "
            "Fuel Level: %3hu, "
-           "Power Consumption: %2hu", 
+           "Power Consumption: %2hu\r", 
            solarPanelString, *batteryLvl, *fuelLvl, *pConsume); 
 
     // 3. Store print statement for annunciation mode into variable
     snprintf(annunciation, 100,
-           "\rANNUNCIATION: "
+           "ANNUNCIATION: "
            "Battery Low: %3s " 
-           "Fuel Low: %3s",
+           "Fuel Low: %3s\r",
            battString, fuelString);
     
     // 4. Pass in the strings to terminalComs, which will
