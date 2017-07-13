@@ -6,6 +6,8 @@
 #include "dataStructs.h"
 #include "warningAlarm.h"
 
+unsigned long GLOBALCOUNTER = 0; 
+
 void main(void)
 {
     // Define shared variables
@@ -117,12 +119,9 @@ void main(void)
         aTCBPtr = queue[i];
 	    aTCBPtr->myTask((aTCBPtr->taskDataPtr));
 	    i = (i + 1) % 5;
+	    GLOBALCOUNTER++; 
 		usleep(100000);
-		
+        		
     }
-	//fclose(led0);
-	//fclose(led1);
-	//fclose(led2);
-	//fclose(led3);
     return;
 }

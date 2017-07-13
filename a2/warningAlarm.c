@@ -35,7 +35,9 @@
 #define LED3 "3"
 
 void warningAlarm(void *warnStruct) {
-	
+  
+
+  printf("in warningAlarm: GLOBALCOUNTER = %lu", GLOBALCOUNTER); 	
   // 1. Store warning data in local variables
   warnData *wData = (warnData*)warnStruct;
   bool *fuelLowPtr = wData->fuelLowPtr;
