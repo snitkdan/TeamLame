@@ -67,7 +67,12 @@ bool checkLow(int region);
     turns on or off the beaglebone LED3 
 	depending on changeState
 */
-void LED3State(char *changeState);
+//void LED3State(char *changeState);
+void LEDState(char *led, char *changeState);
+
+bool checkTimeLED2(int interval);
+
+
 
 /*
   @param led
@@ -78,7 +83,7 @@ void LED3State(char *changeState);
   @effects
     stops the beaglebone LED from blinking
 */
-void stopBlink(char *led);
+//void stopBlink(char *led);
 
 /*
   @param led
@@ -92,6 +97,6 @@ void stopBlink(char *led);
     blinks beaglebone LED specified in
     led every delay seconds.
 */
-void startBlink(char *led, char *delay);
+//void startBlink(char *led, char *delay);
 
 #endif

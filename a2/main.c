@@ -106,11 +106,11 @@ void main(void)
     warningAlarmTCB.myTask = warningAlarm;
 
     // Initialize the task queue
-    queue[0] = &powerSubsystemTCB;
-    queue[1] = &thrusterSubsystemTCB;
-    queue[2] = &satelliteComsTCB;
-    queue[3] = &consoleDisplayTCB;
-    queue[4] = &warningAlarmTCB;
+    queue[0] = &warningAlarmTCB;	
+    queue[1] = &satelliteComsTCB;
+    queue[2] = &thrusterSubsystemTCB;	
+    queue[3] = &powerSubsystemTCB;
+    queue[4] = &consoleDisplayTCB;
 
     int i = 0;   // queue index
 	// static int calls = 0;
@@ -119,7 +119,8 @@ void main(void)
         aTCBPtr = queue[i];
 	    aTCBPtr->myTask((aTCBPtr->taskDataPtr));
 	    i = (i + 1) % 5;
-	    GLOBALCOUNTER++; 
+	    if(i == 0) GLOBALCOUNTER++;
+        //printf("Main GLOBAL COUNTER: %lu\n", GLOBALCOUNTER);		
 		usleep(100000);
         		
     }

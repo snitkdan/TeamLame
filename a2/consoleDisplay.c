@@ -46,18 +46,18 @@ void consoleDisplay(void *consoleStruct) {
            "Battery Level: %3hu, "
            "Fuel Level: %3hu, "
            "Power Consumption: %2hu, "
-		   "Power Generation: %2hu\r", 
+		   "Power Generation: %2hu", 
            solarPanelString, *batteryLvl, *fuelLvl, *pConsume, *pGenerate); 
 
     // 3. Store print statement for annunciation mode into variable
     snprintf(annunciation, MAX,
            "ANNUNCIATION: "
            "Battery Low: %3s " 
-           "Fuel Low: %3s\r",
+           "Fuel Low: %3s",
            battString, fuelString);
     
     // 4. Pass in the strings to terminalComs, which will
     //    be displayed on this terminal and another terminal. 
-    terminalComs(satelliteStatus, annunciation);
-    //terminalComs(annunciation, satelliteStatus);
+    //terminalComs(satelliteStatus, annunciation);
+    terminalComs(annunciation, satelliteStatus);
 }

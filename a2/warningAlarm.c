@@ -18,26 +18,25 @@
 #define MED 1
 #define LOW 0
 
-// declares short hand for path of all LEDS
+// declares short hand for the shared path of all LEDs
 #define LEDPATH "/sys/class/leds/beaglebone:green:usr"
 
-// declares on or off state, used to trigger brightness for LED3
+// declares on or off state, used to trigger brightness for LEDs
 #define ON "1"
 #define OFF "0"
 
-// adjusts how often the LED flashes (100 = On 100ms then off for 100ms)
-#define SEC1 "100"
-#define SEC2 "500"
-
-// labels the LEDS
+// labels the LEDs
 #define LED1 "1"
 #define LED2 "2"
 #define LED3 "3"
 
+// declares how many times GLOBALCOUNTER would increment to be considered
+// one second (or two seconds)
+#define SEC_1 1
+#define SEC_2 2
+
 void warningAlarm(void *warnStruct) {
   
-
-  printf("in warningAlarm: GLOBALCOUNTER = %lu", GLOBALCOUNTER); 	
   // 1. Store warning data in local variables
   warnData *wData = (warnData*)warnStruct;
   bool *fuelLowPtr = wData->fuelLowPtr;
@@ -58,45 +57,61 @@ void warningAlarm(void *warnStruct) {
   *batteryLowPtr = checkLow(battRegion);
   *fuelLowPtr = checkLow(fuelRegion);
   
+  
+  /*
   // 4. If battLvl and fuelLvl are okay
   if (battRegion == HIGH && fuelRegion == HIGH) {
 	  // 4.1 When battLvl and fuelLvl > 50
-	  LED3State(ON);
-	  stopBlink(LED2);
-	  stopBlink(LED1);
+	  LEDState(LED3, ON);
+	  LEDState(LED2, OFF);
+	  LEDState(LED1, OFF);
   }
   // 5. At least battLvl or fuelLvl <= 50
   else {
-	  LED3State(OFF);
-	  if (battRegion == MED && setOnlyOnce == 1) {
-		    // 5.1 10 < battLvl <= 50
-	        startBlink(LED2, SEC2);
-			setOnlyOnce--;	
-	  } else if (battRegion == LOW && setOnlyOnce == 0) {
-		    // 5.2 battLvl < 10
-		   	startBlink(LED2, SEC1);      	  
-			setOnlyOnce++;
+	  LEDState(LED3, OFF);
+	  bool timesUp = false;
+	  if (battRegion == MED) {
+		  if ((timesUp = checkTimeLED2(SEC_2)))
+			  stateLED2 = 1 - stateLED2;
+	  }	else {
+		  if ((timesUp = checkTimeLED2(SEC_1)))
+	  		  stateLED2 = 1 - stateLED2;
 	  }
-	  
-	  if (fuelRegion == MED && setOnlyOnce2 == 1) {
-		    // 5.3 10 < fuelLvl <= 50 
-	        startBlink(LED1, SEC2);
-			setOnlyOnce2--;	
-	  } else if (fuelRegion == LOW && setOnlyOnce2 == 0) {
-		    // 5.4 fuelLvl < 10	  
-		   	startBlink(LED1, SEC1);      	  
-			setOnlyOnce2++;
-	  }	  
+	  printf("\nWARNING: %d GLOBAL COUNTER: %lu\n", timesUp, GLOBALCOUNTER);
   }
-
+  if (stateLED2 == 1) {
+	  LEDState(LED2, ON);
+  } else {
+	  LEDState(LED2, OFF);
+  }
+  */
 }
 
-void LED3State(char *changeState) {
+/*
+void LEDState(char *led, char *changeState) {
 	char command[100];
-	snprintf(command, 100, "echo %s > %s%s/brightness", changeState, LEDPATH, LED3);
+	snprintf(command, 100, "echo %s > %s%s/brightness", changeState, LEDPATH, led);
 	system(command);
 }
 
+bool checkTimeLED2(int interval) {
+	static unsigned long startInterval = 0;
+	printf("\nstartInterval: %lu\n switch at %lu", startInterval, startInterval + interval);
+	
+	static int firstTimeCalled = 1;
+	if (firstTimeCalled == 1) {
+		startInterval = GLOBALCOUNTER; // need to account for waste of one cycle
+		firstTimeCalled--;
+	}
+	if (startInterval + interval == GLOBALCOUNTER) {
+		startInterval = GLOBALCOUNTER; // need to account for next cycle
+		return true;
+	} 
+	return false;
+}
+*/
+
+/*
 void stopBlink(char *led) {
 	char command[100];
 	snprintf(command, 100, "echo none > %s%s/trigger", LEDPATH, led);
@@ -112,7 +127,7 @@ void startBlink(char *led, char *delay) {
 	snprintf(command, 100, "echo %s > %s%s/delay_off", delay, LEDPATH, led);
 	system(command);	
 }
-
+*/
 
 int checkRegion(unsigned short *lvlPtr) {
 	if (*lvlPtr > 50) {
