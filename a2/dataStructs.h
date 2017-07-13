@@ -5,6 +5,8 @@
 #include <stdbool.h>
 //#include "warningAlarm.h"
 
+extern unsigned long GLOBALCOUNTER;
+
 typedef struct powerSubsystemData {
   bool *solarPanelStatePtr;
   unsigned short *batteryLvlPtr;
