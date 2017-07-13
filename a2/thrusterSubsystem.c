@@ -9,6 +9,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdint.h>
+#include <stdlib.h> // for exit
 #include "dataStructs.h"
 #include "thrusterSubsystem.h"
 
@@ -28,10 +29,13 @@ void thrusterSubsystem(void *thrustStruct) {
 
 
   // 4. Update the fuelLvl
-  if ( *fuelLvl == 0) 
+  if ( *fuelLvl == 0) {
       *fuelLvl = 0;
-  else 
+	  fprintf(stderr, "\n\nOut of fuel, you dead\n");
+      exit(0);
+  } else { 
       *fuelLvl -= (unsigned short)fuelCost;
+  }
   // 5. Recalibrate fuelCost
   fuelCost -= (unsigned short)fuelCost;
 }
@@ -53,6 +57,6 @@ void parseCommands(unsigned int *thrusterCommand, cleanCommands *cc) {
 
 double getFuelCost(cleanCommands *cc) {
   double cost = (double)0.0001284522 * (double)(cc->magnitude * cc->duration);
-  //double cost = (double)0.0011284522 * (double)(cc->magnitude * cc->duration);
+  // double cost = (double)0.0011284522 * (double)(cc->magnitude * cc->duration); // FOR DEBUGGING
   return cost;
 }

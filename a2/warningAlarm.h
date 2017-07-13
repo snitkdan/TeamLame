@@ -8,16 +8,6 @@
 #ifndef WARNING
 #define WARNING
 #include <stdio.h>
-#include "dataStructs.h"
-
-// Structure for holding LED metadata
-/*typedef struct LED_STRUCT {
-  const char *path;  // system file path to LED
-  FILE *file;  // file pointer (NULL if not open)
-  unsigned int sec;  // blink duration (-1 if continuous)
-  bool active;  // true of on, false otherwise
-} LED;
-*/
 
 /*
   @param warnStruct
@@ -42,58 +32,66 @@
 
     "Safe Cases":
       1. batteryLvl && fuelLvl > 50: Illuminate LED3 continuously
-
 */
 void warningAlarm(void *warnStruct);
 
-bool checkLow(unsigned short *lvlPtr);
-
+/*
+  @param lvlPtr
+    Unsigned short pointer containing either
+	the batterylvl or fuelLvl values
+  @modifies
+    nothing
+  @effects
+    returns either HIGH, MED, or LOW, indicating
+	how much battery/fuel the lvlPtr contains
+*/
+int checkRegion(unsigned short *lvlPtr);
 
 /*
-
-  @param wData
-    Struct containing necessary
-    data for the warningAlarm
+  @param region
+    int displaying in what region the fuel/battery
+	level is
   @modifies
-    *warnStruct.fuelLowPtr
-    && *warnStruct.batteryLowPtr
-    && leds[1-3]
+    nothing
   @effects
-    updates fuelLowPtr && batteryLowPtr
-    based on fuelLvlPtr && batteryLvlPtr,
-    respectively. The appropriate
-    LED structure in leds will have its
-    metadata updated to reflect these updates.
-    (see "warningAlarm" spec for specific cases)
-
+    returns true if the region is LOW, false otherwise
 */
-// void update(void *wData);
+bool checkLow(int region);
 
+/*
+  @param changeState
+    string containing either a 1 or a 0
+  @modifies
+    beaglebone USER LED3
+  @effects
+    turns on or off the beaglebone LED3 
+	depending on changeState
+*/
+void LED3State(char *changeState);
 
 /*
   @param led
-    struct containing metadata about the
-    beaglebone LED to be displayed.
+    string containing either a reference to 
+	LED1 or LED2
+  @modifies
+    beaglebone LED specified in led
+  @effects
+    stops the beaglebone LED from blinking
+*/
+void stopBlink(char *led);
+
+/*
+  @param led
+    string containing either a reference to 
+	LED1 or LED2
+  @param delay
+    information for how fast the LED will flash
   @modifies
     beaglebone LED specified in led
   @effects
     blinks beaglebone LED specified in
-    led every led.sec seconds.
+    led every delay seconds.
 */
-void display(FILE *led);
-
-/*
-  @param led
-    struct containing metadata about the
-    beaglebone LED to be displayed.
-  @modifies
-    beaglebone LED specified in led
-  @effects
-    turns off the beaglebone LED
-    specified in led, and updates
-    the relevant fields in led
-    to indicate deactivation.
-*/
-void deactivate(FILE *led);
+void startBlink(char *led, char *delay);
 
 #endif
