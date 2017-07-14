@@ -46,10 +46,10 @@ void main(void)
 	FILE *led1 = fopen("/sys/class/leds/beaglebone:green:usr1/brightness", "w");
 	FILE *led2 = fopen("/sys/class/leds/beaglebone:green:usr2/brightness", "w");
 	FILE *led3 = fopen("/sys/class/leds/beaglebone:green:usr3/brightness", "w");
-	fprintf(led0, "%d", 0); fflush(led0); fclose(led0);
-	fprintf(led1, "%d", 0); fflush(led1); fclose(led1);
-	fprintf(led2, "%d", 0); fflush(led2); fclose(led2);
-	fprintf(led3, "%d", 0); fflush(led3); fclose(led3);
+	//fprintf(led0, "%d", 0); fflush(led0); fclose(led0);
+	//fprintf(led1, "%d", 0); fflush(led1); fclose(led1);
+	//fprintf(led2, "%d", 0); fflush(led2); fclose(led2);
+	//fprintf(led3, "%d", 0); fflush(led3); fclose(led3);
 	
     //.....................................
     //  Assign shared variables to pointers
