@@ -3,7 +3,9 @@
 #define DATASTRUCTS
 
 #include <stdbool.h>
-#include "warningAlarm.h"
+//#include "warningAlarm.h"
+
+extern unsigned long GLOBALCOUNTER;
 
 typedef struct powerSubsystemData {
   bool *solarPanelStatePtr;
@@ -43,7 +45,7 @@ typedef struct warningAlarmData {
   bool *batteryLowPtr;
   unsigned short *batteryLvlPtr;
   unsigned short *fuelLvlPtr;
-  LED *leds[3];
+  //LED *leds[3];
 } warnData;
 
 #endif
