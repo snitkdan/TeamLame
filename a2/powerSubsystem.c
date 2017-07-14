@@ -67,6 +67,7 @@ bool useSolarPanels(bool *solarPanelState, unsigned short *pGenerate, unsigned s
   return *solarPanelState;
 }
 
+// Motar Drive -> set motar drive to 100 when solar panel state changes. After it changes, set it back to 0. 
 void powerGeneration(unsigned short *pGenerate, unsigned short *batteryLvl) {
   // 1. Define static variables to track function state
   static short numCalls = 0;
