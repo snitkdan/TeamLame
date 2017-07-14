@@ -81,8 +81,10 @@ void warningAlarm(void *warnStruct) {
             prev = GLOBALCOUNTER;
         }
     } else if (battRegion == LOW) {
+		// reset prev = GLOBALCOUNTER
         if ((GLOBALCOUNTER - prev) % GC_ONE == 0) 
             // flip led state
+		    printf("LOW: flipping state\n");
             flipLED2();
             prev = GLOBALCOUNTER;
     }
@@ -103,9 +105,9 @@ void warningAlarm(void *warnStruct) {
 }
 
 void flipLED2() {
-    static int led2 = 0;
-    led2 = 1 - led2;
-    if (led2 == 1) {
+    static int flipLed2 = 0;
+    flipLed2 = 1 - flipLed2;
+    if (flipLed2 == 1) {
         ledState(led2, ON);
     } else {
         ledState(led2, OFF); 
@@ -113,9 +115,9 @@ void flipLED2() {
 }
 
 void flipLED1() {
-    static int led1 = 0;
-    led1 = 1 - led1;
-    if (led1 == 1) {
+    static int flipLed1 = 0;
+    flipLed1 = 1 - flipLed1;
+    if (flipLed1 == 1) {
         ledState(led1, ON);
     } else {
         ledState(led1, OFF); 

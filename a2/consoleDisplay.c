@@ -21,6 +21,13 @@
     annunciation, passing them to terminalComs.c
 */
 void consoleDisplay(void *consoleStruct) {
+	static unsigned long start = 0;
+	//printf("start: %lu GC - start: %lu GC:%lu\n", start, GLOBALCOUNTER - start, GLOBALCOUNTER);
+	if((GLOBALCOUNTER - start) % MAJOR_CYCLE != 0) {
+	  //printf("------------EXITING CONSOLE DISPLAY--------\n");
+      return;
+	}
+    start = GLOBALCOUNTER;	
     // 1.1 Assign the data of consoleStruct into local variables
     consoleData *cData = (consoleData*)consoleStruct;
     bool *fuelLow = cData->fuelLowPtr;
@@ -54,7 +61,5 @@ void consoleDisplay(void *consoleStruct) {
 
     // 4. Pass in the strings to terminalComs, which will
     //    be displayed on this terminal and another terminal. 
-    //terminalComs(satelliteStatus, annunciation);
-    //terminalComs(annunciation, satelliteStatus);
     terminalComs(output);
 }

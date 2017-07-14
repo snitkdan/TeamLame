@@ -15,10 +15,12 @@
 
 void thrusterSubsystem(void *thrustStruct) {
   static unsigned long start = 0;
-  if((GLOBALCOUNTER - start != MAJOR_CYCLE && start != 0)) {
+  //printf("start: %lu GC - start: %lu GC:%lu\n", start, GLOBALCOUNTER - start, GLOBALCOUNTER);
+  if((GLOBALCOUNTER - start) % MAJOR_CYCLE != 0) {
+	  //printf("------------EXITING CONSOLE DISPLAY--------\n");
       return;
   }
-  start = GLOBALCOUNTER;
+  start = GLOBALCOUNTER;	
   // 1. Assign the data of thrustStruct into local variables
   thrustData *tData = (thrustData *) thrustStruct;
   unsigned int *thrusterCommand = tData->thrusterCommandPtr;

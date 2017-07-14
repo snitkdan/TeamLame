@@ -6,7 +6,7 @@
 #include "dataStructs.h"
 #include "warningAlarm.h"
 
-#define MAJORCYCLE 500
+//#define MAJORCYCLE 500
 unsigned long GLOBALCOUNTER = 0;
 
 
@@ -47,7 +47,7 @@ void main(void)
     FILE *led0 = fopen("/sys/class/leds/beaglebone:green:usr0/brightness", "w");
     if (!led0) {
        fprintf(stderr, "MAIN: Couldn't open led0\n");
-       return(EXIT_FAILURE);
+       return;
     } else {
        fprintf(led0, "%d", 0); fflush(led0); fclose(led0);
     }
@@ -118,7 +118,7 @@ void main(void)
       aTCBPtr = queue[i];
       aTCBPtr->myTask((aTCBPtr->taskDataPtr));
       if(i == 4) {
-        if(GLOBALCOUNTER % MAJORCYCLE == 0) {
+        if(GLOBALCOUNTER % MAJOR_CYCLE == 0) {
           usleep(9441.8);
         } else {
           usleep(9465);

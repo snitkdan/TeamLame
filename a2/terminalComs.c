@@ -18,7 +18,7 @@ FILE *fp = NULL; // declare file here
 
 int terminalComs(char *output) {
 	// 1. Declare storage and data to be used
-    char buffer[1000];
+    char buffer[MAX];
     static int fd0; // for terminal0
     static int fd1; // for terminal1
 	static int firstTime = 0;
@@ -45,13 +45,13 @@ int terminalComs(char *output) {
 
 	    //3.2 Read and print the data from the file
 	    fseek(fp, 0, SEEK_SET);	 
-        fread(buffer, 1, 1000, fp);
+        fread(buffer, 1, MAX, fp);
 	
         // 3.3 Transmit buffer to terminal0
         //     Transmit annunciation to terminal1
-        //dprintf(fd0, "%s", buffer);
-        //dprintf(fd1, "%s", output);
-        printf("%s\n", output);
+        dprintf(fd0, "%s\n", buffer);
+        dprintf(fd1, "%s\n", output);
+        //printf("%s\n", output);
 		return (0);
 	} else {
 		fprintf(stderr, "ERROR, fp, fd0 and/or fd1 not opened correctly \n");

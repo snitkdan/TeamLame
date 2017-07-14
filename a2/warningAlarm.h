@@ -75,7 +75,7 @@ bool checkTimeLED2(int interval);
 void checkOpened(FILE *led);
 
 void flipLED2();
-void flipLED3();
+void flipLED1();
 
 /*
   @param led
