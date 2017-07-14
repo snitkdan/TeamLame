@@ -25,15 +25,15 @@
 #define ON 1
 #define OFF 0
 
-#define GC_ONE 1
-#define GC_TWO 5
+#define GC_ONE 100
+#define GC_TWO 200
 
 FILE *led1 = NULL;
 FILE *led2 = NULL;
 FILE *led3 = NULL;
 
 void warningAlarm(void *warnStruct) {
-/*  
+  
   if(!led1) {
     led1 = fopen("/sys/class/leds/beaglebone:green:usr1/brightness", "w");
   }
@@ -46,7 +46,7 @@ void warningAlarm(void *warnStruct) {
   checkOpened(led1);
   checkOpened(led2);
   checkOpened(led3);
-*/
+
   // 1. Store warning data in local variables
   warnData *wData = (warnData*)warnStruct;
   bool *fuelLowPtr = wData->fuelLowPtr;
@@ -63,11 +63,11 @@ void warningAlarm(void *warnStruct) {
   *fuelLowPtr = checkLow(fuelRegion);
 
   if (battRegion == HIGH && fuelRegion == HIGH) {
- //   ledState(led3, ON);
- //   ledState(led2, OFF);
- //   ledState(led1, OFF);
+    ledState(led3, ON);
+    ledState(led2, OFF);
+    ledState(led1, OFF);
   } else {
- //   ledState(led3, OFF);
+    ledState(led3, OFF);
     static int prev = 0;
     static int firstTime = 1;
     if (firstTime == 1) {
@@ -106,10 +106,10 @@ void flipLED2() {
     static int ledState = 0;
     ledState = 1 - ledState;
     if (ledState == 1) {
-    //    ledState(led2, ON);
+        ledState(led2, ON);
     printf("------------led2 on  at two sec----------\n");    
     } else {
-    //    ledState(led2, OFF); 
+        ledState(led2, OFF); 
     printf("------------led2 off  at two sec----------\n");    
     }   
 }
@@ -118,9 +118,9 @@ void flipLED3() {
     static int ledState = 0;
     ledState = 1 - ledState;
     if (ledState == 1) {
-    //    ledState(led3, ON);
+        ledState(led3, ON);
     } else {
-    //    ledState(led3, OFF); 
+        ledState(led3, OFF); 
     }   
 }
 
