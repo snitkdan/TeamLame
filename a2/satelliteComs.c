@@ -12,8 +12,6 @@
 #include "satelliteComs.h"
 #define MAX 65536 // upper bound for 16 bit
 
-
-
 void satelliteComs(void *satStruct) {
     // 1. Assign the data of sData into local variables
     satData *sData = (satData*)satStruct;
@@ -31,7 +29,6 @@ void satelliteComs(void *satStruct) {
     // 2. Retrieve random number, mask and assign thrusterCommand to it
     *thrusterCommand = randomInteger(0, MAX) % MAX;
     maskBit(thrusterCommand);
-    // printf("thrusterCommand = %d\n", *thrusterCommand);
 }
 
 void maskBit(unsigned int *thrusterCommand) {

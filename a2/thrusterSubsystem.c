@@ -15,7 +15,6 @@
 
 void thrusterSubsystem(void *thrustStruct) {
   static unsigned long start = 0;
-  //printf("start: %lu GC - start: %lu GC:%lu\n", start, GLOBALCOUNTER - start, GLOBALCOUNTER);
   if((GLOBALCOUNTER - start) % MAJOR_CYCLE != 0) {
       return;
   }
@@ -63,6 +62,5 @@ void parseCommands(unsigned int *thrusterCommand, cleanCommands *cc) {
 
 double getFuelCost(cleanCommands *cc) {
   double cost = (double)0.0001284522 * (double)(cc->magnitude * cc->duration);
-  // double cost = (double)0.0011284522 * (double)(cc->magnitude * cc->duration); // FOR DEBUGGING
   return cost;
 }

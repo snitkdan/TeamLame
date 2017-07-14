@@ -79,9 +79,7 @@ void warningAlarm(void *warnStruct) {
 					newLowBatt++;				
 			}
 			
-			if ((GLOBALCOUNTER - prevBatt) % GC_TWO == 0) {
-			//printf("prev: %lu, GLOBALCOUNTER %lu\n", *prev, GLOBALCOUNTER);
-				
+			if ((GLOBALCOUNTER - prevBatt) % GC_TWO == 0) {				
 				// flip led state
 				flipLED2();
 				prevBatt = GLOBALCOUNTER;

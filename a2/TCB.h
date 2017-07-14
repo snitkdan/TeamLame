@@ -22,5 +22,4 @@ void satelliteComs(void *satStruct);
 void consoleDisplay(void *consoleStruct);
 void thrusterSubsystem(void *thrustStruct);
 void warningAlarm(void *warnStruct);
-void checkOpened(FILE *led);
 #endif

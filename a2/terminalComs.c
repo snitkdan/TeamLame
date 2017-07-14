@@ -51,10 +51,9 @@ int terminalComs(char *output) {
         //     Transmit annunciation to terminal1
         dprintf(fd0, "%s\n", buffer);
         dprintf(fd1, "%s\n", output);
-        //printf("%s\n", output);
 		return (0);
 	} else {
-		fprintf(stderr, "ERROR, fp, fd0 and/or fd1 not opened correctly \n");
+		fprintf(stderr, "ERROR, fp, fd0 and/or fd1 not opened correctly\n");
 		exit(1);
 	}
 }

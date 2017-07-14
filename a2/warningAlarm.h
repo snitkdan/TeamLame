@@ -71,34 +71,7 @@ void ledState(FILE *led, int state);
 
 bool checkTimeLED2(int interval);
 
-//void checkOpened(FILE *led);
-
 void flipLED2();
 void flipLED1();
-
-/*
-  @param led
-    string containing either a reference to 
-	LED1 or LED2
-  @modifies
-    beaglebone LED specified in led
-  @effects
-    stops the beaglebone LED from blinking
-*/
-//void stopBlink(char *led);
-
-/*
-  @param led
-    string containing either a reference to 
-	LED1 or LED2
-  @param delay
-    information for how fast the LED will flash
-  @modifies
-    beaglebone LED specified in led
-  @effects
-    blinks beaglebone LED specified in
-    led every delay seconds.
-*/
-//void startBlink(char *led, char *delay);
 
 #endif

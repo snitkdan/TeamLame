@@ -5,9 +5,9 @@
 #include "TCB.h"
 #include "dataStructs.h"
 
-//#define MAJORCYCLE 500
+#define MAJOR_DELAY 9441.8
+#define MINOR_DELAY 9920.2
 unsigned long GLOBALCOUNTER = 0;
-
 
 void main(void)
 {
@@ -127,9 +127,9 @@ void main(void)
       aTCBPtr->myTask((aTCBPtr->taskDataPtr));
       if(i == 4) {
         if(GLOBALCOUNTER % MAJOR_CYCLE == 0) {
-          usleep(9441.8);
+          usleep(MAJOR_DELAY);
         } else {
-          usleep(9465);
+          usleep(MINOR_DELAY);
         }
         GLOBALCOUNTER++;
       }
