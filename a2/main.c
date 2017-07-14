@@ -4,7 +4,6 @@
 #include <unistd.h>
 #include "TCB.h"
 #include "dataStructs.h"
-#include "warningAlarm.h"
 
 //#define MAJORCYCLE 500
 unsigned long GLOBALCOUNTER = 0;
@@ -14,7 +13,8 @@ void main(void)
 {
     // Define shared variables
     unsigned int thrusterCommand = 0;
-    unsigned short batteryLvl = 100;
+    //unsigned short batteryLvl = 100;
+    unsigned short batteryLvl = 55;	
     unsigned short fuelLvl = 100;
     unsigned short pConsume = 0;
     unsigned short pGenerate = 0;
@@ -45,12 +45,20 @@ void main(void)
 
     // 1. Turn off led0 initially
     FILE *led0 = fopen("/sys/class/leds/beaglebone:green:usr0/brightness", "w");
-    if (!led0) {
-       fprintf(stderr, "MAIN: Couldn't open led0\n");
-       return;
-    } else {
-       fprintf(led0, "%d", 0); fflush(led0); fclose(led0);
-    }
+    FILE *led1 = fopen("/sys/class/leds/beaglebone:green:usr1/brightness", "w");
+    FILE *led2 = fopen("/sys/class/leds/beaglebone:green:usr2/brightness", "w");
+    FILE *led3 = fopen("/sys/class/leds/beaglebone:green:usr3/brightness", "w");
+	
+	checkOpened(led0); 
+	checkOpened(led1);
+	checkOpened(led2);
+	checkOpened(led3);
+	
+    fprintf(led0, "%d", 0); fflush(led0); fclose(led0);
+    fprintf(led1, "%d", 0); fflush(led1); fclose(led1);
+    fprintf(led2, "%d", 0); fflush(led2); fclose(led2);
+    fprintf(led3, "%d", 0); fflush(led3); fclose(led3);
+	
     //.....................................
     //  Assign shared variables to pointers
     //.....................................

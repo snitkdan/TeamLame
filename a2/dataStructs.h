@@ -3,10 +3,11 @@
 #define DATASTRUCTS
 
 #include <stdbool.h>
-//#include "warningAlarm.h"
 
 extern unsigned long GLOBALCOUNTER;
 #define MAJOR_CYCLE 500
+
+void checkOpened(FILE *led); // used in warningAlarm and Main
 
 typedef struct powerSubsystemData {
   bool *solarPanelStatePtr;

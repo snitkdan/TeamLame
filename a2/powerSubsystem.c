@@ -15,7 +15,6 @@ void powerSubsystem(void *powerStruct) {
   static unsigned long start = 0;
 	//printf("start: %lu GC - start: %lu GC:%lu\n", start, GLOBALCOUNTER - start, GLOBALCOUNTER);
   if((GLOBALCOUNTER - start) % MAJOR_CYCLE != 0) {
-    //printf("------------EXITING CONSOLE DISPLAY--------\n");
       return;
   }
   start = GLOBALCOUNTER;

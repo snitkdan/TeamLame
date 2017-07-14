@@ -55,12 +55,12 @@ void warningAlarm(void *warnStruct) {
   unsigned short *fuelLvlPtr = wData->fuelLvlPtr;
   
   // 2. Determine in what region the battery/fuel level is (high, med, low)
-  int battRegion = checkRegion(batteryLvlPtr);
-  int fuelRegion = checkRegion(fuelLvlPtr);
+  int battRegion = checkRegion(batteryLvlPtr, batteryLowPtr);
+  int fuelRegion = checkRegion(fuelLvlPtr, fuelLowPtr);
   
   // 3. Set batteryLow and fuelLow depending on region
-  *batteryLowPtr = checkLow(battRegion);
-  *fuelLowPtr = checkLow(fuelRegion);
+  //*batteryLowPtr = checkLow(battRegion);
+  //*fuelLowPtr = checkLow(fuelRegion);
 
   if (battRegion == HIGH && fuelRegion == HIGH) {
     ledState(led3, ON);
@@ -68,41 +68,69 @@ void warningAlarm(void *warnStruct) {
     ledState(led1, OFF);
   } else {
     ledState(led3, OFF);
-    static int prev = 0;
-    static int firstTime = 1;
-    if (firstTime == 1) {
-        prev = GLOBALCOUNTER;
-        firstTime--;
-    } 
+	
+    static unsigned long prevBatt = 0;
+    static unsigned long prevFuel = 0;
+    static int newMedBatt = 0;
+	static int newLowBatt = 0;
+	static int newMedFuel = 0;
+	static int newLowFuel = 0;
+	
     if (battRegion == MED) {
-        if ((GLOBALCOUNTER - prev) % GC_TWO == 0) {
+		if (newMedBatt == 1) {
+				prevBatt = GLOBALCOUNTER;
+				newMedBatt--;
+				newLowBatt++;				
+		}
+ 		
+        if ((GLOBALCOUNTER - prevBatt) % GC_TWO == 0) {
+		//printf("prev: %lu, GLOBALCOUNTER %lu\n", *prev, GLOBALCOUNTER);
+			
             // flip led state
             flipLED2();
-            prev = GLOBALCOUNTER;
+            prevBatt = GLOBALCOUNTER;
         }
     } else if (battRegion == LOW) {
+		if (newLowBatt == 1) {
+				prevBatt = GLOBALCOUNTER;
+				newLowBatt--;
+				newMedBatt++;				
+		}		
 		// reset prev = GLOBALCOUNTER
-        if ((GLOBALCOUNTER - prev) % GC_ONE == 0) 
+        if ((GLOBALCOUNTER - prevBatt) % GC_ONE == 0) { 
             // flip led state
-		    printf("LOW: flipping state\n");
             flipLED2();
-            prev = GLOBALCOUNTER;
+            prevBatt = GLOBALCOUNTER;
+		}	
     }
 
     if (fuelRegion == MED) {
-        if ((GLOBALCOUNTER - prev) % GC_TWO == 0) {
+		if (newMedFuel == 1) {
+				prevFuel = GLOBALCOUNTER;
+				newMedFuel--;
+				newLowFuel++;				
+		}	
+        if ((GLOBALCOUNTER - prevFuel) % GC_TWO == 0) {
             // flip led state
             flipLED1();
-            prev = GLOBALCOUNTER;
+            prevFuel = GLOBALCOUNTER;
         }
     } else if(fuelRegion == LOW){
-        if ((GLOBALCOUNTER - prev) % GC_ONE == 0) 
+		if (newLowFuel == 1) {
+				prevFuel = GLOBALCOUNTER;
+				newLowFuel--;
+				newMedFuel++;				
+		}		
+        if ((GLOBALCOUNTER - prevFuel) % GC_ONE == 0) {
             // flip led state
             flipLED1();
-            prev = GLOBALCOUNTER;
+            prevFuel = GLOBALCOUNTER;
+		}	
     }
-  }   
+  } 
+  
 }
+
 
 void flipLED2() {
     static int flipLed2 = 0;
@@ -136,16 +164,15 @@ void checkOpened(FILE *led) {
     }
 }
 
-int checkRegion(unsigned short *lvlPtr) {
+int checkRegion(unsigned short *lvlPtr, bool *lowPtr) {
 	if (*lvlPtr > 50) {
+		*lowPtr = false;		
 		return HIGH;
 	} else if (*lvlPtr <= 10) {
+		*lowPtr = true;				
 		return LOW;
 	} else {
+		*lowPtr = false;				
 		return MED;
 	}
-}
-
-bool checkLow(int region) {
-	return region == LOW;
 }

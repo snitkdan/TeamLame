@@ -45,7 +45,7 @@ void warningAlarm(void *warnStruct);
     returns either HIGH, MED, or LOW, indicating
 	how much battery/fuel the lvlPtr contains
 */
-int checkRegion(unsigned short *lvlPtr);
+int checkRegion(unsigned short *lvlPtr, bool *lowPtr);
 
 /*
   @param region
@@ -56,7 +56,6 @@ int checkRegion(unsigned short *lvlPtr);
   @effects
     returns true if the region is LOW, false otherwise
 */
-bool checkLow(int region);
 
 /*
   @param changeState
@@ -72,7 +71,7 @@ void ledState(FILE *led, int state);
 
 bool checkTimeLED2(int interval);
 
-void checkOpened(FILE *led);
+//void checkOpened(FILE *led);
 
 void flipLED2();
 void flipLED1();
