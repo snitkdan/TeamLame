@@ -3,12 +3,12 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <string.h>
+#include <time.h>
 #include "TCB.h"
 #include "dataStructs.h"
 #include "warningAlarm.h"
-#include <time.h>
 
-void pauseSec(int sec);
+void pauseSec(double sec);
 void deactive(LED *led);
 void blink(LED *led);
 
@@ -47,7 +47,7 @@ void main(void) {
     // 1. Declare structures to store LED metadata
     LED led1 = {"/sys/class/leds/beaglebone:green:usr1/brightness", NULL, 0, false};
     LED led2 = {"/sys/class/leds/beaglebone:green:usr2/brightness", NULL, 0, false};
-    LED led3 = {"/sys/class/leds/beaglebone:green:usr3/brightness", NULL, 0, false};
+    LED led3 = {"/sys/class/leds/beaglebone:green:usr3/brightness", NULL, 0, true};
     LED *leds[3] = {&led1, &led2, &led3};
 
     wData.leds[0] = leds[0];
@@ -55,12 +55,12 @@ void main(void) {
     wData.leds[2] = leds[2];
 
     // 2. Turn off all 3 LEDs
-    char *command1 = strcat("echo 0 > ", led1.path);
+    /*char *command1 = strcat("echo 0 > ", led1.path);
     char *command2 = strcat("echo 0 > ", led2.path);
-    char *command3 = strcat("echo 0 > ", led3.path);
-    system(command1);
-    system(command2);
-    system(command3);
+    char *command3 = strcat("echo 0 > ", led3.path);*/
+    //system(command1);
+    //system(command2);
+    //system(command3);
 
 
     //.....................................
@@ -118,35 +118,44 @@ void main(void) {
     warningAlarmTCB.myTask = warningAlarm;
 
     // Initialize the task queue
-    queue[0] = &powerSubsystemTCB;
+    queue[0] = &warningAlarmTCB;
     queue[1] = &thrusterSubsystemTCB;
     queue[2] = &satelliteComsTCB;
-    queue[3] = &consoleDisplayTCB;
-    queue[4] = &warningAlarmTCB;
+    queue[3] = &powerSubsystemTCB;
+    queue[4] = &consoleDisplayTCB;
 
     int i = 0;   // queue index
+    time_t timeStart = 0;
+    time_t timeEnd = 0;
+    time_t timeElapsed = 0;
+    unsigned long globalCounter = 0L;
     while (true) {
-       aTCBPtr = queue[i];
-	     aTCBPtr->myTask((aTCBPtr->taskDataPtr));
-	     i = (i + 1) % 5;
-       // Fuel Lvl Status
+       if(timeElapsed % 5 == 0) {
+           timeStart = time(time_t);
+           aTCBPtr = queue[i];
+           aTCBPtr->myTask((aTCBPtr->taskDataPtr));
+           timeEnd = time(time_t);
+           timeElapsed = timeEnd - timeStart;
+           globalCounter++;
+       }
+       // LED Flashing
+       if(led1.active || led2.active) {
+         printf("LED3 OFF @ %d secs\n", led3.sec);
+         //deactive(&led3);
+       } else {
+         printf("LED3 ON @ %d secs\n", led3.sec);
+         //blink(&led3);
+       }
        if(led1.active) {
-         blink(&led1);
-       } else {
-         deactive(&led1);
+         printf("LED1 ON @ %d secs\n", led1.sec);
+         //blink(&led1);
        }
-       // Battery Lvl Status
        if(led2.active) {
-         blink(&led2);
-       } else {
-         deactive(&led2);
+         printf("LED2 ON @ %d secs\n", led2.sec);
+         //blink(&led2);
        }
-       // Okay
-       if(led3.active) {
-         blink(&led3);
-       } else {
-         deactive(&led3);
-       }
+       i = (i + 1) % 5;
+       pauseSec(0.5);
     }
     return;
 }
@@ -154,7 +163,7 @@ void main(void) {
 void blink(LED *led) {
   char *led_command = strcat("echo 1 > ", led->path);
   system(led_command);
-  pauseSec(led->sec);
+  //pauseSec(led->sec);
 }
 
 void deactive(LED *led) {
@@ -162,11 +171,12 @@ void deactive(LED *led) {
   system(led_command);
 }
 
-void pauseSec(int sec) {
+// BROKEN (too slow)
+void pauseSec(double sec) {
   time_t now, later;
   now = time(NULL);
   later = time(NULL);
-  while((later - now) < (double)sec) {
+  while((later - now) < sec) {
     later = time(NULL);
   }
 }
