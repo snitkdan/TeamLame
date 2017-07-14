@@ -6,7 +6,9 @@
 #include "dataStructs.h"
 #include "warningAlarm.h"
 
+#define MAJORCYCLE 500
 unsigned long GLOBALCOUNTER = 0;
+
 
 void main(void)
 {
@@ -111,15 +113,19 @@ void main(void)
     queue[4] = &consoleDisplayTCB;
 
     int i = 0;   // queue index
-    while (true)
-    {
-        aTCBPtr = queue[i];
-	    aTCBPtr->myTask((aTCBPtr->taskDataPtr));
+	// static int calls = 0;
+    while (true) {
+      aTCBPtr = queue[i];
+      aTCBPtr->myTask((aTCBPtr->taskDataPtr));
+      if(i == 4) {
+        if(GLOBALCOUNTER % MAJORCYCLE == 0) {
+          usleep(9441.8);
+        } else {
+          usleep(9465);
+        }
+        GLOBALCOUNTER++;
+      }
 	    i = (i + 1) % 5;
-	    if(i == 0) GLOBALCOUNTER++;
-        printf("Main GLOBAL COUNTER: %lu\n", GLOBALCOUNTER);
-		usleep(100000);
-
     }
     return;
 }
