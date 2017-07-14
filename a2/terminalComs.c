@@ -15,7 +15,7 @@
 
 FILE *fp = NULL; // declare file here
 
-int terminalComs(char *satelliteStatus, char *annunciation) {
+int terminalComs(char *output) {
 	// 1. Declare storage and data to be used
     char buffer[100];
     static int fd0; // for terminal0
@@ -40,7 +40,7 @@ int terminalComs(char *satelliteStatus, char *annunciation) {
 		
 	    // 3.1 Write data to the file 
         fseek(fp, 0, SEEK_SET); // seeks pointer back to beginning for overwriting
-        fwrite(satelliteStatus, strlen(satelliteStatus) + 1, 1, fp);
+        fwrite(output, strlen(output) + 1, 1, fp);
 
 	    //3.2 Read and print the data from the file
 	    fseek(fp, 0, SEEK_SET);	 
@@ -48,8 +48,8 @@ int terminalComs(char *satelliteStatus, char *annunciation) {
 	
         // 3.3 Transmit buffer to terminal0
         //     Transmit annunciation to terminal1
-        dprintf(fd0, "%s\r", buffer);
-        dprintf(fd1, "%s\r", annunciation);
+        dprintf(fd0, "%s", buffer);
+        dprintf(fd1, "%s", output);
 		return (0);
 	} else {
 		fprintf(stderr, "ERROR, fp, fd0 and/or fd1 not opened correctly \n");

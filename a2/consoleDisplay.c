@@ -7,7 +7,7 @@
 #include <stdbool.h>
 #include "dataStructs.h"
 #include "TCB.h"
-#define MAX 200
+#define MAX 300
 
 /*
   @param consoleStruct
@@ -37,27 +37,27 @@ void consoleDisplay(void *consoleStruct) {
     char *battString = (*batteryLow)? "YES":"NO";
     //char *fuelString = (numCalls == 0)? "YES":"NO";
     //char *battString = (numCalls == 1)? "YES":"NO";
-    char satelliteStatus[MAX];
-    char annunciation[MAX];
+    char output[MAX];
     
     // 2. Store print statements for satellite status into variable
-    snprintf(satelliteStatus, MAX, 
+    snprintf(output, MAX, 
            "Solar Panels: %9s, " 
            "Battery Level: %3hu, "
            "Fuel Level: %3hu, "
            "Power Consumption: %2hu, "
-		   "Power Generation: %2hu", 
-           solarPanelString, *batteryLvl, *fuelLvl, *pConsume, *pGenerate); 
+		   "Power Generation: %2hu\n"
+		   "ANNUNCIATION: "
+		   "Battery Low: %3s "
+		   "Fuel Low: %3s\n",		   
+           solarPanelString, *batteryLvl, *fuelLvl, *pConsume, *pGenerate,
+		   battString, fuelString); 
 
     // 3. Store print statement for annunciation mode into variable
-    snprintf(annunciation, MAX,
-           "ANNUNCIATION: "
-           "Battery Low: %3s " 
-           "Fuel Low: %3s",
-           battString, fuelString);
+
     
     // 4. Pass in the strings to terminalComs, which will
     //    be displayed on this terminal and another terminal. 
     //terminalComs(satelliteStatus, annunciation);
-    terminalComs(annunciation, satelliteStatus);
+    //terminalComs(annunciation, satelliteStatus);
+	terminalComs(output);
 }
