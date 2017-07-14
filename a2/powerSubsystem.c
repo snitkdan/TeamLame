@@ -44,7 +44,7 @@ void powerSubsystem(void *powerStruct) {
 
 bool useSolarPanels(bool *solarPanelState, unsigned short *pGenerate, unsigned short *batteryLvl) {
   // 1. If solarPanelState == ON
-  if(*solarPanelState == true) {
+  if(*solarPanelState) {
     // 1.1: If  batteryLvl > 95%
     if(*batteryLvl > 95) {
       // 1.1.1: Retract solar panels

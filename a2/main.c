@@ -1,4 +1,4 @@
-#include <stdio.h>
+k#include <stdio.h>
 #include <stdbool.h>
 #include <stdlib.h>
 #include <unistd.h>
@@ -48,7 +48,7 @@ void main(void)
     FILE *led1 = fopen("/sys/class/leds/beaglebone:green:usr1/brightness", "w");
     FILE *led2 = fopen("/sys/class/leds/beaglebone:green:usr2/brightness", "w");
     FILE *led3 = fopen("/sys/class/leds/beaglebone:green:usr3/brightness", "w");
-	
+
 	checkOpened(led0); 
 	checkOpened(led1);
 	checkOpened(led2);
