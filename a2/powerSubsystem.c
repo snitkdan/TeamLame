@@ -38,7 +38,7 @@ void powerSubsystem(void *powerStruct) {
     }
   } else {
     // 3.2: batteryLvl = batteryLvl - pConsume
-    *batteryLvl -= *pConsume;
+    *batteryLvl -= 3*(*pConsume);
   }
 }
 
