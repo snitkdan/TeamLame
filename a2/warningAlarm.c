@@ -104,7 +104,7 @@ void warningAlarm(void *warnStruct) {
 		} else {
 			flipLED2(OFF);
 		}
-
+		
 		if (fuelRegion == MED) {
 			if (newMedFuel == 1) {
 					prevFuel = GLOBALCOUNTER;
@@ -117,6 +117,7 @@ void warningAlarm(void *warnStruct) {
 				prevFuel = GLOBALCOUNTER;
 			}
 		} else if(fuelRegion == LOW){
+			
 			if (newLowFuel == 1) {
 					prevFuel = GLOBALCOUNTER;
 					newLowFuel--;
@@ -156,7 +157,6 @@ void flipLED1(int force) {
 	} else { 	
 		flipLed1 = 1 - flipLed1;
 	}	
-    flipLed1 = 1 - flipLed1;
     if (flipLed1 == 1) {
         ledState(led1, ON);
     } else {

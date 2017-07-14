@@ -14,8 +14,8 @@ void main(void)
     // Define shared variables
     unsigned int thrusterCommand = 0;
     //unsigned short batteryLvl = 100;
-    unsigned short batteryLvl = 55;	
-    unsigned short fuelLvl = 100;
+    unsigned short batteryLvl = 1;	
+    unsigned short fuelLvl = 11;
     unsigned short pConsume = 0;
     unsigned short pGenerate = 0;
     bool solarPanelState = false;
