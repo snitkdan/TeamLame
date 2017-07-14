@@ -90,37 +90,35 @@ void warningAlarm(void *warnStruct) {
     if (fuelRegion == MED) {
         if ((GLOBALCOUNTER - prev) % GC_TWO == 0) {
             // flip led state
-            flipLED3();
+            flipLED1();
             prev = GLOBALCOUNTER;
         }
     } else if(fuelRegion == LOW){
         if ((GLOBALCOUNTER - prev) % GC_ONE == 0) 
             // flip led state
-            flipLED3();
+            flipLED1();
             prev = GLOBALCOUNTER;
     }
   }   
 }
 
 void flipLED2() {
-    static int ledState = 0;
-    ledState = 1 - ledState;
-    if (ledState == 1) {
+    static int led2 = 0;
+    led2 = 1 - led2;
+    if (led2 == 1) {
         ledState(led2, ON);
-    printf("------------led2 on  at two sec----------\n");    
     } else {
         ledState(led2, OFF); 
-    printf("------------led2 off  at two sec----------\n");    
     }   
 }
 
-void flipLED3() {
-    static int ledState = 0;
-    ledState = 1 - ledState;
-    if (ledState == 1) {
-        ledState(led3, ON);
+void flipLED1() {
+    static int led1 = 0;
+    led1 = 1 - led1;
+    if (led1 == 1) {
+        ledState(led1, ON);
     } else {
-        ledState(led3, OFF); 
+        ledState(led1, OFF); 
     }   
 }
 

@@ -14,6 +14,11 @@
 #include "thrusterSubsystem.h"
 
 void thrusterSubsystem(void *thrustStruct) {
+  static unsigned long start = 0;
+  if((GLOBALCOUNTER - start != interval && start != 0)) {
+      return;
+  }
+  start = GLOBALCOUNTER;
   // 1. Assign the data of thrustStruct into local variables
   thrustData *tData = (thrustData *) thrustStruct;
   unsigned int *thrusterCommand = tData->thrusterCommandPtr;

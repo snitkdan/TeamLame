@@ -12,6 +12,11 @@
 #include "powerSubsystem.h"
 
 void powerSubsystem(void *powerStruct) {
+  static unsigned long start = 0;
+  if((GLOBALCOUNTER - start != interval && start != 0)) {
+      return;
+  }
+  start = GLOBALCOUNTER;
   // 1. Assign the data of powerStruct into local variables
   powerData *pData = (powerData*)powerStruct;
   bool *solarPanelState = pData->solarPanelStatePtr;
