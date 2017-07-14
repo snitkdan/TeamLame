@@ -49,9 +49,9 @@ int terminalComs(char *output) {
 	
         // 3.3 Transmit buffer to terminal0
         //     Transmit annunciation to terminal1
-        dprintf(fd0, "%s", buffer);
-        dprintf(fd1, "%s", output);
-        //printf("%s\n", output);
+        //dprintf(fd0, "%s", buffer);
+        //dprintf(fd1, "%s", output);
+        printf("%s\n", output);
 		return (0);
 	} else {
 		fprintf(stderr, "ERROR, fp, fd0 and/or fd1 not opened correctly \n");

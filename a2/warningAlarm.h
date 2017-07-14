@@ -68,7 +68,7 @@ bool checkLow(int region);
 	depending on changeState
 */
 //void LED3State(char *changeState);
-void LEDState(char *led, char *changeState);
+void ledState(FILE *led, int state);
 
 bool checkTimeLED2(int interval);
 

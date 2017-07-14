@@ -113,29 +113,16 @@ void main(void)
     queue[4] = &consoleDisplayTCB;
 
     int i = 0;   // queue index
-    int timeTask = 0;
-+   FILE *gpio = fopen("/sys/class/gpio/gpio48/value", "w");
-+   if (!gpio){
-+	printf("Could not open GPIO");
-+	return EXIT_FAILURE;
-+   }
-
-    while (true) {
-	if(i == timeTask) {
-		fprintf(gpio, "%d", 1);
-		fflush(gpio);
-	}
+	// static int calls = 0;
+    while (true)
+    {
         aTCBPtr = queue[i];
-	aTCBPtr->myTask((aTCBPtr->taskDataPtr));
-	if(i == timeTask) {
-		fprintf(gpio, "%d", 0);
-                fflush(gpio);
-	}
-	i = (i + 1) % 5;
-	if(i == 0) GLOBALCOUNTER++;
-        //printf("Main GLOBAL COUNTER: %lu\n", GLOBALCOUNTER);		
-	usleep(100000);
+	    aTCBPtr->myTask((aTCBPtr->taskDataPtr));
+	    i = (i + 1) % 5;
+	    if(i == 0) GLOBALCOUNTER++;
+        printf("Main GLOBAL COUNTER: %lu\n", GLOBALCOUNTER);		
+		usleep(100000);
+        		
     }
-    fclose(gpio);
     return;
 }

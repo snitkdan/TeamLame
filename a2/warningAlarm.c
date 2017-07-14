@@ -22,21 +22,26 @@
 #define LEDPATH "/sys/class/leds/beaglebone:green:usr"
 
 // declares on or off state, used to trigger brightness for LEDs
-#define ON "1"
-#define OFF "0"
+#define ON 1
+#define OFF 0
 
-// labels the LEDs
-#define LED1 "1"
-#define LED2 "2"
-#define LED3 "3"
-
-// declares how many times GLOBALCOUNTER would increment to be considered
-// one second (or two seconds)
-#define SEC_1 1
-#define SEC_2 2
+FILE *led1 = NULL;
+FILE *led2 = NULL;
+FILE *led3 = NULL;
 
 void warningAlarm(void *warnStruct) {
+  static unsigned long start = 0;
   
+  if(!led1) {
+    led1 = fopen("/sys/class/leds/beaglebone:green:usr1/brightness", "w");
+  }
+  if(!led2) {
+    led2 = fopen("/sys/class/leds/beaglebone:green:usr2/brightness", "w");
+  }
+  if(!led3) {
+    led2 = fopen("/sys/class/leds/beaglebone:green:usr3/brightness", "w");
+  }
+
   // 1. Store warning data in local variables
   warnData *wData = (warnData*)warnStruct;
   bool *fuelLowPtr = wData->fuelLowPtr;
@@ -44,11 +49,6 @@ void warningAlarm(void *warnStruct) {
   unsigned short *batteryLvlPtr = wData->batteryLvlPtr;
   unsigned short *fuelLvlPtr = wData->fuelLvlPtr;
   
-  // 1.1 Sets static ints to prevent startBlink functions from 
-  //     being set repeatedly for LED2 and LED1
-  static int setOnlyOnce = 1;
-  static int setOnlyOnce2 = 1;
-
   // 2. Determine in what region the battery/fuel level is (high, med, low)
   int battRegion = checkRegion(batteryLvlPtr);
   int fuelRegion = checkRegion(fuelLvlPtr);
@@ -56,6 +56,15 @@ void warningAlarm(void *warnStruct) {
   // 3. Set batteryLow and fuelLow depending on region
   *batteryLowPtr = checkLow(battRegion);
   *fuelLowPtr = checkLow(fuelRegion);
+
+  if (battRegion == HIGH && fuelRegion == HIGH) {
+    ledState(led3, ON);
+    ledState(led2, OFF);
+    ledState(led1, OFF);
+  } else {
+    ledState(led3, OFF);
+  
+  }   
   
   
   /*
@@ -87,13 +96,11 @@ void warningAlarm(void *warnStruct) {
   */
 }
 
-/*
-void LEDState(char *led, char *changeState) {
-	char command[100];
-	snprintf(command, 100, "echo %s > %s%s/brightness", changeState, LEDPATH, led);
-	system(command);
+void ledState(FILE *led, int state) {
+    fprintf(led, "%d", state);
+    fflush(led);
 }
-
+/*
 bool checkTimeLED2(int interval) {
 	static unsigned long startInterval = 0;
 	printf("\nstartInterval: %lu\n switch at %lu", startInterval, startInterval + interval);

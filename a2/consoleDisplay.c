@@ -52,12 +52,9 @@ void consoleDisplay(void *consoleStruct) {
            solarPanelString, *batteryLvl, *fuelLvl, *pConsume, *pGenerate,
 		   battString, fuelString); 
 
-    // 3. Store print statement for annunciation mode into variable
-
-    
     // 4. Pass in the strings to terminalComs, which will
     //    be displayed on this terminal and another terminal. 
     //terminalComs(satelliteStatus, annunciation);
     //terminalComs(annunciation, satelliteStatus);
-	terminalComs(output);
+    terminalComs(output);
 }
