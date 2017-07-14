@@ -71,7 +71,7 @@ void ledState(FILE *led, int state);
 
 bool checkTimeLED2(int interval);
 
-void flipLED2();
-void flipLED1();
+void flipLED2(int force);
+void flipLED1(int force);
 
 #endif

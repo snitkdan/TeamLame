@@ -24,9 +24,13 @@
 // declares on or off state, used to trigger brightness for LEDs
 #define ON 1
 #define OFF 0
+#define FLIP 1
+
+
 
 #define GC_ONE 100
 #define GC_TWO 200
+
 
 FILE *led1 = NULL;
 FILE *led2 = NULL;
@@ -81,7 +85,7 @@ void warningAlarm(void *warnStruct) {
 			
 			if ((GLOBALCOUNTER - prevBatt) % GC_TWO == 0) {				
 				// flip led state
-				flipLED2();
+				flipLED2(FLIP);
 				prevBatt = GLOBALCOUNTER;
 			}
 		} else if (battRegion == LOW) {
@@ -93,9 +97,12 @@ void warningAlarm(void *warnStruct) {
 			// reset prev = GLOBALCOUNTER
 			if ((GLOBALCOUNTER - prevBatt) % GC_ONE == 0) { 
 				// flip led state
-				flipLED2();
+				flipLED2(FLIP);
 				prevBatt = GLOBALCOUNTER;
-			}	
+			}
+				
+		} else {
+			flipLED2(OFF);
 		}
 
 		if (fuelRegion == MED) {
@@ -106,7 +113,7 @@ void warningAlarm(void *warnStruct) {
 			}	
 			if ((GLOBALCOUNTER - prevFuel) % GC_TWO == 0) {
 				// flip led state
-				flipLED1();
+				flipLED1(FLIP);
 				prevFuel = GLOBALCOUNTER;
 			}
 		} else if(fuelRegion == LOW){
@@ -117,26 +124,38 @@ void warningAlarm(void *warnStruct) {
 			}		
 			if ((GLOBALCOUNTER - prevFuel) % GC_ONE == 0) {
 				// flip led state
-				flipLED1();
+				flipLED1(FLIP);
 				prevFuel = GLOBALCOUNTER;
 			}	
+		} else {
+			flipLED1(OFF);
+		    	   
 		}
     } 
 }
 
 
-void flipLED2() {
+void flipLED2(int force) {
     static int flipLed2 = 0;
-    flipLed2 = 1 - flipLed2;
-    if (flipLed2 == 1) {
-        ledState(led2, ON);
-    } else {
-        ledState(led2, OFF); 
-    }   
+	if (force == OFF) {
+		flipLed2 = 0;
+	} else { 	
+		flipLed2 = 1 - flipLed2;
+	}
+	if (flipLed2 == 1) {
+		ledState(led2, ON);
+	} else {
+		ledState(led2, OFF); 
+	}	
 }
 
-void flipLED1() {
+void flipLED1(int force) {
     static int flipLed1 = 0;
+	if (force == OFF) {
+		flipLed1 = 0;
+	} else { 	
+		flipLed1 = 1 - flipLed1;
+	}	
     flipLed1 = 1 - flipLed1;
     if (flipLed1 == 1) {
         ledState(led1, ON);
