@@ -9,7 +9,7 @@
 #include <stdbool.h>
 #include <stdio.h>
 #include <string.h>
-#include <stdlib.h> // for system()
+#include <stdlib.h>
 #include "dataStructs.h"
 #include "warningAlarm.h"
 
@@ -25,13 +25,15 @@
 #define ON 1
 #define OFF 0
 
+#define GC_ONE 1
+#define GC_TWO 5
+
 FILE *led1 = NULL;
 FILE *led2 = NULL;
 FILE *led3 = NULL;
 
 void warningAlarm(void *warnStruct) {
-  static unsigned long start = 0;
-  
+/*  
   if(!led1) {
     led1 = fopen("/sys/class/leds/beaglebone:green:usr1/brightness", "w");
   }
@@ -39,9 +41,12 @@ void warningAlarm(void *warnStruct) {
     led2 = fopen("/sys/class/leds/beaglebone:green:usr2/brightness", "w");
   }
   if(!led3) {
-    led2 = fopen("/sys/class/leds/beaglebone:green:usr3/brightness", "w");
+    led3 = fopen("/sys/class/leds/beaglebone:green:usr3/brightness", "w");
   }
-
+  checkOpened(led1);
+  checkOpened(led2);
+  checkOpened(led3);
+*/
   // 1. Store warning data in local variables
   warnData *wData = (warnData*)warnStruct;
   bool *fuelLowPtr = wData->fuelLowPtr;
@@ -58,83 +63,78 @@ void warningAlarm(void *warnStruct) {
   *fuelLowPtr = checkLow(fuelRegion);
 
   if (battRegion == HIGH && fuelRegion == HIGH) {
-    ledState(led3, ON);
-    ledState(led2, OFF);
-    ledState(led1, OFF);
+ //   ledState(led3, ON);
+ //   ledState(led2, OFF);
+ //   ledState(led1, OFF);
   } else {
-    ledState(led3, OFF);
-  
+ //   ledState(led3, OFF);
+    static int prev = 0;
+    static int firstTime = 1;
+    if (firstTime == 1) {
+        prev = GLOBALCOUNTER;
+        firstTime--;
+    } 
+    if (battRegion == MED) {
+        if ((GLOBALCOUNTER - prev) % GC_TWO == 0) {
+            // flip led state
+            flipLED2();
+            prev = GLOBALCOUNTER;
+        }
+    } else if (battRegion == LOW) {
+        if ((GLOBALCOUNTER - prev) % GC_ONE == 0) 
+            // flip led state
+            flipLED2();
+            prev = GLOBALCOUNTER;
+    }
+
+    if (fuelRegion == MED) {
+        if ((GLOBALCOUNTER - prev) % GC_TWO == 0) {
+            // flip led state
+            flipLED3();
+            prev = GLOBALCOUNTER;
+        }
+    } else if(fuelRegion == LOW){
+        if ((GLOBALCOUNTER - prev) % GC_ONE == 0) 
+            // flip led state
+            flipLED3();
+            prev = GLOBALCOUNTER;
+    }
   }   
-  
-  
-  /*
-  // 4. If battLvl and fuelLvl are okay
-  if (battRegion == HIGH && fuelRegion == HIGH) {
-	  // 4.1 When battLvl and fuelLvl > 50
-	  LEDState(LED3, ON);
-	  LEDState(LED2, OFF);
-	  LEDState(LED1, OFF);
-  }
-  // 5. At least battLvl or fuelLvl <= 50
-  else {
-	  LEDState(LED3, OFF);
-	  bool timesUp = false;
-	  if (battRegion == MED) {
-		  if ((timesUp = checkTimeLED2(SEC_2)))
-			  stateLED2 = 1 - stateLED2;
-	  }	else {
-		  if ((timesUp = checkTimeLED2(SEC_1)))
-	  		  stateLED2 = 1 - stateLED2;
-	  }
-	  printf("\nWARNING: %d GLOBAL COUNTER: %lu\n", timesUp, GLOBALCOUNTER);
-  }
-  if (stateLED2 == 1) {
-	  LEDState(LED2, ON);
-  } else {
-	  LEDState(LED2, OFF);
-  }
-  */
+}
+
+void flipLED2() {
+    static int ledState = 0;
+    ledState = 1 - ledState;
+    if (ledState == 1) {
+    //    ledState(led2, ON);
+    printf("------------led2 on  at two sec----------\n");    
+    } else {
+    //    ledState(led2, OFF); 
+    printf("------------led2 off  at two sec----------\n");    
+    }   
+}
+
+void flipLED3() {
+    static int ledState = 0;
+    ledState = 1 - ledState;
+    if (ledState == 1) {
+    //    ledState(led3, ON);
+    } else {
+    //    ledState(led3, OFF); 
+    }   
 }
 
 void ledState(FILE *led, int state) {
     fprintf(led, "%d", state);
     fflush(led);
 }
-/*
-bool checkTimeLED2(int interval) {
-	static unsigned long startInterval = 0;
-	printf("\nstartInterval: %lu\n switch at %lu", startInterval, startInterval + interval);
-	
-	static int firstTimeCalled = 1;
-	if (firstTimeCalled == 1) {
-		startInterval = GLOBALCOUNTER; // need to account for waste of one cycle
-		firstTimeCalled--;
-	}
-	if (startInterval + interval == GLOBALCOUNTER) {
-		startInterval = GLOBALCOUNTER; // need to account for next cycle
-		return true;
-	} 
-	return false;
-}
-*/
 
-/*
-void stopBlink(char *led) {
-	char command[100];
-	snprintf(command, 100, "echo none > %s%s/trigger", LEDPATH, led);
-	system(command);
+void checkOpened(FILE *led) {
+    if (!led) {
+        printf("Could not open file\n");  
+        exit(EXIT_FAILURE);
+    }
 }
-
-void startBlink(char *led, char *delay) {
-    char command[100];
-	snprintf(command, 100, "echo timer > %s%s/trigger", LEDPATH, led);
-	system(command);
-	snprintf(command, 100, "echo %s > %s%s/delay_on",  delay, LEDPATH, led);
-	system(command);	
-	snprintf(command, 100, "echo %s > %s%s/delay_off", delay, LEDPATH, led);
-	system(command);	
-}
-*/
 
 int checkRegion(unsigned short *lvlPtr) {
 	if (*lvlPtr > 50) {

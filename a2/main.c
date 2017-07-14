@@ -41,16 +41,14 @@ void main(void)
     consoleData cData;
     warnData wData;
 
-    // 1. Turn off all lights initially
-	FILE *led0 = fopen("/sys/class/leds/beaglebone:green:usr0/brightness", "w");
-	FILE *led1 = fopen("/sys/class/leds/beaglebone:green:usr1/brightness", "w");
-	FILE *led2 = fopen("/sys/class/leds/beaglebone:green:usr2/brightness", "w");
-	FILE *led3 = fopen("/sys/class/leds/beaglebone:green:usr3/brightness", "w");
-	//fprintf(led0, "%d", 0); fflush(led0); fclose(led0);
-	//fprintf(led1, "%d", 0); fflush(led1); fclose(led1);
-	//fprintf(led2, "%d", 0); fflush(led2); fclose(led2);
-	//fprintf(led3, "%d", 0); fflush(led3); fclose(led3);
-
+    // 1. Turn off led0 initially
+    FILE *led0 = fopen("/sys/class/leds/beaglebone:green:usr0/brightness", "w");
+    if (!led0) {
+       fprintf(stderr, "MAIN: Couldn't open led0\n");
+       return(EXIT_FAILURE);
+    } else {
+       fprintf(led0, "%d", 0); fflush(led0); fclose(led0);
+    }
     //.....................................
     //  Assign shared variables to pointers
     //.....................................
@@ -113,7 +111,6 @@ void main(void)
     queue[4] = &consoleDisplayTCB;
 
     int i = 0;   // queue index
-	// static int calls = 0;
     while (true)
     {
         aTCBPtr = queue[i];
