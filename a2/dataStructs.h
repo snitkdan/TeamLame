@@ -6,6 +6,7 @@
 //#include "warningAlarm.h"
 
 extern unsigned long GLOBALCOUNTER;
+#define MAJOR_CYCLE 500
 
 typedef struct powerSubsystemData {
   bool *solarPanelStatePtr;

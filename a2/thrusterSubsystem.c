@@ -15,7 +15,7 @@
 
 void thrusterSubsystem(void *thrustStruct) {
   static unsigned long start = 0;
-  if((GLOBALCOUNTER - start != interval && start != 0)) {
+  if((GLOBALCOUNTER - start != MAJOR_CYCLE && start != 0)) {
       return;
   }
   start = GLOBALCOUNTER;
