@@ -13,8 +13,7 @@ void main(void)
 {
     // Define shared variables
     unsigned int thrusterCommand = 0;
-    //unsigned short batteryLvl = 100;
-    unsigned short batteryLvl = 1;	
+    unsigned short batteryLvl = 51;
     unsigned short fuelLvl = 11;
     unsigned short pConsume = 0;
     unsigned short pGenerate = 0;
@@ -115,10 +114,10 @@ void main(void)
 
     // Initialize the task queue
     queue[0] = &warningAlarmTCB;
-    queue[1] = &satelliteComsTCB;
-    queue[2] = &thrusterSubsystemTCB;
-    queue[3] = &powerSubsystemTCB;
-    queue[4] = &consoleDisplayTCB;
+    queue[1] = &consoleDisplayTCB;	
+    queue[2] = &satelliteComsTCB;
+    queue[3] = &thrusterSubsystemTCB;
+    queue[4] = &powerSubsystemTCB;
 
     int i = 0;   // queue index
 	// static int calls = 0;

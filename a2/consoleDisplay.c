@@ -41,24 +41,18 @@ void consoleDisplay(void *consoleStruct) {
     char *solarPanelString = (*solarPanelState) ? "Deployed":"Retracted";
     char *fuelString = (*fuelLow)? "YES":"NO";
     char *battString = (*batteryLow)? "YES":"NO";
-    //char *fuelString = (numCalls == 0)? "YES":"NO";
-    //char *battString = (numCalls == 1)? "YES":"NO";
-    char output[MAX];
     
     // 2. Store print statements for satellite status into variable
-    snprintf(output, MAX, 
-           "Solar Panels: %9s, " 
+    printf("SATELLITE: ----------------\n"
+	       "Solar Panels: %9s, " 
            "Battery Level: %3hu, "
            "Fuel Level: %3hu, "
            "Power Consumption: %2hu, "
-		   "Power Generation: %2hu\n"
-		   "ANNUNCIATION: "
+		   "Power Generation: %2hu\n", 
+		   solarPanelString, *batteryLvl, *fuelLvl, *pConsume, *pGenerate);
+		   
+	printf("ANNUNCIATION: "
 		   "Battery Low: %3s "
-		   "Fuel Low: %3s\n",		   
-           solarPanelString, *batteryLvl, *fuelLvl, *pConsume, *pGenerate,
+		   "Fuel Low: %3s\n\n",		   
 		   battString, fuelString); 
-
-    // 4. Pass in the strings to terminalComs, which will
-    //    be displayed on this terminal and another terminal. 
-    terminalComs(output);
 }
