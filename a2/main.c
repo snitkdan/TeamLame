@@ -6,7 +6,7 @@
 #include "dataStructs.h"
 
 #define MAJOR_DELAY 9441.8
-#define MINOR_DELAY 9920.2
+#define MINOR_DELAY 9929
 unsigned long GLOBALCOUNTER = 0;
 
 void main(void)
