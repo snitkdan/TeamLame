@@ -39,34 +39,22 @@ void warningAlarm(void *warnStruct);
   @param lvlPtr
     Unsigned short pointer containing either
 	the batterylvl or fuelLvl values
+  @param lowPtr
+    Unsigned bool pointer containing either batteryLow
+    or fuelLow values	
   @modifies
-    nothing
+    assigns batteryLow or fuelLow true if region is LOW
   @effects
     returns either HIGH, MED, or LOW, indicating
 	how much battery/fuel the lvlPtr contains
 */
+// CASES:
+// 		If above 50: 				 HIGH
+// 		If in between 10 to 50: 	 MED
+// 		If less than or equal to 10: LOW
 int checkRegion(unsigned short *lvlPtr, bool *lowPtr);
 
-/*
-  @param region
-    int displaying in what region the fuel/battery
-	level is
-  @modifies
-    nothing
-  @effects
-    returns true if the region is LOW, false otherwise
-*/
 
-/*
-  @param changeState
-    string containing either a 1 or a 0
-  @modifies
-    beaglebone USER LED3
-  @effects
-    turns on or off the beaglebone LED3 
-	depending on changeState
-*/
-//void LED3State(char *changeState);
 void ledState(FILE *led, int state);
 
 bool checkTimeLED2(int interval);

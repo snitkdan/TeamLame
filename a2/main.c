@@ -13,8 +13,8 @@ void main(void)
 {
     // Define shared variables
     unsigned int thrusterCommand = 0;
-    unsigned short batteryLvl = 51;
-    unsigned short fuelLvl = 11;
+    unsigned short batteryLvl = 100;
+    unsigned short fuelLvl = 100;
     unsigned short pConsume = 0;
     unsigned short pGenerate = 0;
     bool solarPanelState = false;
@@ -42,17 +42,20 @@ void main(void)
     consoleData cData;
     warnData wData;
 
-    // 1. Turn off led0 initially
+    // 1. Turn off all leds initially
     FILE *led0 = fopen("/sys/class/leds/beaglebone:green:usr0/brightness", "w");
     FILE *led1 = fopen("/sys/class/leds/beaglebone:green:usr1/brightness", "w");
     FILE *led2 = fopen("/sys/class/leds/beaglebone:green:usr2/brightness", "w");
     FILE *led3 = fopen("/sys/class/leds/beaglebone:green:usr3/brightness", "w");
 
-	checkOpened(led0); 
+	// checks if leds are successfully opened
+	// NOTE: function prototype contained in dataStructs.h
+	checkOpened(led0);
 	checkOpened(led1);
 	checkOpened(led2);
 	checkOpened(led3);
 	
+	// assign 0 to the leds, flush, and close the files
     fprintf(led0, "%d", 0); fflush(led0); fclose(led0);
     fprintf(led1, "%d", 0); fflush(led1); fclose(led1);
     fprintf(led2, "%d", 0); fflush(led2); fclose(led2);
@@ -120,11 +123,13 @@ void main(void)
     queue[4] = &powerSubsystemTCB;
 
     int i = 0;   // queue index
-	// static int calls = 0;
+	// loops through the tasks
     while (true) {
       aTCBPtr = queue[i];
       aTCBPtr->myTask((aTCBPtr->taskDataPtr));
       if(i == 4) {
+		// delays are designed to make the GLOBALCOUNTER tick
+		// equal every 10ms
         if(GLOBALCOUNTER % MAJOR_CYCLE == 0) {
           usleep(MAJOR_DELAY);
         } else {

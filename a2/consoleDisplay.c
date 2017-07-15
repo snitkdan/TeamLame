@@ -21,12 +21,13 @@
     annunciation, passing them to terminalComs.c
 */
 void consoleDisplay(void *consoleStruct) {
+	// Only run this function every major cycle
 	static unsigned long start = 0;
-	//printf("start: %lu GC - start: %lu GC:%lu\n", start, GLOBALCOUNTER - start, GLOBALCOUNTER);
 	if((GLOBALCOUNTER - start) % MAJOR_CYCLE != 0) {
       return;
 	}
-    start = GLOBALCOUNTER;	
+    start = GLOBALCOUNTER;
+	
     // 1.1 Assign the data of consoleStruct into local variables
     consoleData *cData = (consoleData*)consoleStruct;
     bool *fuelLow = cData->fuelLowPtr;
@@ -42,7 +43,8 @@ void consoleDisplay(void *consoleStruct) {
     char *fuelString = (*fuelLow)? "YES":"NO";
     char *battString = (*batteryLow)? "YES":"NO";
     
-    // 2. Store print statements for satellite status into variable
+    // 2. Print satellite status and annunciation onto 
+	// 	  the satellite terminal.
     printf("SATELLITE: ----------------\n"
 	       "Solar Panels: %9s, " 
            "Battery Level: %3hu, "

@@ -12,10 +12,12 @@
 #include "powerSubsystem.h"
 
 void powerSubsystem(void *powerStruct) {
+  // Only run this function every major cycle	
   static unsigned long start = 0;
   if((GLOBALCOUNTER - start) % MAJOR_CYCLE != 0) {
       return;
   }
+  
   start = GLOBALCOUNTER;
   // 1. Assign the data of powerStruct into local variables
   powerData *pData = (powerData*)powerStruct;

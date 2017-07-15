@@ -13,8 +13,8 @@
 #define MAX 65536 // upper bound for 16 bit
 
 void satelliteComs(void *satStruct) {
+	// Only runs this function every global cycle
 	static unsigned long start = 0;
-	//printf("start: %lu GC - start: %lu GC:%lu\n", start, GLOBALCOUNTER - start, GLOBALCOUNTER);
 	if((GLOBALCOUNTER - start) % MAJOR_CYCLE != 0) {
       return;
 	}
@@ -39,7 +39,7 @@ void satelliteComs(void *satStruct) {
     char *battString = (*batteryLow)? "YES":"NO";
     char output[MAX];
     
-    // 2. Store print statements for satellite status into variable
+    // 3. Store print statements for satellite status and annunciation into output
     snprintf(output, MAX,
 		   "EARTH: -----------\n"	
            "Solar Panels: %9s, " 
@@ -53,8 +53,8 @@ void satelliteComs(void *satStruct) {
            solarPanelString, *batteryLvl, *fuelLvl, *pConsume, *pGenerate,
 		   battString, fuelString); 
 
-    // 4. Pass in the string to terminalComs, which will
-    //    be displayed on this terminal and another terminal. 
+    // 4. Pass in the output to terminalComs, which will
+    //    display the information on the earth terminal 
     terminalComs(output);	
 }
 
