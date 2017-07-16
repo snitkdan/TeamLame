@@ -74,7 +74,7 @@ void warningAlarm(void *warnStruct) {
 	    // 3.2.1 Declare statics to track the states
 		//       for LED2 and its relationship with Battery
 		static unsigned long prevBatt = 0;
-		static int newMedBatt = 0;
+		static int newMedBatt = 1;
 		static int newLowBatt = 0;
 		
 		if (battRegion == MED) {
@@ -116,7 +116,7 @@ void warningAlarm(void *warnStruct) {
 		// 3.3.1 Declare statics to track the states
 		//       for LED1 and its relationship with Fuel 
 		static unsigned long prevFuel = 0;
-		static int newMedFuel = 0;
+		static int newMedFuel = 1;
 		static int newLowFuel = 0;
 		
 		// NOTE: the logic here is the same as the battery's

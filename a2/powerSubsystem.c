@@ -39,8 +39,13 @@ void powerSubsystem(void *powerStruct) {
       *batteryLvl = (*batteryLvl > 100) ? 100 : *batteryLvl;
     }
   } else {
-    // 3.2: batteryLvl = batteryLvl - pConsume
-    *batteryLvl -= 3*(*pConsume);
+    // 3.2: batteryLvl = batteryLvl - 3 * pConsume
+	if (3*(*pConsume) > *batteryLvl) { // prevents overflow
+		*batteryLvl = 0;
+	    *pConsume = 0;
+    }else {
+        *batteryLvl -= 3*(*pConsume);
+	}
   }
 }
 

@@ -38,7 +38,8 @@ int terminalComs(char *output) {
 	// 3. error handling: check if file and terminal ports exist 
     if (fp && fd0) {
 		
-	    // 3.1 Write data to the file 
+	    // 3.1 Write data to the file
+	    fseek(fp, 0, SEEK_SET);	 		
         fwrite(output, strlen(output) + 1, 1, fp);
 
 	    //3.2 Read and print the data from the file
