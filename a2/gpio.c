@@ -6,7 +6,7 @@
 #include "dataStructs.h"
 #include "warningAlarm.h"
 
-unsigned long GLOBALCOUNTER = 0; 
+unsigned long GLOBALCOUNTER = 0;
 
 void main(void)
 {
@@ -50,7 +50,7 @@ void main(void)
 	//fprintf(led1, "%d", 0); fflush(led1); fclose(led1);
 	//fprintf(led2, "%d", 0); fflush(led2); fclose(led2);
 	//fprintf(led3, "%d", 0); fflush(led3); fclose(led3);
-	
+
     //.....................................
     //  Assign shared variables to pointers
     //.....................................
@@ -106,35 +106,32 @@ void main(void)
     warningAlarmTCB.myTask = warningAlarm;
 
     // Initialize the task queue
-    queue[0] = &warningAlarmTCB;	
+    queue[0] = &warningAlarmTCB;
     queue[1] = &satelliteComsTCB;
-    queue[2] = &thrusterSubsystemTCB;	
+    queue[2] = &thrusterSubsystemTCB;
     queue[3] = &powerSubsystemTCB;
     queue[4] = &consoleDisplayTCB;
 
     int i = 0;   // queue index
     int timeTask = 0;
-+   FILE *gpio = fopen("/sys/class/gpio/gpio48/value", "w");
-+   if (!gpio){
-+	printf("Could not open GPIO");
-+	return EXIT_FAILURE;
-+   }
-
+    FILE *gpio = fopen("/sys/class/gpio/gpio48/value", "w");
+    if (!gpio){
+	     printf("Could not open GPIO\n");
+	     return;
+     }
     while (true) {
-	if(i == timeTask) {
-		fprintf(gpio, "%d", 1);
-		fflush(gpio);
-	}
-        aTCBPtr = queue[i];
-	aTCBPtr->myTask((aTCBPtr->taskDataPtr));
-	if(i == timeTask) {
-		fprintf(gpio, "%d", 0);
-                fflush(gpio);
-	}
-	i = (i + 1) % 5;
-	if(i == 0) GLOBALCOUNTER++;
-        //printf("Main GLOBAL COUNTER: %lu\n", GLOBALCOUNTER);		
-	usleep(100000);
+	     if(i == timeTask) {
+		       fprintf(gpio, "%d", 1);
+		       fflush(gpio);
+	     }
+       aTCBPtr = queue[i];
+	     aTCBPtr->myTask((aTCBPtr->taskDataPtr));
+	     if(i == timeTask) {
+		       fprintf(gpio, "%d", 0);
+           fflush(gpio);
+	     }
+	     i = (i + 1) % 5;
+	     usleep(100000);
     }
     fclose(gpio);
     return;

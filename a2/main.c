@@ -4,10 +4,11 @@
 #include <unistd.h>
 #include "TCB.h"
 #include "dataStructs.h"
+#include "warningAlarm.h"
 
-#define MAJOR_DELAY 9441.8
-#define MINOR_DELAY 9929
+//#define MAJORCYCLE 500
 unsigned long GLOBALCOUNTER = 0;
+
 
 void main(void)
 {
@@ -42,25 +43,14 @@ void main(void)
     consoleData cData;
     warnData wData;
 
-    // 1. Turn off all leds initially
+    // 1. Turn off led0 initially
     FILE *led0 = fopen("/sys/class/leds/beaglebone:green:usr0/brightness", "w");
-    FILE *led1 = fopen("/sys/class/leds/beaglebone:green:usr1/brightness", "w");
-    FILE *led2 = fopen("/sys/class/leds/beaglebone:green:usr2/brightness", "w");
-    FILE *led3 = fopen("/sys/class/leds/beaglebone:green:usr3/brightness", "w");
-
-	// checks if leds are successfully opened
-	// NOTE: function prototype contained in dataStructs.h
-	checkOpened(led0);
-	checkOpened(led1);
-	checkOpened(led2);
-	checkOpened(led3);
-	
-	// assign 0 to the leds, flush, and close the files
-    fprintf(led0, "%d", 0); fflush(led0); fclose(led0);
-    fprintf(led1, "%d", 0); fflush(led1); fclose(led1);
-    fprintf(led2, "%d", 0); fflush(led2); fclose(led2);
-    fprintf(led3, "%d", 0); fflush(led3); fclose(led3);
-	
+    if (!led0) {
+       fprintf(stderr, "MAIN: Couldn't open led0\n");
+       return;
+    } else {
+       fprintf(led0, "%d", 0); fflush(led0); fclose(led0);
+    }
     //.....................................
     //  Assign shared variables to pointers
     //.....................................
@@ -117,23 +107,21 @@ void main(void)
 
     // Initialize the task queue
     queue[0] = &warningAlarmTCB;
-    queue[1] = &consoleDisplayTCB;	
-    queue[2] = &satelliteComsTCB;
-    queue[3] = &thrusterSubsystemTCB;
-    queue[4] = &powerSubsystemTCB;
+    queue[1] = &satelliteComsTCB;
+    queue[2] = &thrusterSubsystemTCB;
+    queue[3] = &powerSubsystemTCB;
+    queue[4] = &consoleDisplayTCB;
 
     int i = 0;   // queue index
-	// loops through the tasks
+	// static int calls = 0;
     while (true) {
       aTCBPtr = queue[i];
       aTCBPtr->myTask((aTCBPtr->taskDataPtr));
       if(i == 4) {
-		// delays are designed to make the GLOBALCOUNTER tick
-		// equal every 10ms
         if(GLOBALCOUNTER % MAJOR_CYCLE == 0) {
-          usleep(MAJOR_DELAY);
+          usleep(9441.8);
         } else {
-          usleep(MINOR_DELAY);
+          usleep(9465);
         }
         GLOBALCOUNTER++;
       }

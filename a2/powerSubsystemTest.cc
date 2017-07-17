@@ -10,7 +10,6 @@ extern "C" {
     #include "./powerSubsystem.h"
 }
 
-
 // This tests the "powerConsumption" method in "powerSubsystem.c"
 TEST(PowerSubsystemTest, Test_PowerConsumption) {
 
@@ -140,7 +139,7 @@ TEST(PowerSubsystemTest, Test_UseSolarPanels) {
     } else {
       // Case 2: Solar panels retracted
       ASSERT_TRUE(*batteryLvlPtr >= 10);
-      *batteryLvlPtr -= *pConsumePtr;
+      *batteryLvlPtr -= 3*(*pConsumePtr);
     }
     powerConsumption(pConsumePtr);
   }

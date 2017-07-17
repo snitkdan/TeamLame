@@ -12,12 +12,12 @@
 #include "powerSubsystem.h"
 
 void powerSubsystem(void *powerStruct) {
-  // Only run this function every major cycle	
+  // Only run this function every major cycle
   static unsigned long start = 0;
   if((GLOBALCOUNTER - start) % MAJOR_CYCLE != 0) {
       return;
   }
-  
+
   start = GLOBALCOUNTER;
   // 1. Assign the data of powerStruct into local variables
   powerData *pData = (powerData*)powerStruct;
@@ -44,7 +44,7 @@ void powerSubsystem(void *powerStruct) {
 		*batteryLvl = 0;
 	    *pConsume = 0;
     }else {
-        *batteryLvl -= 3*(*pConsume);
+      *batteryLvl -= 3*(*pConsume);
 	}
   }
 }
@@ -74,7 +74,7 @@ bool useSolarPanels(bool *solarPanelState, unsigned short *pGenerate, unsigned s
   return *solarPanelState;
 }
 
-// Motar Drive -> set motar drive to 100 when solar panel state changes. After it changes, set it back to 0. 
+// Motar Drive -> set motar drive to 100 when solar panel state changes. After it changes, set it back to 0.
 void powerGeneration(unsigned short *pGenerate, unsigned short *batteryLvl) {
   // 1. Define static variables to track function state
   static short numCalls = 0;

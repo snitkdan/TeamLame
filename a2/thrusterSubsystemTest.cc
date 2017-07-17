@@ -7,9 +7,9 @@
 
 #include "gtest/gtest.h"
 extern "C" {
+    #include <stdint.h>
     #include "./thrusterSubsystem.h"
     #include "dataStructs.h"
-    #include <stdint.h>
 }
 
 // This tests the "parseCommands" method in "thrusterSubsystem.c"

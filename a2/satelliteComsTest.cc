@@ -12,13 +12,11 @@ extern "C" {
     #include "./satelliteComs.h"
 }
 
-// This tests the "" method in "thrusterSubsystem.c"
+unsigned long GLOBALCOUNTER = 0;
+
 TEST(satelliteComsTest, Test_maskBit) {
-  // 1. Declare test variables
   unsigned int thrusterCommand = 10;
   unsigned int *thrusterCommandPtr = &thrusterCommand;
   maskBit(thrusterCommandPtr);
   ASSERT_EQ(*thrusterCommandPtr, 2);
-  // 2. Construct thrust commands from
-  // all combinations of test variables
 }

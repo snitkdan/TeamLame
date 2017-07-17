@@ -13,7 +13,7 @@ USER_DIR = .
 CPPFLAGS += -isystem $(GTEST_DIR)/include
 
 # Flags passed to the C++ compiler.
-CXXFLAGS += -g -Wall -Wextra -pthread
+CXXFLAGS += -g -Wall -Wextra
 
 # Compilers
 CC = gcc
@@ -29,13 +29,16 @@ GTEST_HEADERS = $(GTEST_DIR)/include/gtest/*.h \
                 $(GTEST_DIR)/include/gtest/internal/*.h
 
 # House-keeping build targets.
+OBJ = satelliteComs.o powerSubsystem.o consoleDisplay.o \
+      thrusterSubsystem.o warningAlarm.o rand2.o terminalComs.o
 
-all : $(TESTS) main
+TEST_OBJ = thrusterSubsystemTest.o satelliteComsTest.o powerSubsystemTest.o \
+						gtest_main.a
 
-clean :
-	rm -f $(TESTS) main gtest.a gtest_main.a *.o
+PROJ_HEADERS = dataStructs.h TCB.h
 
-# Builds gtest.a and gtest_main.a.
+# Default make command
+all: $(TESTS) main
 
 # Usually you shouldn't tweak such internal variables, indicated by a
 # trailing _.
@@ -61,44 +64,53 @@ gtest_main.a : gtest-all.o gtest_main.o
 
 
 # Builds tests
-warningAlarm.o : $(USER_DIR)/warningAlarm.c $(USER_DIR)/warningAlarm.h $(GTEST_HEADERS)
-	$(CC) $(CPPFLAGS) $(CXXFLAGS) -c $(USER_DIR)/warningAlarm.c
-
-warningAlarmTest.o : $(USER_DIR)/warningAlarmTest.cc \
-                     $(USER_DIR)/warningAlarm.h $(GTEST_HEADERS)
-	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $(USER_DIR)/warningAlarmTest.cc
-
-thrusterSubsystem.o : $(USER_DIR)/thrusterSubsystem.c $(USER_DIR)/thrusterSubsystem.h $(GTEST_HEADERS)
-	$(CC) $(CPPFLAGS) $(CXXFLAGS) -c $(USER_DIR)/thrusterSubsystem.c
-
 thrusterSubsystemTest.o : $(USER_DIR)/thrusterSubsystemTest.cc \
                      $(USER_DIR)/thrusterSubsystem.h $(GTEST_HEADERS)
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $(USER_DIR)/thrusterSubsystemTest.cc
-
-satelliteComs.o : $(USER_DIR)/satelliteComs.c $(USER_DIR)/satelliteComs.h $(USER_DIR)/TCB.h $(GTEST_HEADERS)
-	$(CC) $(CPPFLAGS) $(CXXFLAGS) -c $(USER_DIR)/satelliteComs.c $(USER_DIR)/rand2.c
-
-rand2.o : $(USER_DIR)/rand2.c $(USER_DIR)/TCB.h $(GTEST_HEADERS)
-	$(CC) $(CPPFLAGS) $(CXXFLAGS) -c $(USER_DIR)/rand2.c
 
 satelliteComsTest.o : $(USER_DIR)/satelliteComsTest.cc \
                      $(USER_DIR)/satelliteComs.h $(GTEST_HEADERS)
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $(USER_DIR)/satelliteComsTest.cc
 
-powerSubsystem.o : $(USER_DIR)/powerSubsystem.c $(USER_DIR)/powerSubsystem.h $(GTEST_HEADERS)
-	$(CC) $(CPPFLAGS) $(CXXFLAGS) -c $(USER_DIR)/powerSubsystem.c
-
 powerSubsystemTest.o : $(USER_DIR)/powerSubsystemTest.cc \
                      $(USER_DIR)/powerSubsystem.h $(GTEST_HEADERS)
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $(USER_DIR)/powerSubsystemTest.cc
 
-test_suite : thrusterSubsystemTest.o thrusterSubsystem.o powerSubsystemTest.o powerSubsystem.o gtest_main.a \
-             satelliteComs.o satelliteComsTest.o rand2.o warningAlarm.o warningAlarmTest.o
-	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -lpthread $^ -o $@
+test_suite : $(OBJ) $(TEST_OBJ)
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) $^ -o $@
 
+# Builds primary files
+rand2.o : $(USER_DIR)/rand2.c $(PROJ_HEADERS) $(GTEST_HEADERS)
+	$(CC) $(CPPFLAGS) $(CXXFLAGS) -c $(USER_DIR)/rand2.c
+
+terminalComs.o: $(USER_DIR)/terminalComs.c $(PROJ_HEADERS) $(GTEST_HEADERS)
+	$(CC) $(CPPFLAGS) $(CXXFLAGS) -c $(USER_DIR)/terminalComs.c
+
+warningAlarm.o : $(USER_DIR)/warningAlarm.c $(USER_DIR)/warningAlarm.h $(GTEST_HEADERS)
+	$(CC) $(CPPFLAGS) $(CXXFLAGS) -c $(USER_DIR)/warningAlarm.c
+
+thrusterSubsystem.o : $(USER_DIR)/thrusterSubsystem.c $(USER_DIR)/thrusterSubsystem.h $(GTEST_HEADERS)
+	$(CC) $(CPPFLAGS) $(CXXFLAGS) -c $(USER_DIR)/thrusterSubsystem.c
+
+satelliteComs.o : $(USER_DIR)/satelliteComs.c $(USER_DIR)/satelliteComs.h $(GTEST_HEADERS)
+	$(CC) $(CPPFLAGS) $(CXXFLAGS) -c $(USER_DIR)/satelliteComs.c $(USER_DIR)/rand2.c
+
+powerSubsystem.o : $(USER_DIR)/powerSubsystem.c $(USER_DIR)/powerSubsystem.h $(GTEST_HEADERS)
+	$(CC) $(CPPFLAGS) $(CXXFLAGS) -c $(USER_DIR)/powerSubsystem.c
+
+consoleDisplay.o: $(USER_DIR)/consoleDisplay.c $(GTEST_HEADERS)
+	$(CC) $(CPPFLAGS) $(CXXFLAGS) -c $(USER_DIR)/consoleDisplay.c
+
+main : $(OBJ) $(PROJ_HEADERS) $(USER_DIR)/main.c
+	$(CC) -o main $(USER_DIR)/main.c $(OBJ)
+
+# Builds GPIO experiment code
+gpio: $(USER_DIR)/gpio.c $(OBJ) $(PROJ_HEADERS)
+	$(CC) -o gpio $(USER_DIR)/gpio.c $(OBJ)
+
+# Convenience Commands
 copy:
 	scp -r ../a2 root@192.168.7.2:/dev
 
-# Build main
-main: #powerSubsystem.o main.c
-	#$(CC) $(CPPFLAGS) $(CXXFLAGS) -c $(USER_DIR)/main.c powerSubsystem.o
+clean:
+	rm -f $(TESTS) main gpio gtest.a gtest_main.a *.o
