@@ -1,5 +1,5 @@
 # Project 2: Learning the Development Environment – The Next Step
-This directory contains the source code for [Project 2](https://class.ee.washington.edu/474/peckol/assignments/lab2/)
+This directory contains the source code for [Project 2](https://class.ee.washington.edu/474/peckol/assignments/lab2/lab2Summer2017.pdf)
 
 A Makefile has been provided to run the necessary commands to compile the source files into binary executables for testing and deployment.
 
@@ -56,6 +56,7 @@ the following command in the same directory:
 ./main
 ```
 
+
 ## Experiments
 To reproduce the results for the TCB task execution, follow the
 instructions below:
@@ -63,7 +64,7 @@ instructions below:
 to reflect the task to be timed (corresponding to the tasks
 position in the task queue)
 2. Connect a scope probe to GPIO48 on the Beaglebone.
-(For set-up, reference the [lab manual](https://class.ee.washington.edu/474/peckol/assignments/lab2/))
+(For set-up, reference the [lab manual](https://class.ee.washington.edu/474/peckol/assignments/lab2/lab2Summer2017.pdf))
 3. Compile the experimental code via the following command:
 ```
 make gpio
