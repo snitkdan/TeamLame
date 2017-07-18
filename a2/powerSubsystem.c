@@ -17,7 +17,6 @@ void powerSubsystem(void *powerStruct) {
   if((GLOBALCOUNTER - start) % MAJOR_CYCLE != 0) {
       return;
   }
-
   start = GLOBALCOUNTER;
   // 1. Assign the data of powerStruct into local variables
   powerData *pData = (powerData*)powerStruct;
@@ -41,7 +40,7 @@ void powerSubsystem(void *powerStruct) {
   } else {
     // 3.2: batteryLvl = batteryLvl - 3 * pConsume
 	if (3*(*pConsume) > *batteryLvl) { // prevents overflow
-		*batteryLvl = 0;
+		  *batteryLvl = 0;
 	    *pConsume = 0;
     }else {
       *batteryLvl -= 3*(*pConsume);

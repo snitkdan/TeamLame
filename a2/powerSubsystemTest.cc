@@ -107,9 +107,8 @@ TEST(PowerSubsystemTest, Test_PowerGeneration) {
   }
 }
 
-// This tests the "useSolarPanels" method in "powerSubsystem.c"
-// (essentially the powerSubsystem method in) "powerSubsystem.c")
-TEST(PowerSubsystemTest, Test_UseSolarPanels) {
+// This tests the "powerSubsystem" method in "powerSubsystem.c"
+TEST(PowerSubsystemTest, Test_PowerSubsystem) {
 
   // Convenience variables (values)
   bool solarPanelState = true;
