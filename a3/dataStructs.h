@@ -11,10 +11,30 @@ void checkOpened(FILE *led); // used in warningAlarm and Main
 
 typedef struct powerSubsystemData {
   bool *solarPanelStatePtr;
-  unsigned short *batteryLvlPtr;
+  bool *solarPanelDeployPtr;
+  bool *solarPanelRetractPtr;
+  unsigned short *batteryLvlPtr; // TO BE CHANGED LATER
   unsigned short *pConsumePtr;
   unsigned short *pGeneratePtr;
 } powerData;
+
+typedef struct solarPanelControlData {
+  bool *solarPanelStatePtr;
+  bool *solarPanelDeployPtr;
+  bool *solarPanelRetractPtr;
+  bool *motorIncPtr;
+  bool *motorDecPtr;
+} solarData;
+
+typedef struct keyboardConsoleData {
+  bool *motorIncPtr;
+  bool *motorDecPtr;
+} keyboardData;
+
+typedef struct vehicleCommsData {
+  char *commandPtr;
+  char *responsePtr;
+} vehicleData;
 
 typedef struct thrusterSubsystemData {
   unsigned int *thrusterCommandPtr;
@@ -25,7 +45,7 @@ typedef struct satelliteComsData {
   bool *fuelLowPtr;
   bool *batteryLowPtr;
   bool *solarPanelStatePtr;
-  unsigned short *batteryLvlPtr;
+  unsigned short *batteryLvlPtr; // TO BE CHANGED LATER
   unsigned short *fuelLvlPtr;
   unsigned short *pConsumePtr;
   unsigned short *pGeneratePtr;
@@ -36,7 +56,7 @@ typedef struct consoleDisplayData {
   bool *fuelLowPtr;
   bool *batteryLowPtr;
   bool *solarPanelStatePtr;
-  unsigned short *batteryLvlPtr;
+  unsigned short *batteryLvlPtr; // TO BE CHANGED LATER
   unsigned short *fuelLvlPtr;
   unsigned short *pConsumePtr;
   unsigned short *pGeneratePtr;
@@ -45,7 +65,7 @@ typedef struct consoleDisplayData {
 typedef struct warningAlarmData {
   bool *fuelLowPtr;
   bool *batteryLowPtr;
-  unsigned short *batteryLvlPtr;
+  unsigned short *batteryLvlPtr; // TO BE CHANGED LATER
   unsigned short *fuelLvlPtr;
 } warnData;
 

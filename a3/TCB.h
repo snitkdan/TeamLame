@@ -11,6 +11,9 @@ struct myStruct
 
     // Pointer to void used to reference the shared data for the task
     void *taskDataPtr;
+	
+	struct myStruct* next;
+	struct myStruct* prev;
 };
 typedef struct myStruct TCB;
 
@@ -18,6 +21,9 @@ typedef struct myStruct TCB;
 int terminalComs(char* output);
 unsigned int randomInteger(unsigned int low, unsigned int high);
 void powerSubsystem(void *powerStruct);
+void solarPanelControl(void *solarStruct);
+void keyboardConsole(void *keyboardStruct);
+void vehicleComms(void *vehicleStruct);
 void satelliteComs(void *satStruct);
 void consoleDisplay(void *consoleStruct);
 void thrusterSubsystem(void *thrustStruct);

@@ -14,13 +14,21 @@ void main(void)
 {
     // Define shared variables
     unsigned int thrusterCommand = 0;
-    unsigned short batteryLvl = 100;
+    unsigned short batteryLvl = 100; // TO BE CHANGED LATER
     unsigned short fuelLvl = 100;
     unsigned short pConsume = 0;
     unsigned short pGenerate = 0;
     bool solarPanelState = false;
     bool fuelLow = false;
     bool batteryLow = false;
+	
+	// -- New Stuff -- //
+	bool solarPanelDeploy = false;
+	bool solarPanelRetract = false;
+	bool motorInc = false;
+	bool motorDec = false;
+	char command = NULL;
+	char response = NULL;
 
     // Defines a task queue
     // Note: only using 5, (the extra index will be used in future projects)
@@ -28,6 +36,9 @@ void main(void)
 
     // Defines some TCBs
     TCB powerSubsystemTCB;
+	TCB solarPanelControlTCB;
+	TCB keyboardConsoleTCB;
+	TCB vehicleCommsTCB;
     TCB thrusterSubsystemTCB;
     TCB satelliteComsTCB;
     TCB consoleDisplayTCB;
@@ -38,6 +49,9 @@ void main(void)
 
     // Defines data structures
     powerData pData;
+	solarData solData;
+	keyboardData kData;
+	vehicleData vData;
     thrustData tData;
     satData sData;
     consoleData cData;
@@ -55,11 +69,28 @@ void main(void)
     //  Assign shared variables to pointers
     //.....................................
     // powerSubsystem
-    pData.batteryLvlPtr = &batteryLvl;
-    pData.solarPanelStatePtr = &solarPanelState;
+    pData.solarPanelStatePtr = &solarPanelState;	
+	pData.solarPanelDeployPtr = &solarPanelDeploy;
+	pData.solarPanelRetractPtr = &solarPanelRetract;	
+    pData.batteryLvlPtr = &batteryLvl; // TO BE CHANGED LATER
     pData.pConsumePtr = &pConsume;
     pData.pGeneratePtr = &pGenerate;
 
+	//solarPanelControl
+	solData.solarPanelStatePtr = &solarPanelState;	
+	solData.solarPanelDeployPtr = &solarPanelDeploy;
+	solData.solarPanelRetractPtr = &solarPanelRetract;
+	solData.motorIncPtr = &motorInc;
+	solData.motorDecPtr = &motorDec;
+	
+	// keyboardConsole
+	kData.motorIncPtr = &motorInc;
+	kData.motorDecPtr = &motorDec;
+	
+	// vehicleComms
+	vData.commandPtr = &command;
+	vData.responsePtr = &response; //address needed for strings and chars?
+	
     // thrusterSubsystem
     tData.thrusterCommandPtr = &thrusterCommand;
     tData.fuelLvlPtr = &fuelLvl;
@@ -68,7 +99,7 @@ void main(void)
     sData.fuelLowPtr = &fuelLow;
     sData.batteryLowPtr = &batteryLow;
     sData.solarPanelStatePtr = &solarPanelState;
-    sData.batteryLvlPtr = &batteryLvl;
+    sData.batteryLvlPtr = &batteryLvl; // TO BE CHANGED LATER
     sData.fuelLvlPtr = &fuelLvl;
     sData.pConsumePtr = &pConsume;
     sData.pGeneratePtr = &pGenerate;
@@ -78,7 +109,7 @@ void main(void)
     cData.fuelLowPtr = &fuelLow;
     cData.batteryLowPtr = &batteryLow;
     cData.solarPanelStatePtr = &solarPanelState;
-    cData.batteryLvlPtr = &batteryLvl;
+    cData.batteryLvlPtr = &batteryLvl; // TO BE CHANGED LATER
     cData.fuelLvlPtr = &fuelLvl;
     cData.pConsumePtr = &pConsume;
     cData.pGeneratePtr = &pGenerate;
@@ -86,13 +117,22 @@ void main(void)
     // warningAlarm
     wData.fuelLowPtr = &fuelLow;
     wData.batteryLowPtr = &batteryLow;
-    wData.batteryLvlPtr = &batteryLvl;
+    wData.batteryLvlPtr = &batteryLvl; // TO BE CHANGED LATER
     wData.fuelLvlPtr = &fuelLvl;
 
     // Initialize the TCBs
     powerSubsystemTCB.taskDataPtr = (void*)&pData;
     powerSubsystemTCB.myTask = powerSubsystem;
 
+    solarPanelControlTCB.taskDataPtr = (void*)&solData;
+    solarPanelControlTCB.myTask = solarPanelControl;
+
+    keyboardConsoleTCB.taskDataPtr = (void*)&kData;
+    keyboardConsoleTCB.myTask = keyboardConsole;
+
+    vehicleCommsTCB.taskDataPtr = (void*)&pData;
+    vehicleCommsTCB.myTask = vehicleComms;
+	
     thrusterSubsystemTCB.taskDataPtr = (void*)&tData;
     thrusterSubsystemTCB.myTask = thrusterSubsystem;
 
