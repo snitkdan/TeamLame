@@ -19,7 +19,7 @@ void vehicleComms(void *vehicleStruct) {
 	
     // 1.1 Assign the data of consoleStruct into local variables
     vehicleData *vData = (vehicleData*)vehicleStruct;
-    bool *command = vData->commandPtr;
-    bool *response = vData->responsePtr;
+    char *command = vData->commandPtr;
+    char *response = vData->responsePtr;
 
 }

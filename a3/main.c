@@ -36,9 +36,9 @@ void main(void)
 
     // Defines some TCBs
     TCB powerSubsystemTCB;
-	TCB solarPanelControlTCB;
-	TCB keyboardConsoleTCB;
-	TCB vehicleCommsTCB;
+    TCB solarPanelControlTCB;
+    TCB keyboardConsoleTCB;
+    TCB vehicleCommsTCB;
     TCB thrusterSubsystemTCB;
     TCB satelliteComsTCB;
     TCB consoleDisplayTCB;
@@ -49,9 +49,9 @@ void main(void)
 
     // Defines data structures
     powerData pData;
-	solarData solData;
-	keyboardData kData;
-	vehicleData vData;
+    solarData solData;
+    keyboardData kData;
+    vehicleData vData;
     thrustData tData;
     satData sData;
     consoleData cData;
@@ -70,27 +70,27 @@ void main(void)
     //.....................................
     // powerSubsystem
     pData.solarPanelStatePtr = &solarPanelState;	
-	pData.solarPanelDeployPtr = &solarPanelDeploy;
-	pData.solarPanelRetractPtr = &solarPanelRetract;	
+    pData.solarPanelDeployPtr = &solarPanelDeploy;
+    pData.solarPanelRetractPtr = &solarPanelRetract;	
     pData.batteryLvlPtr = &batteryLvl; // TO BE CHANGED LATER
     pData.pConsumePtr = &pConsume;
     pData.pGeneratePtr = &pGenerate;
 
 	//solarPanelControl
-	solData.solarPanelStatePtr = &solarPanelState;	
-	solData.solarPanelDeployPtr = &solarPanelDeploy;
-	solData.solarPanelRetractPtr = &solarPanelRetract;
-	solData.motorIncPtr = &motorInc;
-	solData.motorDecPtr = &motorDec;
-	
-	// keyboardConsole
-	kData.motorIncPtr = &motorInc;
-	kData.motorDecPtr = &motorDec;
-	
-	// vehicleComms
-	vData.commandPtr = &command;
-	vData.responsePtr = &response; //address needed for strings and chars?
-	
+    solData.solarPanelStatePtr = &solarPanelState;	
+    solData.solarPanelDeployPtr = &solarPanelDeploy;
+    solData.solarPanelRetractPtr = &solarPanelRetract;
+    solData.motorIncPtr = &motorInc;
+    solData.motorDecPtr = &motorDec;
+
+    // keyboardConsole
+    kData.motorIncPtr = &motorInc;
+    kData.motorDecPtr = &motorDec;
+    
+    // vehicleComms
+    vData.commandPtr = &command;
+    vData.responsePtr = &response; //address needed for strings and chars?
+
     // thrusterSubsystem
     tData.thrusterCommandPtr = &thrusterCommand;
     tData.fuelLvlPtr = &fuelLvl;
@@ -130,7 +130,7 @@ void main(void)
     keyboardConsoleTCB.taskDataPtr = (void*)&kData;
     keyboardConsoleTCB.myTask = keyboardConsole;
 
-    vehicleCommsTCB.taskDataPtr = (void*)&pData;
+    vehicleCommsTCB.taskDataPtr = (void*)&vData;
     vehicleCommsTCB.myTask = vehicleComms;
 	
     thrusterSubsystemTCB.taskDataPtr = (void*)&tData;
