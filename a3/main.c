@@ -27,8 +27,8 @@ void main(void)
 	bool solarPanelRetract = false;
 	bool motorInc = false;
 	bool motorDec = false;
-	char command = NULL;
-	char response = NULL;
+	char command = '\0';
+	char response = '\0';
 
     // Defines a task queue
     // Note: only using 5, (the extra index will be used in future projects)
