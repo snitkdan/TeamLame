@@ -14,6 +14,8 @@
 #include "TCB.h"
 
 #define MAX 300
+#define SATELLITESTATUS 'z'
+#define ANNUNCIATION 'x'
 
 /*
   @param consoleStruct
@@ -56,7 +58,7 @@ void consoleDisplay(void *consoleStruct) {
     // 2. Print satellite status and annunciation onto 
 	// 	  the satellite terminal.
     fprintf(stdout, "\033[2J");
-    fprintf(stdout, "\033[10;10H");
+    fprintf(stdout, "\033[1;10H");
 	fflush(stdout);	
     nonblock(NB_ENABLE);
 	i=kbhit();
@@ -66,7 +68,7 @@ void consoleDisplay(void *consoleStruct) {
         c=fgetc(stdin);
     }
     fprintf(stdout, "SATELLITE TERMINAL: ----------------\n");	
-	if (c == 'z') {
+	if (c == SATELLITESTATUS) {
     fprintf(stdout, "**Satellite Status\n"    	    
 	       "Solar Panels: %9s, " 
            "Battery Level: %3hu, "
@@ -74,13 +76,14 @@ void consoleDisplay(void *consoleStruct) {
            "Power Consumption: %2hu, "
 		   "Power Generation: %2hu\n", 
 		   solarPanelString, *batteryLvl, *fuelLvl, *pConsume, *pGenerate);
-	} else if (c == 'x') {	   
+	} else if (c == ANNUNCIATION) {	   
 		fprintf(stdout, "Annunciaton\n"
 			   "Battery Low: %3s "
-			   "Fuel Low: %3s",		   
+			   "Fuel Low: %3s",
 			   battString, fuelString); 
 	} else {
-		printf("z for Satellite Status\nx for annunciation");
+		printf("%c for Satellite Status\n%c for annunciation",
+		       SATELLITESTATUS, ANNUNCIATION);
 	}
 	fflush(stdout);
 
