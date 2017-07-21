@@ -42,10 +42,15 @@ void consoleDisplay(void *consoleStruct) {
     char *solarPanelString = (*solarPanelState) ? "Deployed":"Retracted";
     char *fuelString = (*fuelLow)? "YES":"NO";
     char *battString = (*batteryLow)? "YES":"NO";
-    
+   
+    char ch = getch();
+    printf("Input Char is %c", ch);
     // 2. Print satellite status and annunciation onto 
 	// 	  the satellite terminal.
-    printf("SATELLITE: ----------------\n"
+    /*fprintf(stdout, "\033[2J");
+    fprintf(stdout, "\033[10;10H");
+    fprintf(stdout, "SATELLITE TERMINAL: ----------------\n");
+    fprintf(stdout, "**Satellite Status/n"    	    
 	       "Solar Panels: %9s, " 
            "Battery Level: %3hu, "
            "Fuel Level: %3hu, "
@@ -53,8 +58,10 @@ void consoleDisplay(void *consoleStruct) {
 		   "Power Generation: %2hu\n", 
 		   solarPanelString, *batteryLvl, *fuelLvl, *pConsume, *pGenerate);
 		   
-	printf("ANNUNCIATION: "
+	fprintf(stdout, "Annunciaton"
 		   "Battery Low: %3s "
-		   "Fuel Low: %3s\n\n",		   
+		   "Fuel Low: %3s",		   
 		   battString, fuelString); 
+	fflush(stdout);
+    */	
 }
