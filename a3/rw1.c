@@ -110,26 +110,6 @@ void funct0(int fd0, rw coms)
 
 	return;
 }
-
-//  test read then write back
-void funct1(int fd0)
-{
-	char buf[MAX_BUF];
-	int size = sizeof("Roger That\n");
-	
-	printf("in funct1\n");
-		
-	/* read and display the message from the FIFO */
-    read(fd0, buf, MAX_BUF);
-	
-    printf("Received command: %s\n", buf);
-	
-	/* write message to the FIFO */	
-	printf("ack command\n");	
-	write(fd0, "Roger That\n", size);
-	
-	return;
-}
 	
 
 

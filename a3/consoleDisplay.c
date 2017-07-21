@@ -58,7 +58,8 @@ void consoleDisplay(void *consoleStruct) {
     // 2. Print satellite status and annunciation onto 
 	// 	  the satellite terminal.
     fprintf(stdout, "\033[2J");
-    fprintf(stdout, "\033[1;10H");
+	fflush(stdout);		
+    fprintf(stdout, "\033[1;1H");
 	fflush(stdout);	
     nonblock(NB_ENABLE);
 	i=kbhit();
@@ -67,7 +68,8 @@ void consoleDisplay(void *consoleStruct) {
     {
         c=fgetc(stdin);
     }
-    fprintf(stdout, "SATELLITE TERMINAL: ----------------\n");	
+    fprintf(stdout, "SATELLITE TERMINAL: ----------------\n");
+	fflush(stdout);	
 	if (c == SATELLITESTATUS) {
     fprintf(stdout, "**Satellite Status\n"    	    
 	       "Solar Panels: %9s, " 

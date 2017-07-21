@@ -18,7 +18,7 @@ keyboardConsole.o: keyboardConsole.c
 solarPanelControl.o: solarPanelControl.c
 	gcc -Wall -g -c -o solarPanelControl.o solarPanelControl.c
 
-vehicleComms.o: vehicleComms.c
+vehicleComms.o: vehicleComms.c satelliteVehicle.h
 	gcc -Wall -g -c -o vehicleComms.o vehicleComms.c
 
 warningAlarm.o: warningAlarm.c warningAlarm.h
@@ -33,7 +33,7 @@ consoleDisplay.o: consoleDisplay.c nonBlockingKeys.h
 powerSubsystem.o: powerSubsystem.c powerSubsystem.h
 	gcc -Wall -g -c -o powerSubsystem.o powerSubsystem.c
 
-satelliteComs.o: satelliteComs.c satelliteComs.h
+satelliteComs.o: satelliteComs.c satelliteComs.h nonBlockingKeys.h satelliteVehicle.h
 	gcc -Wall -g -c -o satelliteComs.o satelliteComs.c
 
 terminalComs.o: terminalComs.c TCB.h
