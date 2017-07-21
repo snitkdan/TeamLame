@@ -10,6 +10,7 @@
 #include "TCB.h"
 #include "dataStructs.h"
 #include "satelliteComs.h"
+#include "nonBlockingKeys.h"
 #define MAX 65536 // upper bound for 16 bit
 
 void satelliteComs(void *satStruct) {
