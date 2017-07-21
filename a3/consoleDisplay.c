@@ -5,8 +5,14 @@
 
 #include <stdio.h>
 #include <stdbool.h>
+#include <termios.h>
+#include <unistd.h>
+#include<sys/select.h>
+#include<sys/time.h>
+#include "nonBlockingKeys.h"
 #include "dataStructs.h"
 #include "TCB.h"
+
 #define MAX 300
 
 /*
@@ -22,11 +28,12 @@
 */
 void consoleDisplay(void *consoleStruct) {
 	// Only run this function every major cycle
-	static unsigned long start = 0;
+	/*static unsigned long start = 0;
 	if((GLOBALCOUNTER - start) % MAJOR_CYCLE != 0) {
       return;
 	}
     start = GLOBALCOUNTER;
+	*/
 	
     // 1.1 Assign the data of consoleStruct into local variables
     consoleData *cData = (consoleData*)consoleStruct;
@@ -43,25 +50,38 @@ void consoleDisplay(void *consoleStruct) {
     char *fuelString = (*fuelLow)? "YES":"NO";
     char *battString = (*batteryLow)? "YES":"NO";
    
-    char ch = getch();
-    printf("Input Char is %c", ch);
+	static char c;
+    static int i;   
+   
     // 2. Print satellite status and annunciation onto 
 	// 	  the satellite terminal.
-    /*fprintf(stdout, "\033[2J");
+    fprintf(stdout, "\033[2J");
     fprintf(stdout, "\033[10;10H");
-    fprintf(stdout, "SATELLITE TERMINAL: ----------------\n");
-    fprintf(stdout, "**Satellite Status/n"    	    
+	fflush(stdout);	
+    nonblock(NB_ENABLE);
+	i=kbhit();
+
+    if (i!=0)
+    {
+        c=fgetc(stdin);
+    }
+    fprintf(stdout, "SATELLITE TERMINAL: ----------------\n");	
+	if (c == 'z') {
+    fprintf(stdout, "**Satellite Status\n"    	    
 	       "Solar Panels: %9s, " 
            "Battery Level: %3hu, "
            "Fuel Level: %3hu, "
            "Power Consumption: %2hu, "
 		   "Power Generation: %2hu\n", 
 		   solarPanelString, *batteryLvl, *fuelLvl, *pConsume, *pGenerate);
-		   
-	fprintf(stdout, "Annunciaton"
-		   "Battery Low: %3s "
-		   "Fuel Low: %3s",		   
-		   battString, fuelString); 
+	} else if (c == 'x') {	   
+		fprintf(stdout, "Annunciaton\n"
+			   "Battery Low: %3s "
+			   "Fuel Low: %3s",		   
+			   battString, fuelString); 
+	} else {
+		printf("z for Satellite Status\nx for annunciation");
+	}
 	fflush(stdout);
-    */	
+
 }
