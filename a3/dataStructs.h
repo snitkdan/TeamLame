@@ -50,6 +50,8 @@ typedef struct satelliteComsData {
   unsigned short *pConsumePtr;
   unsigned short *pGeneratePtr;
   unsigned int *thrusterCommandPtr;
+  char *commandPtr;
+  char *responsePtr;  
 } satData;
 
 typedef struct consoleDisplayData {

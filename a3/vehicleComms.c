@@ -18,37 +18,29 @@
 #define DEBUG
 
 void vehicleComms(void *vehicleStruct) {
+	#ifdef MAJOR
 	// Only run this function every major cycle
 	static unsigned long start = 0;
 	if((GLOBALCOUNTER - start) % MAJOR_CYCLE != 0) {
       return;
 	}
     start = GLOBALCOUNTER;
+	#endif
 	
     // 1.1 Assign the data of consoleStruct into local variables
     vehicleData *vData = (vehicleData*)vehicleStruct;
     char *command = vData->commandPtr;
     char *response = vData->responsePtr;
 
+    int fd;
+    char * myfifo = "/tmp/myfifo";
+    char buf[MAX_BUF];
+
+    /* open, read, and display the message from the FIFO */
+    fd = open(myfifo, O_RDONLY);
+    read(fd, buf, MAX_BUF);
+    printf("Received: %s\n", buf);
+	fflush(stdout);
+    close(fd);
+
 }
-#ifdef DEBUG
-//  test read then write back
-void funct1(int fd0)
-{
-	char buf[MAX_BUF];
-	int size = sizeof("Roger That\n");
-	
-	printf("in funct1\n");
-		
-	/* read and display the message from the FIFO */
-    read(fd0, buf, MAX_BUF);
-	
-    printf("Received command: %s\n", buf);
-	
-	/* write message to the FIFO */	
-	printf("ack command\n");	
-	write(fd0, "Roger That\n", size);
-	
-	return;
-}
-#endif

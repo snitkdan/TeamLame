@@ -24,15 +24,6 @@
 
 #define DEBUG
 
-typedef enum {wrt, rd} rw;
-
-int fd0;    
-char buf[MAX_BUF];
-
-#ifdef DEBUG
-void funct0(int fd0, rw coms);
-void funct1(int fd0);
-#endif
 void satelliteComs(void *satStruct) {
 	// Only runs this function every global cycle
 	static unsigned long start = 0;
@@ -61,25 +52,20 @@ void satelliteComs(void *satStruct) {
     char *battString = (*batteryLow)? "YES":"NO";
     char output[MAX];
     
-	#ifdef DEBUG
-	char * myfifo0 = "/tmp/myfifo0";
-	    
-	/* create the FIFO (named pipe) */
-    mkfifo(myfifo0, 0666);
+    int fd;
+    char *myfifo = "/tmp/myfifo";
 
-    /* open the FIFO */
-	
-    fd0 = open(myfifo0, O_RDWR);
-	
-	funct0(fd0, wrt);		//  write to fifo
-	funct1(fd0);			//  read then write to the fifo
-	funct0(fd0, rd);		//  read fromn the fifo
-	
-    close(fd0);
+    /* create the FIFO (named pipe) */
+    mkfifo(myfifo, 0666);
+
+    /* write "Hi" to the FIFO */
+    fd = open(myfifo, O_WRONLY);
+	printf("RIGHT AFTER OPENING FIFO\n");
+    write(fd, "Hi", sizeof("Hi"));
+    close(fd);
 
     /* remove the FIFO */
-    unlink(myfifo0);
-	#endif
+    unlink(myfifo);
 	
     // 3. Store print statements for satellite status and annunciation into output
     snprintf(output, MAX,
@@ -100,44 +86,6 @@ void satelliteComs(void *satStruct) {
     terminalComs(output);
 	
 }
-#ifdef DEBUG
-
-/*
- *  Test function0
- */
- 
- //  test write then read back
- 
-void funct0(int fd0, rw coms)
-{	char buf[MAX_BUF];
-	int size = 0;
-	
-	//  testing
-	printf("in funct0\n");
-	
-	// check for write or read
-	switch(coms)
-	{
-		case wrt: 
-		{
-			printf("send command\n");
-			size = sizeof("Launch Rocket");
-			write(fd0, "Launch Rocket", size);
-			break;
-		}
-		case rd:
-		{
-			printf("receive response\n");
-			size = sizeof("Roger That\n");
-			read(fd0, buf, MAX_BUF);
-			printf("Received: %s\n", buf);
-			break;
-		}
-	}
-
-	return;
-}
-#endif
 
 void maskBit(unsigned int *thrusterCommand) {
     // 0. Define a mask 1111111111110011

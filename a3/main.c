@@ -104,6 +104,8 @@ void main(void)
     sData.pConsumePtr = &pConsume;
     sData.pGeneratePtr = &pGenerate;
     sData.thrusterCommandPtr = &thrusterCommand;
+    sData.commandPtr = &command;
+    sData.responsePtr = &response;
 
     // consoleDisplay
     cData.fuelLowPtr = &fuelLow;
@@ -151,13 +153,15 @@ void main(void)
     queue[2] = &thrusterSubsystemTCB;
     queue[3] = &powerSubsystemTCB;
     queue[4] = &consoleDisplayTCB;
+	queue[5] = &vehicleCommsTCB;
+
 
     int i = 0;   // queue index
-	// static int calls = 0;
+	
     while (true) {
       aTCBPtr = queue[i];
       aTCBPtr->myTask((aTCBPtr->taskDataPtr));
-      if(i == 4) {
+      if(i == 5) {
         if(GLOBALCOUNTER % MAJOR_CYCLE == 0) {
           usleep(9441.8);
         } else {
@@ -165,7 +169,7 @@ void main(void)
         }
         GLOBALCOUNTER++;
       }
-	    i = (i + 1) % 5;
+	    i = (i + 1) % 6;
     }
     return;
 }
