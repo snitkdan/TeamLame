@@ -22,7 +22,7 @@
 
 #define MAX 65536 // upper bound for 16 bit
 
-//#define DEBUG
+#define DEBUG
 
 typedef enum {wrt, rd} rw;
 

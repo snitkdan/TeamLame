@@ -17,6 +17,7 @@
 #define SATELLITESTATUS 'z'
 #define ANNUNCIATION 'x'
 
+//#define OFF
 /*
   @param consoleStruct
     struct containing the shared 
@@ -54,7 +55,8 @@ void consoleDisplay(void *consoleStruct) {
    
 	static char c;
     static int i;   
-   
+    
+	#ifdef OFF
     // 2. Print satellite status and annunciation onto 
 	// 	  the satellite terminal.
     fprintf(stdout, "\033[2J");
@@ -88,5 +90,6 @@ void consoleDisplay(void *consoleStruct) {
 		       SATELLITESTATUS, ANNUNCIATION);
 	}
 	fflush(stdout);
+	#endif
 
 }

@@ -11,7 +11,6 @@
     changes thrusterCommand based
     on random integer from rand2.c
 */
-void satelliteComs(void *satStruct);
 
 /*
   @param thrusterCommand

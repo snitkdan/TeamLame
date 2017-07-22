@@ -14,7 +14,8 @@
 #include "TCB.h"
 #include "satelliteVehicle.h"
 #define MAX 300
-//#define DEBUG
+
+#define DEBUG
 
 void vehicleComms(void *vehicleStruct) {
 	// Only run this function every major cycle
