@@ -26,11 +26,13 @@
 
 void satelliteComs(void *satStruct) {
 	// Only runs this function every global cycle
+	#ifdef MAJOR
 	static unsigned long start = 0;
 	if((GLOBALCOUNTER - start) % MAJOR_CYCLE != 0) {
       return;
 	}
     start = GLOBALCOUNTER;
+	#endif
 	
     // 1. Assign the data of sData into local variables
     satData *sData = (satData*)satStruct;
@@ -52,21 +54,27 @@ void satelliteComs(void *satStruct) {
     char *battString = (*batteryLow)? "YES":"NO";
     char output[MAX];
     
+	#define PIPE
     int fd;
-    char *myfifo = "/tmp/myfifo";
+    char *myfifo = "/tmp/myfifo0";
 
     /* create the FIFO (named pipe) */
     mkfifo(myfifo, 0666);
 
     /* write "Hi" to the FIFO */
-    fd = open(myfifo, O_WRONLY);
-	printf("RIGHT AFTER OPENING FIFO\n");
-    write(fd, "Hi", sizeof("Hi"));
-    close(fd);
+	int pid;
+	pid = fork();
+	if (pid != 0) {
+		fd = open(myfifo, O_RDWR);
+		printf("RIGHT AFTER OPENING FIFO\n");
+		write(fd, "Hi", sizeof("Hi"));
+		close(fd);
 
-    /* remove the FIFO */
-    unlink(myfifo);
+		/* remove the FIFO */
+		unlink(myfifo);
 	
+	}
+	#endif
     // 3. Store print statements for satellite status and annunciation into output
     snprintf(output, MAX,
 		   "EARTH: -----------\n"	

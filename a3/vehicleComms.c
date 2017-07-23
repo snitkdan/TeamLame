@@ -33,11 +33,11 @@ void vehicleComms(void *vehicleStruct) {
     char *response = vData->responsePtr;
 
     int fd;
-    char * myfifo = "/tmp/myfifo";
+    char * myfifo = "/tmp/myfifo0";
     char buf[MAX_BUF];
 
     /* open, read, and display the message from the FIFO */
-    fd = open(myfifo, O_RDONLY);
+    fd = open(myfifo, O_RDWR);
     read(fd, buf, MAX_BUF);
     printf("Received: %s\n", buf);
 	fflush(stdout);
