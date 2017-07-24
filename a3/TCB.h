@@ -4,18 +4,15 @@
 #define HEAD_TCB
 
 // Declares a TCB structure
-struct myStruct
-{
-    // Pointer to a function taking void* arg and returning a void
-    void (*myTask)(void*);
-
-    // Pointer to void used to reference the shared data for the task
-    void *taskDataPtr;
-	
+typedef struct myStruct {
+  // Pointer to a function taking void* arg and returning a void
+  void (*myTask)(void*);
+  // Pointer to void used to reference the shared data for the task
+  void *taskDataPtr;
+  // Pointers to next/prev tasks in the task queue
 	struct myStruct* next;
 	struct myStruct* prev;
-};
-typedef struct myStruct TCB;
+} TCB, *TCB_Ptr;
 
 // Declares function prototypes
 //int terminalComs(char* output);
