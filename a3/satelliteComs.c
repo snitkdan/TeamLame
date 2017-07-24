@@ -23,6 +23,7 @@
 #define MAX 65536 // upper bound for 16 bit
 
 #define DEBUG
+int fd = 0;
 
 void satelliteComs(void *satStruct) {
 	// Only runs this function every global cycle
@@ -54,27 +55,27 @@ void satelliteComs(void *satStruct) {
     char *battString = (*batteryLow)? "YES":"NO";
     char output[MAX];
     
-	#define PIPE
-    int fd;
     char *myfifo = "/tmp/myfifo0";
-
+	char send[10] = "Radleigh";
+	
+	char buf[MAX_BUF];
     /* create the FIFO (named pipe) */
     mkfifo(myfifo, 0666);
 
     /* write "Hi" to the FIFO */
-	int pid;
-	pid = fork();
-	if (pid != 0) {
-		fd = open(myfifo, O_RDWR);
-		printf("RIGHT AFTER OPENING FIFO\n");
-		write(fd, "Hi", sizeof("Hi"));
-		close(fd);
-
-		/* remove the FIFO */
-		unlink(myfifo);
+	fd = open(myfifo, O_RDWR);
 	
-	}
-	#endif
+	// set pipe's read end to non blocking
+	fcntl(fd, F_SETFL, O_NONBLOCK);
+	read (fd, buf, MAX_BUF);
+	printf("SATELLITECOMS: %s\n", buf);
+	write(fd, send, 10);
+	
+	//close(fd);
+
+	/* remove the FIFO */
+	//unlink(myfifo);
+	
     // 3. Store print statements for satellite status and annunciation into output
     snprintf(output, MAX,
 		   "EARTH: -----------\n"	

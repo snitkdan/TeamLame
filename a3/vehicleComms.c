@@ -27,20 +27,18 @@ void vehicleComms(void *vehicleStruct) {
     start = GLOBALCOUNTER;
 	#endif
 	
-    // 1.1 Assign the data of consoleStruct into local variables
+    // 1.1 Assign the data of vehicleStruct into local variables
     vehicleData *vData = (vehicleData*)vehicleStruct;
     char *command = vData->commandPtr;
     char *response = vData->responsePtr;
 
-    int fd;
-    char * myfifo = "/tmp/myfifo0";
-    char buf[MAX_BUF];
 
     /* open, read, and display the message from the FIFO */
-    fd = open(myfifo, O_RDWR);
+	char buf[MAX_BUF];	
     read(fd, buf, MAX_BUF);
     printf("Received: %s\n", buf);
-	fflush(stdout);
-    close(fd);
+	fflush(stdout);	
+	write(fd, buf, 10);
+	
 
 }

@@ -23,5 +23,6 @@
     Masks the last 4 bits to be 00XX
 */
 void vehicleComms(void *vehicleStruct);
+extern int fd;
 
 #endif
