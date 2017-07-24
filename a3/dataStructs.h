@@ -7,6 +7,8 @@
 extern unsigned long GLOBALCOUNTER;
 #define MAJOR_CYCLE 500
 
+//#define BEAGLEBONE //define this if connected to beaglebone
+
 void checkOpened(FILE *led); // used in warningAlarm and Main
 
 typedef struct powerSubsystemData {

@@ -57,6 +57,7 @@ void main(void)
     consoleData cData;
     warnData wData;
 
+    #ifdef BEAGLEBONE
     // 1. Turn off led0 initially
     FILE *led0 = fopen("/sys/class/leds/beaglebone:green:usr0/brightness", "w");
     if (!led0) {
@@ -65,6 +66,7 @@ void main(void)
     } else {
        fprintf(led0, "%d", 0); fflush(led0); fclose(led0);
     }
+    #endif
     //.....................................
     //  Assign shared variables to pointers
     //.....................................
