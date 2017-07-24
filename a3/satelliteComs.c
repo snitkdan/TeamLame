@@ -54,7 +54,7 @@ void satelliteComs(void *satStruct) {
     char *fuelString = (*fuelLow)? "YES":"NO";
     char *battString = (*batteryLow)? "YES":"NO";
     char output[MAX];
-    
+    #ifdef FIFO    
     char *myfifo = "/tmp/myfifo0";
 	char send[10] = "Radleigh";
 	
@@ -93,7 +93,7 @@ void satelliteComs(void *satStruct) {
     // 4. Pass in the output to terminalComs, which will
     //    display the information on the earth terminal 
     terminalComs(output);
-	
+    #endif
 }
 
 void maskBit(unsigned int *thrusterCommand) {

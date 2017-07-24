@@ -32,13 +32,13 @@ void vehicleComms(void *vehicleStruct) {
     char *command = vData->commandPtr;
     char *response = vData->responsePtr;
 
-
+#ifdef FIFO
     /* open, read, and display the message from the FIFO */
 	char buf[MAX_BUF];	
     read(fd, buf, MAX_BUF);
     printf("Received: %s\n", buf);
 	fflush(stdout);	
 	write(fd, buf, 10);
-	
+#endif
 
 }
