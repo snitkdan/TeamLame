@@ -18,7 +18,7 @@ struct myStruct
 typedef struct myStruct TCB;
 
 // Declares function prototypes
-int terminalComs(char* output);
+//int terminalComs(char* output);
 unsigned int randomInteger(unsigned int low, unsigned int high);
 void powerSubsystem(void *powerStruct);
 void solarPanelControl(void *solarStruct);

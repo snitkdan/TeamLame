@@ -24,3 +24,5 @@ void satelliteComs(void *sData);
     Masks the last 4 bits to be 00XX
 */
 void maskBit(unsigned int *thrusterCommand);
+int terminalComs(char *output);
+

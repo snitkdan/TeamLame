@@ -1,6 +1,6 @@
 objects = satelliteComs.o powerSubsystem.o consoleDisplay.o \
           thrusterSubsystem.o warningAlarm.o rand2.o \
-          terminalComs.o keyboardConsole.o solarPanelControl.o \
+          keyboardConsole.o solarPanelControl.o \
           vehicleComms.o nonBlockingKeys.o
 headers = dataStructs.h TCB.h
 
@@ -35,9 +35,6 @@ powerSubsystem.o: powerSubsystem.c powerSubsystem.h
 
 satelliteComs.o: satelliteComs.c satelliteComs.h nonBlockingKeys.h satelliteVehicle.h
 	gcc -Wall -g -c -o satelliteComs.o satelliteComs.c
-
-terminalComs.o: terminalComs.c TCB.h
-	gcc -Wall -g -c -o terminalComs.o terminalComs.c
 
 rand2.o: rand2.c
 	gcc -Wall -g -c -o rand2.o rand2.c

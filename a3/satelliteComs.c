@@ -7,12 +7,14 @@
 #include <stdio.h>
 #include <stdbool.h>
 #include <stdint.h>
-
 #include <fcntl.h>
 #include <sys/stat.h>
 #include <sys/types.h>
+#include <errno.h>
 #include <unistd.h>
-
+#include <string.h>
+#define _XOPEN_SOURCE_EXTENDED 1
+#include <stdlib.h> // for exit
 
 #include "TCB.h"
 #include "dataStructs.h"
@@ -23,7 +25,14 @@
 #define MAX 65536 // upper bound for 16 bit
 
 #define DEBUG
-int fd = 0;
+#define MAJOR
+int fd_Vehicle = 0;
+int fd_Earth = 0;
+
+
+
+
+
 
 void satelliteComs(void *satStruct) {
 	// Only runs this function every global cycle
@@ -55,23 +64,43 @@ void satelliteComs(void *satStruct) {
     char *battString = (*batteryLow)? "YES":"NO";
     char output[MAX];
     
-    char *myfifo = "/tmp/myfifo0";
-	char send[10] = "Radleigh";
+    char *vehicleFifo = "/tmp/myfifo0";
+    char *earthFifo = "/tmp/myfifo1";
+	
 	
 	char buf[MAX_BUF];
     /* create the FIFO (named pipe) */
-    mkfifo(myfifo, 0666);
-
-    /* write "Hi" to the FIFO */
-	fd = open(myfifo, O_RDWR);
+    mkfifo(vehicleFifo, 0666);
+    mkfifo(earthFifo, 0666);
+	
+	fd_Vehicle = open(vehicleFifo, O_RDWR);
 	
 	// set pipe's read end to non blocking
-	fcntl(fd, F_SETFL, O_NONBLOCK);
-	read (fd, buf, MAX_BUF);
+	fcntl(fd_Vehicle, F_SETFL, O_NONBLOCK);
+	read (fd_Vehicle, buf, MAX_BUF);
 	printf("SATELLITECOMS: %s\n", buf);
-	write(fd, send, 10);
 	
-	//close(fd);
+	
+	char c;
+	int i;
+	nonblock(NB_ENABLE);
+	i=kbhit(0);
+
+    if (i!=0)
+    {
+        c=fgetc(stdin);
+    }
+	//if (c == 'A' || c == 'B' ) 
+		
+	//	write(fd_Vehicle, &c, 10);
+	// FIGURE OUT HOW TO PASS IN THE CHAR WITH A NULL BYTE
+
+	if (c == 'A') 
+		write(fd_Vehicle, "A", 10);
+	else if (c == 'B')
+		write(fd_Vehicle, "B", 10);
+	
+	//close(fd_Vehicle);
 
 	/* remove the FIFO */
 	//unlink(myfifo);
@@ -94,6 +123,8 @@ void satelliteComs(void *satStruct) {
     //    display the information on the earth terminal 
     terminalComs(output);
 	
+	
+	
 }
 
 void maskBit(unsigned int *thrusterCommand) {
@@ -103,3 +134,27 @@ void maskBit(unsigned int *thrusterCommand) {
     // 1. Mask the bit 2 and 3 to 0
     *thrusterCommand &= MASK;
 }
+
+/*
+ * Filename: TerminalComs.c (adapted)
+ * Author: James K. Peckol
+ * Contact: jkp@uw.washington.edu
+ */
+
+// http://man7.org/linux/man-pages/man2/open.2.html
+
+
+//#define MAX 1000
+#define TEMP 
+FILE *fp = NULL; // declare file here
+
+int terminalComs(char *output) {
+	int fdm = open("/dev/pts/1", O_RDWR);
+
+
+
+
+    dprintf(fdm, "How can we send input here???\n");
+
+}
+

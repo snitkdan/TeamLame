@@ -64,7 +64,7 @@ void consoleDisplay(void *consoleStruct) {
     fprintf(stdout, "\033[1;1H");
 	fflush(stdout);	
     nonblock(NB_ENABLE);
-	i=kbhit();
+	i=kbhit(0);
 
     if (i!=0)
     {

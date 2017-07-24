@@ -12,6 +12,7 @@
 #include <stdio.h>
 #include <stdlib.h> // for exit
 #include "TCB.h"
+#include "nonBlockingKeys.h"
 #define MAX 1000
 
 FILE *fp = NULL; // declare file here
@@ -35,6 +36,8 @@ int terminalComs(char *output) {
 		dprintf(fd0, "\r");
 		firstTime++;
 	}
+	
+	#ifdef TEMP
 	// 3. error handling: check if file and terminal ports exist 
     if (fp && fd0) {
 		
@@ -54,4 +57,5 @@ int terminalComs(char *output) {
 		fprintf(stderr, "ERROR, fp, fd0 and/or fd1 not opened correctly\n");
 		exit(1);
 	}
+	#endif
 }
