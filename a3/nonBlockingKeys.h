@@ -12,7 +12,7 @@
     changes thrusterCommand based
     on random integer from rand2.c
 */
-int kbhit(int port);
+int kbhit();
 
 /*
   @param thrusterCommand

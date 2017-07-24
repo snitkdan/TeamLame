@@ -7,24 +7,16 @@
 
 
 //kbhit, Non-blocking keypress detector, when go keypress, return 1 else always return 0
-int kbhit(int port)
+int kbhit()
 {
-
     struct timeval tv;
     fd_set fds;
     tv.tv_sec = 0;
     tv.tv_usec = 0;
     FD_ZERO(&fds);
-    #ifdef TEST
-    FD_SET(STDIN_FILENO, &fds); //STDIN_FILENO is 0
+    FD_SET(STDIN_FILENO, &fds); //STDOUT_FILENO is 0
     select(STDIN_FILENO+1, &fds, NULL, NULL, &tv);
-
     return FD_ISSET(STDIN_FILENO, &fds);
-	#endif
-	
-    FD_SET(port, &fds); //STDIN_FILENO is 0
-    select(port+1, &fds, NULL, NULL, &tv);
-    return FD_ISSET(port, &fds);	
 }
 
 

@@ -9,17 +9,13 @@
 #include <fcntl.h>
 #include <sys/stat.h>
 #include <sys/types.h>
-#include <sys/ioctl.h>
-
 #include <unistd.h>
-#include <string.h>
 #include "dataStructs.h"
 #include "TCB.h"
 #include "satelliteVehicle.h"
 #define MAX 300
 
 #define DEBUG
-#define MAJOR
 
 void vehicleComms(void *vehicleStruct) {
 	#ifdef MAJOR
@@ -36,16 +32,13 @@ void vehicleComms(void *vehicleStruct) {
     char *command = vData->commandPtr;
     char *response = vData->responsePtr;
 
-	response = "A";
+#ifdef FIFO
     /* open, read, and display the message from the FIFO */
-	char buf[MAX_BUF];
-	if(read(fd_Vehicle, command, MAX_BUF) != -1) {
-		printf("Received: %c\n", *command);		
-		fflush(stdout);
-		write(fd_Vehicle, response, 10);
-	}
-
-
-	
+	char buf[MAX_BUF];	
+    read(fd, buf, MAX_BUF);
+    printf("Received: %s\n", buf);
+	fflush(stdout);	
+	write(fd, buf, 10);
+#endif
 
 }
