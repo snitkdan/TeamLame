@@ -26,4 +26,23 @@ void solarPanelControl(void *solarStruct) {
     bool *motorDec = solData->motorDecPtr;
 
     // Have fun Abdul - Love, Rad
+
+	/*
+
+	if ((*solarPanelState = 1 && *solarPanelDeploy = 1) || (*solarPanelState = 0 && *solarPanelRetract = 1)){
+
+		PWM = 0
+	}else{
+		if(*motorInc = 1){
+			duty = duty + ((5*duty)/100)
+			duty = duty > 100 ? 100 : duty
+		}elseif(*motorDec = 1){
+			duty = duty - ((5*duty)/100)
+			duty = duty < 0 ? 0 : duty
+		}  
+	}
+
+	PWM = duty * period
+
+	*/
 }
