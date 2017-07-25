@@ -62,11 +62,11 @@ void consoleDisplay(void *consoleStruct) {
     //fprintf(stdout, "\033[2J");
     //fprintf(stdout, "\033[1;1H");
     //nonblock(NB_ENABLE);
-	i=kbhit();
-
+    i=kbhit();
     if (i!=0)
     {
         c=fgetc(stdin);
+        printf("character got: %c\n", c);
     }
     char output[MAX]; 
     //fprintf(stdout, "SATELLITE TERMINAL: ----------------\n");

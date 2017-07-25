@@ -54,30 +54,31 @@ void satelliteComs(void *satStruct) {
     char *fuelString = (*fuelLow)? "YES":"NO";
     char *battString = (*batteryLow)? "YES":"NO";
     char output[MAX];
-    #ifdef FIFO    
     char *myfifo = "/tmp/myfifo0";
 	
     char buf[MAX_BUF];
     /* create the FIFO (named pipe) */
     mkfifo(myfifo, 0666);
-
-    /* write "Hi" to the FIFO */
     fd = open(myfifo, O_RDWR);
 	
     // set pipe's read end to non blocking
     fcntl(fd, F_SETFL, O_NONBLOCK);
-    read (fd, buf, MAX_BUF);
-    printf("SATELLITECOMS: %s\n", buf);
-
-    
-    write(fd, send, 10);
-
-    //close(fd);
-
-    /* remove the FIFO */
-    //unlink(myfifo);
-	
-    #endif
+    if (read (fd, buf, MAX_BUF) != -1) {
+        printf("Response from Vehicle: %s\n", buf);
+    } 
+    char c;
+    int i;
+    i = kbhit(); 
+    if (i != 0) {
+        c = fgetc(stdin);
+    }
+    if (c == 'V') {
+        printf("inside satComs V\n");
+        write(fd, "V", 10);
+    } else if (c == 'B') {
+        printf("inside satComs B\n");
+        write(fd, "B", 10);
+    }
 }
 
 void maskBit(unsigned int *thrusterCommand) {

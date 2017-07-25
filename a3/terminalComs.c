@@ -17,10 +17,10 @@
 FILE *fp = NULL; // declare file here
 
 int terminalComs(char *output) {
-	// 1. Declare storage and data to be used
+    // 1. Declare storage and data to be used
     char buffer[MAX];
     static int fd0; // for earth terminal
-	static int firstTime = 0;
+    static int firstTime = 0;
 	
     // 2. open file for reading and writing
 	//    open terminal ports for writing
