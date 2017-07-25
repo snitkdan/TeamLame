@@ -34,11 +34,11 @@ int AppendTCB(TaskQueue queue, TCB_Ptr node) {
   // 0. Verify queue and node is valid
   if(!queue || !node) {
     return 0;
-  }  
+  }
   // 1. Get the number of tasks in the queue
   unsigned int num_tasks = queue->num_tasks;
   // 2. If the queue is initially empty
-  if(num_tasks == 0U) {
+  if(num_tasks == 0) {
     queue->head = queue->tail = node;
     node->prev = node->next = NULL;
   }
@@ -61,7 +61,7 @@ int PushTCB(TaskQueue queue, TCB_Ptr node) {
   // 1. Get the number of tasks in the queue
   unsigned int num_tasks = queue->num_tasks;
   // 2. If the queue is initially empty
-  if(num_tasks == 0U) {
+  if(num_tasks == 0) {
     queue->head = queue->tail = node;
     node->prev = node->next = NULL;
   }
@@ -78,8 +78,7 @@ int PushTCB(TaskQueue queue, TCB_Ptr node) {
 
 TCB_Ptr RemoveTCB(TaskQueue queue, TCB_Ptr node) {
   // 0. Verify queue is valid
-  unsigned int num_tasks = queue->num_tasks;
-  if(queue == NULL && num_tasks == 0U) {
+  if(queue == NULL || queue->num_tasks == 0) {
     return NULL;
   }
   // 1. Search for the node to delete
@@ -107,7 +106,7 @@ TCB_Ptr RemoveTCB(TaskQueue queue, TCB_Ptr node) {
 
 TCB_Ptr PopTCB(TaskQueue queue) {
   // 0. Verify queue is valid
-  if(queue == NULL && queue->num_tasks == 0U) {
+  if(queue == NULL || queue->num_tasks == 0) {
     return NULL;
   }
   // 1. Save the old head
@@ -116,7 +115,7 @@ TCB_Ptr PopTCB(TaskQueue queue) {
   queue->head = queue->head->next;
   queue->num_tasks--;
   // 3. If the list is now empty
-  if(queue->num_tasks == 0U) {
+  if(queue->num_tasks == 0) {
     queue->tail = queue->head = NULL;
   } else {
     queue->head->prev = NULL;
@@ -126,7 +125,7 @@ TCB_Ptr PopTCB(TaskQueue queue) {
 
 TCB_Ptr SliceTCB(TaskQueue queue) {
   // 0. Verify queue is valid
-  if(queue == NULL && queue->num_tasks > 0) {
+  if(queue == NULL || queue->num_tasks == 0) {
     return NULL;
   }
   // 1. Save the old tail

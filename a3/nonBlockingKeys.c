@@ -7,8 +7,7 @@
 
 
 //kbhit, Non-blocking keypress detector, when go keypress, return 1 else always return 0
-int kbhit()
-{
+int kbhit() {
     struct timeval tv;
     fd_set fds;
     tv.tv_sec = 0;
@@ -19,28 +18,20 @@ int kbhit()
     return FD_ISSET(STDIN_FILENO, &fds);
 }
 
-
-
-void nonblock(int state)
-{
+void nonblock(int state) {
     struct termios ttystate;
-
     //get the terminal state
     tcgetattr(STDIN_FILENO, &ttystate);
-
-    if (state==NB_ENABLE)
-    {
+    if (state==NB_ENABLE) {
         //turn off canonical mode
         ttystate.c_lflag &= ~ICANON;
         //minimum of number input read.
-        ttystate.c_cc[VMIN] = 1; 
+        ttystate.c_cc[VMIN] = 1;
     }
-    else if (state==NB_DISABLE)
-    {
+    else if (state==NB_DISABLE) {
         //turn on canonical mode
         ttystate.c_lflag |= ICANON;
     }
     //set the terminal attributes.
     tcsetattr(STDIN_FILENO, TCSANOW, &ttystate);
-
 }
