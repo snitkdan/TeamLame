@@ -34,7 +34,7 @@ int AppendTCB(TaskQueue queue, TCB_Ptr node) {
   // 0. Verify queue and node is valid
   if(!queue || !node) {
     return 0;
-  }  
+  }
   // 1. Get the number of tasks in the queue
   unsigned int num_tasks = queue->num_tasks;
   // 2. If the queue is initially empty
@@ -126,7 +126,7 @@ TCB_Ptr PopTCB(TaskQueue queue) {
 
 TCB_Ptr SliceTCB(TaskQueue queue) {
   // 0. Verify queue is valid
-  if(queue == NULL && queue->num_tasks > 0) {
+  if(queue == NULL && queue->num_tasks == 0U) {
     return NULL;
   }
   // 1. Save the old tail
