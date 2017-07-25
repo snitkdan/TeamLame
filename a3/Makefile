@@ -29,11 +29,14 @@ GTEST_HEADERS = $(GTEST_DIR)/include/gtest/*.h \
                 $(GTEST_DIR)/include/gtest/internal/*.h
 
 # House-keeping build targets.
-OBJ = satelliteComs.o powerSubsystem.o consoleDisplay.o \
-      thrusterSubsystem.o warningAlarm.o rand2.o terminalComs.o
+# OBJ = satelliteComs.o powerSubsystem.o consoleDisplay.o \
+#       thrusterSubsystem.o warningAlarm.o rand2.o terminalComs.o \
 
-TEST_OBJ = thrusterSubsystemTest.o satelliteComsTest.o powerSubsystemTest.o \
-						gtest_main.a
+OBJ =	startup.o scheduler.o
+
+# TEST_OBJ = thrusterSubsystemTest.o satelliteComsTest.o powerSubsystemTest.o \
+
+TEST_OBJ	=	startupTest.o schedulerTest.o gtest_main.a
 
 PROJ_HEADERS = dataStructs.h TCB.h
 
@@ -76,6 +79,14 @@ powerSubsystemTest.o : $(USER_DIR)/powerSubsystemTest.cc \
                      $(USER_DIR)/powerSubsystem.h $(GTEST_HEADERS)
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $(USER_DIR)/powerSubsystemTest.cc
 
+startupTest.o : $(USER_DIR)/startupTest.cc \
+                     $(USER_DIR)/startup.h $(GTEST_HEADERS)
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $(USER_DIR)/startupTest.cc
+
+schedulerTest.o : $(USER_DIR)/schedulerTest.cc \
+                     $(USER_DIR)/scheduler.h $(GTEST_HEADERS)
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $(USER_DIR)/schedulerTest.cc
+
 test_suite : $(OBJ) $(TEST_OBJ)
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) $^ -o $@
 
@@ -100,6 +111,12 @@ powerSubsystem.o : $(USER_DIR)/powerSubsystem.c $(USER_DIR)/powerSubsystem.h $(G
 
 consoleDisplay.o: $(USER_DIR)/consoleDisplay.c $(GTEST_HEADERS)
 	$(CC) $(CPPFLAGS) $(CXXFLAGS) -c $(USER_DIR)/consoleDisplay.c
+
+startup.o : $(USER_DIR)/startup.c $(USER_DIR)/startup.h $(GTEST_HEADERS)
+	$(CC) $(CPPFLAGS) $(CXXFLAGS) -c $(USER_DIR)/startup.c
+
+scheduler.o: $(USER_DIR)/scheduler.c $(GTEST_HEADERS)
+	$(CC) $(CPPFLAGS) $(CXXFLAGS) -c $(USER_DIR)/scheduler.c
 
 main : $(OBJ) $(PROJ_HEADERS) $(USER_DIR)/main.c
 	$(CC) -o main $(USER_DIR)/main.c $(OBJ)

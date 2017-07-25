@@ -6,11 +6,12 @@
 */
 
 #include "gtest/gtest.h"
+#include <iostream>
 extern "C" {
     #include <stdbool.h>
     #include "startup.h"
-    #include "dataStructs.h"
     #include "scheduler.h"
+    #include "dataStructs.h"
     #include "TCB.h"
 }
 
@@ -67,24 +68,16 @@ TEST(StartupTest, Test_Initialization) {
   ASSERT_EQ(response, '\0');
   // 4. Verify the TCBs correctly initialized
   ASSERT_EQ(powerSubsystemTCB.taskDataPtr, (void*)&pData);
-  ASSERT_EQ(powerSubsystemTCB.myTask, powerSubsystem);
   ASSERT_EQ(solarPanelControlTCB.taskDataPtr, (void*)&solData);
-  ASSERT_EQ(solarPanelControlTCB.myTask, solarPanelControl);
   ASSERT_EQ(keyboardConsoleTCB.taskDataPtr, (void*)&kData);
-  ASSERT_EQ(keyboardConsoleTCB.myTask, keyboardConsole);
   ASSERT_EQ(vehicleCommsTCB.taskDataPtr, (void*)&vData);
-  ASSERT_EQ(vehicleCommsTCB.myTask, vehicleComms);
   ASSERT_EQ(thrusterSubsystemTCB.taskDataPtr, (void*)&tData);
-  ASSERT_EQ(thrusterSubsystemTCB.myTask, thrusterSubsystem);
   ASSERT_EQ(satelliteComsTCB.taskDataPtr, (void*)&sData);
-  ASSERT_EQ(satelliteComsTCB.myTask, satelliteComs);
   ASSERT_EQ(consoleDisplayTCB.taskDataPtr, (void*)&cData);
-  ASSERT_EQ(consoleDisplayTCB.myTask, consoleDisplay);
   ASSERT_EQ(warningAlarmTCB.taskDataPtr, (void*)&wData);
-  ASSERT_EQ(warningAlarmTCB.myTask, warningAlarm);
   // 5. Verify the Task Queue correctly initialized
   ASSERT_TRUE(queue);
-  ASSERT_EQ(queue->num_tasks, 6U);
+  ASSERT_EQ(NumTasksInTaskQueue(queue), 6U);
 }
 
 TEST(StartupTest, Test_ActivateTimeBase) {

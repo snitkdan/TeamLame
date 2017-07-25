@@ -130,7 +130,7 @@ TCB_Ptr SliceTCB(TaskQueue queue) {
     return NULL;
   }
   // 1. Save the old tail
-  TCB_Ptr old_tail = queue->head;
+  TCB_Ptr old_tail = queue->tail;
   // 2. Move the tail back
   queue->tail = queue->tail->prev;
   queue->num_tasks--;

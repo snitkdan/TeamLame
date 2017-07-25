@@ -10,7 +10,20 @@
 #include <stdlib.h>
 #include "TCB.h"
 #include "dataStructs.h"
+#include "warningAlarm.h"
 #include "scheduler.h"
+
+// TEMPORARY
+int terminalComs(char* output) {}
+unsigned int randomInteger(unsigned int low, unsigned int high) {}
+void powerSubsystem(void *powerStruct) {}
+void solarPanelControl(void *solarStruct) {}
+void keyboardConsole(void *keyboardStruct) {}
+void vehicleComms(void *vehicleStruct) {}
+void satelliteComs(void *satStruct) {}
+void consoleDisplay(void *consoleStruct) {}
+void thrusterSubsystem(void *thrustStruct) {}
+void warningAlarm(void *warnStruct) {}
 
 // Define shared variables
 unsigned int thrusterCommand;
@@ -153,6 +166,7 @@ void Initialize(void) {
   warningAlarmTCB.myTask = warningAlarm;
 
   // 5. Initialize the task queue
+  queue = AllocateTaskQueue();
   AppendTCB(queue, &warningAlarmTCB);
   AppendTCB(queue, &satelliteComsTCB);
   AppendTCB(queue, &thrusterSubsystemTCB);
