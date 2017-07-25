@@ -48,8 +48,8 @@ TEST(TaskQueueTest, Test_AppendAndSliceTCB) {
   // 3. Slice test
   ASSERT_EQ(SliceTCB(q), testTCB2_ptr);
   ASSERT_EQ(NumTasksInTaskQueue(q), 1U);
-  /*ASSERT_EQ(SliceTCB(q), testTCB_ptr);
-  ASSERT_EQ(NumTasksInTaskQueue(q), 0U);*/
+  ASSERT_EQ(SliceTCB(q), testTCB_ptr);
+  ASSERT_EQ(NumTasksInTaskQueue(q), 0U);
   // 4. Edge cases
   ASSERT_FALSE(AppendTCB(q, NULL));
   ASSERT_FALSE(AppendTCB(NULL, testTCB_ptr));
@@ -76,8 +76,8 @@ TEST(TaskQueueTest, Test_PushAndPopTCB) {
   // 3. Pop test
   ASSERT_EQ(PopTCB(q), testTCB2_ptr);
   ASSERT_EQ(NumTasksInTaskQueue(q), 1U);
-  /*ASSERT_EQ(PopTCB(q), testTCB_ptr);
-  ASSERT_EQ(NumTasksInTaskQueue(q), 0U);*/
+  ASSERT_EQ(PopTCB(q), testTCB_ptr);
+  ASSERT_EQ(NumTasksInTaskQueue(q), 0U);
   // 4. Edge cases
   ASSERT_FALSE(PushTCB(q, NULL));
   ASSERT_FALSE(PushTCB(NULL, testTCB_ptr));
