@@ -7,10 +7,11 @@
 #include "warningAlarm.h"
 #include "startup.h"
 
-unsigned long GLOBALCOUNTER = 0;
+extern unsigned long GLOBALCOUNTER;
 
-void main(void)
-{
+void main(void) {
+    // Extern for the queue
+    extern TaskQueue queue;
     // Startup task
     Initialize();
     ActivateTimeBase();

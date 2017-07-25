@@ -10,13 +10,47 @@ extern "C" {
     #include <stdbool.h>
     #include "startup.h"
     #include "dataStructs.h"
+    #include "scheduler.h"
     #include "TCB.h"
 }
 
 // This tests the "initialize" method in "startup.c"
 TEST(StartupTest, Test_Initialization) {
+  // 0. Declare extern variables
+  extern unsigned int thrusterCommand;
+  extern unsigned short batteryLvl;
+  extern unsigned short fuelLvl;
+  extern unsigned short pConsume;
+  extern unsigned short pGenerate;
+  extern bool solarPanelState;
+  extern bool fuelLow;
+  extern bool batteryLow;
+  extern bool solarPanelDeploy;
+  extern bool solarPanelRetract;
+  extern bool motorInc;
+  extern bool motorDec;
+  extern char command;
+  extern char response;
+  extern TCB powerSubsystemTCB;
+  extern TCB solarPanelControlTCB;
+  extern TCB keyboardConsoleTCB;
+  extern TCB vehicleCommsTCB;
+  extern TCB thrusterSubsystemTCB;
+  extern TCB satelliteComsTCB;
+  extern TCB consoleDisplayTCB;
+  extern TCB warningAlarmTCB;
+  extern powerData pData;
+  extern solarData solData;
+  extern keyboardData kData;
+  extern vehicleData vData;
+  extern thrustData tData;
+  extern satData sData;
+  extern consoleData cData;
+  extern warnData wData;
+  extern TaskQueue queue;
+  // 2. Initialize variables
   Initialize();
-  // 1. Verify correct initial variable values
+  // 3. Verify correct initial variable values
   ASSERT_EQ(thrusterCommand, 0);
   ASSERT_EQ(batteryLvl, 100);
   ASSERT_EQ(fuelLvl, 100);
@@ -31,7 +65,7 @@ TEST(StartupTest, Test_Initialization) {
   ASSERT_EQ(motorDec, false);
   ASSERT_EQ(command, '\0');
   ASSERT_EQ(response, '\0');
-  // 2. Verify the TCBs correctly initialized
+  // 4. Verify the TCBs correctly initialized
   ASSERT_EQ(powerSubsystemTCB.taskDataPtr, (void*)&pData);
   ASSERT_EQ(powerSubsystemTCB.myTask, powerSubsystem);
   ASSERT_EQ(solarPanelControlTCB.taskDataPtr, (void*)&solData);
@@ -48,12 +82,13 @@ TEST(StartupTest, Test_Initialization) {
   ASSERT_EQ(consoleDisplayTCB.myTask, consoleDisplay);
   ASSERT_EQ(warningAlarmTCB.taskDataPtr, (void*)&wData);
   ASSERT_EQ(warningAlarmTCB.myTask, warningAlarm);
-  // 3. Verify the Task Queue correctly initialized
+  // 5. Verify the Task Queue correctly initialized
   ASSERT_TRUE(queue);
   ASSERT_EQ(queue->num_tasks, 6U);
 }
 
 TEST(StartupTest, Test_ActivateTimeBase) {
+  extern unsigned long GLOBALCOUNTER;
   ActivateTimeBase();
   ASSERT_EQ(GLOBALCOUNTER, 0U);
 }

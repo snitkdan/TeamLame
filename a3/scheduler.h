@@ -52,6 +52,21 @@ int AppendTCB(TaskQueue queue, TCB_Ptr node);
 
 /*
   @param node
+    node to add
+  @param queue
+    Task Queue to add into
+  @modifies
+    queue
+  @effects
+    adds node to the head
+    of queue
+  @returns
+    1 on success, and 0 on failure.
+*/
+int PushTCB(TaskQueue queue, TCB_Ptr node);
+
+/*
+  @param node
     node to remove
   @param queue
     Task Queue to remove from
@@ -83,14 +98,15 @@ TCB_Ptr PopTCB(TaskQueue queue);
     removes the current tail from queue
   @returns
     former tail of queue if successful,
-    and NULL otherwise. 
+    and NULL otherwise.
 */
 TCB_Ptr SliceTCB(TaskQueue queue);
 
 /*
   @returns
-    the number of elements in queue
+    the number of tasks in queue, if
+    successful, and -1 otherwise.
 */
-unsigned int NumElementsInTaskQueue(TaskQueue queue);
+unsigned int NumTasksInTaskQueue(TaskQueue queue);
 
 #endif

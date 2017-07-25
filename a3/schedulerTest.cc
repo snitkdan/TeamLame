@@ -9,25 +9,100 @@ extern "C" {
     #include "startup.h"
 }
 
-// This tests the "thrusterSubsystem" method in "thrusterSubsystem.c"
-TEST(ThrusterSubsystemTest, Test_ThrusterSubsystem) {
-  // 1. Set up data struct
-  unsigned int thrusterCommand = 0xFFF0;
-  unsigned short fuelLvl = 100;
-  thrustData tData = {&thrusterCommand, &fuelLvl};
-  void *tDataPtr = (void*)&tData;
-  // 2. Store absolute cost for each iteration
-  double actual_cost = 0.49132966499999997;
-  double actual_fuelLvl = 100.00;
-  // 3. Store the difference between the
-  // rounded and actual cost.
-  double diff, fuelAsDouble;
-  while(fuelLvl > 0) {
-    thrusterSubsystem(tDataPtr);
-    fuelAsDouble = (double)fuelLvl;
-    diff = fuelAsDouble - actual_fuelLvl;
-    diff = diff < 0 ? diff * -1 : diff;
-    ASSERT_TRUE(diff <= 0.51);
-    actual_fuelLvl -= actual_cost;
-  }
+// This tests the "AllocateTaskQueue" & "FreeTaskQueue" method in "scheduler.c"
+TEST(ThrusterSubsystemTest, Test_AllocateAndFreeTaskQueue) {
+  // 1. Allocate test
+  TaskQueue q = AllocateTaskQueue();
+  ASSERT_TRUE(q);
+  ASSERT_TRUE(!q->head && !q->tail);
+  ASSERT_EQ(NumTasksInTaskQueue(q), 0U);
+  TCB_Ptr ptr;
+  q->head = q->tail = ptr;
+  // 2. Free test
+  FreeTaskQueue(q);
+  ASSERT_TRUE(!q->head && !q->tail);
+}
+
+// This tests the "AppendTCB" & "SliceTCB" methods in "scheduler.c"
+TEST(ThrusterSubsystemTest, Test_AppendAndSliceTCB) {
+  // 1. Define test TCB && task queue
+  TCB testTCB, testTCB2;
+  TCB_Ptr testTCB_ptr = &testTCB;
+  TCB_Ptr testTCB2_ptr = &testTCB2;
+  TaskQueue q = AllocateTaskQueue();
+  // 2. Append test
+  ASSERT_TRUE(AppendTCB(q, testTCB_ptr));
+  ASSERT_EQ(q->head, testTCB_ptr);
+  ASSERT_EQ(q->tail, testTCB_ptr);
+  ASSERT_EQ(NumTasksInTaskQueue(q), 1U);
+  ASSERT_TRUE(AppendTCB(q, testTCB2_ptr));
+  ASSERT_EQ(q->tail, testTCB2_ptr);
+  ASSERT_EQ(NumTasksInTaskQueue(q), 2U);
+  // 3. Slice test
+  ASSERT_EQ(SliceTCB(q), testTCB2_ptr);
+  ASSERT_EQ(NumTasksInTaskQueue(q), 1U);
+  ASSERT_EQ(SliceTCB(q), testTCB_ptr);
+  ASSERT_EQ(NumTasksInTaskQueue(q), 0U);
+  // 4. Edge cases
+  ASSERT_FALSE(AppendTCB(q, NULL));
+  ASSERT_FALSE(AppendTCB(NULL, testTCB_ptr));
+  ASSERT_EQ(SliceTCB(q), NULL);
+  // 5. Free the task queue
+  FreeTaskQueue(q);
+}
+
+// This tests the "PushTCB" & "PopTCB" methods in "scheduler.c"
+TEST(ThrusterSubsystemTest, Test_PushAndPopTCB) {
+  // 1. Define test TCB && task queue
+  TCB testTCB, testTCB2;
+  TCB_Ptr testTCB_ptr = &testTCB;
+  TCB_Ptr testTCB2_ptr = &testTCB2;
+  TaskQueue q = AllocateTaskQueue();
+  // 2. Push test
+  ASSERT_TRUE(PushTCB(q, testTCB_ptr));
+  ASSERT_EQ(q->head, testTCB_ptr);
+  ASSERT_EQ(q->tail, testTCB_ptr);
+  ASSERT_EQ(NumTasksInTaskQueue(q), 1U);
+  ASSERT_TRUE(PushTCB(q, testTCB2_ptr));
+  ASSERT_EQ(q->head, testTCB2_ptr);
+  ASSERT_EQ(NumTasksInTaskQueue(q), 2U);
+  // 3. Pop test
+  ASSERT_EQ(PopTCB(q), testTCB2_ptr);
+  ASSERT_EQ(NumTasksInTaskQueue(q), 1U);
+  ASSERT_EQ(PopTCB(q), testTCB_ptr);
+  ASSERT_EQ(NumTasksInTaskQueue(q), 0U);
+  // 4. Edge cases
+  ASSERT_FALSE(PushTCB(q, NULL));
+  ASSERT_FALSE(PushTCB(NULL, testTCB_ptr));
+  ASSERT_EQ(PopTCB(q), NULL);
+  // 5. Free the task queue
+  FreeTaskQueue(q);
+}
+
+// This tests the "RemoveTCB" methods in "scheduler.c"
+TEST(ThrusterSubsystemTest, Test_RemoveTCB) {
+  // 1. Define test TCBs && task queue
+  TCB testTCB, testTCB2, testTCB3, testTCB4;
+  TCB_Ptr testTCB_ptr = &testTCB;
+  TCB_Ptr testTCB2_ptr = &testTCB2;
+  TCB_Ptr testTCB3_ptr = &testTCB3;
+  TCB_Ptr testTCB4_ptr = &testTCB4;
+  TaskQueue q = AllocateTaskQueue();
+  // 2. Add TCBs to task queue
+  AppendTCB(q, testTCB_ptr);
+  AppendTCB(q, testTCB2_ptr);
+  AppendTCB(q, testTCB3_ptr);
+  // 3. Remove test
+  ASSERT_EQ(RemoveTCB(q, testTCB2_ptr), testTCB2_ptr);
+  ASSERT_EQ(q->head, testTCB_ptr);
+  ASSERT_EQ(q->tail, testTCB3_ptr);
+  ASSERT_EQ(NumTasksInTaskQueue(q), 2U);
+  ASSERT_EQ(RemoveTCB(q, testTCB_ptr), testTCB_ptr);
+  ASSERT_EQ(NumTasksInTaskQueue(q), 1U);
+  // 4. Edge cases
+  ASSERT_EQ(RemoveTCB(q, testTCB4_ptr), NULL);
+  ASSERT_EQ(RemoveTCB(q, NULL), NULL);
+  ASSERT_EQ(RemoveTCB(NULL, testTCB3_ptr), NULL);
+  // 5. Free the task queue
+  FreeTaskQueue(q);
 }

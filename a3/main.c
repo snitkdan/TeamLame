@@ -21,7 +21,7 @@ void main(void)
     bool solarPanelState = false;
     bool fuelLow = false;
     bool batteryLow = false;
-	
+
 	// -- New Stuff -- //
 	bool solarPanelDeploy = false;
 	bool solarPanelRetract = false;
@@ -71,15 +71,15 @@ void main(void)
     //  Assign shared variables to pointers
     //.....................................
     // powerSubsystem
-    pData.solarPanelStatePtr = &solarPanelState;	
+    pData.solarPanelStatePtr = &solarPanelState;
     pData.solarPanelDeployPtr = &solarPanelDeploy;
-    pData.solarPanelRetractPtr = &solarPanelRetract;	
+    pData.solarPanelRetractPtr = &solarPanelRetract;
     pData.batteryLvlPtr = &batteryLvl; // TO BE CHANGED LATER
     pData.pConsumePtr = &pConsume;
     pData.pGeneratePtr = &pGenerate;
 
 	//solarPanelControl
-    solData.solarPanelStatePtr = &solarPanelState;	
+    solData.solarPanelStatePtr = &solarPanelState;
     solData.solarPanelDeployPtr = &solarPanelDeploy;
     solData.solarPanelRetractPtr = &solarPanelRetract;
     solData.motorIncPtr = &motorInc;
@@ -88,7 +88,7 @@ void main(void)
     // keyboardConsole
     kData.motorIncPtr = &motorInc;
     kData.motorDecPtr = &motorDec;
-    
+
     // vehicleComms
     vData.commandPtr = &command;
     vData.responsePtr = &response; //address needed for strings and chars?
@@ -136,7 +136,7 @@ void main(void)
 
     vehicleCommsTCB.taskDataPtr = (void*)&vData;
     vehicleCommsTCB.myTask = vehicleComms;
-	
+
     thrusterSubsystemTCB.taskDataPtr = (void*)&tData;
     thrusterSubsystemTCB.myTask = thrusterSubsystem;
 
@@ -159,7 +159,7 @@ void main(void)
 
 
     int i = 0;   // queue index
-	
+
     while (true) {
       aTCBPtr = queue[i];
       aTCBPtr->myTask((aTCBPtr->taskDataPtr));

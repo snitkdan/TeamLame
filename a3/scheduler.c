@@ -10,16 +10,16 @@
 #include "scheduler.h"
 
 TaskQueue AllocateTaskQueue(void) {
-    // 1. Allocate a new TaskQueue
-    TaskQueue queue = (TaskQueue)malloc(sizeof(TQ));
-    if(queue == NULL) {
-      return NULL;
-    }
-    // 2. Assign the members of TaskQueue
-    queue->head = queue->tail = NULL;
-    queue->num_tasks = 0U;
-    // 3. Return the newly allocated TaskQueue
-    return queue;
+  // 1. Allocate a new TaskQueue
+  TaskQueue queue = (TaskQueue)malloc(sizeof(TQ));
+  if(queue == NULL) {
+    return NULL;
+  }
+  // 2. Assign the members of TaskQueue
+  queue->head = queue->tail = NULL;
+  queue->num_tasks = 0U;
+  // 3. Return the newly allocated TaskQueue
+  return queue;
 }
 
 void FreeTaskQueue(TaskQueue queue) {
@@ -27,11 +27,12 @@ void FreeTaskQueue(TaskQueue queue) {
   queue->head = queue->tail = NULL;
   // 2. Free the queue itself
   free(queue);
+  queue = NULL;
 }
 
 int AppendTCB(TaskQueue queue, TCB_Ptr node) {
-  // 0. Verify queue is valid
-  if(!queue) {
+  // 0. Verify queue and node is valid
+  if(!queue || !node) {
     return 0;
   }
   // 1. Get the number of tasks in the queue
@@ -52,7 +53,30 @@ int AppendTCB(TaskQueue queue, TCB_Ptr node) {
   return 1;
 }
 
-int RemoveTCB(TaskQueue queue, TCB_Ptr node) {
+int PushTCB(TaskQueue queue, TCB_Ptr node) {
+  // 0. Verify queue and node is valid
+  if(!queue || !node) {
+    return 0;
+  }
+  // 1. Get the number of tasks in the queue
+  unsigned int num_tasks = queue->num_tasks;
+  // 2. If the queue is initially empty
+  if(num_tasks == 0U) {
+    queue->head = queue->tail = node;
+    node->prev = node->next = NULL;
+  }
+  // 3. If the queue has 1+ elements
+  else {
+    node->prev = NULL;
+    node->next = queue->head;
+    queue->head->prev = node;
+    queue->head = node;
+  }
+  queue->num_tasks++;
+  return 1;
+}
+
+TCB_Ptr RemoveTCB(TaskQueue queue, TCB_Ptr node) {
   // 0. Verify queue is valid
   unsigned int num_tasks = queue->num_tasks;
   if(queue == NULL && num_tasks == 0U) {
@@ -117,4 +141,12 @@ TCB_Ptr SliceTCB(TaskQueue queue) {
     queue->tail->next = NULL;
   }
   return old_tail;
+}
+
+unsigned int NumTasksInTaskQueue(TaskQueue queue) {
+  if(queue == NULL) {
+    return -1;
+  } else {
+    return queue->num_tasks;
+  }
 }
