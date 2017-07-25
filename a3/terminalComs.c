@@ -26,28 +26,29 @@ int terminalComs(char *output) {
 	//    open terminal ports for writing
 	//    NOTE: first time prevents continually opening file and
 	//          terminal every function call
-	if (firstTime == 0) {
-		fp = fopen("file.txt", "w+");
+    if (firstTime == 0) {
+        fp = fopen("file.txt", "w+");
         if(!fp) {
-			exit(1);
-		}		 
+            exit(1);
+        }		 
         fd0 = open("/dev/pts/1", O_WRONLY);
-		dprintf(fd0, "\r");
-		firstTime++;
+	firstTime++;
 	}
-	// 3. error handling: check if file and terminal ports exist 
+
+    // 3. error handling: check if file and terminal ports exist 
     if (fp && fd0) {
-		
-	    // 3.1 Write data to the file
-	    fseek(fp, 0, SEEK_SET);	 		
+	dprintf(fd0, "\033[2J");
+	dprintf(fd0, "\033[1;1H");
+
+	// 3.1 Write data to the file
+        fseek(fp, 0, SEEK_SET);	 		
         fwrite(output, strlen(output) + 1, 1, fp);
 
-	    //3.2 Read and print the data from the file
-	    fseek(fp, 0, SEEK_SET);	 
+	//3.2 Read and print the data from the file
+        fseek(fp, 0, SEEK_SET);	 
         fread(buffer, 1, MAX, fp);
 	
-        // 3.3 Transmit buffer to terminal0
-        //     Transmit annunciation to terminal1
+        // 3.3 Transmit buffer to terminal
         dprintf(fd0, "%s\n", buffer);
 		return (0);
 	} else {

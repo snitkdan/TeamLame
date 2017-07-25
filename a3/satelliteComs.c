@@ -56,43 +56,27 @@ void satelliteComs(void *satStruct) {
     char output[MAX];
     #ifdef FIFO    
     char *myfifo = "/tmp/myfifo0";
-	char send[10] = "Radleigh";
 	
-	char buf[MAX_BUF];
+    char buf[MAX_BUF];
     /* create the FIFO (named pipe) */
     mkfifo(myfifo, 0666);
 
     /* write "Hi" to the FIFO */
-	fd = open(myfifo, O_RDWR);
+    fd = open(myfifo, O_RDWR);
 	
-	// set pipe's read end to non blocking
-	fcntl(fd, F_SETFL, O_NONBLOCK);
-	read (fd, buf, MAX_BUF);
-	printf("SATELLITECOMS: %s\n", buf);
-	write(fd, send, 10);
-	
-	//close(fd);
+    // set pipe's read end to non blocking
+    fcntl(fd, F_SETFL, O_NONBLOCK);
+    read (fd, buf, MAX_BUF);
+    printf("SATELLITECOMS: %s\n", buf);
 
-	/* remove the FIFO */
-	//unlink(myfifo);
-	
-    // 3. Store print statements for satellite status and annunciation into output
-    snprintf(output, MAX,
-		   "EARTH: -----------\n"	
-           "Solar Panels: %9s, " 
-           "Battery Level: %3hu, "
-           "Fuel Level: %3hu, "
-           "Power Consumption: %2hu, "
-		   "Power Generation: %2hu\n"
-		   "ANNUNCIATION: "
-		   "Battery Low: %3s "
-		   "Fuel Low: %3s\n",		   
-           solarPanelString, *batteryLvl, *fuelLvl, *pConsume, *pGenerate,
-		   battString, fuelString); 
+    
+    write(fd, send, 10);
 
-    // 4. Pass in the output to terminalComs, which will
-    //    display the information on the earth terminal 
-    terminalComs(output);
+    //close(fd);
+
+    /* remove the FIFO */
+    //unlink(myfifo);
+	
     #endif
 }
 
