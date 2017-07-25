@@ -1,6 +1,6 @@
 /*
 
-  startupTest - This file contains
+  startupTest.cc - This file contains
   unit tests for the startup task.
 
 */

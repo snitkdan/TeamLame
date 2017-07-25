@@ -29,8 +29,7 @@ TaskQueue AllocateTaskQueue(void);
   @modifies
     queue
   @effects
-    frees the queue and all its
-    elements
+    frees the queue
 */
 void FreeTaskQueue(TaskQueue queue);
 
