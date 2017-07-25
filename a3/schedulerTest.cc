@@ -26,13 +26,9 @@ TEST(TaskQueueTest, Test_AllocateAndFreeTaskQueue) {
 // This tests the "AppendTCB" & "SliceTCB" methods in "scheduler.c"
 TEST(TaskQueueTest, Test_AppendAndSliceTCB) {
   // 1. Define test TCB && task queue
-  TCB testTCB, testTCB2, testTCB3;
+  TCB testTCB, testTCB2;
   TCB_Ptr testTCB_ptr = &testTCB;
   TCB_Ptr testTCB2_ptr = &testTCB2;
-  testTCB.next = &testTCB3;
-  testTCB.prev = &testTCB3;
-  testTCB2.next = &testTCB3;
-  testTCB2.prev = &testTCB3;
   // std::cout << "testTCB_ptr: " << testTCB_ptr << std::endl;
   // std::cout << "testTCB2_ptr: " << testTCB2_ptr << std::endl;
   TaskQueue q = AllocateTaskQueue();
