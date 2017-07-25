@@ -21,7 +21,6 @@ TEST(TaskQueueTest, Test_AllocateAndFreeTaskQueue) {
   q->head = q->tail = ptr;
   // 2. Free test
   FreeTaskQueue(q);
-  ASSERT_TRUE(!q->head && !q->tail);
 }
 
 // This tests the "AppendTCB" & "SliceTCB" methods in "scheduler.c"

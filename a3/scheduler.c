@@ -79,7 +79,7 @@ int PushTCB(TaskQueue queue, TCB_Ptr node) {
 TCB_Ptr RemoveTCB(TaskQueue queue, TCB_Ptr node) {
   // 0. Verify queue is valid
   unsigned int num_tasks = queue->num_tasks;
-  if(queue == NULL && num_tasks == 0) {
+  if(queue == NULL || num_tasks == 0) {
     return NULL;
   }
   // 1. Search for the node to delete
@@ -107,7 +107,7 @@ TCB_Ptr RemoveTCB(TaskQueue queue, TCB_Ptr node) {
 
 TCB_Ptr PopTCB(TaskQueue queue) {
   // 0. Verify queue is valid
-  if(queue == NULL && queue->num_tasks == 0) {
+  if(queue == NULL || queue->num_tasks == 0) {
     return NULL;
   }
   // 1. Save the old head
@@ -126,7 +126,7 @@ TCB_Ptr PopTCB(TaskQueue queue) {
 
 TCB_Ptr SliceTCB(TaskQueue queue) {
   // 0. Verify queue is valid
-  if(queue == NULL && queue->num_tasks == 0) {
+  if(queue == NULL || queue->num_tasks == 0) {
     return NULL;
   }
   // 1. Save the old tail
