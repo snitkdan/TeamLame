@@ -12,12 +12,13 @@
 #include "nonBlockingKeys.h"
 #include "dataStructs.h"
 #include "TCB.h"
+#include <fcntl.h>
 
 #define MAX 1024
 #define SATELLITESTATUS 'z'
 #define ANNUNCIATION 'x'
 
-#define OFF
+//#define OFF
 /*
   @param consoleStruct
     struct containing the shared 
@@ -31,7 +32,8 @@
 */
 void consoleDisplay(void *consoleStruct) {
 	// Only run this function every major cycle
-	/*static unsigned long start = 0;
+	/*
+	static unsigned long start = 0;
 	if((GLOBALCOUNTER - start) % MAJOR_CYCLE != 0) {
       return;
 	}
@@ -53,10 +55,39 @@ void consoleDisplay(void *consoleStruct) {
     char *fuelString = (*fuelLow)? "YES":"NO";
     char *battString = (*batteryLow)? "YES":"NO";
    
-    static char c;
-    static int i;   
+    int flags = fcntl(STDIN_FILENO, F_GETFL, 0);
+	fcntl(STDIN_FILENO, F_SETFL, flags | O_NONBLOCK);
+	
+	char c = getchar();
+	printf("CONSOLE: c = %d, %c\n", c, c);
+	usleep(1000000);	
+	if (c != 255) {
+		char output[MAX];	
+		if (c == SATELLITESTATUS) {
+			sprintf(output, "**Satellite Status\n"    	    
+							"Solar Panels: %9s, " 
+							"Battery Level: %3hu, "
+							"Fuel Level: %3hu, "
+							"Power Consumption: %2hu, "
+							"Power Generation: %2hu\n", 
+							 solarPanelString, *batteryLvl, *fuelLvl, *pConsume, *pGenerate);
+			terminalComs(output);								 
+		} else if (c == ANNUNCIATION) {
+			sprintf(output, "Annunciaton\n"
+							"Battery Low: %3s "
+							"Fuel Low: %3s",
+							 battString, fuelString);
+			terminalComs(output);
+		} else {
+			if(c == 'V') ungetc(c, stdin);
+		}
+	}
+    
+	
     
     #ifdef OFF
+    static char c;
+    static int i; 	
     // 2. Print satellite status and annunciation onto 
     // 	  the satellite terminal.
     //fprintf(stdout, "\033[2J");
@@ -65,29 +96,30 @@ void consoleDisplay(void *consoleStruct) {
     i=kbhit();
     if (i!=0)
     {
-        c=fgetc(stdin);
-        printf("character got: %c\n", c);
+		char output[MAX]; 
+		c=fgetc(stdin);
+		printf("character got: %c\n", c);
+		if (c == SATELLITESTATUS) {
+			sprintf(output, "**Satellite Status\n"    	    
+						"Solar Panels: %9s, " 
+							"Battery Level: %3hu, "
+							"Fuel Level: %3hu, "
+							"Power Consumption: %2hu, "
+							"Power Generation: %2hu\n", 
+							 solarPanelString, *batteryLvl, *fuelLvl, *pConsume, *pGenerate);
+		} else if (c == ANNUNCIATION) {	   
+			sprintf(output, "Annunciaton\n"
+							"Battery Low: %3s "
+							"Fuel Low: %3s",
+							 battString, fuelString); 
+		} else {
+			sprintf(output, "%c for Satellite Status\n%c for annunciation",
+							 SATELLITESTATUS, ANNUNCIATION);
+		}
+		terminalComs(output);		
     }
-    char output[MAX]; 
     //fprintf(stdout, "SATELLITE TERMINAL: ----------------\n");
-    if (c == SATELLITESTATUS) {
-        sprintf(output, "**Satellite Status\n"    	    
-	                "Solar Panels: %9s, " 
-                        "Battery Level: %3hu, "
-                        "Fuel Level: %3hu, "
-                        "Power Consumption: %2hu, "
-                        "Power Generation: %2hu\n", 
-                         solarPanelString, *batteryLvl, *fuelLvl, *pConsume, *pGenerate);
-    } else if (c == ANNUNCIATION) {	   
-        sprintf(output, "Annunciaton\n"
-                        "Battery Low: %3s "
-                        "Fuel Low: %3s",
-                         battString, fuelString); 
-    } else {
-        sprintf(output, "%c for Satellite Status\n%c for annunciation",
-                         SATELLITESTATUS, ANNUNCIATION);
-    }
-    terminalComs(output);
+
     #endif
 
 }

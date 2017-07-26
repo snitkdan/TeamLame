@@ -26,15 +26,14 @@
 int fd = 0;
 
 void satelliteComs(void *satStruct) {
+	/*
 	// Only runs this function every global cycle
-	#ifdef MAJOR
 	static unsigned long start = 0;
 	if((GLOBALCOUNTER - start) % MAJOR_CYCLE != 0) {
       return;
 	}
     start = GLOBALCOUNTER;
-	#endif
-	
+	*/
     // 1. Assign the data of sData into local variables
     satData *sData = (satData*)satStruct;
     bool *fuelLow = sData->fuelLowPtr;
@@ -63,22 +62,38 @@ void satelliteComs(void *satStruct) {
 	
     // set pipe's read end to non blocking
     fcntl(fd, F_SETFL, O_NONBLOCK);
-    if (read (fd, buf, MAX_BUF) != -1) {
+    if (read (fd, buf, MAX_BUF) > 0) {
         printf("Response from Vehicle: %s\n", buf);
-    } 
+    }
+	int flags = fcntl(STDIN_FILENO, F_GETFL, 0);
+	fcntl(STDIN_FILENO, F_SETFL, flags | O_NONBLOCK);
+	
+	char c = getchar();
+	printf("SATCOMS: c = %d, %c\n", c, c);
+	usleep(1000000);
+	if (c != 255) {
+		if (c == 'V') {
+			write(fd, &c, 5);
+		}
+		else {
+			if(c == 'z' || c == 'x') ungetc(c, stdin);
+		}
+	}
+	#ifdef FKTHIS
     char c;
     int i;
     i = kbhit(); 
     if (i != 0) {
         c = fgetc(stdin);
+		if (c == 'V') {
+			printf("inside satComs V\n");
+			write(fd, "V", 10);
+		} else if (c == 'B') {
+			printf("inside satComs B\n");
+			write(fd, "B", 10);
+		}		
     }
-    if (c == 'V') {
-        printf("inside satComs V\n");
-        write(fd, "V", 10);
-    } else if (c == 'B') {
-        printf("inside satComs B\n");
-        write(fd, "B", 10);
-    }
+	#endif
 }
 
 void maskBit(unsigned int *thrusterCommand) {
