@@ -19,7 +19,6 @@ TEST(SolarPanelControlTest, Test_SetPWM) {
     while(PWM_test1 <= 100) {
       PWM_test1 += 10;
       ASSERT_TRUE(setPWM(PWM_test1));
-      usleep(1000000);
     }
 }
 
