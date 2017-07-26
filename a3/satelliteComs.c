@@ -72,7 +72,7 @@ void satelliteComs(void *satStruct) {
 	printf("SATCOMS: c = %d, %c\n", c, c);
 	usleep(1000000);
 	if (c != 255) {
-		if (SatVehicleCmd(c)) {
+		if (satVehicleCmd(c)) {
 			write(fd, &c, 5);
 		}
 		else {

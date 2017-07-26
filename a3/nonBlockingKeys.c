@@ -37,7 +37,7 @@ void nonblock(int state) {
     tcsetattr(STDIN_FILENO, TCSANOW, &ttystate);
 }
 
-bool SatVehicleCmd(char c) {
+bool satVehicleCmd(char c) {
 	return c == 'F' || 
 	       c == 'B' || 
 		   c == 'L' || 
