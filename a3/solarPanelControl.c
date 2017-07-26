@@ -67,13 +67,13 @@ bool setPWM(double d) {
 	fflush(pwm);
 	fprintf(pwm,"bone_pwm_P8_13");
 	fflush(pwm);
-	FILE *period = fopen("", "w");
+	FILE *period = fopen(period_path, "w");
 	fseek(period,0,SEEK_SET);
-	fprintf(period,"%d",200000000);
+	fprintf(period,"%d",500000);
 	fflush(period);
 	FILE *duty = fopen(duty_path, "w");
 	fseek(duty,0,SEEK_SET);
-	fprintf(duty,"%d",100000000);
+	fprintf(duty,"%d",250000);
 	fflush(duty);
 	FILE *run = fopen(run_path, "w");
 	fseek(run,0,SEEK_SET);
