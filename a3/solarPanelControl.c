@@ -11,13 +11,11 @@
 #include "TCB.h"
 #include "solarPanelControl.h"
 
-
-
-
-
 // PWM Functions (inspired by Gavin Strunk: https://class.ee.washington.edu/474/peckol/code/BeagleBone/ForestExamples/Example_4_PWM/Example_4_PWM/libBBB.c)
 static bool initPWM(int mgrnum, char* pin);
 static bool setPWMProperty(int helpnum, char *pin, char *prop, int prop_val);
+
+static bool pwm_initialized = false;
 
 #define DEVICES "/sys/devices"
 #define MAX 300
@@ -63,7 +61,9 @@ void solarPanelControl(void *solarStruct) {
 	}
 	// 1.4: Generate the new PWM for the new duty
 	PWM = duty * period;
-	initPWM(MGRNUM, PIN);
+	if(!pwm_initialized) {
+		if(!initPWM(MGRNUM, PIN)) fprintf(stderr, "PWM Malfunction\n");
+	}
 	setPWMProperty(HNUM, PIN, "duty", duty);
 }
 
@@ -107,5 +107,6 @@ static bool setPWMProperty(int helpnum, char *pin, char *prop, int prop_val) {
 	fflush(pwm);
 	// 5. Clean up
 	fclose(pwm);
+	pwm_initialized = true;
 	return true;
 }
