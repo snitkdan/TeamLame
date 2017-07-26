@@ -79,47 +79,8 @@ void consoleDisplay(void *consoleStruct) {
 							 battString, fuelString);
 			terminalComs(output);
 		} else {
-			if(c == 'V') ungetc(c, stdin);
+			if(validCommand(c)) ungetc(c, stdin);
 		}
 	}
-    
-	
-    
-    #ifdef OFF
-    static char c;
-    static int i; 	
-    // 2. Print satellite status and annunciation onto 
-    // 	  the satellite terminal.
-    //fprintf(stdout, "\033[2J");
-    //fprintf(stdout, "\033[1;1H");
-    //nonblock(NB_ENABLE);
-    i=kbhit();
-    if (i!=0)
-    {
-		char output[MAX]; 
-		c=fgetc(stdin);
-		printf("character got: %c\n", c);
-		if (c == SATELLITESTATUS) {
-			sprintf(output, "**Satellite Status\n"    	    
-						"Solar Panels: %9s, " 
-							"Battery Level: %3hu, "
-							"Fuel Level: %3hu, "
-							"Power Consumption: %2hu, "
-							"Power Generation: %2hu\n", 
-							 solarPanelString, *batteryLvl, *fuelLvl, *pConsume, *pGenerate);
-		} else if (c == ANNUNCIATION) {	   
-			sprintf(output, "Annunciaton\n"
-							"Battery Low: %3s "
-							"Fuel Low: %3s",
-							 battString, fuelString); 
-		} else {
-			sprintf(output, "%c for Satellite Status\n%c for annunciation",
-							 SATELLITESTATUS, ANNUNCIATION);
-		}
-		terminalComs(output);		
-    }
-    //fprintf(stdout, "SATELLITE TERMINAL: ----------------\n");
-
-    #endif
 
 }
