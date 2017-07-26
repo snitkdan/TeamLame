@@ -12,8 +12,9 @@
 
 #define MAX 300
 #define pwm_path "/sys/devices/bone_capemgr.9/slots"
-
-#define BEAGLEBONE
+#define duty_path "/sys/devices/ocp.3/pwm_test_P8_13.15/duty"
+#define period_path "/sys/devices/ocp.3/pwm_test_P8_13.15/period"
+#define run_path "/sys/devices/ocp.3/pwm_test_P8_13.15/run"
 
 void solarPanelControl(void *solarStruct) {
 	// Only run this function every major cycle
@@ -53,20 +54,42 @@ void solarPanelControl(void *solarStruct) {
 	}
 	// 1.4: Generate the new PWM for the new duty
 	PWM = duty * period;
-	setPWM(PWM);
+	setPWM(duty);
 }
 
-bool setPWM(double PWM) {
-	#ifdef BEAGLEBONE
-	FILE *f = fopen(pwm_path, "w");
-	if (!f) {
-		perror("");
-		return false;
-	}
-	fprintf(f, "%f", PWM);
-	fflush(f);
-	fclose(f);
-	return true;
+bool setPWM(double d) {
+
+	#ifndef BEAGLEBONE
+	#define BEAGLEBONE
+	FILE *pwm = fopen(pwm_path, "w");
+	fseek(pwm,0,SEEK_SET);
+	fprintf(pwm,"am33xx_pwm");
+	fflush(pwm);
+	fprintf(pwm,"bone_pwm_P8_13");
+	fflush(pwm);
+	FILE *period = fopen("", "w");
+	fseek(period,0,SEEK_SET);
+	fprintf(period,"%d",200000000);
+	fflush(period);
+	FILE *duty = fopen(duty_path, "w");
+	fseek(duty,0,SEEK_SET);
+	fprintf(duty,"%d",100000000);
+	fflush(duty);
+	FILE *run = fopen(run_path, "w");
+	fseek(run,0,SEEK_SET);
+	fprintf(run,"%d",0);
+	fflush(run);
 	#endif
-	return false;
+
+	// 1. Set the duty
+	fseek(duty,0,SEEK_SET);
+	fprintf(duty,"%d",d);
+	fflush(duty);
+	// 2. Run the PMW
+	fseek(run,0,SEEK_SET);
+	fprintf(run,"%d",1);
+	fflush(run);
+	fprintf(run,"%d",0);
+	fflush(run);
+	return true;
 }
