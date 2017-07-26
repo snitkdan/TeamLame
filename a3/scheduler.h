@@ -17,6 +17,14 @@ typedef struct taskqueue {
 } TQ, *TaskQueue;
 
 /*
+  @modifies
+    queue
+  @effects
+    initializes queue as an empty Task Queue
+*/
+void InitializeTaskQueue(TaskQueue queue);
+
+/*
   @param node
     node to add
   @param queue

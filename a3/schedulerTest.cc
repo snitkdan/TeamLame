@@ -18,6 +18,7 @@ TEST(TaskQueueTest, Test_AppendAndSliceTCB) {
   TCB_Ptr testTCB2_ptr = &testTCB2;
   TQ queue;
   TaskQueue q = &queue;
+  InitializeTaskQueue(q);
   // 2. Append test
   ASSERT_TRUE(AppendTCB(q, testTCB_ptr));
   ASSERT_EQ(q->head, testTCB_ptr);
@@ -45,6 +46,7 @@ TEST(TaskQueueTest, Test_PushAndPopTCB) {
   TCB_Ptr testTCB2_ptr = &testTCB2;
   TQ queue;
   TaskQueue q = &queue;
+  InitializeTaskQueue(q);
   // 2. Push test
   ASSERT_TRUE(PushTCB(q, testTCB_ptr));
   ASSERT_EQ(q->head, testTCB_ptr);
@@ -74,6 +76,7 @@ TEST(TaskQueueTest, Test_RemoveTCB) {
   TCB_Ptr testTCB4_ptr = &testTCB4;
   TQ queue;
   TaskQueue q = &queue;
+  InitializeTaskQueue(q);
   // 2. Add TCBs to task queue
   AppendTCB(q, testTCB_ptr);
   AppendTCB(q, testTCB2_ptr);

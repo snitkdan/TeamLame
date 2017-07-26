@@ -167,6 +167,7 @@ void Initialize(void) {
 
   // 5. Initialize the task queue
   queue = &q;
+  InitializeTaskQueue(queue);
   AppendTCB(queue, &warningAlarmTCB);
   AppendTCB(queue, &keyboardConsoleTCB);
   AppendTCB(queue, &solarPanelControlTCB);

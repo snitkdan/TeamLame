@@ -9,6 +9,12 @@
 #include "TCB.h"
 #include "scheduler.h"
 
+void InitializeTaskQueue(TaskQueue queue) {
+  // 1. Assign the members of TaskQueue
+  queue->head = queue->tail = NULL;
+  queue->num_tasks = 0U;
+}
+
 int AppendTCB(TaskQueue queue, TCB_Ptr node) {
   // 0. Verify queue and node is valid
   if(!queue || !node) {
