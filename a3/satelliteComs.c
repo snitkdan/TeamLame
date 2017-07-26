@@ -72,11 +72,11 @@ void satelliteComs(void *satStruct) {
 	printf("SATCOMS: c = %d, %c\n", c, c);
 	usleep(1000000);
 	if (c != 255) {
-		if (c == 'V') {
+		if (SatVehicleCmd(c)) {
 			write(fd, &c, 5);
 		}
 		else {
-			if(c == 'z' || c == 'x') ungetc(c, stdin);
+			if(consoleModeCmd(c)) ungetc(c, stdin);
 		}
 	}
 	#ifdef FKTHIS

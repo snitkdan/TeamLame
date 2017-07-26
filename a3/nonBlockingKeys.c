@@ -3,6 +3,7 @@
 #include <unistd.h>
 #include <sys/select.h>
 #include <sys/time.h>
+#include <stdbool.h>
 #include "nonBlockingKeys.h"
 
 
@@ -35,3 +36,28 @@ void nonblock(int state) {
     //set the terminal attributes.
     tcsetattr(STDIN_FILENO, TCSANOW, &ttystate);
 }
+
+bool SatVehicleCmd(char c) {
+	return c == 'F' || 
+	       c == 'B' || 
+		   c == 'L' || 
+		   c == 'R' || 
+		   c == 'D' || 
+		   c == 'H';
+}
+
+bool consoleModeCmd(char c) {
+	return c == 'z' || 
+	       c == 'x'; 
+}
+
+#ifdef TODO
+bool motorSpeedCmd(char c) {
+	if (taskQueue == 8) {
+		return c == 'i' ||
+		       c == 'd' ||
+	}
+	return false;
+}
+
+#endif
