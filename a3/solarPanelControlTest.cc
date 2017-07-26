@@ -15,11 +15,14 @@ extern "C" {
 TEST(SolarPanelControlTest, Test_SetPWM) {
     double PWM_test1 = 50;
     ASSERT_TRUE(setPWM(PWM_test1));
-    PWM_test1 = 0;
-    while(PWM_test1 <= 100) {
-      PWM_test1 += 10;
-      ASSERT_TRUE(setPWM(PWM_test1));
+    while(1) {
+      PWM_test1 = 0;
+      while(PWM_test1 <= 100) {
+        PWM_test1 += 10;
+        ASSERT_TRUE(setPWM(PWM_test1));
+      }
     }
+
 }
 
 TEST(SolarPanelControlTest, Test_SolarPanelControl) {

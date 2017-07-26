@@ -62,16 +62,19 @@ bool setPWM(double d) {
 	#ifndef BEAGLEBONE
 	#define BEAGLEBONE
 	FILE *pwm = fopen(pwm_path, "w");
+	if(!pwm) return false;
 	fseek(pwm,0,SEEK_SET);
 	fprintf(pwm,"am33xx_pwm");
 	fflush(pwm);
 	fprintf(pwm,"bone_pwm_P8_13");
 	fflush(pwm);
 	FILE *period = fopen(period_path, "w");
+	if(!period) return false;
 	fseek(period,0,SEEK_SET);
 	fprintf(period,"%d",500000);
 	fflush(period);
 	FILE *duty = fopen(duty_path, "w");
+	if(!duty) return false;
 	fseek(duty,0,SEEK_SET);
 	fprintf(duty,"%d",250000);
 	fflush(duty);
