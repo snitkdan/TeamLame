@@ -2,6 +2,22 @@
 #define NONBLOCK
 #define NB_DISABLE 1
 #define NB_ENABLE 0
+
+// commands for consoleDisplay
+#define SATELLITESTATUS 'z'
+#define ANNUNCIATION 'x'
+
+// commands for vehicleComs
+#define FORWARD 'F'
+#define BACK 'B'
+#define LEFT 'L'
+#define RIGHT 'R'
+#define DRILL_DOWN 'D'
+#define DRILL_UP 'H'
+
+// commands for keyboardConsole
+#define SPEEDINC 'i'
+#define SPEEDDEC 'd'
 /*
   @param satelliteComs
     Struct containing necessary

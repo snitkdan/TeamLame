@@ -38,24 +38,24 @@ void nonblock(int state) {
 }
 
 bool satVehicleCmd(char c) {
-	return c == 'F' || 
-	       c == 'B' || 
-		   c == 'L' || 
-		   c == 'R' || 
-		   c == 'D' || 
-		   c == 'H';
+	return c == FORWARD    || 
+	       c == BACK       || 
+		   c == LEFT       || 
+		   c == RIGHT      || 
+		   c == DRILL_DOWN || 
+		   c == DRILL_UP;
 }
 
 bool consoleModeCmd(char c) {
-	return c == 'z' || 
-	       c == 'x'; 
+	return c == SATELLITESTATUS || 
+	       c == ANNUNCIATION;
 }
 
 #ifdef TODO
 bool motorSpeedCmd(char c) {
 	if (taskQueue == 8) {
-		return c == 'i' ||
-		       c == 'd' ||
+		return c == SPEEDINC ||
+		       c == SPEEDDEC ||
 	}
 	return false;
 }

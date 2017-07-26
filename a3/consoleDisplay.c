@@ -15,8 +15,7 @@
 #include <fcntl.h>
 
 #define MAX 1024
-#define SATELLITESTATUS 'z'
-#define ANNUNCIATION 'x'
+
 
 //#define OFF
 /*
