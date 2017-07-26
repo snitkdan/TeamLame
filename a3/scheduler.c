@@ -9,27 +9,6 @@
 #include "TCB.h"
 #include "scheduler.h"
 
-TaskQueue AllocateTaskQueue(void) {
-  // 1. Allocate a new TaskQueue
-  TaskQueue queue = (TaskQueue)malloc(sizeof(TQ));
-  if(queue == NULL) {
-    return NULL;
-  }
-  // 2. Assign the members of TaskQueue
-  queue->head = queue->tail = NULL;
-  queue->num_tasks = 0U;
-  // 3. Return the newly allocated TaskQueue
-  return queue;
-}
-
-void FreeTaskQueue(TaskQueue queue) {
-  // 1. Set the head/tail to NULL
-  queue->head = queue->tail = NULL;
-  // 2. Free the queue itself
-  free(queue);
-  queue = NULL;
-}
-
 int AppendTCB(TaskQueue queue, TCB_Ptr node) {
   // 0. Verify queue and node is valid
   if(!queue || !node) {

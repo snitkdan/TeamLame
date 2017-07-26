@@ -58,6 +58,7 @@ satData sData;
 consoleData cData;
 warnData wData;
 // Define the Task Queue
+TQ q;
 TaskQueue queue;
 // Define the Global Counter
 unsigned long GLOBALCOUNTER;
@@ -165,7 +166,7 @@ void Initialize(void) {
   warningAlarmTCB.myTask = warningAlarm;
 
   // 5. Initialize the task queue
-  queue = AllocateTaskQueue();
+  queue = &q;
   AppendTCB(queue, &warningAlarmTCB);
   AppendTCB(queue, &keyboardConsoleTCB);
   AppendTCB(queue, &solarPanelControlTCB);

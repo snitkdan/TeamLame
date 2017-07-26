@@ -10,28 +10,14 @@ extern "C" {
     #include "startup.h"
 }
 
-// This tests the "AllocateTaskQueue" & "FreeTaskQueue" method in "scheduler.c"
-TEST(TaskQueueTest, Test_AllocateAndFreeTaskQueue) {
-  // 1. Allocate test
-  TaskQueue q = AllocateTaskQueue();
-  ASSERT_TRUE(q);
-  ASSERT_TRUE(!q->head && !q->tail);
-  ASSERT_EQ(NumTasksInTaskQueue(q), 0U);
-  TCB_Ptr ptr = (TCB_Ptr)5;
-  q->head = q->tail = ptr;
-  // 2. Free test
-  FreeTaskQueue(q);
-}
-
 // This tests the "AppendTCB" & "SliceTCB" methods in "scheduler.c"
 TEST(TaskQueueTest, Test_AppendAndSliceTCB) {
   // 1. Define test TCB && task queue
   TCB testTCB, testTCB2;
   TCB_Ptr testTCB_ptr = &testTCB;
   TCB_Ptr testTCB2_ptr = &testTCB2;
-  // std::cout << "testTCB_ptr: " << testTCB_ptr << std::endl;
-  // std::cout << "testTCB2_ptr: " << testTCB2_ptr << std::endl;
-  TaskQueue q = AllocateTaskQueue();
+  TQ queue;
+  TaskQueue q = &queue;
   // 2. Append test
   ASSERT_TRUE(AppendTCB(q, testTCB_ptr));
   ASSERT_EQ(q->head, testTCB_ptr);
@@ -49,8 +35,6 @@ TEST(TaskQueueTest, Test_AppendAndSliceTCB) {
   ASSERT_FALSE(AppendTCB(q, NULL));
   ASSERT_FALSE(AppendTCB(NULL, testTCB_ptr));
   ASSERT_EQ(SliceTCB(q), (TCB_Ptr)NULL);
-  // 5. Free the task queue
-  FreeTaskQueue(q);
 }
 
 // This tests the "PushTCB" & "PopTCB" methods in "scheduler.c"
@@ -59,7 +43,8 @@ TEST(TaskQueueTest, Test_PushAndPopTCB) {
   TCB testTCB, testTCB2;
   TCB_Ptr testTCB_ptr = &testTCB;
   TCB_Ptr testTCB2_ptr = &testTCB2;
-  TaskQueue q = AllocateTaskQueue();
+  TQ queue;
+  TaskQueue q = &queue;
   // 2. Push test
   ASSERT_TRUE(PushTCB(q, testTCB_ptr));
   ASSERT_EQ(q->head, testTCB_ptr);
@@ -77,8 +62,6 @@ TEST(TaskQueueTest, Test_PushAndPopTCB) {
   ASSERT_FALSE(PushTCB(q, NULL));
   ASSERT_FALSE(PushTCB(NULL, testTCB_ptr));
   ASSERT_EQ(PopTCB(q), (TCB_Ptr)NULL);
-  // 5. Free the task queue
-  FreeTaskQueue(q);
 }
 
 // This tests the "RemoveTCB" methods in "scheduler.c"
@@ -89,7 +72,8 @@ TEST(TaskQueueTest, Test_RemoveTCB) {
   TCB_Ptr testTCB2_ptr = &testTCB2;
   TCB_Ptr testTCB3_ptr = &testTCB3;
   TCB_Ptr testTCB4_ptr = &testTCB4;
-  TaskQueue q = AllocateTaskQueue();
+  TQ queue;
+  TaskQueue q = &queue;
   // 2. Add TCBs to task queue
   AppendTCB(q, testTCB_ptr);
   AppendTCB(q, testTCB2_ptr);
@@ -105,6 +89,4 @@ TEST(TaskQueueTest, Test_RemoveTCB) {
   ASSERT_EQ(RemoveTCB(q, testTCB4_ptr), (TCB_Ptr)NULL);
   ASSERT_EQ(RemoveTCB(q, NULL), (TCB_Ptr)NULL);
   ASSERT_EQ(RemoveTCB(NULL, testTCB3_ptr), (TCB_Ptr)NULL);
-  // 5. Free the task queue
-  FreeTaskQueue(q);
 }

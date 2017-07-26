@@ -17,24 +17,6 @@ typedef struct taskqueue {
 } TQ, *TaskQueue;
 
 /*
-  @returns
-    a new Task Queue with a null head/tail,
-    if successful, and NULL, otherwise.
-*/
-TaskQueue AllocateTaskQueue(void);
-
-/*
-  @param queue
-    the Task Queue to free
-  @modifies
-    queue
-  @effects
-    frees the queue
-*/
-void FreeTaskQueue(TaskQueue queue);
-
-
-/*
   @param node
     node to add
   @param queue
