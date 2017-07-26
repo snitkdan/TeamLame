@@ -121,6 +121,9 @@ startup.o : $(USER_DIR)/startup.c $(USER_DIR)/startup.h $(GTEST_HEADERS)
 scheduler.o: $(USER_DIR)/scheduler.c $(GTEST_HEADERS)
 	$(CC) $(CPPFLAGS) $(CXXFLAGS) -c $(USER_DIR)/scheduler.c
 
+solarPanelControl.o: $(USER_DIR)/solarPanelControl.c $(GTEST_HEADERS)
+	$(CC) $(CPPFLAGS) $(CXXFLAGS) -c $(USER_DIR)/solarPanelControl.c
+
 main : $(OBJ) $(PROJ_HEADERS) $(USER_DIR)/main.c
 	$(CC) -o main $(USER_DIR)/main.c $(OBJ)
 
