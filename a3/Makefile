@@ -130,7 +130,7 @@ gpio: $(USER_DIR)/gpio.c $(OBJ) $(PROJ_HEADERS)
 
 # Convenience Commands
 copy:
-	scp -r ../a2 root@192.168.7.2:/dev
+	scp -r ../a3 ../gtest root@192.168.7.2:/dev
 
 clean:
 	rm -f $(TESTS) main gpio gtest.a gtest_main.a *.o
