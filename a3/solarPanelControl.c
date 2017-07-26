@@ -8,6 +8,7 @@
 #include <errno.h>
 #include "dataStructs.h"
 #include "TCB.h"
+#include "solarPanelControl.h"
 
 #define MAX 300
 #define pwm_path "/sys/devices/bone_capemgr.9/slots"

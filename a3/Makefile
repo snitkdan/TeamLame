@@ -32,11 +32,11 @@ GTEST_HEADERS = $(GTEST_DIR)/include/gtest/*.h \
 # OBJ = satelliteComs.o powerSubsystem.o consoleDisplay.o \
 #       thrusterSubsystem.o warningAlarm.o rand2.o terminalComs.o \
 
-OBJ =	startup.o scheduler.o
+OBJ =	startup.o scheduler.o solarPanelControl.o
 
 # TEST_OBJ = thrusterSubsystemTest.o satelliteComsTest.o powerSubsystemTest.o \
 
-TEST_OBJ	=	startupTest.o schedulerTest.o gtest_main.a
+TEST_OBJ	=	startupTest.o schedulerTest.o solarPanelControlTest.o gtest_main.a
 
 PROJ_HEADERS = dataStructs.h TCB.h
 
@@ -65,7 +65,6 @@ gtest.a : gtest-all.o
 gtest_main.a : gtest-all.o gtest_main.o
 	$(AR) $(ARFLAGS) $@ $^
 
-
 # Builds tests
 thrusterSubsystemTest.o : $(USER_DIR)/thrusterSubsystemTest.cc \
                      $(USER_DIR)/thrusterSubsystem.h $(GTEST_HEADERS)
@@ -86,6 +85,10 @@ startupTest.o : $(USER_DIR)/startupTest.cc \
 schedulerTest.o : $(USER_DIR)/schedulerTest.cc \
                      $(USER_DIR)/scheduler.h $(GTEST_HEADERS)
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $(USER_DIR)/schedulerTest.cc
+
+solarPanelControlTest.o : $(USER_DIR)/solarPanelControlTest.cc \
+                     $(USER_DIR)/solarPanelControl.h $(GTEST_HEADERS)
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $(USER_DIR)/solarPanelControlTest.cc
 
 test_suite : $(OBJ) $(TEST_OBJ)
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) $^ -o $@ -lpthread
