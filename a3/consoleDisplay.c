@@ -79,7 +79,7 @@ void consoleDisplay(void *consoleStruct) {
 							 battString, fuelString);
 			terminalComs(output);
 		} else {
-			if(validCommand(c)) ungetc(c, stdin);
+			if(satVehicleCmd(c)) ungetc(c, stdin);
 		}
 	}
 
