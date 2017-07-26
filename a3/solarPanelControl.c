@@ -13,6 +13,8 @@
 #define MAX 300
 #define pwm_path "/sys/devices/bone_capemgr.9/slots"
 
+#define BEAGLEBONE
+
 void solarPanelControl(void *solarStruct) {
 	// Only run this function every major cycle
 	static unsigned long start = 0;
@@ -32,6 +34,9 @@ void solarPanelControl(void *solarStruct) {
 	// 1.2: Declare variables
 	double PWM, duty, period;
 
+	duty = 250000;
+	period = 500000;
+
   // 1.3: Check if the solor panel state with what it is requested to do
 	if ((*solarPanelState == 1 && *solarPanelDeploy == 1) || (*solarPanelState == 0 && *solarPanelRetract == 1)){
 		PWM = 0;
@@ -48,6 +53,7 @@ void solarPanelControl(void *solarStruct) {
 	}
 	// 1.4: Generate the new PWM for the new duty
 	PWM = duty * period;
+	setPWM(PWM);
 }
 
 bool setPWM(double PWM) {
@@ -57,7 +63,7 @@ bool setPWM(double PWM) {
 		perror("");
 		return false;
 	}
-	fprintf(f, PWM);
+	fprintf(f, "%f", PWM);
 	fflush(f);
 	fclose(f);
 	return true;
