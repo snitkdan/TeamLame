@@ -168,6 +168,8 @@ void Initialize(void) {
   // 5. Initialize the task queue
   queue = AllocateTaskQueue();
   AppendTCB(queue, &warningAlarmTCB);
+  AppendTCB(queue, &keyboardConsoleTCB);
+  AppendTCB(queue, &solarPanelControlTCB);
   AppendTCB(queue, &satelliteComsTCB);
   AppendTCB(queue, &thrusterSubsystemTCB);
   AppendTCB(queue, &powerSubsystemTCB);

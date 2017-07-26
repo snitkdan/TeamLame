@@ -77,7 +77,7 @@ TEST(StartupTest, Test_Initialization) {
   ASSERT_EQ(warningAlarmTCB.taskDataPtr, (void*)&wData);
   // 5. Verify the Task Queue correctly initialized
   ASSERT_TRUE(queue);
-  ASSERT_EQ(NumTasksInTaskQueue(queue), 6U);
+  ASSERT_EQ(NumTasksInTaskQueue(queue), 8U);
 }
 
 TEST(StartupTest, Test_ActivateTimeBase) {

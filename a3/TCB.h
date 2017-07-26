@@ -10,8 +10,8 @@ typedef struct myStruct {
   // Pointer to void used to reference the shared data for the task
   void *taskDataPtr;
   // Pointers to next/prev tasks in the task queue
-	struct myStruct* next;
-	struct myStruct* prev;
+	struct myStruct *next;
+	struct myStruct *prev;
 } TCB, *TCB_Ptr;
 
 // Declares function prototypes
