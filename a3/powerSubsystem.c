@@ -11,6 +11,27 @@
 #include "dataStructs.h"
 #include "powerSubsystem.h"
 
+
+
+// ADC:
+
+/*
+
+  Raw Voltage = V_ref * (ADC_val / 2^bit-width)
+
+  e.g. MAX (1.8 V) -> (1.8 * 4095) / 2^12 = 1.799... = 1.8
+
+*/
+
+// Scaling
+/*
+
+  Scaled Voltage = Raw Voltage * 20
+
+  e.g. MAX (36 V) -> 1.8 * 20 = 36
+
+*/
+
 void powerSubsystem(void *powerStruct) {
   // Only run this function every major cycle
   static unsigned long start = 0;

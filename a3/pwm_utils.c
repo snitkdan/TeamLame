@@ -1,4 +1,11 @@
+/*
+ * pwm_utils.c - This file contains
+ * the implementation for PWM utility functions.
+ * (see pwm_utils.h for specification)
+ */
+
 #include <stdbool.h>
+#include "pwm_utils.h"
 
 bool pwm_initialized = false;
 

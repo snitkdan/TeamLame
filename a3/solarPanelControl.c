@@ -53,6 +53,8 @@ void solarPanelControl(void *solarStruct) {
 	}
 	// 1.4: Generate the new PWM for the new duty
 	PWM = duty * period;
+
+	extern bool pwm_initialized;
 	if(!pwm_initialized) {
 		if(!initPWM(PIN)) fprintf(stderr, "PWM Malfunction\n");
 	}
