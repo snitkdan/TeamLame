@@ -38,7 +38,7 @@ void consoleDisplay(void *consoleStruct) {
 	}
     start = GLOBALCOUNTER;
 	*/
-    printf("INSIDE consoleDisplay\n");	
+    //printf("INSIDE consoleDisplay\n");	
     // 1.1 Assign the data of consoleStruct into local variables
     consoleData *cData = (consoleData*)consoleStruct;
     bool *fuelLow = cData->fuelLowPtr;
@@ -56,10 +56,8 @@ void consoleDisplay(void *consoleStruct) {
    
     int flags = fcntl(STDIN_FILENO, F_GETFL, 0);
 	fcntl(STDIN_FILENO, F_SETFL, flags | O_NONBLOCK);
-	
 	char c = getchar();
-	printf("CONSOLE: c = %d, %c\n", c, c);
-	usleep(1000000);	
+	//printf("CONSOLE: c = %d, %c\n", c, c);
 	if (c != 255) {
 		char output[MAX];	
 		if (c == SATELLITESTATUS) {

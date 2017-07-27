@@ -29,17 +29,6 @@ void vehicleComms(void *vehicleStruct) {
      //printf("INSIDE vehicleComs\n");	  
     // 1.1 Assign the data of vehicleStruct into local variables
     vehicleData *vData = (vehicleData*)vehicleStruct;
-    //char *command = vData->commandPtr;
-	char command[5];
+    char *command = vData->commandPtr;
     char *response = vData->responsePtr;
-
-    response = "A";
-    /* open, read, and display the message from the FIFO */
-    if (read(fd, command, MAX_BUF) > 0) {
-        printf("Received: %s\n", command);
-        fflush(stdout);	
-        write(fd, response, 3);
-	    printf("sent %s\n", response);
-		
-    }
 }
