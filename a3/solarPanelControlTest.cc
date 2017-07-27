@@ -17,9 +17,5 @@ TEST(SolarPanelControlTest, Test_SetPWM) {
 }
 
 TEST(SolarPanelControlTest, Test_SolarPanelControl) {
-  // Initialize();
-  // extern solarData solData;
-  // while(1) {
-  //
-  // }
+
 }
