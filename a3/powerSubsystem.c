@@ -11,10 +11,7 @@
 #include "dataStructs.h"
 #include "powerSubsystem.h"
 
-
-
 // ADC:
-
 /*
 
   Raw Voltage = V_ref * (ADC_val / 2^bit-width)

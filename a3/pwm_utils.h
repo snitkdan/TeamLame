@@ -2,10 +2,11 @@
  * pwm_utils.h - This file contains
  * the specification for PWM utility functions.
  * (see pwm_utils.c for implementation)
+ *
+ * Inspired by Gavin Strunk:
+ *  https://class.ee.washington.edu/474/peckol/code/BeagleBone/ForestExamples/Example_4_PWM/Example_4_PWM/libBBB.c
+ *
  */
-
-// PWM Functions
-// (inspired by Gavin Strunk: https://class.ee.washington.edu/474/peckol/code/BeagleBone/ForestExamples/Example_4_PWM/Example_4_PWM/libBBB.c)
 #ifndef PWM_UTILS
 #define PWM_UTILS
 

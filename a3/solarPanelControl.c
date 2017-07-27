@@ -12,8 +12,9 @@
 #include "solarPanelControl.h"
 #include "pwm_utils.h"
 
-#define MAX 300
 #define PIN "P8_13"
+
+#define MAX 300
 
 void solarPanelControl(void *solarStruct) {
 	// Only run this function every major cycle

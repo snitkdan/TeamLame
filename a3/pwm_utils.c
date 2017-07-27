@@ -2,6 +2,10 @@
  * pwm_utils.c - This file contains
  * the implementation for PWM utility functions.
  * (see pwm_utils.h for specification)
+ *
+ * Inspired by Gavin Strunk:
+ *  https://class.ee.washington.edu/474/peckol/code/BeagleBone/ForestExamples/Example_4_PWM/Example_4_PWM/libBBB.c
+ *
  */
 
 #include <stdbool.h>
@@ -11,7 +15,7 @@ bool pwm_initialized = false;
 
 #define DEVICES "/sys/devices"
 #define HNUM 14
-#define MGRNUM 8
+#define MGRNUM 9
 
 bool initPWM(char *pin) {
 	// 1. Declare necessary variables
