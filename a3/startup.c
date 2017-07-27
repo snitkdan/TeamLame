@@ -13,6 +13,7 @@
 #include "warningAlarm.h"
 #include "scheduler.h"
 
+#define BEAGLEBONE
 // TEMPORARY
 #ifdef COMMENTED
 int terminalComs(char* output) {}

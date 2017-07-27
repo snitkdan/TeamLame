@@ -13,6 +13,7 @@
 #include <stdlib.h>
 #include "dataStructs.h"
 #include "warningAlarm.h"
+#define BEAGLEBONE
 
 // declares the regions for batteryLvl and fuelLvl
 #define HIGH 2
