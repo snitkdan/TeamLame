@@ -22,6 +22,7 @@ void solarPanelControl(void *solarStruct) {
       return;
 	}
   start = GLOBALCOUNTER;
+  printf("INSIDE solarPaenlControl\n");
 
   // 1.1 Assign the data of consoleStruct into local variables
   solarData *solData = (solarData*)solarStruct;

@@ -34,6 +34,8 @@ void satelliteComs(void *satStruct) {
 	}
     start = GLOBALCOUNTER;
 	*/
+	
+    printf("INSIDE satelliteComs\n");	
     // 1. Assign the data of sData into local variables
     satData *sData = (satData*)satStruct;
     bool *fuelLow = sData->fuelLowPtr;
@@ -53,27 +55,34 @@ void satelliteComs(void *satStruct) {
     char *fuelString = (*fuelLow)? "YES":"NO";
     char *battString = (*batteryLow)? "YES":"NO";
     char output[MAX];
-    char *myfifo = "/tmp/myfifo0";
 	
-    char buf[MAX_BUF];
+    char buf[5];
+	
+	static int firstTime = 1;
+	if (firstTime == 1) {
     /* create the FIFO (named pipe) */
-    mkfifo(myfifo, 0666);
-    fd = open(myfifo, O_RDWR);
-	
+        char *myfifo = "/tmp/myfifo0";	
+        mkfifo(myfifo, 0666);
+        fd = open(myfifo, O_RDWR);
+		firstTime--;
+	}
     // set pipe's read end to non blocking
     fcntl(fd, F_SETFL, O_NONBLOCK);
-    if (read (fd, buf, MAX_BUF) > 0) {
+    if (read (fd, buf, 5) > 0) {
         printf("Response from Vehicle: %s\n", buf);
     }
 	int flags = fcntl(STDIN_FILENO, F_GETFL, 0);
 	fcntl(STDIN_FILENO, F_SETFL, flags | O_NONBLOCK);
 	
 	char c = getchar();
+	c = 'B';
 	printf("SATCOMS: c = %d, %c\n", c, c);
 	usleep(1000000);
 	if (c != 255) {
 		if (satVehicleCmd(c)) {
-			write(fd, &c, 5);
+			if (c == 'B')
+				write(fd, "B", 10);
+			    printf("sent B\n");
 		}
 		else {
 			if(consoleModeCmd(c)) ungetc(c, stdin);

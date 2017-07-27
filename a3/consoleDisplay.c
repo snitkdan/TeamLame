@@ -38,7 +38,7 @@ void consoleDisplay(void *consoleStruct) {
 	}
     start = GLOBALCOUNTER;
 	*/
-	
+    printf("INSIDE consoleDisplay\n");	
     // 1.1 Assign the data of consoleStruct into local variables
     consoleData *cData = (consoleData*)consoleStruct;
     bool *fuelLow = cData->fuelLowPtr;

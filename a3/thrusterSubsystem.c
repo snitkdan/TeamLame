@@ -20,6 +20,7 @@ void thrusterSubsystem(void *thrustStruct) {
       return;
   }
   start = GLOBALCOUNTER;	
+  printf("INSIDE thrusterSubsy\n");	
   
   // 1. Assign the data of thrustStruct into local variables
   thrustData *tData = (thrustData *) thrustStruct;
