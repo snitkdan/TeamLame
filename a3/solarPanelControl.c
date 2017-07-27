@@ -9,7 +9,6 @@
 #include <string.h>
 #include "dataStructs.h"
 #include "TCB.h"
-#include "solarPanelControl.h"
 #include "pwm_utils.h"
 
 #define PIN "P8_13"

@@ -1,13 +1,20 @@
 objects = satelliteComs.o powerSubsystem.o consoleDisplay.o \
           thrusterSubsystem.o warningAlarm.o rand2.o \
           terminalComs.o keyboardConsole.o solarPanelControl.o \
-          vehicleComms.o nonBlockingKeys.o
+          vehicleComms.o nonBlockingKeys.o startup.o \
+	  scheduler.o
 headers = dataStructs.h TCB.h
 
 all: main 
 
 main: main.c $(objects) $(headers)
 	gcc -Wall -g -o main main.c $(objects)
+
+scheduler.o: scheduler.c
+	gcc -Wall -g -c -o scheduler.o scheduler.c
+
+startup.o: startup.c startup.h
+	gcc -Wall -g -c -o startup.o startup.c
 
 nonBlockingKeys.o: nonBlockingKeys.c nonBlockingKeys.h
 	gcc -Wall -g -c -o nonBlockingKeys.o nonBlockingKeys.c
