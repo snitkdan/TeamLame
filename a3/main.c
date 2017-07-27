@@ -6,6 +6,7 @@
 #include "dataStructs.h"
 #include "warningAlarm.h"
 #include "startup.h"
+#include "scheduler.h"
 
 extern unsigned long GLOBALCOUNTER;
 
@@ -30,7 +31,7 @@ void main(void) {
         }
         GLOBALCOUNTER++;
       }
-      AppendTCB(aTCBPtr);
+      AppendTCB(queue, aTCBPtr);
 	    i = (i + 1) % 6;
     }
     return;

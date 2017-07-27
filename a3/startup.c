@@ -14,6 +14,7 @@
 #include "scheduler.h"
 
 // TEMPORARY
+#ifdef COMMENTED
 int terminalComs(char* output) {}
 unsigned int randomInteger(unsigned int low, unsigned int high) {}
 void powerSubsystem(void *powerStruct) {}
@@ -23,6 +24,7 @@ void satelliteComs(void *satStruct) {}
 void consoleDisplay(void *consoleStruct) {}
 void thrusterSubsystem(void *thrustStruct) {}
 void warningAlarm(void *warnStruct) {}
+#endif
 
 // Define shared variables
 unsigned int thrusterCommand;

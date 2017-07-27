@@ -2,13 +2,16 @@ objects = satelliteComs.o powerSubsystem.o consoleDisplay.o \
           thrusterSubsystem.o warningAlarm.o rand2.o \
           terminalComs.o keyboardConsole.o solarPanelControl.o \
           vehicleComms.o nonBlockingKeys.o startup.o \
-	  scheduler.o
-headers = dataStructs.h TCB.h
+	  scheduler.o pwm_utils.o
+headers = dataStructs.h TCB.h startup.h scheduler.h
 
 all: main 
 
 main: main.c $(objects) $(headers)
 	gcc -Wall -g -o main main.c $(objects)
+
+pwm_utils.o: pwm_utils.h
+	gcc -Wall -g -c -o pwm_utils.o pwm_utils.c
 
 scheduler.o: scheduler.c
 	gcc -Wall -g -c -o scheduler.o scheduler.c
@@ -22,7 +25,7 @@ nonBlockingKeys.o: nonBlockingKeys.c nonBlockingKeys.h
 keyboardConsole.o: keyboardConsole.c 
 	gcc -Wall -g -c -o keyboardConsole.o keyboardConsole.c
 
-solarPanelControl.o: solarPanelControl.c
+solarPanelControl.o: solarPanelControl.c pwm_utils.h
 	gcc -Wall -g -c -o solarPanelControl.o solarPanelControl.c
 
 vehicleComms.o: vehicleComms.c satelliteVehicle.h
