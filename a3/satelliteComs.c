@@ -44,6 +44,9 @@ void satelliteComs(void *satStruct) {
     unsigned short *pConsume = sData->pConsumePtr;
     unsigned short *pGenerate = sData->pGeneratePtr;
     unsigned int *thrusterCommand = sData->thrusterCommandPtr;
+	char *command = sData->commandPtr;
+    char *response = sData->responsePtr;
+	
 
     // 2. Retrieve random number, mask and assign thrusterCommand to it
     *thrusterCommand = randomInteger(0, MAX) % MAX;
@@ -57,8 +60,8 @@ void satelliteComs(void *satStruct) {
     int flags = fcntl(STDIN_FILENO, F_GETFL, 0);
     fcntl(STDIN_FILENO, F_SETFL, flags | O_NONBLOCK);
 	
-    //char c = getchar();
-    char c = 'B';	
+    *command = getchar();
+	
 }
 
 void maskBit(unsigned int *thrusterCommand) {

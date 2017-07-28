@@ -66,6 +66,10 @@ TaskQueue queue;
 // Define the Global Counter
 unsigned long GLOBALCOUNTER;
 
+// Define pipe
+int fd0;
+
+
 void Initialize(void) {
   // 1. Assign initial values to shared variables
   thrusterCommand = 0;
@@ -183,4 +187,5 @@ void Initialize(void) {
 
 void ActivateTimeBase(void) {
   GLOBALCOUNTER = 0;
+  fd0 = 0;
 }
