@@ -17,6 +17,7 @@
 
 #define MAX 1024
 #define BUF_SIZE 16
+#define SCALE 20
 extern unsigned int current_measurement;
 extern unsigned int batteryBuff[BUF_SIZE];
 static int nextMeasurement();
@@ -73,7 +74,7 @@ void consoleDisplay(void *consoleStruct) {
 							"Fuel Level: %3hu, "
 							"Power Consumption: %2hu, "
 							"Power Generation: %2hu\n", 
-							 solarPanelString, batteryBuff[(current_measurement > 0 ? current_measurement - 1 : 0)], *fuelLvl, *pConsume, *pGenerate);
+							 solarPanelString, batteryBuff[(current_measurement > 0 ? current_measurement - 1 : 0)] * 20, *fuelLvl, *pConsume, *pGenerate);
 			terminalComs(output);								 
 		} else if (c == ANNUNCIATION) {
 			printf("ConsoleDisplay: Showing Annunciation Mode...\n");			
