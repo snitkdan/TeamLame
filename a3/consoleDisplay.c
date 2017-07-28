@@ -13,9 +13,13 @@
 #include "dataStructs.h"
 #include "TCB.h"
 #include <fcntl.h>
+#include "adc_utils.h"
 
 #define MAX 1024
-
+#define BUF_SIZE 16
+extern unsigned int current_measurement;
+extern unsigned int batteryBuff[BUF_SIZE];
+static int nextMeasurement();
 
 //#define OFF
 /*
@@ -53,6 +57,7 @@ void consoleDisplay(void *consoleStruct) {
     char *solarPanelString = (*solarPanelState) ? "Deployed":"Retracted";
     char *fuelString = (*fuelLow)? "YES":"NO";
     char *battString = (*batteryLow)? "YES":"NO";
+    
    
     int flags = fcntl(STDIN_FILENO, F_GETFL, 0);
 	fcntl(STDIN_FILENO, F_SETFL, flags | O_NONBLOCK);
@@ -68,7 +73,7 @@ void consoleDisplay(void *consoleStruct) {
 							"Fuel Level: %3hu, "
 							"Power Consumption: %2hu, "
 							"Power Generation: %2hu\n", 
-							 solarPanelString, *batteryLvl, *fuelLvl, *pConsume, *pGenerate);
+							 solarPanelString, batteryBuff[(current_measurement > 0 ? current_measurement - 1 : 0)], *fuelLvl, *pConsume, *pGenerate);
 			terminalComs(output);								 
 		} else if (c == ANNUNCIATION) {
 			printf("ConsoleDisplay: Showing Annunciation Mode...\n");			

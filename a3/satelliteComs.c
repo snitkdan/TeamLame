@@ -20,8 +20,13 @@
 #include "satelliteComs.h"
 #include "nonBlockingKeys.h"
 #include "satelliteVehicle.h"
+#include "adc_utils.h"
 
 #define MAX 65536 // upper bound for 16 bit
+#define BUF_SIZE 16
+extern unsigned int current_measurement;
+extern unsigned int batteryBuff[BUF_SIZE];
+static int nextMeasurement();
 
 #define DEBUG
 int fd = 0;
@@ -40,7 +45,7 @@ void satelliteComs(void *satStruct) {
     bool *fuelLow = sData->fuelLowPtr;
     bool *batteryLow = sData->batteryLowPtr;
     bool *solarPanelState = sData->solarPanelStatePtr;
-    unsigned short *batteryLvl = sData->batteryLvlPtr;
+    unsigned short **batteryLvl = sData->batteryLvlPtr;
     unsigned short *fuelLvl = sData->fuelLvlPtr;
     unsigned short *pConsume = sData->pConsumePtr;
     unsigned short *pGenerate = sData->pGeneratePtr;
@@ -61,7 +66,7 @@ void satelliteComs(void *satStruct) {
 	static int fd1;
 	static int firstTime = 1;
 	if (firstTime == 1) {
-        fd1 = open("/dev/pts/3", O_WRONLY);
+        fd1 = open("/dev/pts/2", O_WRONLY);
 	    if (!fd1) {
 		    fprintf(stderr, "SATCOMS: couldn't open fd1 earth terminal\n");
 		    exit(EXIT_FAILURE);
@@ -78,7 +83,7 @@ void satelliteComs(void *satStruct) {
 	"Fuel Level: %3hu, "
 	"Power Consumption: %2hu, "
 	"Power Generation: %2hu\n", 
-	 solarPanelString, *batteryLvl, *fuelLvl, *pConsume, *pGenerate);
+	 solarPanelString, batteryBuff[(current_measurement > 0 ? current_measurement - 1 : 0)], *fuelLvl, *pConsume, *pGenerate);
 	 
 	 if (*response == 'A') {
 		 dprintf(fd1, "\nVehicle Response: %c %c\n", *response, *command);
