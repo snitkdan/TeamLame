@@ -32,6 +32,8 @@ void powerSubsystem(void *powerStruct) {
   unsigned int **batteryLvl = pData->batteryLvlPtr;
   unsigned short *pConsume = pData->pConsumePtr;
   unsigned short *pGenerate = pData->pGeneratePtr;
+  bool *solarPanelDeploy = pData->solarPanelDeployPtr;
+  bool *solarPanelRetract = pData->solarPanelRetractPtr;
   // 4. Update the buffer
   if(!initADC()) {
     fprintf(stderr, "ADC Malfunction\n");
@@ -49,9 +51,11 @@ static int nextMeasurement() {
   return readADC(ACH);
 }
 
-bool useSolarPanels(bool *solarPanelState, unsigned short *pGenerate, unsigned int **batteryLvl) {
+bool useSolarPanels(bool *solarPanelState, bool *solarPanelDeploy, bool *solarPanelRetract, unsigned short *pGenerate, unsigned int **batteryLvl) {
   // 1. If solarPanelState == ON
   if(*solarPanelState) {
+    *solarPanelDeploy = !(*solarPanelDeploy);
+    *solarPanelRetract = !(*solarPanelRetract);
     // 1.1: If  batteryLvl > 95%
     if(batteryBuff[current_measurement] > 95) {
       // 1.1.1: Retract solar panels
