@@ -22,7 +22,7 @@ void main(void) {
     Initialize();
     ActivateTimeBase();
     // Defines a TCB pointer
-    extern TCB thrusterSubsystem;
+    extern TCB thrusterSubsystemTCB;
     extern thrustData tData;
     // Run task in a loop
     int i = 0;
