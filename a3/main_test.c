@@ -28,8 +28,8 @@ void main(void) {
     // Run task in a loop
     int i = 0;
     while(i < 3) {
-      solarPanelControlTCB.myTask((void*)solData);
-      usleep(5000000)
+      solarPanelControlTCB.myTask((void*)&solData);
+      usleep(5000000);
       i++;
     }
     // Turn off PWM
