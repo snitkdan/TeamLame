@@ -103,7 +103,7 @@ terminalComs.o: $(USER_DIR)/terminalComs.c $(PROJ_HEADERS) $(GTEST_HEADERS)
 warningAlarm.o : $(USER_DIR)/warningAlarm.c $(USER_DIR)/warningAlarm.h $(GTEST_HEADERS)
 	$(CC) $(CPPFLAGS) $(CXXFLAGS) -c $(USER_DIR)/warningAlarm.c
 
-thrusterSubsystem.o : $(USER_DIR)/thrusterSubsystem.c $(USER_DIR)/thrusterSubsystem.h $(GTEST_HEADERS)
+thrusterSubsystem.o : $(USER_DIR)/thrusterSubsystem.c $(USER_DIR)/thrusterSubsystem.h
 	$(CC) $(CPPFLAGS) $(CXXFLAGS) -c $(USER_DIR)/thrusterSubsystem.c
 
 satelliteComs.o : $(USER_DIR)/satelliteComs.c $(USER_DIR)/satelliteComs.h $(GTEST_HEADERS)
@@ -146,8 +146,8 @@ adc_test: $(USER_DIR)/adc_test.c adc_utils.o
 	$(CC) -o adc_test $(USER_DIR)/adc_test.c adc_utils.o
 
 # Builds separate tests for individual TCBs
-main_test: $(USER_DIR)/main_test.c pwm_utils.o solarPanelControl.o startup.o scheduler.o
-	$(CC) -o main_test $(USER_DIR)/main_test.c pwm_utils.o solarPanelControl.o startup.o scheduler.o
+main_test: $(USER_DIR)/main_test.c pwm_utils.o thrusterSubsystem.o startup.o scheduler.o
+	$(CC) -o main_test $(USER_DIR)/main_test.c pwm_utils.o thrusterSubsystem.o startup.o scheduler.o
 
 
 # Convenience Commands

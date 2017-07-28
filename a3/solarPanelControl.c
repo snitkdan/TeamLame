@@ -13,7 +13,7 @@
 
 static bool initSolarPanel();
 
-#define PIN "P8_13"
+#define P8 "P8_13"
 #define PERIOD 500000
 #define DEFAULT_DUTY 250000
 #define ON 1
@@ -68,19 +68,19 @@ void solarPanelControl(void *solarStruct) {
 	PWM = duty * period;
 
 	// 1.6: Duty cycle and period are in ms.
-	setPWMProperty(PIN, "duty", duty);
+	setPWMProperty(P8, "duty", duty);
 }
 
 static bool initSolarPanel() {
-	if(!initPWM(PIN)) {
+	if(!initPWM(P8)) {
     fprintf(stderr, "PWM Malfunction\n");
     return false;
   }
   // 2. Set the period to 500 ms
-  setPWMProperty(PIN, "period", PERIOD);
+  setPWMProperty(P8, "period", PERIOD);
   // 3. Set the duty cycle to 250 ms
-	setPWMProperty(PIN, "duty", 250000);
+	setPWMProperty(P8, "duty", 250000);
   // 4. Turn on the output
-  setPWMProperty(PIN, "run", ON);
+  setPWMProperty(P8, "run", ON);
 	return true;
 }

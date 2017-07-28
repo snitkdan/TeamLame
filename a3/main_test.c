@@ -11,7 +11,7 @@
 #include "pwm_utils.h"
 #include "startup.h"
 
-#define PIN "P8_13"
+#define P8_19 "P8_19"
 #define ON 1
 #define OFF 0
 
@@ -22,18 +22,17 @@ void main(void) {
     Initialize();
     ActivateTimeBase();
     // Defines a TCB pointer
-    extern TCB solarPanelControlTCB;
-    extern solarData solData;
-    *solData.motorIncPtr = true;
+    extern TCB thrusterSubsystem;
+    extern thrustData tData;
     // Run task in a loop
     int i = 0;
     while(i < 100) {
-      solarPanelControlTCB.myTask((void*)&solData);
+      thrusterSubsystem.myTask((void*)&tData);
       usleep(500000);
       i++;
     }
     // Turn off PWM
-    setPWMProperty(PIN, "run", OFF);
+    setPWMProperty(P8_19, "run", OFF);
 
 
 
