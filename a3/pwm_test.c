@@ -11,6 +11,7 @@
 #define PIN "P8_13"
 #define PERIOD 500000000
 #define ON 1
+#define OFF 0
 
 int main() {
   // 1. Initialize the PWM for P8_13
@@ -24,5 +25,8 @@ int main() {
 	setPWMProperty(PIN, "duty", 250000000);
   // 4. Turn on the output
   setPWMProperty(PIN, "run", ON);
+  // 5. Delay and turn off
+  usleep(5000000)
+  setPWMProperty(PIN, "run", OFF);
   return EXIT_SUCCESS;
 }
