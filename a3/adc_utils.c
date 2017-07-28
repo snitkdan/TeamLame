@@ -14,7 +14,7 @@
 bool adc_initialized = false;
 
 #define DEVICES "/sys/devices"
-#define HNUM 17
+#define HNUM 18
 #define MGRNUM 9
 
 bool initADC() {
