@@ -15,9 +15,9 @@
 #define MAX 65536
 
 #define P8_19 "P8_19"
-#define HNUM_19 18
+#define HNUM_19 15
 #define P8_13 "P8_13"
-#define HNUM_13 15
+#define HNUM_13 16
 #define ON 1
 #define OFF 0
 
