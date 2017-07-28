@@ -132,11 +132,11 @@ gpio: $(USER_DIR)/gpio.c $(OBJ) $(PROJ_HEADERS)
 	$(CC) -o gpio $(USER_DIR)/gpio.c $(OBJ)
 
 # Builds PWM test code
-pwm_util.o: $(USER_DIR)/pwm_util.c $(USER_DIR)/pwm_util.h
-	$(CC) $(CPPFLAGS) $(CXXFLAGS) -c $(USER_DIR)/pwm_util.c
+pwm_utils.o: $(USER_DIR)/pwm_utils.c $(USER_DIR)/pwm_utils.h
+	$(CC) $(CPPFLAGS) $(CXXFLAGS) -c $(USER_DIR)/pwm_utils.c
 
-pwm_test: $(USER_DIR)/pwm_test.c pwm_util.o
-	$(CC) -o pwm_test $(USER_DIR)/pwm_test.c pwm_util.o
+pwm_test: $(USER_DIR)/pwm_test.c pwm_utils.o
+	$(CC) -o pwm_test $(USER_DIR)/pwm_test.c pwm_utils.o
 
 # Convenience Commands
 copy:
