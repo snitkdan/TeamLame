@@ -11,8 +11,12 @@
 #include "TCB.h"
 #include "pwm_utils.h"
 
-#define PIN "P8_13"
+static void initSolarPanel();
 
+#define PIN "P8_13"
+#define PERIOD 500000
+#define ON 1
+#define OFF 0
 #define MAX 300
 
 void solarPanelControl(void *solarStruct) {
@@ -32,13 +36,18 @@ void solarPanelControl(void *solarStruct) {
   bool *motorInc = solData->motorIncPtr;
   bool *motorDec = solData->motorDecPtr;
 
-	// 1.2: Declare variables
+	// 1.2: Track PWM initialization status
+	static bool pwm_init = false;
+
+	// 1.3: Check PWM initialization
+	if(!pwm_init) {
+		initSolarPanel();
+	}
+
+	// 1.3: Declare variables
 	double PWM, duty, period;
 
-	duty = 250000;
-	period = 500000;
-
-  // 1.3: Check if the solor panel state with what it is requested to do
+  // 1.4: Check if the solor panel state with what it is requested to do
 	if ((*solarPanelState == 1 && *solarPanelDeploy == 1) || (*solarPanelState == 0 && *solarPanelRetract == 1)){
 		PWM = 0;
 	} else {
@@ -52,13 +61,22 @@ void solarPanelControl(void *solarStruct) {
 			duty = (duty < 0) ? 0 : duty;
 		}
 	}
-	// 1.4: Generate the new PWM for the new duty
+	// 1.5: Generate the new PWM for the new duty
 	PWM = duty * period;
 
-	extern bool pwm_initialized;
-	if(!pwm_initialized) {
-		if(!initPWM(PIN)) fprintf(stderr, "PWM Malfunction\n");
-	}
-	// Duty cycle and period are in nanoseconds.
+	// 1.6: Duty cycle and period are in ms.
 	setPWMProperty(PIN, "duty", duty);
+}
+
+static void initSolarPanel() {
+	if(!initPWM(PIN)) {
+    fprintf(stderr, "PWM Malfunction\n");
+    return;
+  }
+  // 2. Set the period to 500 ms
+  setPWMProperty(PIN, "period", PERIOD);
+  // 3. Set the duty cycle to 250 ms
+	setPWMProperty(PIN, "duty", 250000);
+  // 4. Turn on the output
+  setPWMProperty(PIN, "run", ON);
 }
