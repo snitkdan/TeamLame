@@ -15,7 +15,7 @@
 bool pwm_initialized = false;
 
 #define DEVICES "/sys/devices"
-#define HNUM 15
+#define HNUM 16
 #define MGRNUM 9
 
 bool initPWM(char *pin) {
