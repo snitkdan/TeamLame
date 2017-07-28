@@ -16,7 +16,7 @@
 #define COMMENTED
 #ifdef COMMENTED
 int terminalComs(char* output) {}
-unsigned int randomInteger(unsigned int low, unsigned int high) {}
+// unsigned int randomInteger(unsigned int low, unsigned int high) {}
 void powerSubsystem(void *powerStruct) {}
 void keyboardConsole(void *keyboardStruct) {}
 void vehicleComms(void *vehicleStruct) {}
