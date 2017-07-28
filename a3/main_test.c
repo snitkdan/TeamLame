@@ -5,12 +5,12 @@
 #include <fcntl.h>
 #include <sys/stat.h>
 #include <sys/types.h>
+#include <stdint.h>
 #include "TCB.h"
 #include "dataStructs.h"
 #include "warningAlarm.h"
 #include "pwm_utils.h"
 #include "startup.h"
-#include<stdint.h>
 
 
 #define MAX 65536
