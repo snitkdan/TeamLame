@@ -15,7 +15,7 @@
 #include "pwm_utils.h"
 
 #define P9_14 "P9_14"
-#define HNUM_14 15
+#define HNUM_14 17
 
 #define ON 1
 #define OFF 0
