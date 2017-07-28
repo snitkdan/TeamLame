@@ -109,8 +109,8 @@ thrusterSubsystem.o : $(USER_DIR)/thrusterSubsystem.c $(USER_DIR)/thrusterSubsys
 satelliteComs.o : $(USER_DIR)/satelliteComs.c $(USER_DIR)/satelliteComs.h $(GTEST_HEADERS)
 	$(CC) $(CPPFLAGS) $(CXXFLAGS) -c $(USER_DIR)/satelliteComs.c $(USER_DIR)/rand2.c
 
-powerSubsystem.o : $(USER_DIR)/powerSubsystem.c $(USER_DIR)/powerSubsystem.h
-	$(CC) $(CPPFLAGS) $(CXXFLAGS) -c $(USER_DIR)/powerSubsystem.c
+powerSubsystem.o : $(USER_DIR)/powerSubsystem.c $(USER_DIR)/powerSubsystem.h startup.o
+	$(CC) $(CPPFLAGS) $(CXXFLAGS) -c $(USER_DIR)/powerSubsystem.c startup.o
 
 consoleDisplay.o: $(USER_DIR)/consoleDisplay.c $(GTEST_HEADERS)
 	$(CC) $(CPPFLAGS) $(CXXFLAGS) -c $(USER_DIR)/consoleDisplay.c

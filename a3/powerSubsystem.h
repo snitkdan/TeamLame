@@ -39,7 +39,7 @@ void powerSubsystem(void *powerStruct);
   @returns
     TRUE if the exit state of the solar panel is ON.
 */
-bool useSolarPanels(bool *solarPanelState, unsigned short *pGenerate, unsigned short *batteryLvl);
+bool useSolarPanels(bool *solarPanelState, unsigned short *pGenerate, unsigned int **batteryLvl);
 
 /*
   @param pConsume
@@ -66,4 +66,4 @@ void powerConsumption(unsigned short *pConsume);
     every even numbered function call.
     Otherwise, do nothing.
 */
-void powerGeneration(unsigned short *pGenerate, unsigned short *batteryLvl);
+void powerGeneration(unsigned short *pGenerate, unsigned int **batteryLvl);

@@ -15,7 +15,8 @@
 #define ACH "AIN0"
 #define BUF_SIZE 16
 
-int current_measurement = 0;
+extern unsigned int current_measurement;
+static int nextMeasurement();
 
 void powerSubsystem(void *powerStruct) {
   // Only run this function every major cycle
@@ -27,7 +28,7 @@ void powerSubsystem(void *powerStruct) {
   // 1. Assign the data of powerStruct into local variables
   powerData *pData = (powerData*)powerStruct;
   bool *solarPanelState = pData->solarPanelStatePtr;
-  unsigned short *batteryLvl = pData->batteryLvlPtr;
+  unsigned int **batteryLvl = pData->batteryLvlPtr;
   unsigned short *pConsume = pData->pConsumePtr;
   unsigned short *pGenerate = pData->pGeneratePtr;
   // 2. Update powerConsumption && powerGeneration
@@ -48,11 +49,11 @@ static int nextMeasurement() {
   return readADC(ACH);
 }
 
-bool useSolarPanels(bool *solarPanelState, unsigned short *pGenerate, unsigned short *batteryLvl) {
+bool useSolarPanels(bool *solarPanelState, unsigned short *pGenerate, unsigned int **batteryLvl) {
   // 1. If solarPanelState == ON
   if(*solarPanelState) {
     // 1.1: If  batteryLvl > 95%
-    if(*batteryLvl > 95) {
+    if(*batteryLvl[current_measurement] > 95) {
       // 1.1.1: Retract solar panels
       *solarPanelState = false;
       *pGenerate = 0;
@@ -64,7 +65,7 @@ bool useSolarPanels(bool *solarPanelState, unsigned short *pGenerate, unsigned s
   // 2. If solarPanelState == OFF
   else {
       // 2.1: If batteryLvl <= 10%
-      if(*batteryLvl <= 10) {
+      if(*batteryLvl[current_measurement] <= 10) {
         // 2.1.1: Deploy solar panels
         *solarPanelState = true;
       }
@@ -74,13 +75,13 @@ bool useSolarPanels(bool *solarPanelState, unsigned short *pGenerate, unsigned s
 }
 
 // Motar Drive -> set motar drive to 100 when solar panel state changes. After it changes, set it back to 0.
-void powerGeneration(unsigned short *pGenerate, unsigned short *batteryLvl) {
+void powerGeneration(unsigned short *pGenerate, unsigned int **batteryLvl) {
   // 1. Define static variables to track function state
   static short numCalls = 0;
   // 2. If battery level <= 95%
-  if(*batteryLvl <= 95) {
+  if(*batteryLvl[current_measurement] <= 95) {
     // 2.1: If battery level <= 50%
-    if(*batteryLvl <= 50) {
+    if(*batteryLvl[current_measurement] <= 50) {
       *pGenerate += (numCalls % 2 == 0) ? 2 : 1;
        // if even call -> +2; else -> +1
     }
