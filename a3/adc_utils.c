@@ -8,6 +8,9 @@
  *
  */
 
+ #include <stdbool.h>
+ #include <stdio.h>
+
 bool adc_initialized = false;
 
 #define DEVICES "/sys/devices"
