@@ -24,7 +24,7 @@ void main(void) {
     // Defines a TCB pointer
     extern TCB solarPanelControlTCB;
     extern solarData solData;
-    *solData.motorDecPtr = true;
+    *solData.motorIncPtr = true;
     // Run task in a loop
     int i = 0;
     while(i < 100) {
