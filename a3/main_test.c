@@ -27,7 +27,7 @@ void main(void) {
     // Run task in a loop
     int i = 0;
     while(i < 100) {
-      thrusterSubsystem.myTask((void*)&tData);
+      thrusterSubsystemTCB.myTask((void*)&tData);
       usleep(500000);
       i++;
     }
