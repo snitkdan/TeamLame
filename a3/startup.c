@@ -23,6 +23,7 @@ void vehicleComms(void *vehicleStruct) {}
 void satelliteComs(void *satStruct) {}
 void consoleDisplay(void *consoleStruct) {}
 void warningAlarm(void *warnStruct) {}
+void solarPanelControl(void *solarStruct){}
 #endif
 
 // Define shared variables
