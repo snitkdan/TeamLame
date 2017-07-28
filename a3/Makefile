@@ -138,6 +138,13 @@ pwm_utils.o: $(USER_DIR)/pwm_utils.c $(USER_DIR)/pwm_utils.h
 pwm_test: $(USER_DIR)/pwm_test.c pwm_utils.o
 	$(CC) -o pwm_test $(USER_DIR)/pwm_test.c pwm_utils.o
 
+# Builds ADC test code
+adc_utils.o: $(USER_DIR)/adc_utils.c $(USER_DIR)/adc_utils.h
+	$(CC) $(CPPFLAGS) $(CXXFLAGS) -c $(USER_DIR)/adc_utils.c
+
+adc_test: $(USER_DIR)/adc_test.c adc_utils.o
+	$(CC) -o adc_test $(USER_DIR)/adc_test.c adc_utils.o
+
 # Convenience Commands
 copy:
 	scp -r ../a3 root@192.168.7.2:/dev
