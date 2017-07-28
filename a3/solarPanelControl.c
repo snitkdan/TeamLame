@@ -15,6 +15,7 @@ static void initSolarPanel();
 
 #define PIN "P8_13"
 #define PERIOD 500000
+#define DEFAULT_DUTY 250000
 #define ON 1
 #define OFF 0
 #define MAX 300
@@ -45,7 +46,9 @@ void solarPanelControl(void *solarStruct) {
 	}
 
 	// 1.3: Declare variables
-	double PWM, duty, period;
+	static int PWM;
+	static int duty = DEFAULT_DUTY;
+	static int period = PERIOD;
 
   // 1.4: Check if the solor panel state with what it is requested to do
 	if ((*solarPanelState == 1 && *solarPanelDeploy == 1) || (*solarPanelState == 0 && *solarPanelRetract == 1)){

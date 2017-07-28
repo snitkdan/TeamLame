@@ -115,7 +115,7 @@ powerSubsystem.o : $(USER_DIR)/powerSubsystem.c $(USER_DIR)/powerSubsystem.h $(G
 consoleDisplay.o: $(USER_DIR)/consoleDisplay.c $(GTEST_HEADERS)
 	$(CC) $(CPPFLAGS) $(CXXFLAGS) -c $(USER_DIR)/consoleDisplay.c
 
-startup.o : $(USER_DIR)/startup.c $(USER_DIR)/startup.h $(GTEST_HEADERS)
+startup.o : $(USER_DIR)/startup.c $(USER_DIR)/startup.h
 	$(CC) $(CPPFLAGS) $(CXXFLAGS) -c $(USER_DIR)/startup.c
 
 scheduler.o: $(USER_DIR)/scheduler.c $(GTEST_HEADERS)
