@@ -42,7 +42,7 @@ void main(void) {
       thrusterCommand &= MASK;
       thrusterSubsystemTCB.myTask((void*)&tData);
       solarPanelControlTCB.myTask((void*)&solData);
-      usleep(1000000);
+      usleep(4000000);
       i++;
     }
     // Turn off PWM
