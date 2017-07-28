@@ -44,9 +44,9 @@ bool initPWM(char *pin) {
 bool setPWMProperty(char *pin, char *prop, int prop_val) {
 	// 1. Declare necessary variables
 	FILE *pwm;
-	char prop_path[45];
+	char prop_path[43];
 	// 2. Construct the file path for desired property
-	sprintf(prop_path, "%s/ocp.2/pwm_test_%s.%i/%s", DEVICES, pin, HNUM, prop);
+	sprintf(prop_path, "%s/ocp.3/pwm_test_%s.%i/%s", DEVICES, pin, HNUM, prop);
 	// 3, Open the pwm
 	pwm = fopen(prop_path, "w");
 	if(!pwm) {
