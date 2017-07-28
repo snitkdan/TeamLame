@@ -70,7 +70,7 @@ void thrusterSubsystem(void *thrustStruct) {
 	}
   // 5.2: Set duty / period
   double duty = (cc.magnitude > 0) ? (cc.duration / cc.magnitude) : 0;
-  double period = cc.magnitude;
+  double period = (cc.magnitude > 0) ? cc.magnitude : 1;
   printf("THRUSTERS: Duty: %f, Period: %f\n", duty, period);
   setPWMProperty(P9_14, "period", period, HNUM_14);
   setPWMProperty(P9_14, "duty", duty, HNUM_14);
@@ -80,10 +80,8 @@ static bool initThrusters() {
 	if(!initPWM(P9_14)) {
       return false;
   }
-  // 2. Set the period to 500 ms
-  setPWMProperty(P9_14, "period", 0, HNUM_14);
-  // 3. Set the duty cycle to 250 ms
-	setPWMProperty(P9_14, "duty", 0, HNUM_14);
+  setPWMProperty(P9_14, "period", 1, HNUM_14);
+	setPWMProperty(P9_14, "duty", 1, HNUM_14);
   // 4. Turn on the output
   setPWMProperty(P9_14, "run", ON, HNUM_14);
 	return true;
