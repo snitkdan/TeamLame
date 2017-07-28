@@ -146,9 +146,6 @@ adc_test: $(USER_DIR)/adc_test.c adc_utils.o
 	$(CC) -o adc_test $(USER_DIR)/adc_test.c adc_utils.o
 
 # Builds separate tests for individual TCBs
-adc_utils.o: $(USER_DIR)/adc_utils.c $(USER_DIR)/adc_utils.h
-	$(CC) $(CPPFLAGS) $(CXXFLAGS) -c $(USER_DIR)/adc_utils.c
-
 main_test: $(USER_DIR)/main_test.c pwm_utils.o solarPanelControl.o startup.o
 	$(CC) -o main_test $(USER_DIR)/main_test.c pwm_utils.o solarPanelControl.o startup.o
 
