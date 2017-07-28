@@ -57,10 +57,9 @@ void satelliteComs(void *satStruct) {
     char *battString = (*batteryLow)? "YES":"NO";
     char output[MAX];
 	
-    int flags = fcntl(STDIN_FILENO, F_GETFL, 0);
-    fcntl(STDIN_FILENO, F_SETFL, flags | O_NONBLOCK);
+    //int flags = fcntl(STDIN_FILENO, F_GETFL, 0);
+    //fcntl(STDIN_FILENO, F_SETFL, flags | O_NONBLOCK);
 	
-    *command = getchar();
 	
 }
 

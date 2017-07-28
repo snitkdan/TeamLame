@@ -1,6 +1,5 @@
 #ifndef SATVEHICLE
 #define SATVEHICLE
-#define MAX_BUF 3
 /*
   @param satelliteComs
     Struct containing necessary
