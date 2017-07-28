@@ -62,33 +62,31 @@ void thrusterSubsystem(void *thrustStruct) {
 
   // 5. PWM things
   // 5.1: Initialization checks
-  static bool pwm_init = false;
-  if(!pwm_init) {
-		pwm_init = initThrusters();
+  static bool pwm_19_init = false;
+  if(!pwm_19_init) {
+		pwm_19_init = initThrusters();
+    if(!pwm_19_init) {
+      fprintf(stderr, "PWM_19 Malfunction\n");
+      return;
+    }
 	}
   // 5.2: Set duty / period
-  int duty = (cc.magnitude > 0) ? (cc.duration / cc.magnitude) : 0;
-  int period = cc.magnitude;
-  #ifdef ERR_STATEMENT
-  printf("Duty: %d, Period: %d\n", duty, period);
-  #endif
-  setPWMProperty(P8_13, "duty", duty, HNUM_13);
-  setPWMProperty(P8_13, "period", period, HNUM_13);
+  double duty = (cc.magnitude > 0) ? (cc.duration / cc.magnitude) : 0;
+  double period = cc.magnitude;
+  setPWMProperty(P8_19, "duty", duty, HNUM_19);
+  setPWMProperty(P8_19, "period", period, HNUM_19);
 }
 
 static bool initThrusters() {
-	if(!initPWM(P8_13)) {
-		#ifdef ERR_STATEMENT
-        fprintf(stderr, "PWM Malfunction\n");
-		#endif
-        return false;
-   }
+	if(!initPWM(P8_19)) {
+      return false;
+  }
   // 2. Set the period to 500 ms
-  setPWMProperty(P8_13, "period", 0, HNUM_13);
+  setPWMProperty(P8_19, "period", 0, HNUM_19);
   // 3. Set the duty cycle to 250 ms
-	setPWMProperty(P8_13, "duty", 0, HNUM_13);
+	setPWMProperty(P8_19, "duty", 0, HNUM_19);
   // 4. Turn on the output
-  setPWMProperty(P8_13, "run", ON, HNUM_13);
+  setPWMProperty(P8_19, "run", ON, HNUM_19);
 	return true;
 }
 

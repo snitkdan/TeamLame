@@ -31,6 +31,9 @@ void main(void) {
     extern TCB thrusterSubsystemTCB;
     extern thrustData tData;
     extern unsigned int thrusterCommand;
+    extern TCB solarPanelControlTCB;
+    extern solarData solData;
+    *solData.motorIncPtr = true;
     // Run task in a loop
     int i = 0;
     while(i < 100) {
@@ -38,12 +41,11 @@ void main(void) {
       uint16_t MASK = 0xFFF3;
       thrusterCommand &= MASK;
       thrusterSubsystemTCB.myTask((void*)&tData);
-      usleep(5000000);
+      solarPanelControlTCB.myTask((void*)&solData);
+      usleep(1000000);
       i++;
     }
     // Turn off PWM
     setPWMProperty(P8_13, "run", OFF, HNUM_13);
-
-
-
+    setPWMProperty(P8_19, "run", OFF, HNUM_19);
 }

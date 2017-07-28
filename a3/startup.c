@@ -13,7 +13,7 @@
 #include "warningAlarm.h"
 #include "scheduler.h"
 
-//#define COMMENTED
+#define COMMENTED
 #ifdef COMMENTED
 int terminalComs(char* output) {}
 // unsigned int randomInteger(unsigned int low, unsigned int high) {}
@@ -23,7 +23,7 @@ void vehicleComms(void *vehicleStruct) {}
 void satelliteComs(void *satStruct) {}
 void consoleDisplay(void *consoleStruct) {}
 void warningAlarm(void *warnStruct) {}
-void solarPanelControl(void *solarStruct){}
+//void solarPanelControl(void *solarStruct){}
 #endif
 
 // Define shared variables

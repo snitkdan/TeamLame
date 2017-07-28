@@ -146,8 +146,8 @@ adc_test: $(USER_DIR)/adc_test.c adc_utils.o
 	$(CC) -o adc_test $(USER_DIR)/adc_test.c adc_utils.o
 
 # Builds separate tests for individual TCBs
-main_test: $(USER_DIR)/main_test.c pwm_utils.o thrusterSubsystem.o startup.o scheduler.o rand2.o
-	$(CC) -o main_test $(USER_DIR)/main_test.c pwm_utils.o thrusterSubsystem.o startup.o scheduler.o rand2.o
+main_test: $(USER_DIR)/main_test.c pwm_utils.o thrusterSubsystem.o startup.o scheduler.o rand2.o solarPanelControl.o
+	$(CC) -o main_test $(USER_DIR)/main_test.c pwm_utils.o thrusterSubsystem.o startup.o scheduler.o rand2.o solarPanelControl.o
 
 
 # Convenience Commands

@@ -12,14 +12,8 @@
 #include <stdbool.h>
 #include "pwm_utils.h"
 
-bool pwm_initialized = false;
-
 #define DEVICES "/sys/devices"
-
 #define MGRNUM 9
-
-//#define ERR_STATEMENT
-
 
 bool initPWM(char *pin) {
 	// 1. Declare necessary variables
@@ -46,9 +40,9 @@ bool initPWM(char *pin) {
 	fflush(pwm);
 	out = fprintf(pwm, "%s", pin_path);
 	if(out < 0) {
-		#ifdef ERR_STATEMENT		
+		#ifdef ERR_STATEMENT
 		fprintf(stderr, "Write error\n");
-		#endif		
+		#endif
 		return false;
 	}
 	fflush(pwm);
@@ -57,7 +51,7 @@ bool initPWM(char *pin) {
 	return true;
 }
 
-bool setPWMProperty(char *pin, char *prop, int prop_val, int hnum) {
+bool setPWMProperty(char *pin, char *prop, double prop_val, int hnum) {
 	// 1. Declare necessary variables
 	FILE *pwm;
 	char prop_path[45];
@@ -66,16 +60,15 @@ bool setPWMProperty(char *pin, char *prop, int prop_val, int hnum) {
 	// 3, Open the pwm
 	pwm = fopen(prop_path, "w");
 	if(!pwm) {
-		#ifdef ERR_STATEMENT				
+		#ifdef ERR_STATEMENT
 		fprintf(stderr, "Failed to update %s\n", prop);
-		#endif		
+		#endif
 		return false;
 	}
 	// 4. Set the property
-	fprintf(pwm, "%d", prop_val);
+	fprintf(pwm, "%f", prop_val);
 	fflush(pwm);
 	// 5. Clean up
 	fclose(pwm);
-	pwm_initialized = true;
 	return true;
 }

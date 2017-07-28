@@ -21,8 +21,6 @@ static bool initSolarPanel();
 #define OFF 0
 #define MAX 300
 
-//#define ERR_STATEMENT
-
 void solarPanelControl(void *solarStruct) {
 	// Only run this function every major cycle
 	static unsigned long start = 0;
@@ -41,17 +39,21 @@ void solarPanelControl(void *solarStruct) {
   bool *motorDec = solData->motorDecPtr;
 
 	// 1.2: Track PWM initialization status
-	static bool pwm_init = false;
+	static bool pwm_13_init = false;
 
 	// 1.3: Check PWM initialization
-	if(!pwm_init) {
-		pwm_init = initSolarPanel();
+	if(!pwm_13_init) {
+		pwm_13_init = initSolarPanel();
+		if(!pwm_13_init) {
+			fprintf(stderr, "PWM_13 Malfunction\n");
+			return;
+		}
 	}
 
 	// 1.3: Declare variables
-	static int PWM;
-	static int duty = DEFAULT_DUTY;
-	static int period = PERIOD;
+	static double PWM;
+	static double duty = DEFAULT_DUTY;
+	static double period = PERIOD;
 
   // 1.4: Check if the solor panel state with what it is requested to do
 	if ((*solarPanelState == 1 && *solarPanelDeploy == 1) || (*solarPanelState == 0 && *solarPanelRetract == 1)){
@@ -76,9 +78,6 @@ void solarPanelControl(void *solarStruct) {
 
 static bool initSolarPanel() {
 	if(!initPWM(P8_13)) {
-	#ifdef ERR_STATEMENT
-    fprintf(stderr, "PWM Malfunction\n");
-	#endif
     return false;
   }
   // 2. Set the period to 500 ms
