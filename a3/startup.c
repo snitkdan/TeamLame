@@ -15,7 +15,6 @@
 
 #define BUF_SIZE 16
 
-#define COMMENTED
 #ifdef COMMENTED
 int terminalComs(char* output) {}
 // unsigned int randomInteger(unsigned int low, unsigned int high) {}
