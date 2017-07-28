@@ -109,7 +109,7 @@ thrusterSubsystem.o : $(USER_DIR)/thrusterSubsystem.c $(USER_DIR)/thrusterSubsys
 satelliteComs.o : $(USER_DIR)/satelliteComs.c $(USER_DIR)/satelliteComs.h $(GTEST_HEADERS)
 	$(CC) $(CPPFLAGS) $(CXXFLAGS) -c $(USER_DIR)/satelliteComs.c $(USER_DIR)/rand2.c
 
-powerSubsystem.o : $(USER_DIR)/powerSubsystem.c $(USER_DIR)/powerSubsystem.h startup.o
+powerSubsystem.o : $(USER_DIR)/powerSubsystem.c $(USER_DIR)/powerSubsystem.h startup.o adc_utils.o
 	$(CC) $(CPPFLAGS) $(CXXFLAGS) -c $(USER_DIR)/powerSubsystem.c startup.o
 
 consoleDisplay.o: $(USER_DIR)/consoleDisplay.c $(GTEST_HEADERS)
@@ -146,8 +146,8 @@ adc_test: $(USER_DIR)/adc_test.c adc_utils.o
 	$(CC) -o adc_test $(USER_DIR)/adc_test.c adc_utils.o
 
 # Builds separate tests for individual TCBs
-main_test: $(USER_DIR)/main_test.c pwm_utils.o startup.o scheduler.o rand2.o solarPanelControl.o
-	$(CC) -o main_test $(USER_DIR)/main_test.c pwm_utils.o startup.o scheduler.o rand2.o solarPanelControl.o
+main_test: $(USER_DIR)/main_test.c startup.o scheduler.o powerSubsystem.o adc_utils.o
+	$(CC) -o main_test $(USER_DIR)/main_test.c startup.o scheduler.o powerSubsystem.o adc_utils.o
 
 
 # Convenience Commands
