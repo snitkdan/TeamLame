@@ -61,6 +61,7 @@ void consoleDisplay(void *consoleStruct) {
 	if (c != 255) {
 		char output[MAX];	
 		if (c == SATELLITESTATUS) {
+			printf("ConsoleDisplay: Showing Satellite Status...\n");
 			sprintf(output, "**Satellite Status\n"    	    
 							"Solar Panels: %9s, " 
 							"Battery Level: %3hu, "
@@ -70,6 +71,7 @@ void consoleDisplay(void *consoleStruct) {
 							 solarPanelString, *batteryLvl, *fuelLvl, *pConsume, *pGenerate);
 			terminalComs(output);								 
 		} else if (c == ANNUNCIATION) {
+			printf("ConsoleDisplay: Showing Annunciation Mode...\n");			
 			sprintf(output, "Annunciaton\n"
 							"Battery Low: %3s "
 							"Fuel Low: %3s",

@@ -21,6 +21,8 @@ static bool initSolarPanel();
 #define OFF 0
 #define MAX 300
 
+//#define ERR_STATEMENT
+
 void solarPanelControl(void *solarStruct) {
 	// Only run this function every major cycle
 	static unsigned long start = 0;
@@ -28,7 +30,7 @@ void solarPanelControl(void *solarStruct) {
       return;
 	}
   start = GLOBALCOUNTER;
-  printf("INSIDE solarPaenlControl\n");
+  //printf("INSIDE solarPaenlControl\n");
 
   // 1.1 Assign the data of consoleStruct into local variables
   solarData *solData = (solarData*)solarStruct;
@@ -69,12 +71,14 @@ void solarPanelControl(void *solarStruct) {
 	PWM = duty * period;
 
 	// 1.6: Duty cycle and period are in ms.
-	setPWMProperty(P8_13, "duty", duty, 0);
+	setPWMProperty(P8_13, "duty", duty, HNUM);
 }
 
 static bool initSolarPanel() {
 	if(!initPWM(P8_13)) {
+	#ifdef ERR_STATEMENT
     fprintf(stderr, "PWM Malfunction\n");
+	#endif
     return false;
   }
   // 2. Set the period to 500 ms

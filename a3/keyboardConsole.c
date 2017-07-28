@@ -29,21 +29,22 @@ void keyboardConsole(void *keyboardStruct) {
     int flags = fcntl(STDIN_FILENO, F_GETFL, 0);
     fcntl(STDIN_FILENO, F_SETFL, flags | O_NONBLOCK);
     char c = getchar();
-    //char c = 'd';
     if (!motorSpeedCmd(c)) {
         if (consoleModeCmd(c) || satVehicleCmd(c)) ungetc(c, stdin);
         *motorInc = false;
         *motorDec = false;
     } else {
         if (c == SPEEDINC) {
+			printf("Increasing motor speed...\n");
             *motorInc = true;
             *motorDec = false;
         } else {
+			printf("Decreasing motor speed...\n");			
             *motorDec = true;
             *motorInc = false;
         }
 
     }
-    printf("motor Inc = %d, motor Dec = %d\n", *motorInc, *motorDec);
+    //printf("motor Inc = %d, motor Dec = %d\n", *motorInc, *motorDec);
     
 }

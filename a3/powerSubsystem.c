@@ -36,7 +36,6 @@ void powerSubsystem(void *powerStruct) {
       return;
   }
   start = GLOBALCOUNTER;
-  printf("INSIDE powerSub\n");
   // 1. Assign the data of powerStruct into local variables
   powerData *pData = (powerData*)powerStruct;
   bool *solarPanelState = pData->solarPanelStatePtr;

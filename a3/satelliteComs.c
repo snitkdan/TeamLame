@@ -12,6 +12,7 @@
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <unistd.h>
+#include <stdlib.h>
 
 
 #include "TCB.h"
@@ -57,18 +58,31 @@ void satelliteComs(void *satStruct) {
     char *battString = (*batteryLow)? "YES":"NO";
     char output[MAX];
 	
-    //int flags = fcntl(STDIN_FILENO, F_GETFL, 0);
-    //fcntl(STDIN_FILENO, F_SETFL, flags | O_NONBLOCK);
-    //printf("\033[2J");		
-    //printf("\033[1;1H");
-    /*printf( 	    
+	static int fd1;
+	static int firstTime = 1;
+	if (firstTime == 1) {
+        fd1 = open("/dev/pts/2", O_WRONLY);
+	    if (!fd1) {
+		    fprintf(stderr, "SATCOMS: couldn't open fd1 earth terminal\n");
+		    exit(EXIT_FAILURE);
+	    }
+		dprintf(fd1, "\033[2J");
+		dprintf(fd1, "\033[1;1H");		
+	    firstTime--;
+	}
+	dprintf(fd1, "\033[1;1H");
+	dprintf(fd1, "EARTH DISPLAY TERMINAL\n");
+    dprintf(fd1, 	    
 	"Solar Panels: %9s, " 
 	"Battery Level: %3hu, "
 	"Fuel Level: %3hu, "
 	"Power Consumption: %2hu, "
 	"Power Generation: %2hu\n", 
 	 solarPanelString, *batteryLvl, *fuelLvl, *pConsume, *pGenerate);
-   */
+	 
+	 if (*response == 'A') {
+		 dprintf(fd1, "\nVehicle Response: %c %c\n", *response, *command);
+	 }
 }
 
 void maskBit(unsigned int *thrusterCommand) {

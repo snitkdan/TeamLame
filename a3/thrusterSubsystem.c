@@ -22,6 +22,8 @@
 #define ON 1
 #define OFF 0
 
+//#define ERR_STATEMENT
+
 static bool initThrusters();
 
 void thrusterSubsystem(void *thrustStruct) {
@@ -31,7 +33,7 @@ void thrusterSubsystem(void *thrustStruct) {
       return;
   }
   start = GLOBALCOUNTER;
-  printf("INSIDE thrusterSubsy\n");
+  //printf("INSIDE thrusterSubsy\n");
 
   // 1. Assign the data of thrustStruct into local variables
   thrustData *tData = (thrustData *) thrustStruct;
@@ -67,16 +69,20 @@ void thrusterSubsystem(void *thrustStruct) {
   // 5.2: Set duty / period
   int duty = (cc.magnitude > 0) ? (cc.duration / cc.magnitude) : 0;
   int period = cc.magnitude;
+  #ifdef ERR_STATEMENT
   printf("Duty: %d, Period: %d\n", duty, period);
+  #endif
   setPWMProperty(P8_13, "duty", duty, HNUM_13);
   setPWMProperty(P8_13, "period", period, HNUM_13);
 }
 
 static bool initThrusters() {
 	if(!initPWM(P8_13)) {
-    fprintf(stderr, "PWM Malfunction\n");
-    return false;
-  }
+		#ifdef ERR_STATEMENT
+        fprintf(stderr, "PWM Malfunction\n");
+		#endif
+        return false;
+   }
   // 2. Set the period to 500 ms
   setPWMProperty(P8_13, "period", 0, HNUM_13);
   // 3. Set the duty cycle to 250 ms
