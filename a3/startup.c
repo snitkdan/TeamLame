@@ -25,13 +25,15 @@ void vehicleComms(void *vehicleStruct) {}
 void satelliteComs(void *satStruct) {}
 void consoleDisplay(void *consoleStruct) {}
 void warningAlarm(void *warnStruct) {}
-//void solarPanelControl(void *solarStruct){}
+//void solarPanelControl(void *solarStruct) {}
+//void thrusterSubsystem(void *thrustStruct) {}
 #endif
 
 // Define shared variables
 unsigned int thrusterCommand;
 unsigned int **batteryLvl;
 unsigned int batteryBuff[BUF_SIZE];
+unsigned int current_measurement = 0;
 unsigned short fuelLvl;
 unsigned short pConsume;
 unsigned short pGenerate;
@@ -105,7 +107,7 @@ void Initialize(void) {
   pData.solarPanelStatePtr = &solarPanelState;
   pData.solarPanelDeployPtr = &solarPanelDeploy;
   pData.solarPanelRetractPtr = &solarPanelRetract;
-  pData.batteryLvlPtr = &batteryLvl; // TO BE CHANGED LATER
+  pData.batteryLvlPtr = batteryLvl;
   pData.pConsumePtr = &pConsume;
   pData.pGeneratePtr = &pGenerate;
   // 3.2: solarPanelControl
@@ -127,7 +129,7 @@ void Initialize(void) {
   sData.fuelLowPtr = &fuelLow;
   sData.batteryLowPtr = &batteryLow;
   sData.solarPanelStatePtr = &solarPanelState;
-  sData.batteryLvlPtr = &batteryLvl; // TO BE CHANGED LATER
+  sData.batteryLvlPtr = batteryLvl;
   sData.fuelLvlPtr = &fuelLvl;
   sData.pConsumePtr = &pConsume;
   sData.pGeneratePtr = &pGenerate;
@@ -138,14 +140,14 @@ void Initialize(void) {
   cData.fuelLowPtr = &fuelLow;
   cData.batteryLowPtr = &batteryLow;
   cData.solarPanelStatePtr = &solarPanelState;
-  cData.batteryLvlPtr = &batteryLvl; // TO BE CHANGED LATER
+  cData.batteryLvlPtr = batteryLvl;
   cData.fuelLvlPtr = &fuelLvl;
   cData.pConsumePtr = &pConsume;
   cData.pGeneratePtr = &pGenerate;
   // 3.8: warningAlarm
   wData.fuelLowPtr = &fuelLow;
   wData.batteryLowPtr = &batteryLow;
-  wData.batteryLvlPtr = &batteryLvl; // TO BE CHANGED LATER
+  wData.batteryLvlPtr = batteryLvl;
   wData.fuelLvlPtr = &fuelLvl;
 
   // 4. Initialize the TCBs
