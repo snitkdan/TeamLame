@@ -27,9 +27,9 @@ void main(void) {
     *solData.motorIncPtr = true;
     // Run task in a loop
     int i = 0;
-    while(i < 3) {
+    while(i < 50) {
       solarPanelControlTCB.myTask((void*)&solData);
-      usleep(5000000);
+      usleep(500000);
       i++;
     }
     // Turn off PWM
