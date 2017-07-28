@@ -13,7 +13,7 @@
 #include "warningAlarm.h"
 #include "scheduler.h"
 
-#define COMMENTED
+//#define COMMENTED
 #ifdef COMMENTED
 int terminalComs(char* output) {}
 // unsigned int randomInteger(unsigned int low, unsigned int high) {}
@@ -72,7 +72,7 @@ int fd0;
 void Initialize(void) {
   // 1. Assign initial values to shared variables
   thrusterCommand = 0;
-  batteryLvl = 100; // TO BE CHANGED LATER
+  batteryLvl = 15; // TO BE CHANGED LATER
   fuelLvl = 100;
   pConsume = 0;
   pGenerate = 0;

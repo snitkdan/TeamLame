@@ -5,7 +5,8 @@
 #include <sys/time.h>
 #include <stdbool.h>
 #include "nonBlockingKeys.h"
-
+#include "scheduler.h"
+#include "startup.h"
 
 //kbhit, Non-blocking keypress detector, when go keypress, return 1 else always return 0
 int kbhit() {
@@ -52,11 +53,14 @@ bool consoleModeCmd(char c) {
 }
 
 bool motorSpeedCmd(char c) {
-	/*if (taskQueue == 8) {
+        unsigned int taskQueue = NumTasksInTaskQueue(queue) + 1;
+	if (taskQueue == 8) {
 		return c == SPEEDINC ||
 		       c == SPEEDDEC;
 	}
-	return false; */
+	return false;
+        /* 
 	return c == SPEEDINC ||
 	       c == SPEEDDEC;
+        */
 }

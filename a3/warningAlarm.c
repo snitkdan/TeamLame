@@ -36,7 +36,7 @@ FILE *led1 = NULL;
 FILE *led2 = NULL;
 FILE *led3 = NULL;
 
-#define BEAGLEBONE
+//#define BEAGLEBONE
 void warningAlarm(void *warnStruct) {
     #ifdef BEAGLEBONE
     // 1.1 Opens the led files and checks they were opened successfully

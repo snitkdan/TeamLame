@@ -44,18 +44,34 @@ void main(void) {
     TCB_Ptr aTCBPtr;
     // Queue index
 
-	// make a pipe that can be seen by vehicleComs and vehicle
-	// fork the two processes
+    extern TCB solarPanelControlTCB;
+    extern TCB keyboardConsoleTCB;
+    extern bool solarPanelState;
+
+    extern bool solarPanelDeploy;
+    extern bool solarPanelRetract;
 		int i = 0;
 		while (true) {
-		  if ((solarPanelState == 1 && solarPanelDeploy == 1) || (solarPanelState == 0 && solarPanelRetract == 1)) {
-		      RemoveTCB(queue, &solarPanelControlTCB);
-			  RemoveTCB(queue, &keyboardConsoleTCB);  
-		 else {
-		      AppendTCB(queue, &solarPanelControlTCB);
-			  AppendTCB(queue, &keyboardConsoleTCB);			  
-		  }
-			
+                  static int append = 0;
+                  static int remove = 1;
+                  //printf("spDeploy:%d spRetract:%d spState:%d\n", solarPanelDeploy, solarPanelRetract, solarPanelState);
+		  if ((solarPanelState && !solarPanelDeploy) || 
+                      (!solarPanelState && !solarPanelRetract)) {
+                       if (append==1) {
+                          printf("Appending solar and keyboard\n");
+		          AppendTCB(queue, &solarPanelControlTCB);
+			  AppendTCB(queue, &keyboardConsoleTCB);
+                          append = 0;
+                          remove = 1;
+                          printf("%u\n", NumTasksInTaskQueue(queue));
+                      }
+                  } else if (remove) { 
+                          printf("Removing solar and keyboard\n");
+		          RemoveTCB(queue, &solarPanelControlTCB);
+			  RemoveTCB(queue, &keyboardConsoleTCB);
+                          append = 1;
+                          remove = 0;
+		  }	
 		  aTCBPtr = PopTCB(queue);
 		  aTCBPtr->myTask((aTCBPtr->taskDataPtr));
 		  if(i == 5) {

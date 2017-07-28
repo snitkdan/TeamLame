@@ -16,6 +16,8 @@ typedef struct taskqueue {
   unsigned int num_tasks;  // Current number of tasks in the queue
 } TQ, *TaskQueue;
 
+extern TaskQueue queue;
+
 /*
   @modifies
     queue
