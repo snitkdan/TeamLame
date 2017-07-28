@@ -11,6 +11,8 @@
 #include "pwm_utils.h"
 #include "startup.h"
 
+#define MAX 65536
+
 #define P8_19 "P8_19"
 #define HNUM_19 18
 #define ON 1
@@ -25,9 +27,13 @@ void main(void) {
     // Defines a TCB pointer
     extern TCB thrusterSubsystemTCB;
     extern thrustData tData;
+    extern unsigned int thrusterCommand;
     // Run task in a loop
     int i = 0;
     while(i < 100) {
+      thrusterCommand = randomInteger(0, MAX) % MAX;
+      uint16_t MASK = 0xFFF3;
+      thrusterCommand &= MASK;
       thrusterSubsystemTCB.myTask((void*)&tData);
       usleep(5000000);
       i++;
