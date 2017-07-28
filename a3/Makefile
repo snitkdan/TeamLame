@@ -118,7 +118,7 @@ consoleDisplay.o: $(USER_DIR)/consoleDisplay.c $(GTEST_HEADERS)
 startup.o : $(USER_DIR)/startup.c $(USER_DIR)/startup.h
 	$(CC) $(CPPFLAGS) $(CXXFLAGS) -c $(USER_DIR)/startup.c
 
-scheduler.o: $(USER_DIR)/scheduler.c $(GTEST_HEADERS)
+scheduler.o: $(USER_DIR)/scheduler.c
 	$(CC) $(CPPFLAGS) $(CXXFLAGS) -c $(USER_DIR)/scheduler.c
 
 solarPanelControl.o: $(USER_DIR)/solarPanelControl.c
@@ -146,8 +146,8 @@ adc_test: $(USER_DIR)/adc_test.c adc_utils.o
 	$(CC) -o adc_test $(USER_DIR)/adc_test.c adc_utils.o
 
 # Builds separate tests for individual TCBs
-main_test: $(USER_DIR)/main_test.c pwm_utils.o solarPanelControl.o startup.o
-	$(CC) -o main_test $(USER_DIR)/main_test.c pwm_utils.o solarPanelControl.o startup.o
+main_test: $(USER_DIR)/main_test.c pwm_utils.o solarPanelControl.o startup.o scheduler.o
+	$(CC) -o main_test $(USER_DIR)/main_test.c pwm_utils.o solarPanelControl.o startup.o scheduler.o
 
 
 # Convenience Commands
