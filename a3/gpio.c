@@ -8,109 +8,163 @@
 
 unsigned long GLOBALCOUNTER = 0;
 
+#define BUF_SIZE 16
+
 void main(void)
 {
-    // Define shared variables
-    unsigned int thrusterCommand = 0;
-    unsigned short batteryLvl = 100;
-    unsigned short fuelLvl = 100;
-    unsigned short pConsume = 0;
-    unsigned short pGenerate = 0;
-    bool solarPanelState = false;
-    bool fuelLow = false;
-    bool batteryLow = false;
+  // Define shared variables
+  unsigned int thrusterCommand;
+  unsigned int **batteryLvl;
+  unsigned int batteryBuff[BUF_SIZE];
+  unsigned int current_measurement = 0;
+  unsigned short fuelLvl;
+  unsigned short pConsume;
+  unsigned short pGenerate;
+  bool solarPanelState;
+  bool fuelLow;
+  bool batteryLow;
+  bool solarPanelDeploy;
+  bool solarPanelRetract;
+  bool motorInc;
+  bool motorDec;
+  char command;
+  char response;
+  // Defines some TCBs
+  TCB powerSubsystemTCB;
+  TCB solarPanelControlTCB;
+  TCB keyboardConsoleTCB;
+  TCB vehicleCommsTCB;
+  TCB thrusterSubsystemTCB;
+  TCB satelliteComsTCB;
+  TCB consoleDisplayTCB;
+  TCB warningAlarmTCB;
+  // Defines data structures
+  powerData pData;
+  solarData solData;
+  keyboardData kData;
+  vehicleData vData;
+  thrustData tData;
+  satData sData;
+  consoleData cData;
+  warnData wData;
+  // Define the Task Queue
+  TQ q;
+  TaskQueue queue;
+  // Define the Global Counter
+  unsigned long GLOBALCOUNTER;
 
-    // Defines a task queue
-    // Note: only using 5, (the extra index will be used in future projects)
-    TCB* queue[6];
+  // Define pipe
+  int fd0;
 
-    // Defines some TCBs
-    TCB powerSubsystemTCB;
-    TCB thrusterSubsystemTCB;
-    TCB satelliteComsTCB;
-    TCB consoleDisplayTCB;
-    TCB warningAlarmTCB;
+    // 1. Assign initial values to shared variables
+    thrusterCommand = 0;
+    batteryLvl = (unsigned int**)&batteryBuff;
+    fuelLvl = 100;
+    pConsume = 0;
+    pGenerate = 0;
+    solarPanelState = false;
+    fuelLow = false;
+    batteryLow = false;
+    solarPanelDeploy = false;
+    solarPanelRetract = false;
+    motorInc = false;
+    motorDec = false;
+    command = '\0';
+    response = '\0';
 
-    // Defines a TCB pointer
-    TCB* aTCBPtr;
+    // 2. Turn off led0 initially
+    #ifdef BEAGLEBONE
+    FILE *led0 = fopen("/sys/class/leds/beaglebone:green:usr0/brightness", "w");
+    if (!led0) {
+       fprintf(stderr, "MAIN: Couldn't open led0\n");
+       return;
+    } else {
+       fprintf(led0, "%d", 0); fflush(led0); fclose(led0);
+    }
+    #endif
 
-    // Defines data structures
-    powerData pData;
-    thrustData tData;
-    satData sData;
-    consoleData cData;
-    warnData wData;
-
-    // 1. Turn off all lights initially
-	FILE *led0 = fopen("/sys/class/leds/beaglebone:green:usr0/brightness", "w");
-	FILE *led1 = fopen("/sys/class/leds/beaglebone:green:usr1/brightness", "w");
-	FILE *led2 = fopen("/sys/class/leds/beaglebone:green:usr2/brightness", "w");
-	FILE *led3 = fopen("/sys/class/leds/beaglebone:green:usr3/brightness", "w");
-	//fprintf(led0, "%d", 0); fflush(led0); fclose(led0);
-	//fprintf(led1, "%d", 0); fflush(led1); fclose(led1);
-	//fprintf(led2, "%d", 0); fflush(led2); fclose(led2);
-	//fprintf(led3, "%d", 0); fflush(led3); fclose(led3);
-
-    //.....................................
-    //  Assign shared variables to pointers
-    //.....................................
-    // powerSubsystem
-    pData.batteryLvlPtr = &batteryLvl;
+    // 3. Assign shared variables to pointers
+    // 3.1: powerSubsystem
     pData.solarPanelStatePtr = &solarPanelState;
+    pData.solarPanelDeployPtr = &solarPanelDeploy;
+    pData.solarPanelRetractPtr = &solarPanelRetract;
+    pData.batteryLvlPtr = batteryLvl;
     pData.pConsumePtr = &pConsume;
     pData.pGeneratePtr = &pGenerate;
-
-    // thrusterSubsystem
+    // 3.2: solarPanelControl
+    solData.solarPanelStatePtr = &solarPanelState;
+    solData.solarPanelDeployPtr = &solarPanelDeploy;
+    solData.solarPanelRetractPtr = &solarPanelRetract;
+    solData.motorIncPtr = &motorInc;
+    solData.motorDecPtr = &motorDec;
+    // 3.3: keyboardConsole
+    kData.motorIncPtr = &motorInc;
+    kData.motorDecPtr = &motorDec;
+    // 3.4: vehicleComms
+    vData.commandPtr = &command;
+    vData.responsePtr = &response; //address needed for strings and chars?
+    // 3.5: thrusterSubsystem
     tData.thrusterCommandPtr = &thrusterCommand;
     tData.fuelLvlPtr = &fuelLvl;
-
-    // satelliteComs
+    // 3.6: satelliteComs
     sData.fuelLowPtr = &fuelLow;
     sData.batteryLowPtr = &batteryLow;
     sData.solarPanelStatePtr = &solarPanelState;
-    sData.batteryLvlPtr = &batteryLvl;
+    sData.batteryLvlPtr = batteryLvl;
     sData.fuelLvlPtr = &fuelLvl;
     sData.pConsumePtr = &pConsume;
     sData.pGeneratePtr = &pGenerate;
     sData.thrusterCommandPtr = &thrusterCommand;
-
-    // consoleDisplay
+    sData.commandPtr = &command;
+    sData.responsePtr = &response;
+    // 3.7: consoleDisplay
     cData.fuelLowPtr = &fuelLow;
     cData.batteryLowPtr = &batteryLow;
     cData.solarPanelStatePtr = &solarPanelState;
-    cData.batteryLvlPtr = &batteryLvl;
+    cData.batteryLvlPtr = batteryLvl;
     cData.fuelLvlPtr = &fuelLvl;
     cData.pConsumePtr = &pConsume;
     cData.pGeneratePtr = &pGenerate;
-
-    // warningAlarm
+    // 3.8: warningAlarm
     wData.fuelLowPtr = &fuelLow;
     wData.batteryLowPtr = &batteryLow;
-    wData.batteryLvlPtr = &batteryLvl;
+    wData.batteryLvlPtr = batteryLvl;
     wData.fuelLvlPtr = &fuelLvl;
 
-    // Initialize the TCBs
+    // 4. Initialize the TCBs
+    // 4.1: powerSubsystem
     powerSubsystemTCB.taskDataPtr = (void*)&pData;
     powerSubsystemTCB.myTask = powerSubsystem;
-
+    // 4.2: solarPanelControl
+    solarPanelControlTCB.taskDataPtr = (void*)&solData;
+    solarPanelControlTCB.myTask = solarPanelControl;
+    // 4.3: keyboardConsole
+    keyboardConsoleTCB.taskDataPtr = (void*)&kData;
+    keyboardConsoleTCB.myTask = keyboardConsole;
+    // 4.4: vehicleComms
+    vehicleCommsTCB.taskDataPtr = (void*)&vData;
+    vehicleCommsTCB.myTask = vehicleComms;
+    // 4.5: thrusterSubsystem
     thrusterSubsystemTCB.taskDataPtr = (void*)&tData;
     thrusterSubsystemTCB.myTask = thrusterSubsystem;
-
+    // 4.6: satelliteComs
     satelliteComsTCB.taskDataPtr = (void*)&sData;
     satelliteComsTCB.myTask = satelliteComs;
-
+    // 4.7: consoleDisplay
     consoleDisplayTCB.taskDataPtr = (void*)&cData;
     consoleDisplayTCB.myTask = consoleDisplay;
-
+    // 4.8: warningAlarm
     warningAlarmTCB.taskDataPtr = (void*)&wData;
     warningAlarmTCB.myTask = warningAlarm;
-
     // Initialize the task queue
     queue[0] = &warningAlarmTCB;
     queue[1] = &satelliteComsTCB;
     queue[2] = &thrusterSubsystemTCB;
     queue[3] = &powerSubsystemTCB;
     queue[4] = &consoleDisplayTCB;
+    queue[5] = &solarPanelControlTCB;
+    queue[6] = &keyboardConsoleTCB;
+    queue[7] = &vehicleCommsTCB;
 
     int i = 0;   // queue index
     int timeTask = 0;
@@ -118,7 +172,7 @@ void main(void)
     if (!gpio){
 	     printf("Could not open GPIO\n");
 	     return;
-     }
+    }
     while (true) {
 	     if(i == timeTask) {
 		       fprintf(gpio, "%d", 1);
@@ -130,7 +184,7 @@ void main(void)
 		       fprintf(gpio, "%d", 0);
            fflush(gpio);
 	     }
-	     i = (i + 1) % 5;
+	     i = (i + 1) % 8;
 	     usleep(100000);
     }
     fclose(gpio);
