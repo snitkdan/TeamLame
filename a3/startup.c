@@ -22,7 +22,6 @@ void keyboardConsole(void *keyboardStruct) {}
 void vehicleComms(void *vehicleStruct) {}
 void satelliteComs(void *satStruct) {}
 void consoleDisplay(void *consoleStruct) {}
-void thrusterSubsystem(void *thrustStruct) {}
 void warningAlarm(void *warnStruct) {}
 #endif
 
