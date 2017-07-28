@@ -94,7 +94,7 @@ test_suite : $(OBJ) $(TEST_OBJ)
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) $^ -o $@ -lpthread
 
 # Builds primary files
-rand2.o : $(USER_DIR)/rand2.c $(PROJ_HEADERS) $(GTEST_HEADERS)
+rand2.o : $(USER_DIR)/rand2.c $(PROJ_HEADERS)
 	$(CC) $(CPPFLAGS) $(CXXFLAGS) -c $(USER_DIR)/rand2.c
 
 terminalComs.o: $(USER_DIR)/terminalComs.c $(PROJ_HEADERS) $(GTEST_HEADERS)
