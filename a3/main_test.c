@@ -27,7 +27,7 @@ void main(void) {
     *solData.motorDecPtr = true;
     // Run task in a loop
     int i = 0;
-    while(i < 50) {
+    while(i < 100) {
       solarPanelControlTCB.myTask((void*)&solData);
       usleep(500000);
       i++;
