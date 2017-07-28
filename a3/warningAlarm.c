@@ -36,6 +36,7 @@ FILE *led2 = NULL;
 FILE *led3 = NULL;
 
 void warningAlarm(void *warnStruct) {
+    #ifdef BEAGLEBONE
     // 1.1 Opens the led files and checks they were opened successfully
     if(!led1) {
         led1 = fopen("/sys/class/leds/beaglebone:green:usr1/brightness", "w");
@@ -50,6 +51,7 @@ void warningAlarm(void *warnStruct) {
     checkOpened(led2);
     checkOpened(led3);
 
+    #endif
     // 1.2 Store warning data in local variables
     warnData *wData = (warnData*)warnStruct;
     bool *fuelLowPtr = wData->fuelLowPtr;
@@ -60,7 +62,7 @@ void warningAlarm(void *warnStruct) {
     // 2. Determine in what region the battery/fuel level is (high, med, low)
     int battRegion = checkRegion(batteryLvlPtr, batteryLowPtr);
     int fuelRegion = checkRegion(fuelLvlPtr, fuelLowPtr);
-
+    #ifdef BEAGLEBONE
 	// 3. Section for controlling the LEDS
     if (battRegion == HIGH && fuelRegion == HIGH) {
 		// 3.1 both battery and fuel level are high
@@ -147,6 +149,7 @@ void warningAlarm(void *warnStruct) {
 		    	   
 		}
     } 
+    #endif
 }
 
 // Tracks the state of LED2, whether it's

@@ -31,5 +31,11 @@ void vehicleComms(void *vehicleStruct) {
     vehicleData *vData = (vehicleData*)vehicleStruct;
     char *command = vData->commandPtr;
     char *response = vData->responsePtr;
-	//printf("VEHICLECOMS: %s\n", command);
+    
+    
+     
 }
+
+
+
+

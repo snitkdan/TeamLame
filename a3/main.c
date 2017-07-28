@@ -25,32 +25,6 @@ void main(void) {
 	
 	// make a pipe that can be seen by vehicleComs and vehicle
 	// fork the two processes
-	#ifdef TEST
-	char * myfifo0 = "/tmp/myfifo0";   
-	/* create the FIFO (named pipe) */
-    mkfifo(myfifo0, 0666);
-    /* open the FIFO */
-    fd0 = open(myfifo0, O_RDWR);
-    #endif	
-	pid_t pid;
-	pid = fork();
-	if (pid == (pid_t)0) {
-		while (1) {
-			// vehicle
-			char buf[10];
-			int readState = read(fd0, buf, 10);
-			if (readState > 0) {
-				printf("In vehicle: received %s\n", buf);
-			}
-			printf("Here be the child process..........\n");
-			usleep(10000);
-		}
-	} else if (pid < (pid_t) 0) {
-		// Fork failed
-		fprintf(stderr, "Fork failed\n");
-		return EXIT_FAILURE;
-	} else {
-	#ifdef TEST
 		int i = 0;
 		while (true) {
 		  aTCBPtr = PopTCB(queue);
@@ -67,6 +41,4 @@ void main(void) {
 			i = (i + 1) % 6;
 		}
 		return;
-	#endif
-	}
 }
