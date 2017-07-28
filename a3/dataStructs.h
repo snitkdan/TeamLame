@@ -16,7 +16,7 @@ typedef struct powerSubsystemData {
   bool *solarPanelStatePtr;
   bool *solarPanelDeployPtr;
   bool *solarPanelRetractPtr;
-  unsigned short *batteryLvlPtr; // TO BE CHANGED LATER
+  unsigned int **batteryLvl;
   unsigned short *pConsumePtr;
   unsigned short *pGeneratePtr;
 } powerData;
@@ -54,7 +54,7 @@ typedef struct satelliteComsData {
   unsigned short *pGeneratePtr;
   unsigned int *thrusterCommandPtr;
   char *commandPtr;
-  char *responsePtr;  
+  char *responsePtr;
 } satData;
 
 typedef struct consoleDisplayData {

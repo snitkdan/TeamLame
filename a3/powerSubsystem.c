@@ -10,8 +10,12 @@
 #include <stdbool.h>
 #include "dataStructs.h"
 #include "powerSubsystem.h"
+#include "adc_utils.h"
 
 #define ACH "AIN0"
+#define BUF_SIZE 16
+
+int current_measurement = 0;
 
 void powerSubsystem(void *powerStruct) {
   // Only run this function every major cycle
@@ -34,16 +38,15 @@ void powerSubsystem(void *powerStruct) {
     fprintf(stderr, "ADC Malfunction\n");
     return;
   }
+  // 4. Update the buffer
   int next = nextMeasurement();
-
+  *batteryLvl[current_measurement] = next;
+  current_measurement = (current_measurement + 1) % BUF_SIZE;
 }
 
 static int nextMeasurement() {
   return readADC(ACH);
 }
-
-
-
 
 bool useSolarPanels(bool *solarPanelState, unsigned short *pGenerate, unsigned short *batteryLvl) {
   // 1. If solarPanelState == ON

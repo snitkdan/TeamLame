@@ -13,6 +13,8 @@
 #include "warningAlarm.h"
 #include "scheduler.h"
 
+#define BUF_SIZE 16
+
 #define COMMENTED
 #ifdef COMMENTED
 int terminalComs(char* output) {}
@@ -28,7 +30,8 @@ void warningAlarm(void *warnStruct) {}
 
 // Define shared variables
 unsigned int thrusterCommand;
-unsigned short batteryLvl;
+unsigned int **batteryLvl;
+unsigned int batteryBuff[BUF_SIZE];
 unsigned short fuelLvl;
 unsigned short pConsume;
 unsigned short pGenerate;
@@ -72,7 +75,7 @@ int fd0;
 void Initialize(void) {
   // 1. Assign initial values to shared variables
   thrusterCommand = 0;
-  batteryLvl = 100; // TO BE CHANGED LATER
+  *batteryLvl = batteryBuff;
   fuelLvl = 100;
   pConsume = 0;
   pGenerate = 0;
