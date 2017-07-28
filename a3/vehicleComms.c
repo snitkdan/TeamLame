@@ -60,15 +60,13 @@ void vehicleComms(void *vehicleStruct) {
     fd0 = open(myfifo0, O_RDWR);
     satelliteEnd(fd0, wrt, *command);     //  write to fifo
     vehicleEnd(fd0);		         //  read then write to the fifo
-    satelliteEnd(fd0, rd, *command);     //  read fromn the fifo	
+    satelliteEnd(fd0, rd, *response);     //  read fromn the fifo	
     close(fd0);
 
+    printf("VEHICLE COMS: %c\n", *response);
     /* remove the FIFO */
     unlink(myfifo0);
-    //
-    //printf("\033[1;1H");		
     return;
-    //
 }
 
 void satelliteEnd(int fd0, rw coms, char cmd) {
@@ -92,6 +90,7 @@ void satelliteEnd(int fd0, rw coms, char cmd) {
              size = sizeof("Roger That\n");
              read(fd0, buf, MAX_BUF);
              printf("Received: %s\n", buf);
+             cmd = 'A';
              break;
          }
      }

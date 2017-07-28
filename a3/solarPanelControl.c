@@ -69,7 +69,7 @@ void solarPanelControl(void *solarStruct) {
 	PWM = duty * period;
 
 	// 1.6: Duty cycle and period are in ms.
-	setPWMProperty(P8_13, "duty", duty);
+	setPWMProperty(P8_13, "duty", duty, 0);
 }
 
 static bool initSolarPanel() {
