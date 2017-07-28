@@ -12,11 +12,12 @@
 #include "pwm_utils.h"
 #include "startup.h"
 
-
 #define MAX 65536
 
 #define P8_19 "P8_19"
 #define HNUM_19 18
+#define P8_13 "P8_13"
+#define HNUM_13 15
 #define ON 1
 #define OFF 0
 
@@ -41,7 +42,7 @@ void main(void) {
       i++;
     }
     // Turn off PWM
-    setPWMProperty(P8_19, "run", OFF, HNUM_19);
+    setPWMProperty(P8_13, "run", OFF, HNUM_13);
 
 
 
