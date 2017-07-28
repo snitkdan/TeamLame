@@ -9,7 +9,6 @@
  */
 
 #include <stdio.h>
-
 #include <stdbool.h>
 #include "pwm_utils.h"
 

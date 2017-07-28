@@ -131,6 +131,10 @@ main : $(OBJ) $(PROJ_HEADERS) $(USER_DIR)/main.c
 gpio: $(USER_DIR)/gpio.c $(OBJ) $(PROJ_HEADERS)
 	$(CC) -o gpio $(USER_DIR)/gpio.c $(OBJ)
 
+# Builds PWM test code
+pwm_test: $(USER_DIR)/pwm_test.c $(USER_DIR)/pwm_util.c
+	$(CC) -o pwm_test $(USER_DIR)/pwm_test.c $(USER_DIR)/pwm_util.c 
+
 # Convenience Commands
 copy:
 	scp -r ../a2 root@192.168.7.2:/dev
