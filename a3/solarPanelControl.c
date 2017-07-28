@@ -11,7 +11,7 @@
 #include "TCB.h"
 #include "pwm_utils.h"
 
-static void initSolarPanel();
+static bool initSolarPanel();
 
 #define PIN "P8_13"
 #define PERIOD 500000
