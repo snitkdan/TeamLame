@@ -12,6 +12,7 @@
 #include "startup.h"
 
 #define P8_19 "P8_19"
+#define HNUM_19 18
 #define ON 1
 #define OFF 0
 
@@ -28,11 +29,11 @@ void main(void) {
     int i = 0;
     while(i < 100) {
       thrusterSubsystemTCB.myTask((void*)&tData);
-      usleep(500000);
+      usleep(5000000);
       i++;
     }
     // Turn off PWM
-    setPWMProperty(P8_19, "run", OFF);
+    setPWMProperty(P8_19, "run", OFF, HNUM_19);
 
 
 

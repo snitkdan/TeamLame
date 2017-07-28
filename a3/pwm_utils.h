@@ -41,5 +41,5 @@ bool initPWM(char* pin);
     true on success, and
     false otherwise.
 */
-bool setPWMProperty(char *pin, char *prop, int prop_val);
+bool setPWMProperty(char *pin, char *prop, int prop_val, int hnum);
 #endif

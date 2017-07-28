@@ -15,7 +15,7 @@
 bool pwm_initialized = false;
 
 #define DEVICES "/sys/devices"
-#define HNUM 15
+
 #define MGRNUM 9
 
 bool initPWM(char *pin) {
@@ -50,12 +50,12 @@ bool initPWM(char *pin) {
 	return true;
 }
 
-bool setPWMProperty(char *pin, char *prop, int prop_val) {
+bool setPWMProperty(char *pin, char *prop, int prop_val, int hnum) {
 	// 1. Declare necessary variables
 	FILE *pwm;
 	char prop_path[43];
 	// 2. Construct the file path for desired property
-	sprintf(prop_path, "%s/ocp.3/pwm_test_%s.%i/%s", DEVICES, pin, HNUM, prop);
+	sprintf(prop_path, "%s/ocp.3/pwm_test_%s.%i/%s", DEVICES, pin, hnum, prop);
 	// 3, Open the pwm
 	pwm = fopen(prop_path, "w");
 	if(!pwm) {
