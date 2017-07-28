@@ -44,8 +44,6 @@ void nonblock(int state);
 
 bool consoleModeCmd(char c);
 bool satVehicleCmd(char c);
-#ifdef TODO
 bool motorSpeedCmd(char c);
-#endif
 
 #endif

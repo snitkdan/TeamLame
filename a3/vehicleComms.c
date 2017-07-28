@@ -40,10 +40,11 @@ void vehicleComms(void *vehicleStruct) {
     char *command = vData->commandPtr;
     char *response = vData->responsePtr;
     
+    //printf("\033[20;20H");		
     //*command = 'B';
     char c = getchar();
     if (!satVehicleCmd(c)) {
-        if (consoleModeCmd(c)) ungetc(c, stdin);
+        if (consoleModeCmd(c) || motorSpeedCmd(c)) ungetc(c, stdin);
         *command = '\0';
         return;
     } else {
@@ -59,14 +60,14 @@ void vehicleComms(void *vehicleStruct) {
     fd0 = open(myfifo0, O_RDWR);
     satelliteEnd(fd0, wrt, *command);     //  write to fifo
     vehicleEnd(fd0);		         //  read then write to the fifo
-    satelliteEnd(fd0, rd, *command);     //  read fromn the fifo
-	
+    satelliteEnd(fd0, rd, *command);     //  read fromn the fifo	
     close(fd0);
 
     /* remove the FIFO */
     unlink(myfifo0);
     //
-    return 0;
+    //printf("\033[1;1H");		
+    return;
     //
 }
 
