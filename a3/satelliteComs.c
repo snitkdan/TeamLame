@@ -59,8 +59,16 @@ void satelliteComs(void *satStruct) {
 	
     //int flags = fcntl(STDIN_FILENO, F_GETFL, 0);
     //fcntl(STDIN_FILENO, F_SETFL, flags | O_NONBLOCK);
-	
-	
+    //printf("\033[2J");		
+    //printf("\033[1;1H");
+    /*printf( 	    
+	"Solar Panels: %9s, " 
+	"Battery Level: %3hu, "
+	"Fuel Level: %3hu, "
+	"Power Consumption: %2hu, "
+	"Power Generation: %2hu\n", 
+	 solarPanelString, *batteryLvl, *fuelLvl, *pConsume, *pGenerate);
+   */
 }
 
 void maskBit(unsigned int *thrusterCommand) {

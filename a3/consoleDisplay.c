@@ -76,7 +76,7 @@ void consoleDisplay(void *consoleStruct) {
 							 battString, fuelString);
 			terminalComs(output);
 		} else {
-			if(satVehicleCmd(c)) ungetc(c, stdin);
+			if(satVehicleCmd(c) || motorSpeedCmd(c)) ungetc(c, stdin);
 		}
 	}
 

@@ -51,13 +51,12 @@ bool consoleModeCmd(char c) {
 	       c == ANNUNCIATION;
 }
 
-#ifdef TODO
 bool motorSpeedCmd(char c) {
-	if (taskQueue == 8) {
+	/*if (taskQueue == 8) {
 		return c == SPEEDINC ||
-		       c == SPEEDDEC ||
+		       c == SPEEDDEC;
 	}
-	return false;
+	return false; */
+	return c == SPEEDINC ||
+	       c == SPEEDDEC;
 }
-
-#endif

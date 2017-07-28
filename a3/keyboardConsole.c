@@ -5,8 +5,11 @@
 
 #include <stdio.h>
 #include <stdbool.h>
+#include <fcntl.h>
+#include <unistd.h>
 #include "dataStructs.h"
 #include "TCB.h"
+#include "nonBlockingKeys.h"
 #define MAX 300
 
 void keyboardConsole(void *keyboardStruct) {
@@ -22,5 +25,25 @@ void keyboardConsole(void *keyboardStruct) {
     bool *motorInc = kData->motorIncPtr;
     bool *motorDec = kData->motorDecPtr;
 
-    // Even more fun, Abdul - Love, Rad
+   
+    int flags = fcntl(STDIN_FILENO, F_GETFL, 0);
+    fcntl(STDIN_FILENO, F_SETFL, flags | O_NONBLOCK);
+    char c = getchar();
+    //char c = 'd';
+    if (!motorSpeedCmd(c)) {
+        if (consoleModeCmd(c) || satVehicleCmd(c)) ungetc(c, stdin);
+        *motorInc = false;
+        *motorDec = false;
+    } else {
+        if (c == SPEEDINC) {
+            *motorInc = true;
+            *motorDec = false;
+        } else {
+            *motorDec = true;
+            *motorInc = false;
+        }
+
+    }
+    printf("motor Inc = %d, motor Dec = %d\n", *motorInc, *motorDec);
+    
 }
