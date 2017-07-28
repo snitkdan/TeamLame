@@ -10,6 +10,8 @@
 #include "warningAlarm.h"
 #include "pwm_utils.h"
 #include "startup.h"
+#include<stdint.h>
+
 
 #define MAX 65536
 
