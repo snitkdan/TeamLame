@@ -71,6 +71,7 @@ void thrusterSubsystem(void *thrustStruct) {
   // 5.2: Set duty / period
   double duty = (cc.magnitude > 0) ? (cc.duration / cc.magnitude) : 0;
   double period = cc.magnitude;
+  printf("THRUSTERS: Duty: %f, Period: %f\n", duty, period);
   setPWMProperty(P8_19, "duty", duty, HNUM_19);
   setPWMProperty(P8_19, "period", period, HNUM_19);
 }
