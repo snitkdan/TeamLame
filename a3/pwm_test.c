@@ -8,7 +8,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 
-#define PIN "P9_14"
+#define PIN "P8_13"
 #define PERIOD 500000
 #define ON 1
 #define OFF 0
