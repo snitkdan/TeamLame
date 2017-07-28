@@ -14,22 +14,26 @@
 
 #include <stdbool.h>
 /*
+    @param ach
+      ADC channel
     @modifies
       BeagleBone
     @effects
       initializes the ADC at
-      channel AIN0 on BeagleBone.
+      channel ach on BeagleBone.
     @returns
       true on success, and
       false otherwise.
 */
-bool initADC();
+bool initADC(char *ach);
 
 /*
+  @param ach
+    ADC channel
   @returns
     ADC reading from channel
     AIN0 on Beaglebone on success,
     and -1 on failure.
 */
-int readADC();
+int readADC(char *ach);
 #endif
