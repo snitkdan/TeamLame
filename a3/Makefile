@@ -132,12 +132,15 @@ gpio: $(USER_DIR)/gpio.c $(OBJ) $(PROJ_HEADERS)
 	$(CC) -o gpio $(USER_DIR)/gpio.c $(OBJ)
 
 # Builds PWM test code
-pwm_test: $(USER_DIR)/pwm_test.c $(USER_DIR)/pwm_util.c
-	$(CC) -o pwm_test $(USER_DIR)/pwm_test.c $(USER_DIR)/pwm_util.c 
+pwm_util.o: $(USER_DIR)/pwm_util.c $(USER_DIR)/pwm_util.h
+	$(CC) $(CPPFLAGS) $(CXXFLAGS) -c $(USER_DIR)/pwm_util.c
+
+pwm_test: $(USER_DIR)/pwm_test.c pwm_util.o
+	$(CC) -o pwm_test $(USER_DIR)/pwm_test.c pwm_util.o
 
 # Convenience Commands
 copy:
-	scp -r ../a2 root@192.168.7.2:/dev
+	scp -r ../a3 root@192.168.7.2:/dev
 
 clean:
 	rm -f $(TESTS) main gpio gtest.a gtest_main.a *.o
