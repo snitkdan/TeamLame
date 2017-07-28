@@ -33,8 +33,17 @@ bool initPWM(char *pin) {
 		return false;
 	}
 	// 4. Configure the PWM
-	fprintf(pwm, "am33xx_pwm");
-	fprintf(pwm, "%s", pin_path);
+	int out = fprintf(pwm, "am33xx_pwm");
+	if(out < 0) {
+		fprintf(stderr, "Write error\n");
+		return false;
+	}
+	fflush(pwm);
+	out = fprintf(pwm, "%s", pin_path);
+	if(out < 0) {
+		fprintf(stderr, "Write error\n");
+		return false;
+	}
 	fflush(pwm);
 	// 5. Clean up
 	fclose(pwm);
