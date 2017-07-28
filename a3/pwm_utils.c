@@ -21,10 +21,10 @@ bool pwm_initialized = false;
 bool initPWM(char *pin) {
 	// 1. Declare necessary variables
 	FILE *pwm;
-	char mgr_path[50];
+	char mgr_path[35];
 	char pin_path[20];
 	// 2. Construct file paths for the mgr & pin
-	sprintf(mgr_path, "%s/%s/%i/slots", DEVICES, "bone_capemgr.", MGRNUM);
+	sprintf(mgr_path, "%s/%s%i/slots", DEVICES, "bone_capemgr.", MGRNUM);
 	sprintf(pin_path, "bone_pwm_%s", pin);
 	// 3. Open the pwm
 	pwm = fopen(mgr_path, "w");
