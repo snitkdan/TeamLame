@@ -26,7 +26,6 @@
 #define BUF_SIZE 16
 extern unsigned int current_measurement;
 extern unsigned int batteryBuff[BUF_SIZE];
-static int nextMeasurement();
 
 #define DEBUG
 int fd = 0;
@@ -52,17 +51,17 @@ void satelliteComs(void *satStruct) {
     unsigned int *thrusterCommand = sData->thrusterCommandPtr;
 	char *command = sData->commandPtr;
     char *response = sData->responsePtr;
-	
+
 
     // 2. Retrieve random number, mask and assign thrusterCommand to it
     *thrusterCommand = randomInteger(0, MAX) % MAX;
     maskBit(thrusterCommand);
-	
+
     char *solarPanelString = (*solarPanelState) ? "Deployed":"Retracted";
     char *fuelString = (*fuelLow)? "YES":"NO";
     char *battString = (*batteryLow)? "YES":"NO";
     char output[MAX];
-	
+
 	static int fd1;
 	static int firstTime = 1;
 	if (firstTime == 1) {
@@ -72,19 +71,19 @@ void satelliteComs(void *satStruct) {
 		    exit(EXIT_FAILURE);
 	    }
 		dprintf(fd1, "\033[2J");
-		dprintf(fd1, "\033[1;1H");		
+		dprintf(fd1, "\033[1;1H");
 	    firstTime--;
 	}
 	dprintf(fd1, "\033[1;1H");
 	dprintf(fd1, "EARTH DISPLAY TERMINAL\n");
-    dprintf(fd1, 	    
-	"Solar Panels: %9s, " 
-	"Battery Level: %3hu, "
+    dprintf(fd1,
+	"Solar Panels: %9s, "
+	"Battery Level: %3u, "
 	"Fuel Level: %3hu, "
 	"Power Consumption: %2hu, "
-	"Power Generation: %2hu\n", 
+	"Power Generation: %2hu\n",
 	 solarPanelString, batteryBuff[(current_measurement > 0 ? current_measurement - 1 : 0)] * 20, *fuelLvl, *pConsume, *pGenerate);
-	 
+
 	 if (*response == 'A') {
 		 dprintf(fd1, "\nVehicle Response: %c %c\n", *response, *command);
 	 }

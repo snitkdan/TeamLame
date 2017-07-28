@@ -2,9 +2,15 @@
 #include <stdbool.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include <fcntl.h>
+#include <sys/stat.h>
+#include <sys/types.h>
 #include "TCB.h"
 #include "dataStructs.h"
 #include "warningAlarm.h"
+//#include "startup.h"
+#include "scheduler.h"
+
 
 unsigned long GLOBALCOUNTER = 0;
 
@@ -48,10 +54,8 @@ void main(void)
   consoleData cData;
   warnData wData;
   // Define the Task Queue
-  TQ q;
-  TaskQueue queue;
   // Define the Global Counter
-  unsigned long GLOBALCOUNTER;
+  unsigned long GLOBALCOUNTER = 0;
 
   // Define pipe
   int fd0;
@@ -157,6 +161,8 @@ void main(void)
     warningAlarmTCB.taskDataPtr = (void*)&wData;
     warningAlarmTCB.myTask = warningAlarm;
     // Initialize the task queue
+    TCB* queue[8];
+    TCB* aTCBPtr;
     queue[0] = &warningAlarmTCB;
     queue[1] = &satelliteComsTCB;
     queue[2] = &thrusterSubsystemTCB;

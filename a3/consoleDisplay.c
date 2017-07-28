@@ -20,18 +20,17 @@
 #define SCALE 20
 extern unsigned int current_measurement;
 extern unsigned int batteryBuff[BUF_SIZE];
-static int nextMeasurement();
 
 //#define OFF
 /*
   @param consoleStruct
-    struct containing the shared 
+    struct containing the shared
     data for consoleDisplay.
   @modifies
-    nothing    
+    nothing
   @effects
     stores the data from the shared variables
-    in the form of satelliteStatus and 
+    in the form of satelliteStatus and
     annunciation, passing them to terminalComs.c
 */
 void consoleDisplay(void *consoleStruct) {
@@ -43,7 +42,7 @@ void consoleDisplay(void *consoleStruct) {
 	}
     start = GLOBALCOUNTER;
 	*/
-    //printf("INSIDE consoleDisplay\n");	
+    //printf("INSIDE consoleDisplay\n");
     // 1.1 Assign the data of consoleStruct into local variables
     consoleData *cData = (consoleData*)consoleStruct;
     bool *fuelLow = cData->fuelLowPtr;
@@ -54,30 +53,30 @@ void consoleDisplay(void *consoleStruct) {
     unsigned short *pConsume = cData->pConsumePtr;
     unsigned short *pGenerate = cData->pGeneratePtr;
 
-    // 1.2 Define necessary string storage 
+    // 1.2 Define necessary string storage
     char *solarPanelString = (*solarPanelState) ? "Deployed":"Retracted";
     char *fuelString = (*fuelLow)? "YES":"NO";
     char *battString = (*batteryLow)? "YES":"NO";
-    
-   
+
+
     int flags = fcntl(STDIN_FILENO, F_GETFL, 0);
 	fcntl(STDIN_FILENO, F_SETFL, flags | O_NONBLOCK);
 	char c = getchar();
 	//printf("CONSOLE: c = %d, %c\n", c, c);
 	if (c != 255) {
-		char output[MAX];	
+		char output[MAX];
 		if (c == SATELLITESTATUS) {
 			printf("ConsoleDisplay: Showing Satellite Status...\n");
-			sprintf(output, "**Satellite Status\n"    	    
-							"Solar Panels: %9s, " 
-							"Battery Level: %3hu, "
+			sprintf(output, "**Satellite Status\n"
+							"Solar Panels: %9s, "
+							"Battery Level: %3u, "
 							"Fuel Level: %3hu, "
 							"Power Consumption: %2hu, "
-							"Power Generation: %2hu\n", 
+							"Power Generation: %2hu\n",
 							 solarPanelString, batteryBuff[(current_measurement > 0 ? current_measurement - 1 : 0)] * 20, *fuelLvl, *pConsume, *pGenerate);
-			terminalComs(output);								 
+			terminalComs(output);
 		} else if (c == ANNUNCIATION) {
-			printf("ConsoleDisplay: Showing Annunciation Mode...\n");			
+			printf("ConsoleDisplay: Showing Annunciation Mode...\n");
 			sprintf(output, "Annunciaton\n"
 							"Battery Low: %3s "
 							"Fuel Low: %3s",
