@@ -44,7 +44,7 @@ void powerSubsystem(void *powerStruct) {
   current_measurement = (current_measurement + 1) % BUF_SIZE;
   // 2. Update powerConsumption && powerGeneration
   powerConsumption(pConsume);
-  useSolarPanels(solarPanelState, pGenerate, batteryLvl);
+  useSolarPanels(solarPanelState, solarPanelDeploy, solarPanelRetract, pGenerate, batteryLvl);
 }
 
 static int nextMeasurement() {
