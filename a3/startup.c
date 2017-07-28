@@ -13,8 +13,7 @@
 #include "warningAlarm.h"
 #include "scheduler.h"
 
-//#define BEAGLEBONE
-// TEMPORARY
+#define COMMENTED
 #ifdef COMMENTED
 int terminalComs(char* output) {}
 unsigned int randomInteger(unsigned int low, unsigned int high) {}
