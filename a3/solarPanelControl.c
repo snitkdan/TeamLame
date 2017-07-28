@@ -14,7 +14,7 @@
 static bool initSolarPanel();
 
 #define P8_13 "P8_13"
-#define HNUM_13 16
+#define HNUM_13 15
 #define PERIOD 500000
 #define DEFAULT_DUTY 250000
 #define ON 1

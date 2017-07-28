@@ -25,27 +25,24 @@ void main(void) {
     Initialize();
     ActivateTimeBase();
     // Defines a TCB pointer
-    extern TCB powerSubsystemTCB;
+    /*extern TCB powerSubsystemTCB;
     extern int current_measurement;
-    extern unsigned int batteryBuff[BUF_SIZE];
-    /* PWM
+    extern unsigned int batteryBuff[BUF_SIZE];*/
     extern TCB thrusterSubsystemTCB;
     extern thrustData tData;
     extern unsigned int thrusterCommand;
     extern TCB solarPanelControlTCB;
     extern solarData solData;
     *solData.motorIncPtr = true;
-    */
+
     // Run task in a loop
     int i = 0;
     while(i < 100) {
-      /*thrusterCommand = randomInteger(0, MAX) % MAX;
+      thrusterCommand = randomInteger(0, MAX) % MAX;
       uint16_t MASK = 0xFFF3;
       thrusterCommand &= MASK;
       thrusterSubsystemTCB.myTask((void*)&tData);
-      solarPanelControlTCB.myTask((void*)&solData);*/
-      powerSubsystemTCB.myTask(powerSubsystemTCB.taskDataPtr);
-      printf("Current measurement: %d\n", batteryBuff[current_measurement]);
+      solarPanelControlTCB.myTask((void*)&solData);
       usleep(4000000);
       i++;
     }

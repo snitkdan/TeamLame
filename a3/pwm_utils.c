@@ -60,7 +60,7 @@ bool setPWMProperty(char *pin, char *prop, double prop_val, int hnum) {
 		return false;
 	}
 	// 4. Set the property
-	fprintf(pwm, "%f", prop_val);
+	fprintf(pwm, "%d", (int)prop_val);
 	fflush(pwm);
 	// 5. Clean up
 	fclose(pwm);
