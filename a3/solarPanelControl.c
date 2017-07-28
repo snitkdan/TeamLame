@@ -42,7 +42,7 @@ void solarPanelControl(void *solarStruct) {
 
 	// 1.3: Check PWM initialization
 	if(!pwm_init) {
-		initSolarPanel();
+		pwm_init = initSolarPanel();
 	}
 
 	// 1.3: Declare variables
@@ -57,7 +57,7 @@ void solarPanelControl(void *solarStruct) {
 		//if need speed to increase then duty (run time ) should decrease
 		if(*motorInc == 1) {
 			duty -= ((5 * duty) / 100);
-			duty = (duty > 100) ? 100 : duty;
+			duty = (duty > PERIOD) ? PERIOD : duty;
 		} else if (*motorDec == 1) {
 			//if need speed to decrease then duty (run time ) should increase
 			duty += ((5*duty) / 100);
@@ -71,10 +71,10 @@ void solarPanelControl(void *solarStruct) {
 	setPWMProperty(PIN, "duty", duty);
 }
 
-static void initSolarPanel() {
+static bool initSolarPanel() {
 	if(!initPWM(PIN)) {
     fprintf(stderr, "PWM Malfunction\n");
-    return;
+    return false;
   }
   // 2. Set the period to 500 ms
   setPWMProperty(PIN, "period", PERIOD);
@@ -82,4 +82,5 @@ static void initSolarPanel() {
 	setPWMProperty(PIN, "duty", 250000);
   // 4. Turn on the output
   setPWMProperty(PIN, "run", ON);
+	return true;
 }
