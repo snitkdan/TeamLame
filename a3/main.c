@@ -15,7 +15,7 @@
 /*
   1. Update public interface for PWM utils
   to include doubles and update existing code
-  accordingly.
+  accordingly. (DONE)
 
   2. Get ADC queue working with a
   "next" method and declaring
@@ -72,6 +72,7 @@ void main(void) {
                           append = 1;
                           remove = 0;
 		  }	
+
 		  aTCBPtr = PopTCB(queue);
 		  aTCBPtr->myTask((aTCBPtr->taskDataPtr));
 		  if(i == 5) {

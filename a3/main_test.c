@@ -14,12 +14,9 @@
 
 #define MAX 65536
 
-#define P8_19 "P8_19"
-#define HNUM_19 18
-#define P8_13 "P8_13"
-#define HNUM_13 15
 #define ON 1
 #define OFF 0
+#define BUF_SIZE 16
 
 extern unsigned long GLOBALCOUNTER;
 
@@ -28,24 +25,31 @@ void main(void) {
     Initialize();
     ActivateTimeBase();
     // Defines a TCB pointer
+    extern TCB powerSubsystemTCB;
+    extern int current_measurement;
+    extern unsigned int batteryBuff[BUF_SIZE];
+    /* PWM
     extern TCB thrusterSubsystemTCB;
     extern thrustData tData;
     extern unsigned int thrusterCommand;
     extern TCB solarPanelControlTCB;
     extern solarData solData;
     *solData.motorIncPtr = true;
+    */
     // Run task in a loop
     int i = 0;
     while(i < 100) {
-      thrusterCommand = randomInteger(0, MAX) % MAX;
+      /*thrusterCommand = randomInteger(0, MAX) % MAX;
       uint16_t MASK = 0xFFF3;
       thrusterCommand &= MASK;
       thrusterSubsystemTCB.myTask((void*)&tData);
-      solarPanelControlTCB.myTask((void*)&solData);
-      usleep(1000000);
+      solarPanelControlTCB.myTask((void*)&solData);*/
+      powerSubsystemTCB.myTask(powerSubsystemTCB.taskDataPtr);
+      printf("Current measurement: %d\n", batteryBuff[current_measurement]);
+      usleep(4000000);
       i++;
     }
     // Turn off PWM
-    setPWMProperty(P8_13, "run", OFF, HNUM_13);
-    setPWMProperty(P8_19, "run", OFF, HNUM_19);
+    //setPWMProperty(P8_13, "run", OFF, HNUM_13);
+    //setPWMProperty(P8_19, "run", OFF, HNUM_19);
 }
