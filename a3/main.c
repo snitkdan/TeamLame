@@ -48,6 +48,14 @@ void main(void) {
 	// fork the two processes
 		int i = 0;
 		while (true) {
+		  if ((solarPanelState == 1 && solarPanelDeploy == 1) || (solarPanelState == 0 && solarPanelRetract == 1)) {
+		      RemoveTCB(queue, &solarPanelControlTCB);
+			  RemoveTCB(queue, &keyboardConsoleTCB);  
+		 else {
+		      AppendTCB(queue, &solarPanelControlTCB);
+			  AppendTCB(queue, &keyboardConsoleTCB);			  
+		  }
+			
 		  aTCBPtr = PopTCB(queue);
 		  aTCBPtr->myTask((aTCBPtr->taskDataPtr));
 		  if(i == 5) {
