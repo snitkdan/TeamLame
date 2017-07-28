@@ -9,7 +9,7 @@
 #include <unistd.h>
 
 #define PIN "P9_14"
-#define PERIOD 500000000
+#define PERIOD 500000
 #define ON 1
 #define OFF 0
 
@@ -22,7 +22,7 @@ int main() {
   // 2. Set the period to 500 ms
   setPWMProperty(PIN, "period", PERIOD);
   // 3. Set the duty cycle to 250 ms
-	setPWMProperty(PIN, "duty", 250000000);
+	setPWMProperty(PIN, "duty", 250000);
   // 4. Turn on the output
   setPWMProperty(PIN, "run", ON);
   // 5. Delay and turn off
