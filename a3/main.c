@@ -11,6 +11,27 @@
 #include "startup.h"
 #include "scheduler.h"
 
+// TODO:
+/*
+  1. Update public interface for PWM utils
+  to include doubles and update existing code
+  accordingly.
+
+  2. Get ADC queue working with a
+  "next" method and declaring
+  the right local variables
+  for it in startup.c
+
+  3. Get thrusterSubsystem &
+  solarPanelControl to communicate
+  on separate PWM channels
+  at the same time.
+
+  4. Update the main Makefile
+  to integrate the whole
+  project.
+*/
+
 extern unsigned long GLOBALCOUNTER;
 
 void main(void) {
@@ -22,7 +43,7 @@ void main(void) {
     // Defines a TCB pointer
     TCB_Ptr aTCBPtr;
     // Queue index
-	
+
 	// make a pipe that can be seen by vehicleComs and vehicle
 	// fork the two processes
 		int i = 0;
