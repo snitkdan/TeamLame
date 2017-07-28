@@ -39,7 +39,7 @@ void powerSubsystem(void *powerStruct);
   @returns
     TRUE if the exit state of the solar panel is ON.
 */
-bool useSolarPanels(bool *solarPanelState, unsigned short *pGenerate, unsigned int **batteryLvl);
+bool useSolarPanels(bool *solarPanelState, bool *solarPanelDeploy, bool *solarPanelRetract, unsigned short *pGenerate, unsigned int **batteryLvl);
 
 /*
   @param pConsume
