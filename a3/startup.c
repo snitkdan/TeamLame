@@ -25,7 +25,7 @@ void vehicleComms(void *vehicleStruct) {}
 void satelliteComs(void *satStruct) {}
 void consoleDisplay(void *consoleStruct) {}
 void warningAlarm(void *warnStruct) {}
-void solarPanelControl(void *solarStruct) {}
+//void solarPanelControl(void *solarStruct) {}
 //void thrusterSubsystem(void *thrustStruct) {}
 #endif
 

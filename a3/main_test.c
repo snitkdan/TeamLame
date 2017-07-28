@@ -25,16 +25,12 @@ void main(void) {
     Initialize();
     ActivateTimeBase();
     // Defines a TCB pointer
-    /*extern TCB powerSubsystemTCB;
-    extern int current_measurement;
-    extern unsigned int batteryBuff[BUF_SIZE];*/
     extern TCB thrusterSubsystemTCB;
     extern thrustData tData;
     extern unsigned int thrusterCommand;
     extern TCB solarPanelControlTCB;
     extern solarData solData;
     *solData.motorIncPtr = true;
-
     // Run task in a loop
     int i = 0;
     while(i < 100) {
@@ -43,7 +39,7 @@ void main(void) {
       thrusterCommand &= MASK;
       thrusterSubsystemTCB.myTask((void*)&tData);
       solarPanelControlTCB.myTask((void*)&solData);
-      usleep(4000000);
+      usleep(1000000);
       i++;
     }
     // Turn off PWM
