@@ -15,7 +15,7 @@
 /*
   1. Update public interface for PWM utils
   to include doubles and update existing code
-  accordingly.
+  accordingly. (DONE)
 
   2. Get ADC queue working with a
   "next" method and declaring
@@ -50,12 +50,12 @@ void main(void) {
 		while (true) {
 		  if ((solarPanelState == 1 && solarPanelDeploy == 1) || (solarPanelState == 0 && solarPanelRetract == 1)) {
 		      RemoveTCB(queue, &solarPanelControlTCB);
-			  RemoveTCB(queue, &keyboardConsoleTCB);  
+			  RemoveTCB(queue, &keyboardConsoleTCB);
 		 else {
 		      AppendTCB(queue, &solarPanelControlTCB);
-			  AppendTCB(queue, &keyboardConsoleTCB);			  
+			  AppendTCB(queue, &keyboardConsoleTCB);
 		  }
-			
+
 		  aTCBPtr = PopTCB(queue);
 		  aTCBPtr->myTask((aTCBPtr->taskDataPtr));
 		  if(i == 5) {

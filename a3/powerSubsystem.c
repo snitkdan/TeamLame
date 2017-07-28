@@ -11,23 +11,7 @@
 #include "dataStructs.h"
 #include "powerSubsystem.h"
 
-// ADC:
-/*
-
-  Raw Voltage = V_ref * (ADC_val / 2^bit-width)
-
-  e.g. MAX (1.8 V) -> (1.8 * 4095) / 2^12 = 1.799... = 1.8
-
-*/
-
-// Scaling
-/*
-
-  Scaled Voltage = Raw Voltage * 20
-
-  e.g. MAX (36 V) -> 1.8 * 20 = 36
-
-*/
+#define ACH "AIN0"
 
 void powerSubsystem(void *powerStruct) {
   // Only run this function every major cycle
@@ -42,29 +26,24 @@ void powerSubsystem(void *powerStruct) {
   unsigned short *batteryLvl = pData->batteryLvlPtr;
   unsigned short *pConsume = pData->pConsumePtr;
   unsigned short *pGenerate = pData->pGeneratePtr;
-  // 2. Update powerConsumption
+  // 2. Update powerConsumption && powerGeneration
   powerConsumption(pConsume);
-  // 3. Check the solar panels & update batteryLvl accordingly
-  if (useSolarPanels(solarPanelState, pGenerate, batteryLvl)) {
-    // 3.1: batteryLvl = batteryLvl - pConsume + pGenerate
-    if ((*batteryLvl + *pGenerate) < *pConsume) {
-      *batteryLvl = 0;
-      *pConsume = 0;
-    } else {
-      *batteryLvl += *pGenerate - *pConsume;
-      // 3.1.1: batteryLvl maxes out at 100
-      *batteryLvl = (*batteryLvl > 100) ? 100 : *batteryLvl;
-    }
-  } else {
-    // 3.2: batteryLvl = batteryLvl - 3 * pConsume
-	if (3*(*pConsume) > *batteryLvl) { // prevents overflow
-		  *batteryLvl = 0;
-	    *pConsume = 0;
-    }else {
-      *batteryLvl -= 3*(*pConsume);
-	}
+  useSolarPanels(solarPanelState, pGenerate, batteryLvl);
+  // 3. Get the next measurement
+  if(!initADC()) {
+    fprintf(stderr, "ADC Malfunction\n");
+    return;
   }
+  int next = nextMeasurement();
+
 }
+
+static int nextMeasurement() {
+  return readADC(ACH);
+}
+
+
+
 
 bool useSolarPanels(bool *solarPanelState, unsigned short *pGenerate, unsigned short *batteryLvl) {
   // 1. If solarPanelState == ON
