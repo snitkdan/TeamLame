@@ -32,17 +32,13 @@ bool initPWM(char *pin) {
 	// 4. Configure the PWM
 	int out = fprintf(pwm, "am33xx_pwm");
 	if(out < 0) {
-		#ifdef ERR_STATEMENT
 		fprintf(stderr, "Write error\n");
-		#endif
 		return false;
 	}
 	fflush(pwm);
 	out = fprintf(pwm, "%s", pin_path);
 	if(out < 0) {
-		#ifdef ERR_STATEMENT
 		fprintf(stderr, "Write error\n");
-		#endif
 		return false;
 	}
 	fflush(pwm);
@@ -60,9 +56,7 @@ bool setPWMProperty(char *pin, char *prop, double prop_val, int hnum) {
 	// 3, Open the pwm
 	pwm = fopen(prop_path, "w");
 	if(!pwm) {
-		#ifdef ERR_STATEMENT
 		fprintf(stderr, "Failed to update %s\n", prop);
-		#endif
 		return false;
 	}
 	// 4. Set the property
