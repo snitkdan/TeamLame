@@ -77,7 +77,7 @@ int fd0;
 void Initialize(void) {
   // 1. Assign initial values to shared variables
   thrusterCommand = 0;
-  batteryLvl = &batteryBuff;
+  batteryLvl = (unsigned int**)&batteryBuff;
   fuelLvl = 100;
   pConsume = 0;
   pGenerate = 0;

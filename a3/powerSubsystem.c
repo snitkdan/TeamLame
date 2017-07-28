@@ -31,18 +31,17 @@ void powerSubsystem(void *powerStruct) {
   unsigned int **batteryLvl = pData->batteryLvlPtr;
   unsigned short *pConsume = pData->pConsumePtr;
   unsigned short *pGenerate = pData->pGeneratePtr;
-  // 2. Update powerConsumption && powerGeneration
-  powerConsumption(pConsume);
-  useSolarPanels(solarPanelState, pGenerate, batteryLvl);
-  // 3. Get the next measurement
+  // 4. Update the buffer
   if(!initADC()) {
     fprintf(stderr, "ADC Malfunction\n");
     return;
   }
-  // 4. Update the buffer
   int next = nextMeasurement();
   *batteryLvl[current_measurement] = next;
   current_measurement = (current_measurement + 1) % BUF_SIZE;
+  // 2. Update powerConsumption && powerGeneration
+  powerConsumption(pConsume);
+  useSolarPanels(solarPanelState, pGenerate, batteryLvl);
 }
 
 static int nextMeasurement() {
