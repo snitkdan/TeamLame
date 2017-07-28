@@ -15,14 +15,14 @@
 bool pwm_initialized = false;
 
 #define DEVICES "/sys/devices"
-#define HNUM 14
+#define HNUM 15
 #define MGRNUM 9
 
 bool initPWM(char *pin) {
 	// 1. Declare necessary variables
 	FILE *pwm;
 	char mgr_path[35];
-	char pin_path[20];
+	char pin_path[15];
 	// 2. Construct file paths for the mgr & pin
 	sprintf(mgr_path, "%s/%s%i/slots", DEVICES, "bone_capemgr.", MGRNUM);
 	sprintf(pin_path, "bone_pwm_%s", pin);
@@ -44,7 +44,7 @@ bool initPWM(char *pin) {
 bool setPWMProperty(char *pin, char *prop, int prop_val) {
 	// 1. Declare necessary variables
 	FILE *pwm;
-	char prop_path[60];
+	char prop_path[45];
 	// 2. Construct the file path for desired property
 	sprintf(prop_path, "%s/ocp.2/pwm_test_%s.%i/%s", DEVICES, pin, HNUM, prop);
 	// 3, Open the pwm
