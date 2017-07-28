@@ -26,7 +26,7 @@ int main() {
   // 4. Turn on the output
   setPWMProperty(PIN, "run", ON);
   // 5. Delay and turn off
-  usleep(5000000)
+  usleep(5000000);
   setPWMProperty(PIN, "run", OFF);
   return EXIT_SUCCESS;
 }
