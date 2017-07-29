@@ -38,7 +38,6 @@ void powerSubsystem(void *powerStruct) {
   static bool adc_init = false;
   if(!adc_init) {
     adc_init = initADC();
-    fprintf(stderr, "ADC Malfunction\n");
     return;
   }
   int next = nextMeasurement();
