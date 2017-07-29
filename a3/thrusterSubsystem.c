@@ -14,8 +14,8 @@
 #include "thrusterSubsystem.h"
 #include "pwm_utils.h"
 
-#define P9_14 "P8_19"
-#define HNUM_14 16
+#define P9_14 "P8_13"
+#define HNUM_14 17
 
 #define ON 1
 #define OFF 0
