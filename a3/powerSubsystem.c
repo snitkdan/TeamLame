@@ -35,8 +35,10 @@ void powerSubsystem(void *powerStruct) {
   bool *solarPanelDeploy = pData->solarPanelDeployPtr;
   bool *solarPanelRetract = pData->solarPanelRetractPtr;
   // 4. Update the buffer
-  if(!initADC()) {
-    //fprintf(stderr, "ADC Malfunction\n");
+  static bool adc_init = false;
+  if(!adc_init) {
+    adc_init = initADC();
+    fprintf(stderr, "ADC Malfunction\n");
     return;
   }
   int next = nextMeasurement();
