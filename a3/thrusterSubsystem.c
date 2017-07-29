@@ -64,14 +64,14 @@ void thrusterSubsystem(void *thrustStruct) {
   if(!pwm_19_init) {
 		pwm_19_init = initThrusters();
     if(!pwm_19_init) {
-      fprintf(stderr, "PWM_19 Malfunction\n");
+      //fprintf(stderr, "PWM_19 Malfunction\n");
       return;
     }
 	}
   // 5.2: Set duty / period
   double duty = (cc.duration > 0) ? (cc.magnitude / cc.duration) : 0;
   double period = cc.duration;
-  printf("THRUSTERS: Duty: %f, Period: %f\n", duty, period);
+  //printf("THRUSTERS: Duty: %f, Period: %f\n", duty, period);
   setPWMProperty(P9_14, "period", period, HNUM_14);
   setPWMProperty(P9_14, "duty", duty, HNUM_14);
 }
