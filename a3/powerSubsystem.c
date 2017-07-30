@@ -43,10 +43,13 @@ void powerSubsystem(void *powerStruct) {
   int next = nextMeasurement();
   batteryBuff[current_measurement] = next;
   current_measurement = (current_measurement + 1) % BUF_SIZE;
-  // 3. Update powerConsumption && powerGeneration
-  // deployed and retracted bug
-  // updating battery with potentiometer
-  // rescaling v to mv
+  // 2. Update powerConsumption && powerGeneration
+
+
+  // TODO:
+  // 1. deployed and retracted bug
+  // 2. updating battery with potentiometer
+  // 3. rescaling v to mv
   powerConsumption(pConsume);
   useSolarPanels(solarPanelState, solarPanelDeploy, solarPanelRetract, pGenerate, batteryLvl);
 }
