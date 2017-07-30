@@ -44,8 +44,6 @@ void powerSubsystem(void *powerStruct) {
   batteryBuff[current_measurement] = next;
   current_measurement = (current_measurement + 1) % BUF_SIZE;
   // 2. Update powerConsumption && powerGeneration
-
-
   // TODO:
   // 1. deployed and retracted bug
   // 2. updating battery with potentiometer
