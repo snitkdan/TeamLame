@@ -34,7 +34,7 @@ void powerSubsystem(void *powerStruct) {
   unsigned short *pGenerate = pData->pGeneratePtr;
   bool *solarPanelDeploy = pData->solarPanelDeployPtr;
   bool *solarPanelRetract = pData->solarPanelRetractPtr;
-  // 4. Update the buffer
+  // 2. Update the buffer
   static bool adc_init = false;
   if(!adc_init) {
     adc_init = initADC();
@@ -43,9 +43,7 @@ void powerSubsystem(void *powerStruct) {
   int next = nextMeasurement();
   batteryBuff[current_measurement] = next;
   current_measurement = (current_measurement + 1) % BUF_SIZE;
-  // 2. Update powerConsumption && powerGeneration
-
-
+  // 3. Update powerConsumption && powerGeneration
   // deployed and retracted bug
   // updating battery with potentiometer
   // rescaling v to mv
