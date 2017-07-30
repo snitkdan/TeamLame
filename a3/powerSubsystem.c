@@ -46,9 +46,10 @@ void powerSubsystem(void *powerStruct) {
   // 2. Update powerConsumption && powerGeneration
 
 
-  // deployed and retracted bug
-  // updating battery with potentiometer
-  // rescaling v to mv
+  // TODO: 
+  // 1. deployed and retracted bug
+  // 2. updating battery with potentiometer
+  // 3. rescaling v to mv
   powerConsumption(pConsume);
   useSolarPanels(solarPanelState, solarPanelDeploy, solarPanelRetract, pGenerate, batteryLvl);
 }
