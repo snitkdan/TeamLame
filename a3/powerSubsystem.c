@@ -13,6 +13,8 @@
 #include "adc_utils.h"
 
 #define ACH "AIN0"
+#define HNUM 16
+
 #define BUF_SIZE 16
 
 extern unsigned int current_measurement;
@@ -53,7 +55,7 @@ void powerSubsystem(void *powerStruct) {
 }
 
 static int nextMeasurement() {
-  return readADC(ACH);
+  return readADC(ACH, HNUM);
 }
 
 bool useSolarPanels(bool *solarPanelState, bool *solarPanelDeploy, bool *solarPanelRetract, unsigned short *pGenerate, unsigned int **batteryLvl) {
