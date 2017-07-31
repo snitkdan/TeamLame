@@ -34,17 +34,18 @@ void main(void) {
     static int rem = 1;
 		while (true) {
       if ((solarPanelState && !solarPanelDeploy) || (!solarPanelState && !solarPanelRetract)) {
-        if (append==1) {
-		        AppendTCB(queue, &solarPanelControlTCB);
-			      AppendTCB(queue, &keyboardConsoleTCB);
-            app = 0;
-            rem = 1;
-        } else if (rem == 1) {
-		        RemoveTCB(queue, &solarPanelControlTCB);
-			      RemoveTCB(queue, &keyboardConsoleTCB);
-            app = 1;
-            rem = 0;
-		  }
+            if (append==1) {
+  		        AppendTCB(queue, &solarPanelControlTCB);
+  			      AppendTCB(queue, &keyboardConsoleTCB);
+              app = 0;
+              rem = 1;
+            } else if (rem == 1) {
+  		        RemoveTCB(queue, &solarPanelControlTCB);
+  			      RemoveTCB(queue, &keyboardConsoleTCB);
+              app = 1;
+              rem = 0;
+		      }
+      }
 		  aTCBPtr = PopTCB(queue);
 		  aTCBPtr->myTask((aTCBPtr->taskDataPtr));
 		  if(i == 5) {
@@ -53,7 +54,7 @@ void main(void) {
   			} else {
   			  usleep(9465);
   			}
-			GLOBALCOUNTER++;
+			  GLOBALCOUNTER++;
 		  }
 		  AppendTCB(queue, aTCBPtr);
 			i = (i + 1) % 6;
