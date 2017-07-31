@@ -13,6 +13,8 @@
 #include "adc_utils.h"
 
 #define ACH "AIN0"
+#define HNUM 16
+
 #define BUF_SIZE 16
 
 extern unsigned int current_measurement;
@@ -34,7 +36,7 @@ void powerSubsystem(void *powerStruct) {
   unsigned short *pGenerate = pData->pGeneratePtr;
   bool *solarPanelDeploy = pData->solarPanelDeployPtr;
   bool *solarPanelRetract = pData->solarPanelRetractPtr;
-  // 4. Update the buffer
+  // 2. Update the buffer
   static bool adc_init = false;
   if(!adc_init) {
     adc_init = initADC();
@@ -44,17 +46,16 @@ void powerSubsystem(void *powerStruct) {
   batteryBuff[current_measurement] = next;
   current_measurement = (current_measurement + 1) % BUF_SIZE;
   // 2. Update powerConsumption && powerGeneration
-
-
-  // deployed and retracted bug
-  // updating battery with potentiometer
-  // rescaling v to mv
+  // TODO:
+  // 1. deployed and retracted bug
+  // 2. updating battery with potentiometer
+  // 3. rescaling v to mv
   powerConsumption(pConsume);
   useSolarPanels(solarPanelState, solarPanelDeploy, solarPanelRetract, pGenerate, batteryLvl);
 }
 
 static int nextMeasurement() {
-  return readADC(ACH);
+  return readADC(ACH, HNUM);
 }
 
 bool useSolarPanels(bool *solarPanelState, bool *solarPanelDeploy, bool *solarPanelRetract, unsigned short *pGenerate, unsigned int **batteryLvl) {

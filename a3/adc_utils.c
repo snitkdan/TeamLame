@@ -37,13 +37,13 @@ bool initADC() {
 	return true;
 }
 
-int readADC(char *ach) {
+int readADC(char *ach, int hnum) {
   // 1. Declare necessary variables
   FILE *adc_val;
   int value;
   char adc_val_path[50];
   // 2. Construct file path to read from ach
-  sprintf(adc_val_path, "%s/%s%i/%s", DEVICES, "ocp.3/helper.", HNUM, ach);
+  sprintf(adc_val_path, "%s/%s%i/%s", DEVICES, "ocp.3/helper.", hnum, ach);
   // 3. Open the ach for reading
   adc_val = fopen(adc_val_path, "r");
   if(!adc_val) {
