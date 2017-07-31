@@ -56,9 +56,9 @@ void main(void) {
 		  aTCBPtr->myTask((aTCBPtr->taskDataPtr));
 		  if(i == 5) {
 			if(GLOBALCOUNTER % MAJOR_CYCLE == 0) {
-			  usleep(9441.8);
+			  usleep(70495.4);
 			} else {
-			  usleep(9465);
+			  usleep(79804);
 			}
 			GLOBALCOUNTER++;
 		  }
