@@ -30,31 +30,37 @@ void main(void) {
     extern bool solarPanelDeploy;
     extern bool solarPanelRetract;
 		int i = 0;
-    static int app = 0;
-    static int rem = 1;
 		while (true) {
-      if ((solarPanelState && !solarPanelDeploy) || (!solarPanelState && !solarPanelRetract)) {
-            if (append==1) {
-  		        AppendTCB(queue, &solarPanelControlTCB);
-  			      AppendTCB(queue, &keyboardConsoleTCB);
-              app = 0;
-              rem = 1;
-            } else if (rem == 1) {
-  		        RemoveTCB(queue, &solarPanelControlTCB);
-  			      RemoveTCB(queue, &keyboardConsoleTCB);
-              app = 1;
-              rem = 0;
-		      }
-      }
+                  static int append = 0;
+                  static int remove = 1;
+                  //printf("spDeploy:%d spRetract:%d spState:%d\n", solarPanelDeploy, solarPanelRetract, solarPanelState);
+		  if ((solarPanelState && !solarPanelDeploy) || 
+                      (!solarPanelState && !solarPanelRetract)) {
+                       if (append==1) {
+                          printf("Appending solar and keyboard\n");
+		          AppendTCB(queue, &solarPanelControlTCB);
+			  AppendTCB(queue, &keyboardConsoleTCB);
+                          append = 0;
+                          remove = 1;
+                          printf("%u\n", NumTasksInTaskQueue(queue));
+                      }
+                  } else if (remove) { 
+                          printf("Removing solar and keyboard\n");
+		          RemoveTCB(queue, &solarPanelControlTCB);
+			  RemoveTCB(queue, &keyboardConsoleTCB);
+                          append = 1;
+                          remove = 0;
+		  }	
+
 		  aTCBPtr = PopTCB(queue);
 		  aTCBPtr->myTask((aTCBPtr->taskDataPtr));
 		  if(i == 5) {
-  			if(GLOBALCOUNTER % MAJOR_CYCLE == 0) {
-  			  usleep(9441.8);
-  			} else {
-  			  usleep(9465);
-  			}
-			  GLOBALCOUNTER++;
+			if(GLOBALCOUNTER % MAJOR_CYCLE == 0) {
+			  usleep(9441.8);
+			} else {
+			  usleep(9465);
+			}
+			GLOBALCOUNTER++;
 		  }
 		  AppendTCB(queue, aTCBPtr);
 			i = (i + 1) % 6;

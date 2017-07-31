@@ -60,7 +60,6 @@ void satelliteComs(void *satStruct) {
     char *solarPanelString = (*solarPanelState) ? "Deployed":"Retracted";
     char *fuelString = (*fuelLow)? "YES":"NO";
     char *battString = (*batteryLow)? "YES":"NO";
-    char output[MAX];
 
 	static int fd1;
 	static int firstTime = 1;

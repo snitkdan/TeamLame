@@ -33,5 +33,5 @@ bool initADC();
     AIN0 on Beaglebone on success,
     and -1 on failure.
 */
-int readADC(char *ach);
+int readADC(char *ach, int hnum);
 #endif
