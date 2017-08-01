@@ -60,7 +60,6 @@ void satelliteComs(void *satStruct) {
     char *solarPanelString = (*solarPanelState) ? "Deployed":"Retracted";
     char *fuelString = (*fuelLow)? "YES":"NO";
     char *battString = (*batteryLow)? "YES":"NO";
-    char output[MAX];
 
 	static int fd1;
 	static int firstTime = 1;
@@ -81,8 +80,11 @@ void satelliteComs(void *satStruct) {
 	"Battery Level: %3u, "
 	"Fuel Level: %3hu, "
 	"Power Consumption: %2hu, "
-	"Power Generation: %2hu\n",
-	 solarPanelString, batteryBuff[(current_measurement > 0 ? current_measurement - 1 : 0)] * 20, *fuelLvl, *pConsume, *pGenerate);
+	"Power Generation: %2hu\n"
+	"Battery Low: %s "
+	"Fuel Low: %s ",
+	 solarPanelString, batteryBuff[(current_measurement > 0 ? current_measurement - 1 : 0)] * 20, *fuelLvl, *pConsume, *pGenerate,
+	 battString, fuelString);
 
 	 if (*response == 'A') {
 		 dprintf(fd1, "\nVehicle Response: %c %c\n", *response, *command);

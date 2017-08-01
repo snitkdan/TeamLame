@@ -31,7 +31,7 @@ int terminalComs(char *output) {
         if(!fp) {
             exit(1);
         }		 
-        fd0 = open("/dev/pts/3", O_WRONLY);
+        fd0 = open("/dev/pts/1", O_WRONLY);
 	firstTime++;
 	}
 
