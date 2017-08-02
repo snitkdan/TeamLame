@@ -58,8 +58,8 @@ void warningAlarm(void *warnStruct) {
     warnData *wData = (warnData*)warnStruct;
     bool *fuelLowPtr = wData->fuelLowPtr;
     bool *batteryLowPtr = wData->batteryLowPtr;
-    unsigned int *batteryLvlPtr = wData->batteryLvlPtr;
-    unsigned short *fuelLvlPtr = wData->fuelLvlPtr;
+    unsigned int *batteryLvl = wData->batteryLvlPtr;
+    unsigned short *fuelLvlPtr = (unsigned int) wData->fuelLvlPtr;
 
     // 2. Determine in what region the battery/fuel level is (high, med, low)
     int battRegion = checkRegion(batteryLvlPtr, batteryLowPtr);
@@ -210,7 +210,7 @@ void checkOpened(FILE *led) {
     }
 }
 
-int checkRegion(unsigned short *lvlPtr, bool *lowPtr) {
+int checkRegion(unsigned int *lvlPtr, bool *lowPtr) {
     if (*lvlPtr > 50) {
 	    *lowPtr = false;
 	    return HIGH;

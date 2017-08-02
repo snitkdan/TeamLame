@@ -37,7 +37,7 @@ void warningAlarm(void *warnStruct);
 
 /*
   @param lvlPtr
-    Unsigned short pointer containing either
+    Unsigned int pointer containing either
 	the batterylvl or fuelLvl values
   @param lowPtr
     Unsigned bool pointer containing either batteryLow
@@ -52,7 +52,7 @@ void warningAlarm(void *warnStruct);
 // 		If above 50: 				 HIGH
 // 		If in between 10 to 50: 	 MED
 // 		If less than or equal to 10: LOW
-int checkRegion(unsigned short *lvlPtr, bool *lowPtr);
+int checkRegion(unsigned int *lvlPtr, bool *lowPtr);
 
 
 void ledState(FILE *led, int state);
