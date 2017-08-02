@@ -25,4 +25,8 @@ void satelliteComs(void *satStruct);
 void consoleDisplay(void *consoleStruct);
 void thrusterSubsystem(void *thrustStruct);
 void warningAlarm(void *warnStruct);
+void transportDistance(void *tranportStruct);
+void imageCapture(void *imageStruct);
+void batteryTemp(void *temperatureStruct);
+
 #endif

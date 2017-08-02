@@ -1,4 +1,4 @@
-# Builds tests & main files for Project 2
+# Builds tests & main files for Project 4
 
 # Points to the root of Google Test, relative to where this file is.
 # Remember to tweak this if you move this file.
@@ -35,7 +35,7 @@ GTEST_HEADERS = $(GTEST_DIR)/include/gtest/*.h \
 OBJ =	startup.o scheduler.o solarPanelControl.o adc_utils.o pwm_utils.o \
 	consoleDisplay.o powerSubsystem.o satelliteComs.o thrusterSubsystem.o \
 	warningAlarm.o terminalComs.o rand2.o nonBlockingKeys.o vehicleComms.o \
-	keyboardConsole.o
+	keyboardConsole.o batteryTemp.o transportDistance.o imageCapture.o
 
 # TEST_OBJ = thrusterSubsystemTest.o satelliteComsTest.o powerSubsystemTest.o \
 
@@ -97,44 +97,53 @@ test_suite : $(OBJ) $(TEST_OBJ)
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) $^ -o $@ -lpthread
 
 # Builds primary files
+imageCapture.o : $(USER_DIR)/imageCapture.c $(PROJ_HEADERS)
+	$(CC) $(CXXFLAGS) -c $(USER_DIR)/imageCapture.c
+
+transportDistance.o : $(USER_DIR)/transportDistance.c $(PROJ_HEADERS)
+	$(CC) $(CXXFLAGS) -c $(USER_DIR)/transportDistance.c
+
+batteryTemp.o : $(USER_DIR)/batteryTemp.c $(PROJ_HEADERS)
+	$(CC) $(CXXFLAGS) -c $(USER_DIR)/batteryTemp.c
+
 rand2.o : $(USER_DIR)/rand2.c $(PROJ_HEADERS)
-	$(CC) $(CPPFLAGS) $(CXXFLAGS) -c $(USER_DIR)/rand2.c
+	$(CC) $(CXXFLAGS) -c $(USER_DIR)/rand2.c
 
 terminalComs.o: $(USER_DIR)/terminalComs.c $(PROJ_HEADERS)
-	$(CC) $(CPPFLAGS) $(CXXFLAGS) -c $(USER_DIR)/terminalComs.c
+	$(CC) $(CXXFLAGS) -c $(USER_DIR)/terminalComs.c
 
 nonBlockingKeys.o: $(USER_DIR)/nonBlockingKeys.c $(PROJ_HEADERS)
-	$(CC) $(CPPFLAGS) $(CXXFLAGS) -c $(USER_DIR)/nonBlockingKeys.c
+	$(CC) $(CXXFLAGS) -c $(USER_DIR)/nonBlockingKeys.c
 
 warningAlarm.o : $(USER_DIR)/warningAlarm.c $(USER_DIR)/warningAlarm.h
-	$(CC) $(CPPFLAGS) $(CXXFLAGS) -c $(USER_DIR)/warningAlarm.c
+	$(CC) $(CXXFLAGS) -c $(USER_DIR)/warningAlarm.c
 
 thrusterSubsystem.o : $(USER_DIR)/thrusterSubsystem.c $(USER_DIR)/thrusterSubsystem.h
-	$(CC) $(CPPFLAGS) $(CXXFLAGS) -c $(USER_DIR)/thrusterSubsystem.c
+	$(CC) $(CXXFLAGS) -c $(USER_DIR)/thrusterSubsystem.c
 
 satelliteComs.o : $(USER_DIR)/satelliteComs.c $(USER_DIR)/satelliteComs.h nonBlockingKeys.h adc_utils.o
-	$(CC) $(CPPFLAGS) $(CXXFLAGS) -c $(USER_DIR)/satelliteComs.c $(USER_DIR)/rand2.c
+	$(CC) $(CXXFLAGS) -c $(USER_DIR)/satelliteComs.c $(USER_DIR)/rand2.c
 
 powerSubsystem.o : $(USER_DIR)/powerSubsystem.c $(USER_DIR)/powerSubsystem.h startup.o adc_utils.o
-	$(CC) $(CPPFLAGS) $(CXXFLAGS) -c $(USER_DIR)/powerSubsystem.c startup.o
+	$(CC) $(CXXFLAGS) -c $(USER_DIR)/powerSubsystem.c
 
 consoleDisplay.o: $(USER_DIR)/consoleDisplay.c nonBlockingKeys.h adc_utils.o
-	$(CC) $(CPPFLAGS) $(CXXFLAGS) -c $(USER_DIR)/consoleDisplay.c
+	$(CC) $(CXXFLAGS) -c $(USER_DIR)/consoleDisplay.c
 
 keyboardConsole.o: $(USER_DIR)/keyboardConsole.c nonBlockingKeys.h
-	$(CC) $(CPPFLAGS) $(CXXFLAGS) -c $(USER_DIR)/keyboardConsole.c
+	$(CC) $(CXXFLAGS) -c $(USER_DIR)/keyboardConsole.c
 
 startup.o : $(USER_DIR)/startup.c $(USER_DIR)/startup.h
-	$(CC) $(CPPFLAGS) $(CXXFLAGS) -c $(USER_DIR)/startup.c
+	$(CC) $(CXXFLAGS) -c $(USER_DIR)/startup.c
 
 scheduler.o: $(USER_DIR)/scheduler.c
-	$(CC) $(CPPFLAGS) $(CXXFLAGS) -c $(USER_DIR)/scheduler.c
+	$(CC) $(CXXFLAGS) -c $(USER_DIR)/scheduler.c
 
-vehicleComms.o: $(USER_DIR)/vehicleComms.c nonBlockingKeys.h
-	$(CC) $(CPPFLAGS) $(CXXFLAGS) -c $(USER_DIR)/vehicleComms.c pwm_utils.o
+vehicleComms.o: $(USER_DIR)/vehicleComms.c nonBlockingKeys.h  pwm_utils.o
+	$(CC) $(CXXFLAGS) -c $(USER_DIR)/vehicleComms.c
 
 solarPanelControl.o: $(USER_DIR)/solarPanelControl.c pwm_utils.o
-	$(CC) $(CPPFLAGS) $(CXXFLAGS) -c $(USER_DIR)/solarPanelControl.c pwm_utils.o
+	$(CC) $(CXXFLAGS) -c $(USER_DIR)/solarPanelControl.c
 
 main : $(OBJ) $(PROJ_HEADERS) $(USER_DIR)/main.c
 	$(CC) -o main $(USER_DIR)/main.c $(OBJ)

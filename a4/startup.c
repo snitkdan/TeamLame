@@ -15,6 +15,7 @@
 
 #define BUF_SIZE 16
 
+
 //#define COMMENTED
 #ifdef COMMENTED
 int terminalComs(char* output) {}
@@ -31,8 +32,8 @@ void warningAlarm(void *warnStruct) {}
 
 // Define shared variables
 unsigned int thrusterCommand;
-unsigned int **batteryLvl;
-unsigned int batteryBuff[BUF_SIZE];
+unsigned int *batteryLvl;
+unsigned int batteryBuff[BUF_SIZE] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15};
 unsigned int current_measurement = 0;
 unsigned short fuelLvl;
 unsigned short pConsume;
@@ -46,6 +47,7 @@ bool motorInc;
 bool motorDec;
 char command;
 char response;
+
 // Defines some TCBs
 TCB powerSubsystemTCB;
 TCB solarPanelControlTCB;
@@ -55,6 +57,10 @@ TCB thrusterSubsystemTCB;
 TCB satelliteComsTCB;
 TCB consoleDisplayTCB;
 TCB warningAlarmTCB;
+TCB transportDistanceTCB;
+TCB imageCaptureTCB;
+TCB batteryTempTCB;
+
 // Defines data structures
 powerData pData;
 solarData solData;
@@ -64,20 +70,20 @@ thrustData tData;
 satData sData;
 consoleData cData;
 warnData wData;
+transportData tranData;
+imageData iData;
+tempData temData;
+
 // Define the Task Queue
 TQ q;
 TaskQueue queue;
 // Define the Global Counter
 unsigned long GLOBALCOUNTER;
 
-// Define pipe
-int fd0;
-
-
 void Initialize(void) {
   // 1. Assign initial values to shared variables
   thrusterCommand = 0;
-  batteryLvl = (unsigned int**)&batteryBuff;
+  batteryLvl = batteryBuff;
   fuelLvl = 100;
   pConsume = 0;
   pGenerate = 0;
@@ -92,6 +98,7 @@ void Initialize(void) {
   response = '\0';
 
   // 2. Turn off led0 initially
+  #define BEAGLEBONE
   #ifdef BEAGLEBONE
   FILE *led0 = fopen("/sys/class/leds/beaglebone:green:usr0/brightness", "w");
   if (!led0) {
@@ -149,7 +156,14 @@ void Initialize(void) {
   wData.batteryLowPtr = &batteryLow;
   wData.batteryLvlPtr = batteryLvl;
   wData.fuelLvlPtr = &fuelLvl;
-
+  
+  #ifdef INSERT_LAB4_DATA_HERE
+  tranData.fooPtr = &foo;
+  
+  iData.fooPtr = &foo;
+  temData.fooPtr = &foo;
+  #endif
+  
   // 4. Initialize the TCBs
   // 4.1: powerSubsystem
   powerSubsystemTCB.taskDataPtr = (void*)&pData;
@@ -175,7 +189,16 @@ void Initialize(void) {
   // 4.8: warningAlarm
   warningAlarmTCB.taskDataPtr = (void*)&wData;
   warningAlarmTCB.myTask = warningAlarm;
-
+   // 4.8: transportDistance
+  transportDistanceTCB.taskDataPtr = (void*)&tranData;
+  warningAlarmTCB.myTask = transportDistance; 
+  // 4.8: imageCapture
+  imageCaptureTCB.taskDataPtr = (void*)&iData;
+  imageCaptureTCB.myTask = imageCapture;
+    // 4.8: batteryTemp
+  batteryTempTCB.taskDataPtr = (void*)&temData;
+  batteryTempTCB.myTask = batteryTemp;
+  
   // 5. Initialize the task queue
   queue = &q;
   InitializeTaskQueue(queue);
@@ -191,5 +214,4 @@ void Initialize(void) {
 
 void ActivateTimeBase(void) {
   GLOBALCOUNTER = 0;
-  fd0 = 0;
 }

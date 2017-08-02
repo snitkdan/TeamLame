@@ -48,7 +48,7 @@ void consoleDisplay(void *consoleStruct) {
     bool *fuelLow = cData->fuelLowPtr;
     bool *batteryLow = cData->batteryLowPtr;
     bool *solarPanelState = cData->solarPanelStatePtr;
-    unsigned short *batteryLvl = cData->batteryLvlPtr;
+    unsigned int *batteryLvl = cData->batteryLvlPtr;
     unsigned short *fuelLvl = cData->fuelLvlPtr;
     unsigned short *pConsume = cData->pConsumePtr;
     unsigned short *pGenerate = cData->pGeneratePtr;
@@ -73,7 +73,7 @@ void consoleDisplay(void *consoleStruct) {
 							"Fuel Level: %3hu, "
 							"Power Consumption: %2hu, "
 							"Power Generation: %2hu\n",
-							 solarPanelString, batteryBuff[(current_measurement > 0 ? current_measurement - 1 : 0)] * 20, *fuelLvl, *pConsume, *pGenerate);
+							 solarPanelString, batteryLvl[5], *fuelLvl, *pConsume, *pGenerate);
 			terminalComs(output);
 		} else if (c == ANNUNCIATION) {
 			printf("ConsoleDisplay: Showing Annunciation Mode...\n");

@@ -1,4 +1,4 @@
-headers = optfft.h tables.c
+	headers = optfft.h tables.c
 
 all: main 
 

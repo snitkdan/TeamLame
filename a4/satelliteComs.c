@@ -44,7 +44,7 @@ void satelliteComs(void *satStruct) {
     bool *fuelLow = sData->fuelLowPtr;
     bool *batteryLow = sData->batteryLowPtr;
     bool *solarPanelState = sData->solarPanelStatePtr;
-    unsigned short **batteryLvl = sData->batteryLvlPtr;
+    unsigned int *batteryLvl = sData->batteryLvlPtr;
     unsigned short *fuelLvl = sData->fuelLvlPtr;
     unsigned short *pConsume = sData->pConsumePtr;
     unsigned short *pGenerate = sData->pGeneratePtr;
@@ -83,7 +83,7 @@ void satelliteComs(void *satStruct) {
 	"Power Generation: %2hu\n"
 	"Battery Low: %s "
 	"Fuel Low: %s ",
-	 solarPanelString, batteryBuff[(current_measurement > 0 ? current_measurement - 1 : 0)] * 20, *fuelLvl, *pConsume, *pGenerate,
+	 solarPanelString, batteryLvl[5], *fuelLvl, *pConsume, *pGenerate,
 	 battString, fuelString);
 
 	 if (*response == 'A') {

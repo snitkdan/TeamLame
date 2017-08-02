@@ -51,13 +51,13 @@ void solarPanelControl(void *solarStruct) {
 	}
 
 	// 1.3: Declare variables
-	static double PWM;
+	//static double PWM;
 	static double duty = DEFAULT_DUTY;
-	static double period = PERIOD;
+	//static double period = PERIOD;
 
   // 1.4: Check if the solor panel state with what it is requested to do
 	if ((*solarPanelState == 1 && *solarPanelDeploy == 1) || (*solarPanelState == 0 && *solarPanelRetract == 1)){
-		PWM = 0;
+		//PWM = 0;
 	} else {
 		//if need speed to increase then duty (run time ) should decrease
 		if(*motorInc == 1) {
@@ -70,7 +70,7 @@ void solarPanelControl(void *solarStruct) {
 		}
 	}
 	// 1.5: Generate the new PWM for the new duty
-	PWM = duty * period;
+	//PWM = duty * period;
 
 	// 1.6: Duty cycle and period are in ms.
 	//printf("SOLARPANELS: Duty: %f\n", duty);

@@ -31,7 +31,7 @@ void powerSubsystem(void *powerStruct) {
   // 1. Assign the data of powerStruct into local variables
   powerData *pData = (powerData*)powerStruct;
   bool *solarPanelState = pData->solarPanelStatePtr;
-  unsigned int **batteryLvl = pData->batteryLvlPtr;
+  unsigned int *batteryLvl = pData->batteryLvlPtr;
   unsigned short *pConsume = pData->pConsumePtr;
   unsigned short *pGenerate = pData->pGeneratePtr;
   bool *solarPanelDeploy = pData->solarPanelDeployPtr;
@@ -58,7 +58,7 @@ static int nextMeasurement() {
   return readADC(ACH, HNUM);
 }
 
-bool useSolarPanels(bool *solarPanelState, bool *solarPanelDeploy, bool *solarPanelRetract, unsigned short *pGenerate, unsigned int **batteryLvl) {
+bool useSolarPanels(bool *solarPanelState, bool *solarPanelDeploy, bool *solarPanelRetract, unsigned short *pGenerate, unsigned int *batteryLvl) {
   // 1. If solarPanelState == ON
   if(*solarPanelState) {
     *solarPanelDeploy = !(*solarPanelDeploy);
@@ -86,7 +86,7 @@ bool useSolarPanels(bool *solarPanelState, bool *solarPanelDeploy, bool *solarPa
 }
 
 // Motar Drive -> set motar drive to 100 when solar panel state changes. After it changes, set it back to 0.
-void powerGeneration(unsigned short *pGenerate, unsigned int **batteryLvl) {
+void powerGeneration(unsigned short *pGenerate, unsigned int *batteryLvl) {
   // 1. Define static variables to track function state
   static short numCalls = 0;
   // 2. If battery level <= 95%
