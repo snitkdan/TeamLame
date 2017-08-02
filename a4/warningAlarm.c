@@ -59,7 +59,7 @@ void warningAlarm(void *warnStruct) {
     bool *fuelLowPtr = wData->fuelLowPtr;
     bool *batteryLowPtr = wData->batteryLowPtr;
     unsigned int *batteryLvl = wData->batteryLvlPtr;
-    unsigned short *fuelLvl = (unsigned int) wData->fuelLvlPtr;
+    unsigned int *fuelLvl = (unsigned int*) wData->fuelLvlPtr;
 
     // 2. Determine in what region the battery/fuel level is (high, med, low)
     int battRegion = checkRegion(batteryLvl, batteryLowPtr);
