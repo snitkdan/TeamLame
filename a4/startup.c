@@ -34,7 +34,7 @@ void warningAlarm(void *warnStruct) {}
 unsigned int thrusterCommand;
 unsigned int *batteryLvl;
 unsigned int batteryBuff[BUF_SIZE] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15};
-unsigned int current_measurement = 0;
+//unsigned int current_measurement = 0;
 unsigned short fuelLvl;
 unsigned short pConsume;
 unsigned short pGenerate;
@@ -83,7 +83,7 @@ unsigned long GLOBALCOUNTER;
 void Initialize(void) {
   // 1. Assign initial values to shared variables
   thrusterCommand = 0;
-  batteryLvl = batteryBuff;
+  batteryLvl = &batteryBuff[0];
   fuelLvl = 100;
   pConsume = 0;
   pGenerate = 0;

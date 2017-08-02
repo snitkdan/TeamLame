@@ -65,7 +65,7 @@ bool useSolarPanels(bool *solarPanelState, bool *solarPanelDeploy, bool *solarPa
     *solarPanelDeploy = !(*solarPanelDeploy);
     *solarPanelRetract = !(*solarPanelRetract);
     // 1.1: If  batteryLvl > 95%
-    if(batteryBuff[current_measurement] > 95) {
+    if(*batteryLvl > 95) {
       // 1.1.1: Retract solar panels
       *solarPanelState = false;
       *pGenerate = 0;
@@ -77,7 +77,7 @@ bool useSolarPanels(bool *solarPanelState, bool *solarPanelDeploy, bool *solarPa
   // 2. If solarPanelState == OFF
   else {
       // 2.1: If batteryLvl <= 10%
-      if(batteryBuff[current_measurement] <= 10) {
+      if(*batteryLvl <= 10) {
         // 2.1.1: Deploy solar panels
         *solarPanelState = true;
       }
@@ -91,9 +91,9 @@ void powerGeneration(unsigned short *pGenerate, unsigned int *batteryLvl) {
   // 1. Define static variables to track function state
   static short numCalls = 0;
   // 2. If battery level <= 95%
-  if(batteryBuff[current_measurement] <= 95) {
+  if(*batteryLvl <= 95) {
     // 2.1: If battery level <= 50%
-    if(batteryBuff[current_measurement] <= 50) {
+    if(*batteryLvl <= 50) {
       *pGenerate += (numCalls % 2 == 0) ? 2 : 1;
        // if even call -> +2; else -> +1
     }
