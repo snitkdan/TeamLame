@@ -1,5 +1,6 @@
-#ifndef SATVEHICLE
-#define SATVEHICLE
+#include <stdint.h>
+
+
 /*
   @param satelliteComs
     Struct containing necessary
@@ -10,6 +11,7 @@
     changes thrusterCommand based
     on random integer from rand2.c
 */
+void satelliteComs(void *sData);
 
 /*
   @param thrusterCommand
@@ -21,7 +23,4 @@
   @effects
     Masks the last 4 bits to be 00XX
 */
-void vehicleComms(void *vehicleStruct);
-//extern int fd;
-
-#endif
+void maskBit(unsigned int *thrusterCommand);

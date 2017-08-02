@@ -13,13 +13,9 @@
 #include "adc_utils.h"
 
 #define ACH "AIN0"
-#define HNUM 16
-
 #define BUF_SIZE 16
 
-extern unsigned int current_measurement;
-extern unsigned int batteryBuff[BUF_SIZE];
-static int nextMeasurement();
+int current_measurement = 0;
 
 void powerSubsystem(void *powerStruct) {
   // Only run this function every major cycle
@@ -31,40 +27,37 @@ void powerSubsystem(void *powerStruct) {
   // 1. Assign the data of powerStruct into local variables
   powerData *pData = (powerData*)powerStruct;
   bool *solarPanelState = pData->solarPanelStatePtr;
-  unsigned int **batteryLvl = pData->batteryLvlPtr;
-  unsigned short *pConsume = pData->pConsumePtr;
-  unsigned short *pGenerate = pData->pGeneratePtr;
   bool *solarPanelDeploy = pData->solarPanelDeployPtr;
   bool *solarPanelRetract = pData->solarPanelRetractPtr;
-  // 2. Update the buffer
-  static bool adc_init = false;
-  if(!adc_init) {
-    adc_init = initADC();
+   
+  unsigned short *batteryLvl = pData->batteryLvlPtr;
+  unsigned short *pConsume = pData->pConsumePtr;
+  unsigned short *pGenerate = pData->pGeneratePtr;
+  // 2. Update powerConsumption && powerGeneration
+  powerConsumption(pConsume);
+  useSolarPanels(solarPanelState, pGenerate, batteryLvl, solarPanelDeploy, solarPanelRetract);
+  // 3. Get the next measurement
+  if(!initADC()) {
+    fprintf(stderr, "ADC Malfunction\n");
     return;
   }
+  // 4. Update the buffer
   int next = nextMeasurement();
-  batteryBuff[current_measurement] = next;
+  *batteryLvl[current_measurement] = next;
   current_measurement = (current_measurement + 1) % BUF_SIZE;
-  // 2. Update powerConsumption && powerGeneration
-  // TODO:
-  // 1. deployed and retracted bug
-  // 2. updating battery with potentiometer
-  // 3. rescaling v to mv
-  powerConsumption(pConsume);
-  useSolarPanels(solarPanelState, solarPanelDeploy, solarPanelRetract, pGenerate, batteryLvl);
 }
 
 static int nextMeasurement() {
-  return readADC(ACH, HNUM);
+  return readADC(ACH);
 }
 
-bool useSolarPanels(bool *solarPanelState, bool *solarPanelDeploy, bool *solarPanelRetract, unsigned short *pGenerate, unsigned int **batteryLvl) {
+bool useSolarPanels(bool *solarPanelState, unsigned short *pGenerate, unsigned short *batteryLvl, bool *solarPanelDeploy, bool *solarPanelRetract) {
   // 1. If solarPanelState == ON
   if(*solarPanelState) {
     *solarPanelDeploy = !(*solarPanelDeploy);
     *solarPanelRetract = !(*solarPanelRetract);
     // 1.1: If  batteryLvl > 95%
-    if(batteryBuff[current_measurement] > 95) {
+    if(*batteryLvl > 95) {
       // 1.1.1: Retract solar panels
       *solarPanelState = false;
       *pGenerate = 0;
@@ -76,7 +69,7 @@ bool useSolarPanels(bool *solarPanelState, bool *solarPanelDeploy, bool *solarPa
   // 2. If solarPanelState == OFF
   else {
       // 2.1: If batteryLvl <= 10%
-      if(batteryBuff[current_measurement] <= 10) {
+      if(*batteryLvl <= 10) {
         // 2.1.1: Deploy solar panels
         *solarPanelState = true;
       }
@@ -86,13 +79,13 @@ bool useSolarPanels(bool *solarPanelState, bool *solarPanelDeploy, bool *solarPa
 }
 
 // Motar Drive -> set motar drive to 100 when solar panel state changes. After it changes, set it back to 0.
-void powerGeneration(unsigned short *pGenerate, unsigned int **batteryLvl) {
+void powerGeneration(unsigned short *pGenerate, unsigned short *batteryLvl) {
   // 1. Define static variables to track function state
   static short numCalls = 0;
   // 2. If battery level <= 95%
-  if(batteryBuff[current_measurement] <= 95) {
+  if(*batteryLvl <= 95) {
     // 2.1: If battery level <= 50%
-    if(batteryBuff[current_measurement] <= 50) {
+    if(*batteryLvl <= 50) {
       *pGenerate += (numCalls % 2 == 0) ? 2 : 1;
        // if even call -> +2; else -> +1
     }

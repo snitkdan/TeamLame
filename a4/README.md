@@ -1,9 +1,9 @@
 # Project 2: Learning the Development Environment – The Next Step
-This directory contains the source code for [Project 3](https://class.ee.washington.edu/474/peckol/assignments/lab3/lab3Summer17.pdf)
+This directory contains the source code for [Project 2](https://class.ee.washington.edu/474/peckol/assignments/lab2/lab2Summer2017.pdf)
 
 A Makefile has been provided to run the necessary commands to compile the source files into binary executables for testing and deployment.
 
-Within the a3/ directory, run the following command:
+Within the a2/ directory, run the following command:
 ```
 make
 ```
@@ -29,7 +29,7 @@ within the same directory:
 ```
 
 _To add more unit tests, simply add the appropriate [*test*]test.cc
-file to the a3/ directory and add the appropriate commands to the
+file to the a2/ directory and add the appropriate commands to the
 Makefile to link it to the test_suite._
 
 ## Deployment
@@ -41,7 +41,7 @@ the Beaglebone Black and a host machine.
 2. Transfer the a2/ directory
 to a directory within the "/dev" folder
 by running the following command
-within the a3/ directory on the host machine:
+within the a2/ directory on the host machine:
 ```
 make copy
 ```
@@ -58,13 +58,13 @@ the following command in the same directory:
 
 
 ## Experiments
-To reproduce the results for the [TCB task execution](https://docs.google.com/spreadsheets/u/1/d/175E8ISgZ6rh0_AZOfoZ8aj6qClh7xpmRiB09o0lkgjw/edit?usp=drive_web), follow the
+To reproduce the results for the [TCB task execution](https://docs.google.com/spreadsheets/d/1BmmUTLn6MlDJZZvJ8Uzegxo9HI7NbdYS99hrN_KA-mE/edit?usp=sharing), follow the
 instructions below:
 1. Edit the "timeTask" variable
 to reflect the task to be timed (corresponding to the tasks
 position in the task queue)
 2. Connect a scope probe to GPIO48 on the Beaglebone.
-(For set-up, reference the [lab manual](https://class.ee.washington.edu/474/peckol/assignments/lab3/lab3Summer17.pdf))
+(For set-up, reference the [lab manual](https://class.ee.washington.edu/474/peckol/assignments/lab2/lab2Summer2017.pdf))
 3. Compile the experimental code via the following command:
 ```
 make gpio
