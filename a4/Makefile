@@ -164,7 +164,7 @@ main_test: $(USER_DIR)/main_test.c pwm_utils.o thrusterSubsystem.o startup.o sch
 
 # Convenience Commands
 copy:
-	scp -r ../a3 root@192.168.7.2:/dev
+	scp -r ../a4 root@192.168.7.2:/dev
 
 clean:
 	rm -f $(TESTS) main gpio gtest.a gtest_main.a *.o
