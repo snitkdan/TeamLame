@@ -71,3 +71,10 @@ signed int i, i1, j, l, l1, l2, t1, t2, u;
 	}
 	return (j);
 }
+
+void main() 
+{
+	signed int zero[256] = {0};
+	signed int freq = optfft(u1, zero);
+	printf("Frequency from fft: %d\n", freq);
+}
