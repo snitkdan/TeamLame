@@ -59,11 +59,11 @@ void warningAlarm(void *warnStruct) {
     bool *fuelLowPtr = wData->fuelLowPtr;
     bool *batteryLowPtr = wData->batteryLowPtr;
     unsigned int *batteryLvl = wData->batteryLvlPtr;
-    unsigned short *fuelLvlPtr = (unsigned int) wData->fuelLvlPtr;
+    unsigned short *fuelLvl = (unsigned int) wData->fuelLvlPtr;
 
     // 2. Determine in what region the battery/fuel level is (high, med, low)
-    int battRegion = checkRegion(batteryLvlPtr, batteryLowPtr);
-    int fuelRegion = checkRegion(fuelLvlPtr, fuelLowPtr);
+    int battRegion = checkRegion(batteryLvl, batteryLowPtr);
+    int fuelRegion = checkRegion(fuelLvl, fuelLowPtr);
     #ifdef BEAGLEBONE
 	// 3. Section for controlling the LEDS
     if (battRegion == HIGH && fuelRegion == HIGH) {
