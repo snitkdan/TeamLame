@@ -17,7 +17,6 @@
 
 #define BUF_SIZE 16
 
-extern unsigned int current_measurement;
 extern unsigned int batteryBuff[BUF_SIZE];
 static int nextMeasurement();
 
@@ -37,6 +36,7 @@ void powerSubsystem(void *powerStruct) {
   bool *solarPanelDeploy = pData->solarPanelDeployPtr;
   bool *solarPanelRetract = pData->solarPanelRetractPtr;
   // 2. Update the buffer
+  static unsigned int current_measurement = 0;
   static bool adc_init = false;
   if(!adc_init) {
     adc_init = initADC();
@@ -45,6 +45,7 @@ void powerSubsystem(void *powerStruct) {
   int next = nextMeasurement();
   batteryBuff[current_measurement] = next;
   current_measurement = (current_measurement + 1) % BUF_SIZE;
+  *batteryLvl = next;
   // 2. Update powerConsumption && powerGeneration
   // TODO:
   // 1. deployed and retracted bug
