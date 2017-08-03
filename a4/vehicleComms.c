@@ -6,6 +6,7 @@
 #include <stdio.h>
 #include <stdbool.h>
 #include <stdint.h>
+#include <string.h>
 #include <fcntl.h>
 #include <sys/stat.h>
 #include <sys/types.h>
@@ -78,7 +79,7 @@ void satelliteEnd(int fd0, rw coms, char cmd) {
      switch(coms) {
          case wrt:
          {
-             printf("FUNCT0: send cmd %c\n", cmd);
+             printf("SATELLITE: send cmd %c\n", cmd);
              char toVehicle[2];
              toVehicle[0] = cmd;
              toVehicle[1] = '\0';
@@ -88,7 +89,7 @@ void satelliteEnd(int fd0, rw coms, char cmd) {
          }
          case rd:
          {
-             printf("FUNCT0: receiving response\n");
+             printf("SATELLITE: receiving response\n");
              read(fd0, buf, MAX_BUF);
              printf("Received: %s\n", buf);
              cmd = 'A';
@@ -100,9 +101,16 @@ void satelliteEnd(int fd0, rw coms, char cmd) {
 void vehicleEnd(int fd0) {
      char buf[MAX_BUF];
      read(fd0, buf, MAX_BUF);
-     printf("FUNCT1: Received command: %s\n", buf);
-     char responseBuf[4]; 
-     sprintf(responseBuf, "A %s", buf);
+     printf("VEHICLE: Received command: %s\n", buf);
+     char responseBuf[4];	 
+	 if (strchr(buf, REQUEST_LIFTOFF)) {
+		sprintf(responseBuf, "K %s", buf);
+	 } else if (strchr(buf, REQUEST_DOCK)) {
+		sprintf(responseBuf, "C %s", buf);
+	 } else {
+		sprintf(responseBuf, "A %s", buf);		 
+		 
+	 }
      write(fd0, responseBuf, sizeof(responseBuf));
      return;
 }

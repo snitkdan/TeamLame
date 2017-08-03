@@ -14,6 +14,9 @@
 #define RIGHT 'R'
 #define DRILL_DOWN 'D'
 #define DRILL_UP 'H'
+#define REQUEST_LIFTOFF 'T'
+#define REQUEST_DOCK 'D'
+
 
 // commands for keyboardConsole
 #define SPEEDINC 'i'

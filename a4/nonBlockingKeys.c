@@ -39,12 +39,14 @@ void nonblock(int state) {
 }
 
 bool satVehicleCmd(char c) {
-	return c == FORWARD    || 
-	       c == BACK       || 
-		   c == LEFT       || 
-		   c == RIGHT      || 
-		   c == DRILL_DOWN || 
-		   c == DRILL_UP;
+	return c == FORWARD         || 
+	       c == BACK            || 
+		   c == LEFT            || 
+		   c == RIGHT           || 
+		   c == DRILL_DOWN      || 
+		   c == DRILL_UP        ||
+		   c == REQUEST_LIFTOFF || 
+		   c == REQUEST_DOCK;
 }
 
 bool consoleModeCmd(char c) {
