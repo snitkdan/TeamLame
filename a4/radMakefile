@@ -2,18 +2,29 @@ objects = satelliteComs.o powerSubsystem.o consoleDisplay.o \
           thrusterSubsystem.o warningAlarm.o rand2.o \
           terminalComs.o keyboardConsole.o solarPanelControl.o \
           vehicleComms.o nonBlockingKeys.o startup.o \
-	  scheduler.o pwm_utils.o adc_utils.o
+	  scheduler.o pwm_utils.o adc_utils.o \
+	  transportDistance.o imageCapture.o batteryTemp.o \
+	  
 headers = dataStructs.h TCB.h startup.h scheduler.h
 
-all: main 
+all: main
 
 main: main.c $(objects) $(headers)
 	gcc -Wall -g -o main main.c $(objects)
 
-adc_utils.o: adc_utils.h
+transportDistance.o: transportDistance.c
+	gcc -Wall -g -c -o transportDistance.o transportDistance.c	
+
+imageCapture.o: imageCapture.c
+	gcc -Wall -g -c -o imageCapture.o imageCapture.c
+	
+batteryTemp.o: batteryTemp.c
+	gcc -Wall -g -c -o batteryTemp.o batteryTemp.c
+
+adc_utils.o: adc_utils.c adc_utils.h
 	gcc -Wall -g -c -o adc_utils.o adc_utils.c
 
-pwm_utils.o: pwm_utils.h
+pwm_utils.o: pwm_utils.c pwm_utils.h
 	gcc -Wall -g -c -o pwm_utils.o pwm_utils.c
 
 scheduler.o: scheduler.c
@@ -54,10 +65,6 @@ terminalComs.o: terminalComs.c TCB.h
 
 rand2.o: rand2.c
 	gcc -Wall -g -c -o rand2.o rand2.c
-
-
-test: TCB.h dataStructs.h
-	gcc main.c -o test -g -Wall
 
 clean:
 	rm main *.o

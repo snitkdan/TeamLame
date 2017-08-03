@@ -16,8 +16,11 @@
 #define HNUM 16
 
 #define BUF_SIZE 16
+#define DEBUG
 
+#ifndef DEBUG
 extern unsigned int batteryBuff[BUF_SIZE];
+#endif
 static int nextMeasurement();
 
 void powerSubsystem(void *powerStruct) {
@@ -38,14 +41,25 @@ void powerSubsystem(void *powerStruct) {
   // 2. Update the buffer
   static unsigned int current_measurement = 0;
   static bool adc_init = false;
+  #ifndef DEBUG 
   if(!adc_init) {
     adc_init = initADC();
     return;
   }
   int next = nextMeasurement();
+  #endif
+  
+  #ifdef DEBUG
+  unsigned int batteryBuff[BUF_SIZE] = {100, 90, 80, 70, 60, 50, 40, 30, 25, 20, 15, 14, 13, 12, 11, 10};
+  *batteryLvl = batteryBuff[current_measurement];
+  current_measurement = (current_measurement + 1) % BUF_SIZE;
+  #endif
+  
+  #ifndef DEBUG
   batteryBuff[current_measurement] = next;
   current_measurement = (current_measurement + 1) % BUF_SIZE;
   *batteryLvl = next;
+  #endif
   // 2. Update powerConsumption && powerGeneration
   // TODO:
   // 1. deployed and retracted bug

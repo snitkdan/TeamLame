@@ -97,6 +97,9 @@ test_suite : $(OBJ) $(TEST_OBJ)
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) $^ -o $@ -lpthread
 
 # Builds primary files
+main : $(OBJ) $(PROJ_HEADERS) $(USER_DIR)/main.c
+	$(CC) -o main $(USER_DIR)/main.c $(OBJ)
+
 imageCapture.o : $(USER_DIR)/imageCapture.c $(PROJ_HEADERS)
 	$(CC) $(CXXFLAGS) -c $(USER_DIR)/imageCapture.c
 
@@ -145,8 +148,7 @@ vehicleComms.o: $(USER_DIR)/vehicleComms.c nonBlockingKeys.h  pwm_utils.o
 solarPanelControl.o: $(USER_DIR)/solarPanelControl.c pwm_utils.o
 	$(CC) $(CXXFLAGS) -c $(USER_DIR)/solarPanelControl.c
 
-main : $(OBJ) $(PROJ_HEADERS) $(USER_DIR)/main.c
-	$(CC) -o main $(USER_DIR)/main.c $(OBJ)
+
 
 # Builds GPIO experiment code
 gpio: $(USER_DIR)/gpio.c $(OBJ) $(PROJ_HEADERS)

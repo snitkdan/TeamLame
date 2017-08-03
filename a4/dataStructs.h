@@ -6,7 +6,7 @@
 
 extern unsigned long GLOBALCOUNTER;
 extern int fd0;
-#define MAJOR_CYCLE 500
+#define MAJOR_CYCLE 50
 
 //#define BEAGLEBONE //define this if connected to beaglebone
 

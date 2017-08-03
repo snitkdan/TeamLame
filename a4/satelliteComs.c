@@ -24,8 +24,8 @@
 
 #define MAX 65536 // upper bound for 16 bit
 #define BUF_SIZE 16
-extern unsigned int current_measurement;
-extern unsigned int batteryBuff[BUF_SIZE];
+//extern unsigned int current_measurement;
+//extern unsigned int batteryBuff[BUF_SIZE];
 
 #define DEBUG
 int fd = 0;
@@ -83,7 +83,7 @@ void satelliteComs(void *satStruct) {
 	"Power Generation: %2hu\n"
 	"Battery Low: %s "
 	"Fuel Low: %s ",
-	 solarPanelString, batteryLvl[5], *fuelLvl, *pConsume, *pGenerate,
+	 solarPanelString, *batteryLvl, *fuelLvl, *pConsume, *pGenerate,
 	 battString, fuelString);
 
 	 if (*response == 'A') {

@@ -61,7 +61,14 @@ void consoleDisplay(void *consoleStruct) {
 
     int flags = fcntl(STDIN_FILENO, F_GETFL, 0);
 	fcntl(STDIN_FILENO, F_SETFL, flags | O_NONBLOCK);
+	//#define DEBUG
+	#ifndef DEBUG
 	char c = getchar();
+	#endif
+	
+	#ifdef DEBUG
+	char c = 'z';
+	#endif
 	//printf("CONSOLE: c = %d, %c\n", c, c);
 	if (c != 255) {
 		char output[MAX];
@@ -73,7 +80,7 @@ void consoleDisplay(void *consoleStruct) {
 							"Fuel Level: %3hu, "
 							"Power Consumption: %2hu, "
 							"Power Generation: %2hu\n",
-							 solarPanelString, batteryLvl[5], *fuelLvl, *pConsume, *pGenerate);
+							 solarPanelString, *batteryLvl, *fuelLvl, *pConsume, *pGenerate);
 			terminalComs(output);
 		} else if (c == ANNUNCIATION) {
 			printf("ConsoleDisplay: Showing Annunciation Mode...\n");

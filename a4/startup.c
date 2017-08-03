@@ -33,7 +33,7 @@ void warningAlarm(void *warnStruct) {}
 // Define shared variables
 unsigned int thrusterCommand;
 unsigned int *batteryLvl;
-unsigned int batteryBuff[BUF_SIZE] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15};
+unsigned int batteryBuff[BUF_SIZE] = {100};
 //unsigned int current_measurement = 0;
 unsigned short fuelLvl;
 unsigned short pConsume;
@@ -101,11 +101,19 @@ void Initialize(void) {
   #define BEAGLEBONE
   #ifdef BEAGLEBONE
   FILE *led0 = fopen("/sys/class/leds/beaglebone:green:usr0/brightness", "w");
-  if (!led0) {
-     fprintf(stderr, "MAIN: Couldn't open led0\n");
+  FILE *led1 = fopen("/sys/class/leds/beaglebone:green:usr1/brightness", "w");
+  FILE *led2 = fopen("/sys/class/leds/beaglebone:green:usr2/brightness", "w");
+  FILE *led3 = fopen("/sys/class/leds/beaglebone:green:usr3/brightness", "w");
+ 
+  if (!led0 || !led1 || !led2 || !led3) {
+     fprintf(stderr, "MAIN: Couldn't open led\n");
      return;
   } else {
      fprintf(led0, "%d", 0); fflush(led0); fclose(led0);
+     fprintf(led1, "%d", 0); fflush(led1); fclose(led1);
+     fprintf(led2, "%d", 0); fflush(led2); fclose(led2);
+     fprintf(led3, "%d", 0); fflush(led3); fclose(led3);
+	 
   }
   #endif
 
@@ -191,7 +199,7 @@ void Initialize(void) {
   warningAlarmTCB.myTask = warningAlarm;
    // 4.8: transportDistance
   transportDistanceTCB.taskDataPtr = (void*)&tranData;
-  warningAlarmTCB.myTask = transportDistance; 
+  transportDistanceTCB.myTask = transportDistance; 
   // 4.8: imageCapture
   imageCaptureTCB.taskDataPtr = (void*)&iData;
   imageCaptureTCB.myTask = imageCapture;
