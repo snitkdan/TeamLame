@@ -23,7 +23,7 @@ typedef enum {wrt, rd} rw;
 int fd0;    
 char buf[MAX_BUF];    
 
-void satelliteEnd(int fd0, rw coms, char cmd);
+void satelliteEnd(int fd0, rw coms, char *cmd);
 void vehicleEnd(int fd0);
 
 void vehicleComms(void *vehicleStruct) {
@@ -60,10 +60,10 @@ void vehicleComms(void *vehicleStruct) {
     /* open the FIFO */
 	
     fd0 = open(myfifo0, O_RDWR);
-    satelliteEnd(fd0, wrt, *command);     //  write to fifo
+    satelliteEnd(fd0, wrt, command);     //  write to fifo
     vehicleEnd(fd0);	         //  read then write to the fifo
-    satelliteEnd(fd0, rd, *response);     //  read fromn the fifo	
-    *response = 'A';
+    satelliteEnd(fd0, rd, response);     //  read fromn the fifo	
+	printf("RESPONSE = %s\n", response);
 	close(fd0);
 
     //printf("VEHICLE COMS: %c\n", response);
@@ -72,28 +72,35 @@ void vehicleComms(void *vehicleStruct) {
     return;
 }
 
-void satelliteEnd(int fd0, rw coms, char cmd) {
+void satelliteEnd(int fd0, rw coms, char *cmd) {
      char buf[MAX_BUF];
      int size = 0;
 
      switch(coms) {
          case wrt:
          {
-             printf("SATELLITE: send cmd %c\n", cmd);
-             char toVehicle[2];
+             printf("SATELLITE: send cmd %s\n", cmd);
+             /*char toVehicle[2];
              toVehicle[0] = cmd;
              toVehicle[1] = '\0';
              size = sizeof(toVehicle);
-             write(fd0, toVehicle, size);
-             break;
+             write(fd0, toVehicle, size);			 
+			 */
+			 write(fd0, cmd, sizeof(cmd));
+			 break;
          }
          case rd:
          {
              printf("SATELLITE: receiving response\n");
              read(fd0, buf, MAX_BUF);
-             printf("Received: %s\n", buf);
-             cmd = 'A';
-             break;
+             printf("SATELLITE: received: %s\n", buf);
+             int i = 0;
+			 while (buf[i] != '\0') {
+				 cmd[i] = buf[i];
+				 i++;
+			 }
+			 cmd[i] = '\0';
+			 break;
          }
      }
 }
@@ -102,13 +109,13 @@ void vehicleEnd(int fd0) {
      char buf[MAX_BUF];
      read(fd0, buf, MAX_BUF);
      printf("VEHICLE: Received command: %s\n", buf);
-     char responseBuf[4];	 
+     char responseBuf[10];	 
 	 if (strchr(buf, REQUEST_LIFTOFF)) {
-		sprintf(responseBuf, "K %s", buf);
+		sprintf(responseBuf, "K %s%c", buf, '\0');
 	 } else if (strchr(buf, REQUEST_DOCK)) {
-		sprintf(responseBuf, "C %s", buf);
+		sprintf(responseBuf, "C %s%c", buf, '\0');
 	 } else {
-		sprintf(responseBuf, "A %s", buf);		 
+		sprintf(responseBuf, "A %s%c", buf, '\0');		 
 		 
 	 }
      write(fd0, responseBuf, sizeof(responseBuf));

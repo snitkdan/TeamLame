@@ -13,6 +13,7 @@
 #include <sys/types.h>
 #include <unistd.h>
 #include <stdlib.h>
+#include <string.h>
 
 
 #include "TCB.h"
@@ -86,7 +87,10 @@ void satelliteComs(void *satStruct) {
 	 solarPanelString, *batteryLvl, *fuelLvl, *pConsume, *pGenerate,
 	 battString, fuelString);
 
-	 if (*response == 'A') {
+	 if (strstr(response, "A") || 
+	     strstr(response, "C") || 
+		 strstr(response, "K")) 
+     {
 		 dprintf(fd1, "\nVehicle Response: %c %c\n", *response, *command);
 	 }
 }
