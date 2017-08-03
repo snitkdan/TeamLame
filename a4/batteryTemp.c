@@ -22,6 +22,8 @@ void batteryTemp(void *temperatureStruct) {
 	}
     start = GLOBALCOUNTER;
 	*/
+    tempData *tData = (tempData*)temperatureStruct;
+    bool *batteryOverTemp = tData->batteryOverTempPtr;    	
     return;
 }
 

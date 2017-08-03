@@ -38,6 +38,7 @@ unsigned int batteryBuff[BUF_SIZE] = {100};
 unsigned short fuelLvl;
 unsigned short pConsume;
 unsigned short pGenerate;
+unsigned short distance;
 bool solarPanelState;
 bool fuelLow;
 bool batteryLow;
@@ -45,6 +46,7 @@ bool solarPanelDeploy;
 bool solarPanelRetract;
 bool motorInc;
 bool motorDec;
+bool batteryOverTemp;
 char command;
 char response;
 
@@ -94,8 +96,10 @@ void Initialize(void) {
   solarPanelRetract = false;
   motorInc = false;
   motorDec = false;
+  batteryOverTemp = false;
   command = '\0';
   response = '\0';
+  distance = 0;
 
   // 2. Turn off led0 initially
   #define BEAGLEBONE
@@ -159,19 +163,24 @@ void Initialize(void) {
   cData.fuelLvlPtr = &fuelLvl;
   cData.pConsumePtr = &pConsume;
   cData.pGeneratePtr = &pGenerate;
+  cData.distancePtr = &distance;
+  cData.batteryOverTempPtr = &batteryOverTemp;
   // 3.8: warningAlarm
   wData.fuelLowPtr = &fuelLow;
   wData.batteryLowPtr = &batteryLow;
   wData.batteryLvlPtr = batteryLvl;
   wData.fuelLvlPtr = &fuelLvl;
+  // 3.9: transportDistance
+  tranData.distancePtr = &distance;
   
   #ifdef INSERT_LAB4_DATA_HERE
-  tranData.fooPtr = &foo;
-  
   iData.fooPtr = &foo;
-  temData.fooPtr = &foo;
-  #endif
   
+
+  #endif
+  //3.10 batteryTemp
+  temData.batteryOverTempPtr = &batteryOverTemp;
+
   // 4. Initialize the TCBs
   // 4.1: powerSubsystem
   powerSubsystemTCB.taskDataPtr = (void*)&pData;

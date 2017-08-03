@@ -48,10 +48,12 @@ void consoleDisplay(void *consoleStruct) {
     bool *fuelLow = cData->fuelLowPtr;
     bool *batteryLow = cData->batteryLowPtr;
     bool *solarPanelState = cData->solarPanelStatePtr;
+    bool *batteryOverTemp = cData->batteryOverTempPtr;	
     unsigned int *batteryLvl = cData->batteryLvlPtr;
     unsigned short *fuelLvl = cData->fuelLvlPtr;
     unsigned short *pConsume = cData->pConsumePtr;
     unsigned short *pGenerate = cData->pGeneratePtr;
+    unsigned short *distance = cData->distancePtr;	
 
     // 1.2 Define necessary string storage
     char *solarPanelString = (*solarPanelState) ? "Deployed":"Retracted";

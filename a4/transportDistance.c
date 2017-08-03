@@ -22,6 +22,8 @@ void transportDistance(void *transportStruct) {
 	}
     start = GLOBALCOUNTER;
 	*/
+	transportData *tData = (transportData*)transportStruct;
+    unsigned short *distance = tData->distancePtr;
     return;
 }
 

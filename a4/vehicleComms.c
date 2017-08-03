@@ -74,18 +74,10 @@ void vehicleComms(void *vehicleStruct) {
 
 void satelliteEnd(int fd0, rw coms, char *cmd) {
      char buf[MAX_BUF];
-     int size = 0;
-
      switch(coms) {
          case wrt:
          {
              printf("SATELLITE: send cmd %s\n", cmd);
-             /*char toVehicle[2];
-             toVehicle[0] = cmd;
-             toVehicle[1] = '\0';
-             size = sizeof(toVehicle);
-             write(fd0, toVehicle, size);			 
-			 */
 			 write(fd0, cmd, sizeof(cmd));
 			 break;
          }
