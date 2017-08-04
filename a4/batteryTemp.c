@@ -46,8 +46,8 @@ void batteryTemp(void *temperatureStruct) {
 
 	// 1. Read from the 2 sensors
 	#ifdef ADC
-	int battTemp1 = readADC(ACH1, HNUM1);
-	int battTemp2 = readADC(ACH2, HNUM2);
+	double battTemp1 = readADC(ACH1, HNUM1) / 1000;
+	double battTemp2 = readADC(ACH2, HNUM2) / 1000;
 	static int callNum = 0;
 	static int currTmp = 0;
 	#endif
