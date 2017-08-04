@@ -4,6 +4,7 @@ objects = satelliteComs.o powerSubsystem.o consoleDisplay.o \
           vehicleComms.o nonBlockingKeys.o startup.o \
 	  scheduler.o pwm_utils.o adc_utils.o \
 	  transportDistance.o imageCapture.o batteryTemp.o \
+	  optfft.o \
 	  
 headers = dataStructs.h TCB.h startup.h scheduler.h
 
@@ -11,11 +12,14 @@ all: main
 
 main: main.c $(objects) $(headers)
 	gcc -Wall -g -o main main.c $(objects)
+	
+optfft.o: optfft.c optfft.h tables.c
+	gcc -Wall -g -c -o optfft.o optfft.c	
 
 transportDistance.o: transportDistance.c
 	gcc -Wall -g -c -o transportDistance.o transportDistance.c	
 
-imageCapture.o: imageCapture.c
+imageCapture.o: imageCapture.c optfft.h
 	gcc -Wall -g -c -o imageCapture.o imageCapture.c
 	
 batteryTemp.o: batteryTemp.c

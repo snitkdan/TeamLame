@@ -12,7 +12,6 @@
 #include <unistd.h>
 #include "dataStructs.h"
 #include "TCB.h"
-#include "dataStructs.h"
 #include "powerSubsystem.h"
 #include "adc_utils.h"
 

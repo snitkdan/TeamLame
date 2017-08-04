@@ -244,6 +244,7 @@ void Initialize(void) {
   AppendTCB(queue, &consoleDisplayTCB);
   AppendTCB(queue, &vehicleCommsTCB);
   AppendTCB(queue, &batteryTempTCB);
+  AppendTCB(queue, &imageCaptureTCB);
 }
 
 void ActivateTimeBase(void) {

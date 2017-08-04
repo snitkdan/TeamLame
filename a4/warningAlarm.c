@@ -44,7 +44,7 @@ FILE *led3 = NULL;
 static int tempFlag = 0; // 0: normal, 1: battery was over temperature waiting for acknowledge print onto terminal, 2: no acknowledge after 15 sec, flash lights 
 static int timer_batt = 0;
 static int timer_fuel = 0;
-static int timer_15 = 130;
+static int timer_15 = 0;
 static int timer_10 = 0;
 
 int stateled2 = 0;
@@ -88,13 +88,11 @@ void warningAlarm(void *warnStruct) {
 	
 	if (tempFlag != 2) {
 		if (tempFlag == 1) {
-			printf("BATTERY OVERHEAT!!\n");
+			//printf("BATTERY OVERHEAT!!\n");
 			if (timer_15 == GC_FIFTEEN) {
 				tempFlag = 2;
-				printf("STARTING FLASHING SHIT NOW\n\n\n\n\n");
 				timer_15 = 0;
 			} else {
-				printf("timer_15 = %d\n", timer_15);
 				timer_15++;	
 			}
 			readAck();			
@@ -152,7 +150,6 @@ void warningAlarm(void *warnStruct) {
             timer_fuel++;
 		}
 	} else {
-		printf("------------FLASHING LIGHTS HERE\n");	
 		readAck();
 		ledState(led3, OFF);
 		
@@ -194,7 +191,7 @@ void readAck() {
 	if (!warningCmd(c)) {
 		if (consoleModeCmd(c) || motorSpeedCmd(c) || satVehicleCmd(c)) ungetc(c, stdin);
 	} else {
-		printf("Warning Alarm: Acknowledge Received\n");
+		//printf("Warning Alarm: Acknowledge Received\n");
 		tempFlag = 0;
 		timer_15 = 0;
 	}	
