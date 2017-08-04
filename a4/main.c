@@ -11,6 +11,9 @@
 #include "startup.h"
 #include "scheduler.h"
 
+
+#define TEST
+
 extern unsigned long GLOBALCOUNTER;
 
 void main(void) {
@@ -29,41 +32,43 @@ void main(void) {
 
     extern bool solarPanelDeploy;
     extern bool solarPanelRetract;
+
+    static int app = 0;
+    static int rem = 1;
+
+    int test_task = 8;
+
 		int i = 0;
 		while (true) {
-                  static int append = 0;
-                  static int remove = 1;
-                  //printf("spDeploy:%d spRetract:%d spState:%d\n", solarPanelDeploy, solarPanelRetract, solarPanelState);
-		  if ((solarPanelState && !solarPanelDeploy) || 
-                      (!solarPanelState && !solarPanelRetract)) {
-                       if (append==1) {
-                          printf("Appending solar and keyboard\n");
-		          AppendTCB(queue, &solarPanelControlTCB);
-			  AppendTCB(queue, &keyboardConsoleTCB);
-                          append = 0;
-                          remove = 1;
-                          printf("%u\n", NumTasksInTaskQueue(queue));
-                      }
-                  } else if (remove) { 
-                          printf("Removing solar and keyboard\n");
-		          RemoveTCB(queue, &solarPanelControlTCB);
-			  RemoveTCB(queue, &keyboardConsoleTCB);
-                          append = 1;
-                          remove = 0;
-		  }	
-
+		  if ((solarPanelState && !solarPanelDeploy) ||
+          (!solarPanelState && !solarPanelRetract)) {
+        if (append==1) {
+          printf("Appending solar and keyboard\n");
+          AppendTCB(queue, &solarPanelControlTCB);
+          AppendTCB(queue, &keyboardConsoleTCB);
+          app = 0;
+          rem = 1;
+          printf("%u\n", NumTasksInTaskQueue(queue));
+        }
+      } else if (remove) {
+        printf("Removing solar and keyboard\n");
+        RemoveTCB(queue, &solarPanelControlTCB);
+        RemoveTCB(queue, &keyboardConsoleTCB);
+        app = 1;
+        rem = 0;
+		  }
 		  aTCBPtr = PopTCB(queue);
 		  aTCBPtr->myTask((aTCBPtr->taskDataPtr));
 		  if(i == 5) {
-			if(GLOBALCOUNTER % MAJOR_CYCLE == 0) {
-			  usleep(70495.4);
-			} else {
-			  usleep(79804);
-			}
-			GLOBALCOUNTER++;
+  			if(GLOBALCOUNTER % MAJOR_CYCLE == 0) {
+  			  usleep(70495.4);
+  			} else {
+  			  usleep(79804);
+  			}
+			  GLOBALCOUNTER++;
 		  }
 		  AppendTCB(queue, aTCBPtr);
-			i = (i + 1) % 6;
+			i = (i + 1) % 9;
 		}
 		return;
 }

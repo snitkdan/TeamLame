@@ -23,4 +23,10 @@ void Initialize(void);
     the system time base.
 */
 void ActivateTimeBase(void);
+
+/*
+  @effects
+    initializes the ADC / PWM
+*/
+void InitHardware(void);
 #endif

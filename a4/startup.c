@@ -31,13 +31,19 @@ void warningAlarm(void *warnStruct) {}
 #endif
 
 // Define shared variables
+// Thrusters
 unsigned int thrusterCommand;
+unsigned short fuelLvl;
+// Power Subsystem
 unsigned int *batteryLvl;
 unsigned int batteryBuff[BUF_SIZE] = {100};
-//unsigned int current_measurement = 0;
-unsigned short fuelLvl;
 unsigned short pConsume;
 unsigned short pGenerate;
+// Battery Temp
+unsigned int batteryTempBuff1[BUF_SIZE] = {100};
+unsigned int batteryTempBuff2[BUF_SIZE] = {100};
+unsigned int *batteryTmp1;
+unsigned int *batteryTmp2;
 unsigned short distance;
 bool solarPanelState;
 bool fuelLow;
@@ -86,6 +92,11 @@ void Initialize(void) {
   // 1. Assign initial values to shared variables
   thrusterCommand = 0;
   batteryLvl = &batteryBuff[0];
+
+  // Battery Temperature
+  batteryTmp1 = &batteryTempBuff1[0];
+  batteryTmp2 = &batteryTempBuff2[0];
+
   fuelLvl = 100;
   pConsume = 0;
   pGenerate = 0;
@@ -108,7 +119,6 @@ void Initialize(void) {
   FILE *led1 = fopen("/sys/class/leds/beaglebone:green:usr1/brightness", "w");
   FILE *led2 = fopen("/sys/class/leds/beaglebone:green:usr2/brightness", "w");
   FILE *led3 = fopen("/sys/class/leds/beaglebone:green:usr3/brightness", "w");
- 
   if (!led0 || !led1 || !led2 || !led3) {
      fprintf(stderr, "MAIN: Couldn't open led\n");
      return;
@@ -117,8 +127,10 @@ void Initialize(void) {
      fprintf(led1, "%d", 0); fflush(led1); fclose(led1);
      fprintf(led2, "%d", 0); fflush(led2); fclose(led2);
      fprintf(led3, "%d", 0); fflush(led3); fclose(led3);
-	 
+
   }
+  // 2.1: Initialize the Hardware Perepherals
+  InitHardware();
   #endif
 
   // 3. Assign shared variables to pointers
@@ -172,14 +184,14 @@ void Initialize(void) {
   wData.fuelLvlPtr = &fuelLvl;
   // 3.9: transportDistance
   tranData.distancePtr = &distance;
-  
+
   #ifdef INSERT_LAB4_DATA_HERE
   iData.fooPtr = &foo;
-  
-
   #endif
   //3.10 batteryTemp
   temData.batteryOverTempPtr = &batteryOverTemp;
+  temData.batteryTmp1 = batteryTmp1;
+  temData.batteryTmp2 = batteryTmp2;
 
   // 4. Initialize the TCBs
   // 4.1: powerSubsystem
@@ -208,14 +220,14 @@ void Initialize(void) {
   warningAlarmTCB.myTask = warningAlarm;
    // 4.8: transportDistance
   transportDistanceTCB.taskDataPtr = (void*)&tranData;
-  transportDistanceTCB.myTask = transportDistance; 
+  transportDistanceTCB.myTask = transportDistance;
   // 4.8: imageCapture
   imageCaptureTCB.taskDataPtr = (void*)&iData;
   imageCaptureTCB.myTask = imageCapture;
     // 4.8: batteryTemp
   batteryTempTCB.taskDataPtr = (void*)&temData;
   batteryTempTCB.myTask = batteryTemp;
-  
+
   // 5. Initialize the task queue
   queue = &q;
   InitializeTaskQueue(queue);
@@ -227,8 +239,16 @@ void Initialize(void) {
   AppendTCB(queue, &powerSubsystemTCB);
   AppendTCB(queue, &consoleDisplayTCB);
   AppendTCB(queue, &vehicleCommsTCB);
+  AppendTCB(queue, &batteryTempTCB);
 }
 
 void ActivateTimeBase(void) {
   GLOBALCOUNTER = 0;
+}
+
+void InitHardware(void) {
+  if(!initADC()) {
+    fprintf(stderr, "ADC ERROR\n");
+    exit(EXIT_FAILURE);
+  }
 }

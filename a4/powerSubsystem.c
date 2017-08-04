@@ -21,7 +21,6 @@
 #ifndef DEBUG
 extern unsigned int batteryBuff[BUF_SIZE];
 #endif
-static int nextMeasurement();
 
 void powerSubsystem(void *powerStruct) {
   // Only run this function every major cycle
@@ -40,21 +39,13 @@ void powerSubsystem(void *powerStruct) {
   bool *solarPanelRetract = pData->solarPanelRetractPtr;
   // 2. Update the buffer
   static unsigned int current_measurement = 0;
-  static bool adc_init = false;
-  #ifndef DEBUG 
-  if(!adc_init) {
-    adc_init = initADC();
-    return;
-  }
-  int next = nextMeasurement();
-  #endif
-  
   #ifdef DEBUG
+  int next = readADC(ACH, HNUM);
   unsigned int batteryBuff[BUF_SIZE] = {100, 90, 80, 70, 60, 50, 40, 30, 25, 20, 15, 14, 13, 12, 11, 10};
   *batteryLvl = batteryBuff[current_measurement];
   current_measurement = (current_measurement + 1) % BUF_SIZE;
   #endif
-  
+
   #ifndef DEBUG
   batteryBuff[current_measurement] = next;
   current_measurement = (current_measurement + 1) % BUF_SIZE;
@@ -65,12 +56,9 @@ void powerSubsystem(void *powerStruct) {
   // 1. deployed and retracted bug
   // 2. updating battery with potentiometer
   // 3. rescaling v to mv
+  // 4. Change battery level pointer rescaled!!
   powerConsumption(pConsume);
   useSolarPanels(solarPanelState, solarPanelDeploy, solarPanelRetract, pGenerate, batteryLvl);
-}
-
-static int nextMeasurement() {
-  return readADC(ACH, HNUM);
 }
 
 bool useSolarPanels(bool *solarPanelState, bool *solarPanelDeploy, bool *solarPanelRetract, unsigned short *pGenerate, unsigned int *batteryLvl) {
