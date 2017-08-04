@@ -24,6 +24,19 @@ void transportDistance(void *transportStruct) {
 	*/
 	transportData *tData = (transportData*)transportStruct;
     unsigned short *distance = tData->distancePtr;
+	
+	// unsigned int frequency variable?
+	
+	// The Satellite Management and Control System must support an interface to a sensor that
+    // detects a signal from an inbound transport vehicle. The frequency of the incoming signal
+    // shall be proportional to the distance between the satellite and an inbound transport vehicle. 
+	
+	// received interrupt when distance == 1000
+	
+	
+	// distance in meters
+	
+	
     return;
 }
 

@@ -33,7 +33,6 @@ void batteryTemp(void *temperatureStruct) {
 	}
     start = GLOBALCOUNTER;
 	*/
-	// Make buffers circular with fifo?
 
 	// 0. Recast the data
 	tempData *temData = (tempData *)temperatureStruct;
