@@ -26,7 +26,7 @@ bool initPWM(char *pin) {
 	// 3. Open the pwm
 	pwm = fopen(mgr_path, "w");
 	if(!pwm) {
-		fprintf(stderr, "Failed to initialize PWM for pin %s\n", pin);
+		//fprintf(stderr, "Failed to initialize PWM for pin %s\n", pin);
 		return false;
 	}
 	// 4. Configure the PWM
@@ -56,7 +56,7 @@ bool setPWMProperty(char *pin, char *prop, double prop_val, int hnum) {
 	// 3, Open the pwm
 	pwm = fopen(prop_path, "w");
 	if(!pwm) {
-		fprintf(stderr, "Failed to update %s\n", prop);
+		//fprintf(stderr, "Failed to update %s\n", prop);
 		return false;
 	}
 	// 4. Set the property

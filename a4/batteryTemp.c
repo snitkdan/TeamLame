@@ -50,19 +50,19 @@ void batteryTemp(void *temperatureStruct) {
 	int battTemp2 = readADC(ACH2, HNUM2);
 	#endif
 	#ifdef debug
-	static callNum = 0;
-	static int currTmp = 1;
-	int battTemp1 = batteryTempBuff1[currTmp];
-	int battTemp2 = batteryTempBuff2[currTmp];
+	static int callNum = 0;
+	static int currTmp = 0;
+	unsigned int battTemp1 = batteryTempBuff1[currTmp];
+	unsigned int battTemp2 = batteryTempBuff2[currTmp];
 	battTemp1 *= (callNum % 3) ? 1.3 : (callNum % 2) ? 1.2 : 1.1;
 	battTemp2 *= (callNum % 3) ? 1.3 : (callNum % 2) ? 1.2 : 1.1;
 	currTmp = (currTmp + 1) % 16;
 	#endif
 	// 2. Convert sensor readings to temperatures
-	int temp1 = 32 * battTemp1 + 33;
-	int temp2 = 32 * battTemp2 + 33;
+	unsigned int temp1 = 32 * battTemp1 + 33;
+	unsigned int temp2 = 32 * battTemp2 + 33;
 	// 3. Check the overtemp
-	if(*batteryTmp1 != 0) {
+	if(callNum != 0) {
 		double t1_diff = 1.20 * *batteryTmp1;
 		double t2_diff = 1.20 * *batteryTmp2;
 		*batteryOverTempPtr = (temp1 > t1_diff || temp2 > t2_diff) ? true : false;
@@ -71,8 +71,8 @@ void batteryTemp(void *temperatureStruct) {
 	*batteryTmp2 = temp2;
 	batteryTempBuff1[currTmp] = temp1;
 	batteryTempBuff2[currTmp] = temp2;
-	printf("callNum: %d, batteryTmp1: %d, batteryTmp2: %d, batteryOverTmp %d\n",
+	printf("callNum: %d, batteryTmp1: %u, batteryTmp2: %u, batteryOverTmp %d\n",
 					callNum, *batteryTmp1, *batteryTmp2, *batteryOverTempPtr);
-	callNum = (callNum + 1) % 3;
+	callNum++;
   return;
 }

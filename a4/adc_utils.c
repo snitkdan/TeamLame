@@ -47,7 +47,7 @@ int readADC(char *ach, int hnum) {
   // 3. Open the ach for reading
   adc_val = fopen(adc_val_path, "r");
   if(!adc_val) {
-    fprintf(stderr, "Failed to read from %s\n", ach);
+    //fprintf(stderr, "Failed to read from %s\n", ach);
     return -1;
   }
   // 4. Read in the value from ach
