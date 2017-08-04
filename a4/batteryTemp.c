@@ -21,6 +21,8 @@
 #define HNUM1 16
 #define HNUM2 16
 
+#define debug
+
 extern unsigned int batteryTempBuff1[BUF_SIZE];
 extern unsigned int batteryTempBuff2[BUF_SIZE];
 
@@ -46,9 +48,12 @@ void batteryTemp(void *temperatureStruct) {
 	int battTemp2 = readADC(ACH2, HNUM2);
 	#endif
 	#ifdef debug
+	static callNum = 0;
 	static int currTmp = 1;
 	int battTemp1 = batteryTempBuff1[currTmp];
 	int battTemp2 = batteryTempBuff2[currTmp];
+	battTemp1 *= (callNum % 3) ? 1.3 : (callNum % 2) ? 1.2 : 1.1;
+	battTemp2 *= (callNum % 3) ? 1.3 : (callNum % 2) ? 1.2 : 1.1;
 	currTmp = (currTmp + 1) % 16;
 	#endif
 	// 2. Convert sensor readings to temperatures
@@ -64,7 +69,8 @@ void batteryTemp(void *temperatureStruct) {
 	*batteryTmp2 = temp2;
 	batteryTempBuff1[currTmp] = temp1;
 	batteryTempBuff2[currTmp] = temp2;
-	printf("batteryTmp1: %d, batteryTmp2: %d, batteryOverTmp %d\n",
-					*batteryTmp1, *batteryTmp2, *batteryOverTempPtr);
+	printf("callNum: %d, batteryTmp1: %d, batteryTmp2: %d, batteryOverTmp %d\n",
+					callNum, *batteryTmp1, *batteryTmp2, *batteryOverTempPtr);
+	callNum = (callNum + 1) % 3;
   return;
 }

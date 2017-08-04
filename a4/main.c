@@ -59,14 +59,14 @@ void main(void) {
 		  }
 		  aTCBPtr = PopTCB(queue);
 		  aTCBPtr->myTask((aTCBPtr->taskDataPtr));
-		  if(i == 5) {
+		  /*if(i == 5) {
   			if(GLOBALCOUNTER % MAJOR_CYCLE == 0) {
   			  usleep(70495.4);
   			} else {
   			  usleep(79804);
   			}
 			  GLOBALCOUNTER++;
-		  }
+		  }*/
 		  AppendTCB(queue, aTCBPtr);
 			i = (i + 1) % 9;
 		}
