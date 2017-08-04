@@ -50,10 +50,13 @@ void batteryTemp(void *temperatureStruct) {
 	int battTemp2 = readADC(ACH2, HNUM2);
 	#endif
 	#ifdef debug
+
+	static unsigned int tempBuff[] = {100, 100, 100, 100, 100, 100,
+			100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100};
 	static int callNum = 0;
 	static int currTmp = 0;
-	unsigned int battTemp1 = batteryTempBuff1[currTmp];
-	unsigned int battTemp2 = batteryTempBuff2[currTmp];
+	unsigned int battTemp1 = tempBuff[currTmp];
+	unsigned int battTemp2 = tempBuff[currTmp];
 	battTemp1 *= (callNum % 3) ? 1.3 : (callNum % 2) ? 1.2 : 1.1;
 	battTemp2 *= (callNum % 3) ? 1.3 : (callNum % 2) ? 1.2 : 1.1;
 	currTmp = (currTmp + 1) % 16;

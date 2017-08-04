@@ -40,7 +40,7 @@ void main(void) {
 
 		int i = 0;
 		while (true) {
-	usleep(100000);
+	    usleep(100000);
 		  if ((solarPanelState && !solarPanelDeploy) ||
           (!solarPanelState && !solarPanelRetract)) {
         if (app == 1) {
