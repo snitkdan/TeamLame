@@ -12,6 +12,7 @@
 #include "dataStructs.h"
 #include "warningAlarm.h"
 #include "scheduler.h"
+#include "startup.h"
 #include "adc_utils.h"
 
 #define BUF_SIZE 16
