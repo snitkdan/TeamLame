@@ -23,7 +23,7 @@
 
 #define BUF_SIZE 16
 
-#define debug
+#define ADC
 
 extern unsigned int batteryTempBuff1[BUF_SIZE];
 extern unsigned int batteryTempBuff2[BUF_SIZE];
