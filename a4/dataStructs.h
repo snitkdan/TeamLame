@@ -48,7 +48,7 @@ typedef struct satelliteComsData {
   bool *fuelLowPtr;
   bool *batteryLowPtr;
   bool *solarPanelStatePtr;
-  unsigned int *batteryLvlPtr;  
+  unsigned int *batteryLvlPtr;
   unsigned short *fuelLvlPtr;
   unsigned short *pConsumePtr;
   unsigned short *pGeneratePtr;
@@ -62,7 +62,7 @@ typedef struct consoleDisplayData {
   bool *batteryLowPtr;
   bool *solarPanelStatePtr;
   bool *batteryOverTempPtr;
-  unsigned int *batteryLvlPtr;  
+  unsigned int *batteryLvlPtr;
   unsigned short *fuelLvlPtr;
   unsigned short *pConsumePtr;
   unsigned short *pGeneratePtr;
@@ -86,5 +86,7 @@ typedef struct imageCaptureData {
 
 typedef struct batteryTempData {
   bool *batteryOverTempPtr;
+  unsigned int *batteryTmp1;
+  unsigned int *batteryTmp2;
 } tempData;
 #endif

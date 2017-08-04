@@ -12,6 +12,7 @@
 #include "dataStructs.h"
 #include "warningAlarm.h"
 #include "scheduler.h"
+#include "adc_utils.h"
 
 #define BUF_SIZE 16
 
@@ -130,7 +131,7 @@ void Initialize(void) {
 
   }
   // 2.1: Initialize the Hardware Perepherals
-  InitHardware();
+  //InitHardware();
   #endif
 
   // 3. Assign shared variables to pointers
@@ -247,8 +248,8 @@ void ActivateTimeBase(void) {
 }
 
 void InitHardware(void) {
-  if(!initADC()) {
+  /*if(!initADC()) {
     fprintf(stderr, "ADC ERROR\n");
     exit(EXIT_FAILURE);
-  }
+  } */
 }

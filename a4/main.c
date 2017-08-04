@@ -42,7 +42,7 @@ void main(void) {
 		while (true) {
 		  if ((solarPanelState && !solarPanelDeploy) ||
           (!solarPanelState && !solarPanelRetract)) {
-        if (append==1) {
+        if (app == 1) {
           printf("Appending solar and keyboard\n");
           AppendTCB(queue, &solarPanelControlTCB);
           AppendTCB(queue, &keyboardConsoleTCB);
@@ -50,7 +50,7 @@ void main(void) {
           rem = 1;
           printf("%u\n", NumTasksInTaskQueue(queue));
         }
-      } else if (remove) {
+      } else if (rem) {
         printf("Removing solar and keyboard\n");
         RemoveTCB(queue, &solarPanelControlTCB);
         RemoveTCB(queue, &keyboardConsoleTCB);

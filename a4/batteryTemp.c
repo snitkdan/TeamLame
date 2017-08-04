@@ -21,6 +21,8 @@
 #define HNUM1 16
 #define HNUM2 16
 
+#define BUF_SIZE 16
+
 #define debug
 
 extern unsigned int batteryTempBuff1[BUF_SIZE];
