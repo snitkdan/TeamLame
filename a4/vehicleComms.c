@@ -16,7 +16,7 @@
 #include "satelliteVehicle.h"
 #include "nonBlockingKeys.h"
 #define MAX 300
-#define MAX_BUF 300
+#define MAX_BUF 10
 #define DEBUG
 typedef enum {wrt, rd} rw;
 
@@ -60,41 +60,18 @@ void vehicleComms(void *vehicleStruct) {
     /* open the FIFO */
 	
     fd0 = open(myfifo0, O_RDWR);
-    satelliteEnd(fd0, wrt, command);     //  write to fifo
+    char buf[MAX_BUF];
+    write(fd0, command, sizeof(command));
     vehicleEnd(fd0);	         //  read then write to the fifo
-    satelliteEnd(fd0, rd, response);     //  read fromn the fifo	
+	read(fd0, buf, MAX_BUF);
+	response = &buf[0];
+	
 	printf("RESPONSE = %s\n", response);
 	close(fd0);
 
-    //printf("VEHICLE COMS: %c\n", response);
     /* remove the FIFO */
     unlink(myfifo0);
     return;
-}
-
-void satelliteEnd(int fd0, rw coms, char *cmd) {
-     char buf[MAX_BUF];
-     switch(coms) {
-         case wrt:
-         {
-             printf("SATELLITE: send cmd %s\n", cmd);
-			 write(fd0, cmd, sizeof(cmd));
-			 break;
-         }
-         case rd:
-         {
-             printf("SATELLITE: receiving response\n");
-             read(fd0, buf, MAX_BUF);
-             printf("SATELLITE: received: %s\n", buf);
-             int i = 0;
-			 while (buf[i] != '\0') {
-				 cmd[i] = buf[i];
-				 i++;
-			 }
-			 cmd[i] = '\0';
-			 break;
-         }
-     }
 }
 
 void vehicleEnd(int fd0) {
@@ -103,11 +80,11 @@ void vehicleEnd(int fd0) {
      printf("VEHICLE: Received command: %s\n", buf);
      char responseBuf[10];	 
 	 if (strchr(buf, REQUEST_LIFTOFF)) {
-		sprintf(responseBuf, "K %s%c", buf, '\0');
+		snprintf(responseBuf, 10, "K %s", buf);
 	 } else if (strchr(buf, REQUEST_DOCK)) {
-		sprintf(responseBuf, "C %s%c", buf, '\0');
+		snprintf(responseBuf, 10, "C %s", buf);
 	 } else {
-		sprintf(responseBuf, "A %s%c", buf, '\0');		 
+		snprintf(responseBuf, 10, "A %s", buf);		 
 		 
 	 }
      write(fd0, responseBuf, sizeof(responseBuf));

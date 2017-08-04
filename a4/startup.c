@@ -242,8 +242,9 @@ void Initialize(void) {
   AppendTCB(queue, &thrusterSubsystemTCB);
   AppendTCB(queue, &powerSubsystemTCB);
   AppendTCB(queue, &consoleDisplayTCB);
+  AppendTCB(queue, &batteryTempTCB);  
   AppendTCB(queue, &vehicleCommsTCB);
-  AppendTCB(queue, &batteryTempTCB);
+  AppendTCB(queue, &transportDistanceTCB);
   AppendTCB(queue, &imageCaptureTCB);
 }
 
