@@ -184,6 +184,8 @@ void Initialize(void) {
   wData.batteryLowPtr = &batteryLow;
   wData.batteryLvlPtr = batteryLvl;
   wData.fuelLvlPtr = &fuelLvl;
+  wData.batteryOverTempPtr = &batteryOverTemp;
+ 
   // 3.9: transportDistance
   tranData.distancePtr = &distance;
 

@@ -67,14 +67,18 @@ void batteryTemp(void *temperatureStruct) {
 	if(callNum != 0) {
 		double t1_diff = 1.20 * *batteryTmp1;
 		double t2_diff = 1.20 * *batteryTmp2;
-		*batteryOverTempPtr = (temp1 > t1_diff || temp2 > t2_diff) ? true : false;
+		//*batteryOverTempPtr = (temp1 > t1_diff || temp2 > t2_diff) ? true : false;
+		#define DEBUG
+		#ifdef DEBUG
+		*batteryOverTempPtr = true;
+		#endif
 	}
 	*batteryTmp1 = temp1;
 	*batteryTmp2 = temp2;
 	batteryTempBuff1[currTmp] = temp1;
 	batteryTempBuff2[currTmp] = temp2;
-	printf("callNum: %d, batteryTmp1: %u, batteryTmp2: %u, batteryOverTmp %d\n",
-					callNum, *batteryTmp1, *batteryTmp2, *batteryOverTempPtr);
+	//printf("callNum: %d, batteryTmp1: %u, batteryTmp2: %u, batteryOverTmp %d\n",
+	//				callNum, *batteryTmp1, *batteryTmp2, *batteryOverTempPtr);
 	callNum++;
 	currTmp = (currTmp + 1) % 16;
   return;

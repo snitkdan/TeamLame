@@ -56,10 +56,8 @@ int checkRegion(unsigned int *lvlPtr, bool *lowPtr);
 
 
 void ledState(FILE *led, int state);
+void readAck();
+void flipLED(int force, FILE *ledFile, int *state);
 
-bool checkTimeLED2(int interval);
-
-void flipLED2(int force);
-void flipLED1(int force);
 
 #endif

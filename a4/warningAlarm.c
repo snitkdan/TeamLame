@@ -12,6 +12,7 @@
 #include <stdlib.h>
 #include "dataStructs.h"
 #include "warningAlarm.h"
+#include "nonBlockingKeys.h"
 
 
 // declares the regions for batteryLvl and fuelLvl
@@ -25,16 +26,31 @@
 // declares on or off state, used to trigger brightness for LEDs
 #define ON 1
 #define OFF 0
-#define FLIP 1
+#define FLIP 2
 
 // declares how many ticks for the GLOBALCOUNTER before 1 or 2 secs have passed
 #define GC_ONE 10
 #define GC_TWO 20
+#define GC_FIVE 50
+#define GC_TEN 100
+#define GC_FIFTEEN 150
+#define GC_10HZ 2
 
 // globally defines the led files here
 FILE *led1 = NULL;
 FILE *led2 = NULL;
 FILE *led3 = NULL;
+
+static int tempFlag = 0; // 0: normal, 1: battery was over temperature waiting for acknowledge print onto terminal, 2: no acknowledge after 15 sec, flash lights 
+static int timer_batt = 0;
+static int timer_fuel = 0;
+static int timer_15 = 130;
+static int timer_10 = 0;
+
+int stateled2 = 0;
+int stateled1 = 0;
+
+
 
 void warningAlarm(void *warnStruct) {
     // 1.1 Opens the led files and checks they were opened successfully
@@ -57,133 +73,131 @@ void warningAlarm(void *warnStruct) {
     bool *batteryLowPtr = wData->batteryLowPtr;
     unsigned int *batteryLvl = wData->batteryLvlPtr;
     unsigned int *fuelLvl = (unsigned int*) wData->fuelLvlPtr;
+    bool *batteryOverTemp = wData->batteryOverTempPtr;
 
+	
     // 2. Determine in what region the battery/fuel level is (high, med, low)
     int battRegion = checkRegion(batteryLvl, batteryLowPtr);
     int fuelRegion = checkRegion(fuelLvl, fuelLowPtr);
+	
 	// 3. Section for controlling the LEDS
-    if (battRegion == HIGH && fuelRegion == HIGH) {
-		// 3.1 both battery and fuel level are high
-        ledState(led3, ON);
-        ledState(led2, OFF);
-        ledState(led1, OFF);
-    } else {
-		// 3.2 at least batt or fuel is not HIGH
-        ledState(led3, OFF);
-
-	    // 3.2.1 Declare statics to track the states
-		//       for LED2 and its relationship with Battery
-		static unsigned long prevBatt = 0;
-		static int newMedBatt = 1;
-		static int newLowBatt = 0;
-
-		if (battRegion == MED) {
-			// 3.2.2 Battery is in MEDIUM region
-			if (newMedBatt == 1) {
-				// Only do this step if battery just changed
-				// state to MEDIUM
-				prevBatt = GLOBALCOUNTER;
-				newMedBatt--; // decrements to show we've entered MED state
-				newLowBatt++; // increments to show we're not in LOW state
+	if (*batteryOverTemp && tempFlag == 0) { // if tempFlag == 2, don't change it to 1
+		tempFlag = 1;
+		//tempFlag = 0;
+	}
+	
+	if (tempFlag != 2) {
+		if (tempFlag == 1) {
+			printf("BATTERY OVERHEAT!!\n");
+			if (timer_15 == GC_FIFTEEN) {
+				tempFlag = 2;
+				printf("STARTING FLASHING SHIT NOW\n\n\n\n\n");
+				timer_15 = 0;
+			} else {
+				printf("timer_15 = %d\n", timer_15);
+				timer_15++;	
 			}
-
-			if ((GLOBALCOUNTER - prevBatt) % GC_TWO == 0) {
-				// flip led2 state every 2 second
-				flipLED2(FLIP);
-				prevBatt = GLOBALCOUNTER;
-			}
-		} else if (battRegion == LOW) {
-			// 3.2.3 Battery is in LOW region
-			if (newLowBatt == 1) {
-				// Only do this step if battery just changed
-				// state to LOW
-				prevBatt = GLOBALCOUNTER;
-				newLowBatt--; // decrements to show we've entered LOW state
-				newMedBatt++; // increments to show we're not in MED state
-			}
-			if ((GLOBALCOUNTER - prevBatt) % GC_ONE == 0) {
-				// flip led2 state every 1 second
-				flipLED2(FLIP);
-				prevBatt = GLOBALCOUNTER;
-			}
-
-		} else {
-			// 3.2.4 Battery is in HIGH region, LED should turn off
-			//       If in this state, FUEL must be MED or LOW
-			flipLED2(OFF);
+			readAck();			
 		}
-
-		// 3.3.1 Declare statics to track the states
-		//       for LED1 and its relationship with Fuel
-		static unsigned long prevFuel = 0;
-		static int newMedFuel = 1;
-		static int newLowFuel = 0;
-
-		// NOTE: the logic here is the same as the battery's
-		if (fuelRegion == MED) {
-			if (newMedFuel == 1) {
-					prevFuel = GLOBALCOUNTER;
-					newMedFuel--;
-					newLowFuel++;
-			}
-			if ((GLOBALCOUNTER - prevFuel) % GC_TWO == 0) {
-				flipLED1(FLIP);
-				prevFuel = GLOBALCOUNTER;
-			}
-		} else if(fuelRegion == LOW){
-
-			if (newLowFuel == 1) {
-					prevFuel = GLOBALCOUNTER;
-					newLowFuel--;
-					newMedFuel++;
-			}
-			if ((GLOBALCOUNTER - prevFuel) % GC_ONE == 0) {
-				// flip led state
-				flipLED1(FLIP);
-				prevFuel = GLOBALCOUNTER;
-			}
+	
+		if (battRegion == HIGH && fuelRegion == HIGH) {
+			// 3.1 both battery and fuel level are high
+			ledState(led3, ON);
+			ledState(led2, OFF);
+			ledState(led1, OFF);
 		} else {
-			flipLED1(OFF);
+			ledState(led3, OFF);
 
+
+			// 3.2.1 Declare statics to track the states
+			//       for LED2 and its relationship with Battery
+			if (battRegion == MED) {
+				// 3.2.2 Battery is in MEDIUM region
+				if (timer_batt % GC_TWO == 0) {
+					// flip led2 state every 2 second
+					flipLED(FLIP, led2, &stateled2);
+					timer_batt = 0;
+				}
+			} else if (battRegion == LOW) {
+				// 3.2.3 Battery is in LOW region
+				if (timer_batt % GC_ONE == 0) {
+					// flip led2 state every 1 second
+					flipLED(FLIP, led2, &stateled2);
+					timer_batt = 0;					
+				}
+			    timer_batt++;
+			} else {
+				// 3.2.4 Battery is in HIGH region, LED should turn off
+				//       If in this state, FUEL must be MED or LOW
+				flipLED(OFF, led2, &stateled2);
+			}
+		    timer_batt++;
+			
+
+			// NOTE: the logic here is the same as the battery's
+			if (fuelRegion == MED) {
+				if (timer_fuel % GC_TWO == 0) {
+					flipLED(FLIP, led1, &stateled1);
+					timer_fuel = 0;
+				}
+			} else if(fuelRegion == LOW){
+				if (timer_fuel % GC_ONE == 0) {
+					// flip led state
+					flipLED(FLIP, led1, &stateled1);
+					timer_fuel = 0;					
+				}
+			} else {
+				flipLED(OFF, led1, &stateled1);
+			}
+            timer_fuel++;
 		}
-    }
+	} else {
+		printf("------------FLASHING LIGHTS HERE\n");	
+		readAck();
+		ledState(led3, OFF);
+		
+		if (timer_10 < GC_FIVE) {
+			if (timer_10 % GC_10HZ == 0) {
+			    flipLED(FLIP, led2, &stateled2);
+			    flipLED(FLIP, led1, &stateled1);
+			}
+			timer_10++;
+		} else if (timer_10 < GC_TEN) {
+			flipLED(ON, led2, &stateled2);
+			flipLED(ON, led1, &stateled1);
+			timer_10++;			
+	    } else {
+			timer_10 = 0;
+		}
+	}	
 }
 
-// Tracks the state of LED2, whether it's
-// on or off.
-// @param force
-//	  If force is off, then turn LED2 off
-//    else just flip the led state
-void flipLED2(int force) {
-    static int flipLed2 = 0;
+
+void flipLED(int force, FILE *ledFile, int *state) {
 	if (force == OFF) {
-		flipLed2 = 0;
-	} else {
-		flipLed2 = 1 - flipLed2;
+		*state = 0;
+	} else if (force == ON){
+		*state = 1;
+	} else {	
+		*state = 1 - *state;
 	}
-	if (flipLed2 == 1) {
-		ledState(led2, ON);
+	if (*state == 1) {
+		ledState(ledFile, ON);
 	} else {
-		ledState(led2, OFF);
+		ledState(ledFile, OFF);
 	}
 }
-// Tracks the state of LED1, whether it's
-// on or off.
-// @param force
-//	  If force is off, then turn LED1 off
-//    else just flip the led state
-void flipLED1(int force) {
-    static int flipLed1 = 0;
-	if (force == OFF) {
-		flipLed1 = 0;
+
+void readAck() {
+	char c = getchar();
+	//char c = 'a';	
+	if (!warningCmd(c)) {
+		if (consoleModeCmd(c) || motorSpeedCmd(c) || satVehicleCmd(c)) ungetc(c, stdin);
 	} else {
-		flipLed1 = 1 - flipLed1;
-	}
-    if (flipLed1 == 1) {
-        ledState(led1, ON);
-    } else {
-        ledState(led1, OFF);
-    }
+		printf("Warning Alarm: Acknowledge Received\n");
+		tempFlag = 0;
+		timer_15 = 0;
+	}	
 }
 
 // Prints the state to the led and flushes the buffer

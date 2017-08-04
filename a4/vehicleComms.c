@@ -45,7 +45,7 @@ void vehicleComms(void *vehicleStruct) {
     char c = getchar();
     //char c = 'B';	
     if (!satVehicleCmd(c)) {
-        if (consoleModeCmd(c) || motorSpeedCmd(c)) ungetc(c, stdin);
+        if (consoleModeCmd(c) || motorSpeedCmd(c) || warningCmd(c)) ungetc(c, stdin);
         *command = '\0';
 		*response = '\0';
         return;

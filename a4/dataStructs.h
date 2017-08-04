@@ -74,6 +74,7 @@ typedef struct warningAlarmData {
   bool *batteryLowPtr;
   unsigned int *batteryLvlPtr;
   unsigned short *fuelLvlPtr;
+  bool *batteryOverTempPtr; 
 } warnData;
 
 typedef struct transportDistanceData {

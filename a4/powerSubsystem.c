@@ -41,7 +41,7 @@ void powerSubsystem(void *powerStruct) {
   static unsigned int current_measurement = 0;
   #ifdef DEBUG
   int next = readADC(ACH, HNUM);
-  unsigned int batteryBuff[BUF_SIZE] = {100, 90, 80, 70, 60, 50, 40, 30, 25, 20, 15, 14, 13, 12, 11, 10};
+  unsigned int batteryBuff[BUF_SIZE] = {100, 90, 80, 70, 60, 50, 40, 30, 20, 10, 5, 0, 5, 15, 30, 50};
   *batteryLvl = batteryBuff[current_measurement];
   current_measurement = (current_measurement + 1) % BUF_SIZE;
   #endif

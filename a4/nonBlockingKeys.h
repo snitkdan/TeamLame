@@ -17,6 +17,8 @@
 #define REQUEST_LIFTOFF 'T'
 #define REQUEST_DOCK 'D'
 
+// commands for warningAlarm
+#define OVERHEAT_ACK 'a'
 
 // commands for keyboardConsole
 #define SPEEDINC 'i'
@@ -48,5 +50,7 @@ void nonblock(int state);
 bool consoleModeCmd(char c);
 bool satVehicleCmd(char c);
 bool motorSpeedCmd(char c);
+bool warningCmd(char c);
+
 
 #endif

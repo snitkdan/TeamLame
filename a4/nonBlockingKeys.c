@@ -66,3 +66,7 @@ bool motorSpeedCmd(char c) {
 	       c == SPEEDDEC;
         */
 }
+
+bool warningCmd(char c) {
+	return c == OVERHEAT_ACK;
+}

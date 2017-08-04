@@ -40,7 +40,7 @@ void main(void) {
 
 		int i = 0;
 		while (true) {
-	    usleep(100000);
+	    //usleep(100000);
 		  if ((solarPanelState && !solarPanelDeploy) ||
           (!solarPanelState && !solarPanelRetract)) {
         if (app == 1) {
@@ -60,14 +60,14 @@ void main(void) {
 		  }
 		  aTCBPtr = PopTCB(queue);
 		  aTCBPtr->myTask((aTCBPtr->taskDataPtr));
-		  /*if(i == 5) {
+		  if(i == 5) {
   			if(GLOBALCOUNTER % MAJOR_CYCLE == 0) {
   			  usleep(70495.4);
   			} else {
   			  usleep(79804);
   			}
 			  GLOBALCOUNTER++;
-		  }*/
+		  }
 		  AppendTCB(queue, aTCBPtr);
 			i = (i + 1) % 9;
 		}

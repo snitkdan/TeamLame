@@ -42,6 +42,11 @@ void transportDistance(void *transportStruct) {
     fprintf(gpio, "%d", 1);
     usleep(1000);
 	fprintf(gpio, "%d", 0);
+	int count = read hardwareCounter;
+	int freq = count * 1000;
+	convert freq to distance
+	// read from adc or gpio?
+   	
 	
 	*/
 	// distance in meters
