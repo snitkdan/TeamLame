@@ -31,9 +31,19 @@ void transportDistance(void *transportStruct) {
     // detects a signal from an inbound transport vehicle. The frequency of the incoming signal
     // shall be proportional to the distance between the satellite and an inbound transport vehicle. 
 	
-	// received interrupt when distance == 1000
+	/*
+	FILE *gpio0 = fopen("/sys/class/gpio/gpio49/value", "w");
+    FILE *gpio1 = fopen("/sys/class/gpio/gpio60/value", "w");
+
+    if (!gpio){
+	     printf("Could not open GPIO\n");
+	     return;
+    }
+    fprintf(gpio, "%d", 1);
+    usleep(1000);
+	fprintf(gpio, "%d", 0);
 	
-	
+	*/
 	// distance in meters
 	
 	

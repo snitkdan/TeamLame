@@ -65,6 +65,9 @@ terminalComs.o: terminalComs.c TCB.h
 
 rand2.o: rand2.c
 	gcc -Wall -g -c -o rand2.o rand2.c
+	
+copy:
+	scp -r ../a4 root@192.168.7.2:/dev	
 
 clean:
 	rm main *.o
