@@ -14,7 +14,7 @@
 
 static bool initSolarPanel();
 
-#define PWM_PIN "PWM_PIN"
+#define PWM_PIN "P9_14"
 #define HNUM_13 15
 #define PERIOD 500000
 #define DEFAULT_DUTY 250000
@@ -51,6 +51,7 @@ void solarPanelControl(void *solarStruct) {
 	if(!solarPanelInit) {
 		solarPanelInit = initSolarPanel();
 		if(!solarPanelInit) {
+			exit(1);
 			//fprintf(stderr, "PWM_13 Malfunction\n");
 			return;
 		}
