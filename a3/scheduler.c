@@ -67,11 +67,7 @@ TCB_Ptr RemoveTCB(TaskQueue queue, TCB_Ptr node) {
     return NULL;
   }
   // 1. Search for the node to delete
-  TCB_Ptr curr = queue->head;
-  while(curr != NULL && curr != node) {
-    curr = curr->next;
-  }
-  // 2. If we didn't find it
+  TCB_Ptr curr = GetTCB(queue, node);
   if(curr == NULL) {
     return NULL;
   }
@@ -133,4 +129,21 @@ unsigned int NumTasksInTaskQueue(TaskQueue queue) {
   } else {
     return queue->num_tasks;
   }
+}
+
+
+bool ContainsTCB(TaskQueue queue, TCB_Ptr node) {
+  TCB_Ptr curr = queue->head;
+  while(curr != NULL && curr != node) {
+    curr = curr->next;
+  }
+  return (curr == NULL) ? false : true;
+}
+
+TCB_Ptr GetTCB(TaskQueue queue, TCB_Ptr node) {
+  TCB_Ptr curr = queue->head;
+  while(curr != NULL && curr != node) {
+    curr = curr->next;
+  }
+  return curr;
 }

@@ -18,6 +18,8 @@
 #include "pwm_utils.h"
 
 #define PWM_PIN "P8_13"
+#define HNUM_14 17
+
 #define BUF_SIZE 16
 
 
@@ -62,6 +64,14 @@ bool batteryOverTemp;
 char command;
 char response;
 char request;
+
+// For signals
+bool snapshot = false;
+bool fromPowerSS = false;
+bool fromSolar = false;
+bool from transport = false;
+bool stable = false;
+bool endOfTravel = false;
 
 // Defines some TCBs
 TCB powerSubsystemTCB;
@@ -134,7 +144,6 @@ void Initialize(void) {
      fprintf(led1, "%d", 0); fflush(led1); fclose(led1);
      fprintf(led2, "%d", 0); fflush(led2); fclose(led2);
      fprintf(led3, "%d", 0); fflush(led3); fclose(led3);
-
   }
   // 2.1: Initialize the Hardware Perepherals
   InitHardware();
@@ -268,16 +277,34 @@ void InitHardware(void) {
   }
 }
 
+// For signals
+bool snapshot = false;
+bool fromPowerSS = false;
+bool fromSolar = false;
+bool fromTransport = false;
+bool stable = false;
+bool endOfTravel = false;
+
 void sigHandler(int sig) {
   if (sig == SIGUSR1) {
-    // 1. Handle connection with ADC Channel (batteryLevel Measurement ON)
-    // set stable = true (connected!)
-    // 2. Handle connection with solar panel output as well
-    // a deployment sensor on the solar panel will generate a signaling
-    // event to indicate end of travel. (endofTravel = true and read by solarPanelControl)
+    if(fromPowerSS) {
+      // 1. Handle connection with ADC Channel (batteryLevel Measurement ON)
+      // set stable = true (connected!)
+      stable = true;
+      usleep(600);
+    }
+    if(fromSolar) {
+      // 2. Handle connection with solar panel output as well
+      // a deployment sensor on the solar panel will generate a signaling
+      // event to indicate end of travel. (endofTravel = true and read by solarPanelControl)
+      endOfTravel = true;
+      setPWMProperty(PWM_PIN, "run", OFF, HNUM_14);
+    }
+    if(fromTransport) {
+      // RADLEIGH
+    }
   }
-  if (sig == SIGUSR2) {
-    // 3. Handle signal from inbound transport vehicle.
-    // (?4) BatteryTemp over signal?
+  if (sig == SIGINT) {
+    snapshot = true;
   }
 }

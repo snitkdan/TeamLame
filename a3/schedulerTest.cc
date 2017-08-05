@@ -93,3 +93,22 @@ TEST(TaskQueueTest, Test_RemoveTCB) {
   ASSERT_EQ(RemoveTCB(q, NULL), (TCB_Ptr)NULL);
   ASSERT_EQ(RemoveTCB(NULL, testTCB3_ptr), (TCB_Ptr)NULL);
 }
+
+// This tests the "Contains" methods in "scheduler.c"
+TEST(TaskQueueTest, TEST_Contains) {
+  // 1. Define test TCBs && task queue
+  TCB testTCB, testTCB2, testTCB3, testTCB4;
+  TCB_Ptr testTCB_ptr = &testTCB;
+  TCB_Ptr testTCB2_ptr = &testTCB2;
+  TCB_Ptr testTCB3_ptr = &testTCB3;
+  TCB_Ptr testTCB4_ptr = &testTCB4;
+  TQ queue;
+  TaskQueue q = &queue;
+  InitializeTaskQueue(q);
+  // 2. Add TCBs to task queue
+  AppendTCB(q, testTCB_ptr);
+  bool contains = ContainsTCB(q, testTCB_ptr);
+  ASSERT_TRUE(contains);
+  contains = ContainsTCB(q, testTCB2_ptr);
+  ASSERT_FALSE(contains);
+}
