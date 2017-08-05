@@ -20,21 +20,6 @@
 #define PWM_PIN "P8_13"
 #define BUF_SIZE 16
 
-
-//#define COMMENTED
-#ifdef COMMENTED
-int terminalComs(char* output) {}
-// unsigned int randomInteger(unsigned int low, unsigned int high) {}
-void powerSubsystem(void *powerStruct) {}
-void keyboardConsole(void *keyboardStruct) {}
-void vehicleComms(void *vehicleStruct) {}
-void satelliteComs(void *satStruct) {}
-void consoleDisplay(void *consoleStruct) {}
-void warningAlarm(void *warnStruct) {}
-//void solarPanelControl(void *solarStruct) {}
-//void thrusterSubsystem(void *thrustStruct) {}
-#endif
-
 // Define shared variables
 // Thrusters
 unsigned int thrusterCommand;
@@ -49,15 +34,19 @@ unsigned int batteryTempBuff1[BUF_SIZE] = {100};
 unsigned int batteryTempBuff2[BUF_SIZE] = {100};
 unsigned int *batteryTmp1;
 unsigned int *batteryTmp2;
+bool batteryOverTemp;
+// Transport distance
 unsigned short distance;
+// Solar Panel
 bool solarPanelState;
-bool fuelLow;
-bool batteryLow;
 bool solarPanelDeploy;
 bool solarPanelRetract;
 bool motorInc;
 bool motorDec;
-bool batteryOverTemp;
+// Warning Alarm
+bool fuelLow;
+bool batteryLow;
+// Sat Comms
 char command;
 char response;
 

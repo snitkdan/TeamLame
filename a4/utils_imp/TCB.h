@@ -9,6 +9,8 @@ typedef struct myStruct {
   void (*myTask)(void*);
   // Pointer to void used to reference the shared data for the task
   void *taskDataPtr;
+  // Number indicating task priority
+  int priority;
   // Pointers to next/prev tasks in the task queue
 	struct myStruct *next;
 	struct myStruct *prev;
