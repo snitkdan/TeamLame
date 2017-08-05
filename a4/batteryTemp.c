@@ -22,7 +22,7 @@
 
 #define BUF_SIZE 16
 
-#define DEBUG
+//#define DEBUG
 extern unsigned int batteryTempBuff1[BUF_SIZE];
 extern unsigned int batteryTempBuff2[BUF_SIZE];
 
@@ -44,14 +44,17 @@ void batteryTemp(void *temperatureStruct) {
 
 	// 1. Read from the 2 sensors
 	#ifndef DEBUG
-	double battTemp1 = readADC(ACH1, HNUM1) / 1000;
-	double battTemp2 = readADC(ACH2, HNUM2) / 1000;
+	double battTemp1 = readADC(ACH1, HNUM1); 
+	battTemp1 /= 1000;
+	double battTemp2 = readADC(ACH2, HNUM2);
+	battTemp2 /= 1000;
+	
 	#endif	
 
+	static int callNum = 0;
+	static int currTmp = 0;
 	
 	#ifdef DEBUG
-	static int callNum = 0;
-	static int currTmp = 0;	
 	static unsigned int tempBuff[] = {100, 100, 100, 100, 100, 100,
 			100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100};
 	unsigned int battTemp1 = tempBuff[currTmp];
