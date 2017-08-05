@@ -37,6 +37,7 @@ typedef struct keyboardConsoleData {
 typedef struct vehicleCommsData {
   char *commandPtr;
   char *responsePtr;
+  char *requestPtr;
 } vehicleData;
 
 typedef struct thrusterSubsystemData {

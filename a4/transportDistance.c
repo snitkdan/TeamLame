@@ -64,7 +64,7 @@ void transportDistance(void *transportStruct) {
     // detects a signal from an inbound transport vehicle. The frequency of the incoming signal
     // shall be proportional to the distance between the satellite and an inbound transport vehicle.
 	static int firstTime = 0;
-    #define DEBUG	
+    //#define DEBUG	
     #ifndef DEBUG	
 	if (firstTime == 0) {
         initPins();
@@ -85,7 +85,8 @@ void transportDistance(void *transportStruct) {
 	fprintf(gpioReset, "%d", 0); fflush(gpioReset);	
 	fprintf(gpioReset, "%d", 1); fflush(gpioReset);
 	fprintf(gpioReset, "%d", 0); fflush(gpioReset);
-	
+	fscanf(gpio0, "%d", &bit0);
+	printf("START BIT 0 : %d\n", bit0);	
 	fprintf(gpioIN, "%d", 1); fflush(gpioIN);
 	usleep(DELAY);
 	fprintf(gpioIN, "%d", 0); fflush(gpioIN);
@@ -142,15 +143,15 @@ void transportDistance(void *transportStruct) {
 	gpioBinary = gpioBinary | (bit5 << 5);
 	gpioBinary = gpioBinary | (bit6 << 6);
 
-	/*
-	printf("bit zero: %d ", bit0);
-	printf("bit one : %d ", bit1);
-	printf("bit two : %d ", bit2);
-	printf("bit thre: %d ", bit3);
-	printf("bit four: %d ", bit4);
-	printf("bit five: %d ", bit5);
-	printf("bit six : %d\n", bit6);
-	*/
+	
+	printf("%d ", bit6);
+	printf("%d ", bit5);
+	printf("%d ", bit4);
+	printf("%d ", bit3);
+	printf("%d ", bit2);
+	printf("%d ", bit1);
+	printf("%d\n", bit0);
+	
 	
 	printf ("HardwareCounter:  %d\n", gpioBinary);
 	double time = MICROSEC / DELAY;

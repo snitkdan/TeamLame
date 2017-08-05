@@ -61,6 +61,7 @@ bool motorDec;
 bool batteryOverTemp;
 char command;
 char response;
+char request;
 
 // Defines some TCBs
 TCB powerSubsystemTCB;
