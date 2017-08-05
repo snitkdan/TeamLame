@@ -9,6 +9,7 @@
 #include <stdbool.h>
 #include <stdlib.h>
 #include <signal.h>
+#include <unistd.h>
 #include "TCB.h"
 #include "dataStructs.h"
 #include "warningAlarm.h"
@@ -21,6 +22,7 @@
 #define HNUM_14 17
 
 #define BUF_SIZE 16
+#define OFF 0
 
 
 //#define COMMENTED
@@ -69,7 +71,7 @@ char request;
 bool snapshot = false;
 bool fromPowerSS = false;
 bool fromSolar = false;
-bool from transport = false;
+bool fromTransport = false;
 bool stable = false;
 bool endOfTravel = false;
 
@@ -276,14 +278,6 @@ void InitHardware(void) {
     exit(EXIT_FAILURE);
   }
 }
-
-// For signals
-bool snapshot = false;
-bool fromPowerSS = false;
-bool fromSolar = false;
-bool fromTransport = false;
-bool stable = false;
-bool endOfTravel = false;
 
 void sigHandler(int sig) {
   if (sig == SIGUSR1) {
