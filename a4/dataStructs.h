@@ -66,7 +66,7 @@ typedef struct consoleDisplayData {
   unsigned short *fuelLvlPtr;
   unsigned short *pConsumePtr;
   unsigned short *pGeneratePtr;
-  unsigned short *distancePtr;
+  unsigned int *distancePtr;
 } consoleData;
 
 typedef struct warningAlarmData {
@@ -78,7 +78,7 @@ typedef struct warningAlarmData {
 } warnData;
 
 typedef struct transportDistanceData {
-  unsigned short *distancePtr;
+  unsigned int *distancePtr;
 } transportData;
 
 typedef struct imageCaptureData {

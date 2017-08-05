@@ -25,6 +25,7 @@
 #define BIT1 "65"
 #define BIT0 "61"
 
+#define BUF_SIZE 8
 #define PATH "/sys/class/gpio"
 #define MICROSEC 1000000
 #define DELAY 10000
@@ -38,6 +39,11 @@ FILE *gpio3 = NULL;
 FILE *gpio4 = NULL;
 FILE *gpio5 = NULL;
 FILE *gpio6 = NULL;
+
+extern unsigned int distanceBuff[BUF_SIZE];
+
+void initPins();
+
 void transportDistance(void *transportStruct) {
 	// Only run this function every major cycle
 	/*
@@ -48,7 +54,7 @@ void transportDistance(void *transportStruct) {
     start = GLOBALCOUNTER;
 	*/
 	transportData *tData = (transportData*)transportStruct;
-    unsigned short *distance = tData->distancePtr;
+    unsigned int *distance = tData->distancePtr;
 
     /*if (no interrupt) {
 		return;
@@ -61,32 +67,9 @@ void transportDistance(void *transportStruct) {
     #define DEBUG	
     #ifndef DEBUG	
 	if (firstTime == 0) {
-	    system("echo "IN" > /sys/class/gpio/export");
-	    system("echo "RESET" > /sys/class/gpio/export");
-	    system("echo "BIT0" > /sys/class/gpio/export");
-	    system("echo "BIT1" > /sys/class/gpio/export");
-	    system("echo "BIT2" > /sys/class/gpio/export");
-	    system("echo "BIT3" > /sys/class/gpio/export");
-	    system("echo "BIT4" > /sys/class/gpio/export");
-	    system("echo "BIT5" > /sys/class/gpio/export");
-	    system("echo "BIT6" > /sys/class/gpio/export");
-		
-		system("echo out > /sys/class/gpio/gpio"IN"/direction");
-		system("echo falling > /sys/class/gpio/gpio"IN"/edge");
-		
-		system("echo out > /sys/class/gpio/gpio"RESET"/direction");
-		system("echo in > /sys/class/gpio/gpio"BIT0"/direction");
-		system("echo in > /sys/class/gpio/gpio"BIT1"/direction");
-		system("echo in > /sys/class/gpio/gpio"BIT2"/direction");
-		system("echo in > /sys/class/gpio/gpio"BIT3"/direction");
-		system("echo in > /sys/class/gpio/gpio"BIT4"/direction");
-		system("echo in > /sys/class/gpio/gpio"BIT5"/direction");
-		system("echo in > /sys/class/gpio/gpio"BIT6"/direction");
+        initPins();
 	    firstTime++;
-		
-		
 	}
-	
 	gpioIN = fopen("/sys/class/gpio/gpio"IN"/value", "w");
 	gpioReset = fopen("/sys/class/gpio/gpio"RESET"/value", "w");	
 	gpio0 = fopen("/sys/class/gpio/gpio"BIT0"/value", "r");
@@ -122,9 +105,9 @@ void transportDistance(void *transportStruct) {
 	if (firstTime == 0) {
 		system("echo 0 > file0.txt");
 		system("echo 1 > file1.txt");
-		system("echo 0 > file2.txt");
-		system("echo 0 > file3.txt");
-		system("echo 1 > file4.txt");
+		system("echo 1 > file2.txt");
+		system("echo 1 > file3.txt");
+		system("echo 0 > file4.txt");
 		system("echo 0 > file5.txt");
 		system("echo 0 > file6.txt");
 		firstTime++;
@@ -174,14 +157,33 @@ void transportDistance(void *transportStruct) {
 	printf("frequency = %d\n", frequency);
 	
 	// some distance equation?
-	*distance = 1500000 / frequency;
-	if (*distance > 2000) {
-		*distance = 2000;
-	} else if (*distance < 100) {
-		*distance = 100;
+	double calcDistance = 1500000 / frequency;
+	calcDistance = 1500000 / frequency;
+	if (calcDistance > 2000) {
+		calcDistance = 2000;
+	} else if (calcDistance < 100) {
+		calcDistance = 100;
 	}
-	printf("distance = %d\n", *distance);
+	printf("current distance = %d\n", calcDistance);
+
 	
+	static int callNum = 0;
+	static int currIndex = 0;
+	if (callNum == 0) {
+	    distanceBuff[currIndex] = calcDistance;	
+        *distance = distanceBuff[currIndex];		
+     	currIndex = (currIndex + 1) % 8;
+	} else {
+		double diff_high = 1.1 * *distance;
+		double diff_low  = 0.9 * *distance;
+        if (calcDistance > diff_high || calcDistance < diff_low) { // different by more than 10% of prev measurement
+	        distanceBuff[currIndex] = calcDistance;	
+            *distance = distanceBuff[currIndex];		
+     	    currIndex = (currIndex + 1) % 8;			
+		}
+		
+	}
+
 	#ifdef DEBUG
 	fclose(fp0);
 	fclose(fp1);
@@ -202,5 +204,29 @@ void transportDistance(void *transportStruct) {
 	fclose(gpio6);
 	#endif
     return;
+}
+
+void initPins() {
+	system("echo "IN" > /sys/class/gpio/export");
+	system("echo "RESET" > /sys/class/gpio/export");
+	system("echo "BIT0" > /sys/class/gpio/export");
+	system("echo "BIT1" > /sys/class/gpio/export");
+	system("echo "BIT2" > /sys/class/gpio/export");
+	system("echo "BIT3" > /sys/class/gpio/export");
+	system("echo "BIT4" > /sys/class/gpio/export");
+	system("echo "BIT5" > /sys/class/gpio/export");
+	system("echo "BIT6" > /sys/class/gpio/export");
+	
+	system("echo out > /sys/class/gpio/gpio"IN"/direction");
+	system("echo falling > /sys/class/gpio/gpio"IN"/edge");
+	
+	system("echo out > /sys/class/gpio/gpio"RESET"/direction");
+	system("echo in > /sys/class/gpio/gpio"BIT0"/direction");
+	system("echo in > /sys/class/gpio/gpio"BIT1"/direction");
+	system("echo in > /sys/class/gpio/gpio"BIT2"/direction");
+	system("echo in > /sys/class/gpio/gpio"BIT3"/direction");
+	system("echo in > /sys/class/gpio/gpio"BIT4"/direction");
+	system("echo in > /sys/class/gpio/gpio"BIT5"/direction");
+	system("echo in > /sys/class/gpio/gpio"BIT6"/direction");	
 }
 

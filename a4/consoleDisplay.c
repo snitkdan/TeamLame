@@ -18,8 +18,6 @@
 #define MAX 1024
 #define BUF_SIZE 16
 #define SCALE 20
-extern unsigned int current_measurement;
-extern unsigned int batteryBuff[BUF_SIZE];
 
 //#define OFF
 /*
@@ -53,7 +51,7 @@ void consoleDisplay(void *consoleStruct) {
     unsigned short *fuelLvl = cData->fuelLvlPtr;
     unsigned short *pConsume = cData->pConsumePtr;
     unsigned short *pGenerate = cData->pGeneratePtr;
-    unsigned short *distance = cData->distancePtr;	
+    unsigned int *distance = cData->distancePtr;	
 
     // 1.2 Define necessary string storage
     char *solarPanelString = (*solarPanelState) ? "Deployed":"Retracted";
