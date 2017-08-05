@@ -24,6 +24,7 @@
 #define BUF_SIZE 16
 #define OFF 0
 
+void sigHandler(int sig);
 
 //#define COMMENTED
 #ifdef COMMENTED
@@ -129,6 +130,7 @@ void Initialize(void) {
   batteryOverTemp = false;
   command = '\0';
   response = '\0';
+  request = '\0';
   distance = &distanceBuff[0];
 
   // 2. Turn off led0 initially
@@ -150,6 +152,11 @@ void Initialize(void) {
   // 2.1: Initialize the Hardware Perepherals
   InitHardware();
   #endif
+  
+  
+  // Enable the signals
+  signal(SIGINT, sigHandler);
+  signal(SIGUSR1, sigHandler);
 
   // 3. Assign shared variables to pointers
   // 3.1: powerSubsystem
@@ -170,7 +177,8 @@ void Initialize(void) {
   kData.motorDecPtr = &motorDec;
   // 3.4: vehicleComms
   vData.commandPtr = &command;
-  vData.responsePtr = &response; //address needed for strings and chars?
+  vData.responsePtr = &response;
+  vData.requestPtr = &request; //address needed for strings and chars?
   // 3.5: thrusterSubsystem
   tData.thrusterCommandPtr = &thrusterCommand;
   tData.fuelLvlPtr = &fuelLvl;
@@ -252,16 +260,12 @@ void Initialize(void) {
   queue = &q;
   InitializeTaskQueue(queue);
   AppendTCB(queue, &warningAlarmTCB);
-  AppendTCB(queue, &keyboardConsoleTCB);
-  AppendTCB(queue, &solarPanelControlTCB);
   AppendTCB(queue, &satelliteComsTCB);
   AppendTCB(queue, &thrusterSubsystemTCB);
   AppendTCB(queue, &powerSubsystemTCB);
   AppendTCB(queue, &consoleDisplayTCB);
-  AppendTCB(queue, &batteryTempTCB);
   AppendTCB(queue, &vehicleCommsTCB);
-  AppendTCB(queue, &transportDistanceTCB);
-  AppendTCB(queue, &imageCaptureTCB);
+
 }
 
 void ActivateTimeBase(void) {
@@ -285,14 +289,16 @@ void sigHandler(int sig) {
       // 1. Handle connection with ADC Channel (batteryLevel Measurement ON)
       // set stable = true (connected!)
       stable = true;
-      usleep(600);
+      //usleep(600);
+	  printf("Stable: %d\n", stable);
     }
     if(fromSolar) {
       // 2. Handle connection with solar panel output as well
       // a deployment sensor on the solar panel will generate a signaling
       // event to indicate end of travel. (endofTravel = true and read by solarPanelControl)
       endOfTravel = true;
-      setPWMProperty(PWM_PIN, "run", OFF, HNUM_14);
+	  printf("endOfTravel: %d\n", endOfTravel);
+      //setPWMProperty(PWM_PIN, "run", OFF, HNUM_14);
     }
     if(fromTransport) {
       // RADLEIGH

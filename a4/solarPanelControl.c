@@ -7,6 +7,7 @@
 #include <stdbool.h>
 #include <errno.h>
 #include <string.h>
+#include <signal.h>
 #include "dataStructs.h"
 #include "TCB.h"
 #include "pwm_utils.h"
@@ -21,6 +22,8 @@ static bool initSolarPanel();
 #define OFF 0
 #define MAX 300
 
+extern bool fromSolar;
+
 void solarPanelControl(void *solarStruct) {
 	// Only run this function every major cycle
 	static unsigned long start = 0;
@@ -28,7 +31,7 @@ void solarPanelControl(void *solarStruct) {
       return;
 	}
   start = GLOBALCOUNTER;
-  //printf("INSIDE solarPaenlControl\n");
+  //printf("INSIDE solarPanelControl\n");
 
   // 1.1 Assign the data of consoleStruct into local variables
   solarData *solData = (solarData*)solarStruct;
@@ -40,7 +43,8 @@ void solarPanelControl(void *solarStruct) {
 
 	// 1.2: Track PWM initialization status
 	static bool pwm_13_init = false;
-
+    #define TEST
+	#ifndef TEST
 	// 1.3: Check PWM initialization
 	if(!pwm_13_init) {
 		pwm_13_init = initSolarPanel();
@@ -49,15 +53,19 @@ void solarPanelControl(void *solarStruct) {
 			return;
 		}
 	}
+	#endif
 
 	// 1.3: Declare variables
 	//static double PWM;
 	static double duty = DEFAULT_DUTY;
 	//static double period = PERIOD;
 
+  printf("SPS: %d SPD:%d SPR%d\n", *solarPanelState, *solarPanelDeploy, *solarPanelRetract);
   // 1.4: Check if the solor panel state with what it is requested to do
 	if ((*solarPanelState == 1 && *solarPanelDeploy == 1) || (*solarPanelState == 0 && *solarPanelRetract == 1)){
-		//PWM = 0;
+		fromSolar = true;
+		raise(SIGUSR1);
+		fromSolar = false;
 	} else {
 		//if need speed to increase then duty (run time ) should decrease
 		if(*motorInc == 1) {
@@ -74,7 +82,9 @@ void solarPanelControl(void *solarStruct) {
 
 	// 1.6: Duty cycle and period are in ms.
 	//printf("SOLARPANELS: Duty: %f\n", duty);
+	#ifndef TEST
 	setPWMProperty(PWM_PIN, "duty", duty, HNUM_13);
+	#endif
 }
 
 static bool initSolarPanel() {

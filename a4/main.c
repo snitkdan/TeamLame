@@ -44,7 +44,7 @@ void main(void) {
 		int i = 0;
 		while (true) {
 
-      #ifdef TEST
+      #ifndef TEST
       if(solarPanelState) {
         // SolarPanelState ON
         if(solarPanelDeploy) {

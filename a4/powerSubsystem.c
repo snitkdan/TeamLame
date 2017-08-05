@@ -8,6 +8,7 @@
 
 #include <stdio.h>
 #include <stdbool.h>
+#include <signal.h>
 #include "dataStructs.h"
 #include "powerSubsystem.h"
 #include "adc_utils.h"
@@ -18,11 +19,15 @@
 #define BUF_SIZE 16
 #define DEBUG
 
+
+extern bool fromPowerSS;
 #ifndef DEBUG
 extern unsigned int batteryBuff[BUF_SIZE];
 #endif
 
 void powerSubsystem(void *powerStruct) {
+	
+fromPowerSS = true;
   // Only run this function every major cycle
   static unsigned long start = 0;
   if((GLOBALCOUNTER - start) % MAJOR_CYCLE != 0) {
@@ -39,18 +44,19 @@ void powerSubsystem(void *powerStruct) {
   bool *solarPanelRetract = pData->solarPanelRetractPtr;
   // 2. Update the buffer
   static unsigned int current_measurement = 0;
-  #ifdef DEBUG
+  raise(SIGUSR1);
+  #ifndef DEBUG
   int next = readADC(ACH, HNUM);
-  unsigned int batteryBuff[BUF_SIZE] = {100, 90, 80, 70, 60, 50, 40, 30, 20, 10, 5, 0, 5, 15, 30, 50};
+  batteryBuff[current_measurement] = next;
+  current_measurement = (current_measurement + 1) % BUF_SIZE;
+  *batteryLvl = next; 
+  #endif
+  #ifdef DEBUG
+  unsigned int batteryBuff[BUF_SIZE] = {60, 10, 5, 10, 30, 95, 100, 50, 30, 10, 5, 0, 30, 50, 95, 100};
   *batteryLvl = batteryBuff[current_measurement];
   current_measurement = (current_measurement + 1) % BUF_SIZE;
   #endif
 
-  #ifndef DEBUG
-  batteryBuff[current_measurement] = next;
-  current_measurement = (current_measurement + 1) % BUF_SIZE;
-  *batteryLvl = next;
-  #endif
   // 2. Update powerConsumption && powerGeneration
   // TODO:
   // 1. deployed and retracted bug
@@ -64,8 +70,9 @@ void powerSubsystem(void *powerStruct) {
 bool useSolarPanels(bool *solarPanelState, bool *solarPanelDeploy, bool *solarPanelRetract, unsigned short *pGenerate, unsigned int *batteryLvl) {
   // 1. If solarPanelState == ON
   if(*solarPanelState) {
-    *solarPanelDeploy = !(*solarPanelDeploy);
-    *solarPanelRetract = !(*solarPanelRetract);
+    *solarPanelDeploy = true;
+    *solarPanelRetract = false;
+	
     // 1.1: If  batteryLvl > 95%
     if(*batteryLvl > 95) {
       // 1.1.1: Retract solar panels
@@ -78,6 +85,8 @@ bool useSolarPanels(bool *solarPanelState, bool *solarPanelDeploy, bool *solarPa
   }
   // 2. If solarPanelState == OFF
   else {
+	  *solarPanelDeploy = false;
+	  *solarPanelRetract = true;
       // 2.1: If batteryLvl <= 10%
       if(*batteryLvl <= 10) {
         // 2.1.1: Deploy solar panels

@@ -220,7 +220,7 @@ void initPins() {
 	system("echo "BIT6" > /sys/class/gpio/export");
 	
 	system("echo out > /sys/class/gpio/gpio"IN"/direction");
-	system("echo falling > /sys/class/gpio/gpio"IN"/edge");
+	//system("echo falling > /sys/class/gpio/gpio"IN"/edge");
 	
 	system("echo out > /sys/class/gpio/gpio"RESET"/direction");
 	system("echo in > /sys/class/gpio/gpio"BIT0"/direction");

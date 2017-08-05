@@ -40,7 +40,27 @@ void vehicleComms(void *vehicleStruct) {
     vehicleData *vData = (vehicleData*)vehicleStruct;
     char *command = vData->commandPtr;
     char *response = vData->responsePtr;
+    char *request = vData->requestPtr;
     
+	if (*request != '\0') {
+        char buf[MAX_BUF];
+		
+		char * myfifo0 = "/tmp/myfifo0";	
+		mkfifo(myfifo0, 0666);
+
+		/* open the FIFO */	
+		fd0 = open(myfifo0, O_RDWR);		
+	    write(fd0, request, sizeof(request));
+        vehicleEnd(fd0);	         //  read then write to the fifo
+	    read(fd0, buf, MAX_BUF);
+	    response = &buf[0];		
+	    close(fd0);
+
+        /* remove the FIFO */
+        unlink(myfifo0);
+		return;
+	}
+	
     //printf("\033[20;20H");		
     char c = getchar();
     //char c = 'B';	
@@ -52,13 +72,13 @@ void vehicleComms(void *vehicleStruct) {
     } else {
         *command = c;
     }
-    char * myfifo0 = "/tmp/myfifo0";
-	    
+	
+
     /* create the FIFO (named pipe) */
+    char * myfifo0 = "/tmp/myfifo0";	
     mkfifo(myfifo0, 0666);
 
-    /* open the FIFO */
-	
+    /* open the FIFO */	
     fd0 = open(myfifo0, O_RDWR);
     char buf[MAX_BUF];
     write(fd0, command, sizeof(command));
