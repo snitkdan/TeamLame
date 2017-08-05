@@ -152,8 +152,8 @@ void Initialize(void) {
   // 2.1: Initialize the Hardware Perepherals
   InitHardware();
   #endif
-  
-  
+
+
   // Enable the signals
   signal(SIGINT, sigHandler);
   signal(SIGUSR1, sigHandler);
@@ -289,16 +289,14 @@ void sigHandler(int sig) {
       // 1. Handle connection with ADC Channel (batteryLevel Measurement ON)
       // set stable = true (connected!)
       stable = true;
-      //usleep(600);
-	  printf("Stable: %d\n", stable);
+      usleep(600);
     }
     if(fromSolar) {
       // 2. Handle connection with solar panel output as well
       // a deployment sensor on the solar panel will generate a signaling
       // event to indicate end of travel. (endofTravel = true and read by solarPanelControl)
       endOfTravel = true;
-	  printf("endOfTravel: %d\n", endOfTravel);
-      //setPWMProperty(PWM_PIN, "run", OFF, HNUM_14);
+      setPWMProperty(PWM_PIN, "run", OFF, HNUM_14);
     }
     if(fromTransport) {
       // RADLEIGH
