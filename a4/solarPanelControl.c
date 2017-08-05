@@ -23,8 +23,10 @@ static bool initSolarPanel();
 #define MAX 300
 
 extern bool fromSolar;
+extern bool endOfTravel;
 
 void solarPanelControl(void *solarStruct) {
+	fromSolar = true;
 	// Only run this function every major cycle
 	static unsigned long start = 0;
 	if((GLOBALCOUNTER - start) % MAJOR_CYCLE != 0) {
@@ -42,13 +44,13 @@ void solarPanelControl(void *solarStruct) {
   bool *motorDec = solData->motorDecPtr;
 
 	// 1.2: Track PWM initialization status
-	static bool pwm_13_init = false;
-    #define TEST
+	static bool solarPanelInit = false;
+  #define TEST
 	#ifndef TEST
 	// 1.3: Check PWM initialization
-	if(!pwm_13_init) {
-		pwm_13_init = initSolarPanel();
-		if(!pwm_13_init) {
+	if(!solarPanelInit) {
+		solarPanelInit = initSolarPanel();
+		if(!solarPanelInit) {
 			//fprintf(stderr, "PWM_13 Malfunction\n");
 			return;
 		}
@@ -60,13 +62,18 @@ void solarPanelControl(void *solarStruct) {
 	static double duty = DEFAULT_DUTY;
 	//static double period = PERIOD;
 
-  printf("SPS: %d SPD:%d SPR%d\n", *solarPanelState, *solarPanelDeploy, *solarPanelRetract);
+  printf("SPS: %d SPD: %d SPR: %d\n", *solarPanelState, *solarPanelDeploy, *solarPanelRetract);
   // 1.4: Check if the solor panel state with what it is requested to do
 	if ((*solarPanelState == 1 && *solarPanelDeploy == 1) || (*solarPanelState == 0 && *solarPanelRetract == 1)){
-		fromSolar = true;
-		raise(SIGUSR1);
-		fromSolar = false;
+		if(!endOfTravel) {
+			raise(SIGUSR1);
+			setPWMProperty(PWM_PIN, "run", OFF, HNUM_14);
+		}
 	} else {
+		if(endOfTravel) {
+			setPWMProperty(PWM_PIN, "run", ON, HNUM_14);
+			endOfTravel = false;
+		}
 		//if need speed to increase then duty (run time ) should decrease
 		if(*motorInc == 1) {
 			duty += ((5 * duty) / 100);
@@ -85,12 +92,10 @@ void solarPanelControl(void *solarStruct) {
 	#ifndef TEST
 	setPWMProperty(PWM_PIN, "duty", duty, HNUM_13);
 	#endif
+	fromSolar = false;
 }
 
 static bool initSolarPanel() {
-	if(!initPWM(PWM_PIN)) {
-    return false;
-  }
   // 2. Set the period to 500 ms
   setPWMProperty(PWM_PIN, "period", PERIOD, HNUM_13);
   // 3. Set the duty cycle to 250 ms

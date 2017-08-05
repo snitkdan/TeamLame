@@ -9,13 +9,15 @@
  */
 
  #include <stdbool.h>
+ #include <unistd.h>
  #include <stdio.h>
-
-bool adc_initialized = false;
+ #include <signal.h>
 
 #define DEVICES "/sys/devices"
 #define HNUM 16
 #define MGRNUM 9
+
+extern bool stable;
 
 bool initADC() {
 	// 1. Declare necessary variables
@@ -50,6 +52,11 @@ int readADC(char *ach, int hnum) {
     //fprintf(stderr, "Failed to read from %s\n", ach);
     return -1;
   }
+  raise(SIGUSR1);
+  if(!stable) {
+    fprintf("Unstable, cannot read!\n");
+  }
+  usleep(600);
   // 4. Read in the value from ach
   fscanf(adc_val, "%d", &value);
   fflush(adc_val);
