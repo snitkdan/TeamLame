@@ -16,7 +16,7 @@
 
 // GPIO PIN NUMBERS
 #define IN "66"
-#define RESET "69"
+#define RESET "48"
 #define BIT6 "67"
 #define BIT5 "68"
 #define BIT4 "44"
@@ -85,19 +85,19 @@ void transportDistance(void *transportStruct) {
 	fprintf(gpioReset, "%d", 0); fflush(gpioReset);	
 	fprintf(gpioReset, "%d", 1); fflush(gpioReset);
 	fprintf(gpioReset, "%d", 0); fflush(gpioReset);
-	fscanf(gpio0, "%d", &bit0);
-	printf("START BIT 0 : %d\n", bit0);	
+	//fscanf(gpio0, "%d", &bit0);
+	//printf("START BIT 0 : %d\n", bit0);	
 	fprintf(gpioIN, "%d", 1); fflush(gpioIN);
 	usleep(DELAY);
 	fprintf(gpioIN, "%d", 0); fflush(gpioIN);
 	
-	fscanf(gpio0, "%d", &bit0);
-	fscanf(gpio1, "%d", &bit1);
-	fscanf(gpio2, "%d", &bit2);
-	fscanf(gpio3, "%d", &bit3);
-	fscanf(gpio4, "%d", &bit4);
-	fscanf(gpio5, "%d", &bit5);
-	fscanf(gpio6, "%d", &bit6);
+	if (gpio0) fscanf(gpio0, "%d", &bit0);
+	if (gpio1) fscanf(gpio1, "%d", &bit1);
+	if (gpio2) fscanf(gpio2, "%d", &bit2);
+	if (gpio3) fscanf(gpio3, "%d", &bit3);
+	if (gpio4) fscanf(gpio4, "%d", &bit4);
+	if (gpio5) fscanf(gpio5, "%d", &bit5);
+	if (gpio6) fscanf(gpio6, "%d", &bit6);
     #endif 	
 	
 	// --------------------------------------------
@@ -124,7 +124,8 @@ void transportDistance(void *transportStruct) {
 	FILE *fp6 = fopen("file6.txt", "r");
 	
 	unsigned int bit0, bit1, bit2, bit3, bit4, bit5, bit6;
-	fscanf(fp0, "%d", &bit0);
+	
+    fscanf(fp0, "%d", &bit0);
 	fscanf(fp1, "%d", &bit1);
 	fscanf(fp2, "%d", &bit2);
 	fscanf(fp3, "%d", &bit3);
@@ -159,8 +160,9 @@ void transportDistance(void *transportStruct) {
 	printf("frequency = %d\n", frequency);
 	
 	// some distance equation?
-	double calcDistance = 1500000 / frequency;
-	calcDistance = 1500000 / frequency;
+	//double calcDistance = 1500000 / frequency;
+	double calcDistance = 1500;
+	
 	if (calcDistance > 2000) {
 		calcDistance = 2000;
 	} else if (calcDistance < 100) {

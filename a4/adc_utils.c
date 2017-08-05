@@ -54,7 +54,7 @@ int readADC(char *ach, int hnum) {
   }
   raise(SIGUSR1);
   if(!stable) {
-    fprintf("Unstable, cannot read!\n");
+    fprintf(stderr, "Unstable, cannot read!\n");
   }
   usleep(600);
   // 4. Read in the value from ach
