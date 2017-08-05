@@ -12,7 +12,7 @@
 #include "scheduler.h"
 
 
-#define TEST
+//#define TEST
 
 extern unsigned long GLOBALCOUNTER;
 
@@ -28,36 +28,55 @@ void main(void) {
 
     extern TCB solarPanelControlTCB;
     extern TCB keyboardConsoleTCB;
-    extern bool solarPanelState;
+    extern TCB batteryTempTCB;
+    extern TCB transportDistanceTCB;
+    extern TCB imageCaptureTCB;
 
+
+    extern bool solarPanelState;
     extern bool solarPanelDeploy;
     extern bool solarPanelRetract;
 
-    static int app = 0;
-    static int rem = 1;
+    extern bool snapshot;
 
     int test_task = 8;
 
 		int i = 0;
 		while (true) {
-	    //usleep(100000);
-		  if ((solarPanelState && !solarPanelDeploy) ||
-          (!solarPanelState && !solarPanelRetract)) {
-        if (app == 1) {
-          printf("Appending solar and keyboard\n");
-          AppendTCB(queue, &solarPanelControlTCB);
-          AppendTCB(queue, &keyboardConsoleTCB);
-          app = 0;
-          rem = 1;
-          printf("%u\n", NumTasksInTaskQueue(queue));
+
+      #ifdef TEST
+      if(solarPanelState) {
+        // SolarPanelState ON
+        if(solarPanelDeploy) {
+          // Charging
+          if(!ContainsTCB(queue, &batteryTempTCB)) {
+            AppendTCB(queue, &batteryTempTCB);
+          }
+        } else {
+          // Solar Panel switch state
+          if(!ContainsTCB(queue, &solarPanelControlTCB)) {
+            AppendTCB(queue, &solarPanelControlTCB);
+            AppendTCB(queue, &keyboardConsoleTCB);
+          }
         }
-      } else if (rem) {
-        printf("Removing solar and keyboard\n");
-        RemoveTCB(queue, &solarPanelControlTCB);
-        RemoveTCB(queue, &keyboardConsoleTCB);
-        app = 1;
-        rem = 0;
-		  }
+      } else {
+        // SolarPanelState OFF
+        if(!solarPanelRetract) {
+          // Solar Panel switch state
+          if(!ContainsTCB(queue, &solarPanelControlTCB)) {
+            AppendTCB(queue, &solarPanelControlTCB);
+            AppendTCB(queue, &keyboardConsoleTCB);
+          }
+        }
+      }
+      if(snapshot) {
+        if(!ContainsTCB(queue, &transportDistanceTCB)) {
+          AppendTCB(queue, &imageCaptureTCB);
+          AppendTCB(queue, &transportDistanceTCB);
+        }
+      }
+      #endif
+
 		  aTCBPtr = PopTCB(queue);
 		  aTCBPtr->myTask((aTCBPtr->taskDataPtr));
 		  if(i == 5) {

@@ -35,16 +35,16 @@ GTEST_HEADERS = $(GTEST_DIR)/include/gtest/*.h \
 OBJ =	startup.o scheduler.o solarPanelControl.o adc_utils.o pwm_utils.o \
 	consoleDisplay.o powerSubsystem.o satelliteComs.o thrusterSubsystem.o \
 	warningAlarm.o terminalComs.o rand2.o nonBlockingKeys.o vehicleComms.o \
-	keyboardConsole.o batteryTemp.o transportDistance.o imageCapture.o
+	keyboardConsole.o
 
 # TEST_OBJ = thrusterSubsystemTest.o satelliteComsTest.o powerSubsystemTest.o \
 
-TEST_OBJ	=	startupTest.o schedulerTest.o solarPanelControlTest.o gtest_main.a
+TEST_OBJ	=	startupTest.o schedulerTest.o gtest_main.a
 
 PROJ_HEADERS = dataStructs.h TCB.h
 
 # Default make command
-all: $(TESTS) main
+all: $(TESTS) # main
 
 # Usually you shouldn't tweak such internal variables, indicated by a
 # trailing _.
@@ -89,9 +89,9 @@ schedulerTest.o : $(USER_DIR)/schedulerTest.cc \
                      $(USER_DIR)/scheduler.h $(GTEST_HEADERS)
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $(USER_DIR)/schedulerTest.cc
 
-solarPanelControlTest.o : $(USER_DIR)/solarPanelControlTest.cc \
+#solarPanelControlTest.o : $(USER_DIR)/solarPanelControlTest.cc \
                      $(USER_DIR)/solarPanelControl.h $(GTEST_HEADERS)
-	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $(USER_DIR)/solarPanelControlTest.cc
+	#$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $(USER_DIR)/solarPanelControlTest.cc
 
 test_suite : $(OBJ) $(TEST_OBJ)
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) $^ -o $@ -lpthread
@@ -99,15 +99,6 @@ test_suite : $(OBJ) $(TEST_OBJ)
 # Builds primary files
 main : $(OBJ) $(PROJ_HEADERS) $(USER_DIR)/main.c
 	$(CC) -o main $(USER_DIR)/main.c $(OBJ)
-
-imageCapture.o : $(USER_DIR)/imageCapture.c $(PROJ_HEADERS)
-	$(CC) $(CXXFLAGS) -c $(USER_DIR)/imageCapture.c
-
-transportDistance.o : $(USER_DIR)/transportDistance.c $(PROJ_HEADERS)
-	$(CC) $(CXXFLAGS) -c $(USER_DIR)/transportDistance.c
-
-batteryTemp.o : $(USER_DIR)/batteryTemp.c $(PROJ_HEADERS)
-	$(CC) $(CXXFLAGS) -c $(USER_DIR)/batteryTemp.c
 
 rand2.o : $(USER_DIR)/rand2.c $(PROJ_HEADERS)
 	$(CC) $(CXXFLAGS) -c $(USER_DIR)/rand2.c

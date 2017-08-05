@@ -9,6 +9,7 @@
 #define SCHED
 
 #include "TCB.h"
+#include <stdbool.h>
 
 // Declares a TCB structure
 typedef struct taskqueue {
@@ -99,5 +100,20 @@ TCB_Ptr SliceTCB(TaskQueue queue);
     successful, and -1 otherwise.
 */
 unsigned int NumTasksInTaskQueue(TaskQueue queue);
+
+/*
+  @returns
+    true if node is in the queue,
+    and false otherwise.
+*/
+bool ContainsTCB(TaskQueue queue, TCB_Ptr node);
+
+
+/*
+  @returns
+    the TCB_Ptr for node in the queue if
+    node is in the queue, and NULL otherwise
+*/
+TCB_Ptr GetTCB(TaskQueue queue, TCB_Ptr node);
 
 #endif
