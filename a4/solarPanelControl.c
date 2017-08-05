@@ -14,7 +14,7 @@
 
 static bool initSolarPanel();
 
-#define PWM_PIN "PWM_PIN"
+#define PWM_PIN "P8_13"
 #define HNUM_13 15
 #define PERIOD 500000
 #define DEFAULT_DUTY 250000
@@ -67,11 +67,11 @@ void solarPanelControl(void *solarStruct) {
 	if ((*solarPanelState == 1 && *solarPanelDeploy == 1) || (*solarPanelState == 0 && *solarPanelRetract == 1)){
 		if(!endOfTravel) {
 			raise(SIGUSR1);
-			setPWMProperty(PWM_PIN, "run", OFF, HNUM_14);
+			setPWMProperty(PWM_PIN, "run", OFF, HNUM_13);
 		}
 	} else {
 		if(endOfTravel) {
-			setPWMProperty(PWM_PIN, "run", ON, HNUM_14);
+			setPWMProperty(PWM_PIN, "run", ON, HNUM_13);
 			endOfTravel = false;
 		}
 		//if need speed to increase then duty (run time ) should decrease

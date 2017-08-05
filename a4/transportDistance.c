@@ -16,7 +16,7 @@
 
 // GPIO PIN NUMBERS
 #define IN "66"
-#define RESET "69"
+#define RESET "48"
 #define BIT6 "67"
 #define BIT5 "68"
 #define BIT4 "44"
@@ -85,8 +85,8 @@ void transportDistance(void *transportStruct) {
 	fprintf(gpioReset, "%d", 0); fflush(gpioReset);	
 	fprintf(gpioReset, "%d", 1); fflush(gpioReset);
 	fprintf(gpioReset, "%d", 0); fflush(gpioReset);
-	fscanf(gpio0, "%d", &bit0);
-	printf("START BIT 0 : %d\n", bit0);	
+	//fscanf(gpio0, "%d", &bit0);
+	//printf("START BIT 0 : %d\n", bit0);	
 	fprintf(gpioIN, "%d", 1); fflush(gpioIN);
 	usleep(DELAY);
 	fprintf(gpioIN, "%d", 0); fflush(gpioIN);
