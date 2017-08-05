@@ -8,13 +8,16 @@
 #include <stdio.h>
 #include <stdbool.h>
 #include <stdlib.h>
+#include <signal.h>
 #include "TCB.h"
 #include "dataStructs.h"
 #include "warningAlarm.h"
 #include "scheduler.h"
 #include "startup.h"
 #include "adc_utils.h"
+#include "pwm_utils.h"
 
+#define PWM_PIN "P8_13"
 #define BUF_SIZE 16
 
 
@@ -185,7 +188,7 @@ void Initialize(void) {
   wData.batteryLvlPtr = batteryLvl;
   wData.fuelLvlPtr = &fuelLvl;
   wData.batteryOverTempPtr = &batteryOverTemp;
- 
+
   // 3.9: transportDistance
   tranData.distancePtr = &distance;
 
@@ -242,7 +245,7 @@ void Initialize(void) {
   AppendTCB(queue, &thrusterSubsystemTCB);
   AppendTCB(queue, &powerSubsystemTCB);
   AppendTCB(queue, &consoleDisplayTCB);
-  AppendTCB(queue, &batteryTempTCB);  
+  AppendTCB(queue, &batteryTempTCB);
   AppendTCB(queue, &vehicleCommsTCB);
   AppendTCB(queue, &transportDistanceTCB);
   AppendTCB(queue, &imageCaptureTCB);
@@ -256,5 +259,23 @@ void InitHardware(void) {
   if(!initADC()) {
     fprintf(stderr, "ADC ERROR\n");
     exit(EXIT_FAILURE);
+  }
+  if(!initPWM(PWM_PIN)) {
+    fprintf(stderr, "PWM ERROR\n");
+    exit(EXIT_FAILURE);
+  }
+}
+
+void sigHandler(int sig) {
+  if (sig == SIGUSR1) {
+    // 1. Handle connection with ADC Channel (batteryLevel Measurement ON)
+    // set stable = true (connected!)
+    // 2. Handle connection with solar panel output as well
+    // a deployment sensor on the solar panel will generate a signaling
+    // event to indicate end of travel. (endofTravel = true and read by solarPanelControl)
+  }
+  if (sig == SIGUSR2) {
+    // 3. Handle signal from inbound transport vehicle.
+    // (?4) BatteryTemp over signal?
   }
 }
