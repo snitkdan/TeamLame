@@ -71,7 +71,7 @@ void main(void) {
       }
       if(snapshot) {
         if(!ContainsTCB(queue, &transportDistanceTCB)) {
-          AppendTCB(queue, &imageCaptureTCB);
+          //AppendTCB(queue, &imageCaptureTCB);
           AppendTCB(queue, &transportDistanceTCB);
         }
       }
