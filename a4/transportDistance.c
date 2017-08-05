@@ -82,6 +82,7 @@ void transportDistance(void *transportStruct) {
 
 
 	unsigned int in, reset, bit0, bit1, bit2, bit3, bit4, bit5, bit6;
+	fprintf(gpioReset, "%d", 0); fflush(gpioReset);	
 	fprintf(gpioReset, "%d", 1); fflush(gpioReset);
 	fprintf(gpioReset, "%d", 0); fflush(gpioReset);
 	
