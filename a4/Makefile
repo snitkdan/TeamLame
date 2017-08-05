@@ -1,45 +1,27 @@
-CC = gcc
-CFLAG = -Wall -Wpedantic -g
-
-OBJ = satelliteComs.o powerSubsystem.o consoleDisplay.o \
+objects = satelliteComs.o powerSubsystem.o consoleDisplay.o \
           thrusterSubsystem.o warningAlarm.o rand2.o \
           terminalComs.o keyboardConsole.o solarPanelControl.o \
           vehicleComms.o nonBlockingKeys.o startup.o \
-	  			scheduler.o pwm_utils.o adc_utils.o \
-	  			transportDistance.o imageCapture.o batteryTemp.o \
-	  			optfft.o \
-
-HEADER = satelliteComs.h powerSubsystem.h \
-						thrusterSubsystem.h warningAlarm.h \
-						nonBlockingKeys.h satelliteVehicle.h startup.h \
-						scheduler.h pwm_utils.h adc_utils.h \
-						optfft.h isr.h \
-						shared_variables.hdataStructs.h TCB.h \
-
+	  scheduler.o pwm_utils.o adc_utils.o \
+	  transportDistance.o imageCapture.o batteryTemp.o \
+	  optfft.o \
+	  
+headers = dataStructs.h TCB.h startup.h scheduler.h
 
 all: main
 
-main: main.c $(OBJ) $(HEADER)
-	gcc -Wall -g -o main main.c $(OBJ)
-
-%.o: %.c $(HEADERS)
-	$(CC) $(CFLAGS) -c $<
-
-copy:
-	scp -r ../a4 root@192.168.7.2:/dev
-
-clean:
-	rm main *.o
-
+main: main.c $(objects) $(headers)
+	gcc -Wall -g -o main main.c $(objects)
+	
 optfft.o: optfft.c optfft.h tables.c
-	gcc -Wall -g -c -o optfft.o optfft.c
+	gcc -Wall -g -c -o optfft.o optfft.c	
 
 transportDistance.o: transportDistance.c
-	gcc -Wall -g -c -o transportDistance.o transportDistance.c
+	gcc -Wall -g -c -o transportDistance.o transportDistance.c	
 
 imageCapture.o: imageCapture.c optfft.h
 	gcc -Wall -g -c -o imageCapture.o imageCapture.c
-
+	
 batteryTemp.o: batteryTemp.c
 	gcc -Wall -g -c -o batteryTemp.o batteryTemp.c
 
@@ -58,7 +40,7 @@ startup.o: startup.c startup.h
 nonBlockingKeys.o: nonBlockingKeys.c nonBlockingKeys.h
 	gcc -Wall -g -c -o nonBlockingKeys.o nonBlockingKeys.c
 
-keyboardConsole.o: keyboardConsole.c
+keyboardConsole.o: keyboardConsole.c 
 	gcc -Wall -g -c -o keyboardConsole.o keyboardConsole.c
 
 solarPanelControl.o: solarPanelControl.c pwm_utils.h
@@ -87,3 +69,9 @@ terminalComs.o: terminalComs.c TCB.h
 
 rand2.o: rand2.c
 	gcc -Wall -g -c -o rand2.o rand2.c
+	
+copy:
+	scp -r ../a4 root@192.168.7.2:/dev	
+
+clean:
+	rm main *.o
