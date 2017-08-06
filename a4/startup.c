@@ -18,8 +18,8 @@
 #include "adc_utils.h"
 #include "pwm_utils.h"
 
-#define PWM_PIN "P8_13"
-#define HNUM_14 17
+#define PWM_PIN "P9_14"
+#define HNUM 17
 
 #define BUF_SIZE 16
 #define OFF 0
@@ -296,7 +296,6 @@ void sigHandler(int sig) {
       // a deployment sensor on the solar panel will generate a signaling
       // event to indicate end of travel. (endofTravel = true and read by solarPanelControl)
       endOfTravel = true;
-      setPWMProperty(PWM_PIN, "run", OFF, HNUM_14);
     }
     if(fromTransport) {
       // RADLEIGH

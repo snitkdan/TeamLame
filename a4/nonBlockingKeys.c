@@ -54,9 +54,12 @@ bool consoleModeCmd(char c) {
 	       c == ANNUNCIATION;
 }
 
+extern TaskQueue queue;
+extern TCB solarPanelControlTCB;
+
 bool motorSpeedCmd(char c) {
-        unsigned int taskQueue = NumTasksInTaskQueue(queue) + 1;
-	if (taskQueue == 8) {
+        //unsigned int taskQueue = NumTasksInTaskQueue(queue) + 1;
+	if (ContainsTCB(queue, &solarPanelControlTCB)) {
 		return c == SPEEDINC ||
 		       c == SPEEDDEC;
 	}

@@ -26,7 +26,7 @@ bool initPWM(char *pin) {
 	// 3. Open the pwm
 	pwm = fopen(mgr_path, "w");
 	if(!pwm) {
-		//fprintf(stderr, "Failed to initialize PWM for pin %s\n", pin);
+		fprintf(stderr, "Failed to initialize PWM for pin %s\n", pin);
 		return false;
 	}
 	// 4. Configure the PWM
