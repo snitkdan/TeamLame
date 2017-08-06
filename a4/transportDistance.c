@@ -63,13 +63,22 @@ void transportDistance(void *transportStruct) {
     // detects a signal from an inbound transport vehicle. The frequency of the incoming signal
     // shall be proportional to the distance between the satellite and an inbound transport vehicle.
 	static int firstTime = 0;
-    #define DEBUG	
+    //#define DEBUG	
     #ifndef DEBUG	
 	if (firstTime == 0) {
         initPins();
 	    firstTime++;
 	}
-		
+	gpioIN = fopen("/sys/class/gpio/gpio"IN"/value", "w");
+	gpioReset = fopen("/sys/class/gpio/gpio"RESET"/value", "w");	
+	gpio0 = fopen("/sys/class/gpio/gpio"BIT0"/value", "r");
+	gpio1 = fopen("/sys/class/gpio/gpio"BIT1"/value", "r");
+	gpio2 = fopen("/sys/class/gpio/gpio"BIT2"/value", "r");
+	gpio3 = fopen("/sys/class/gpio/gpio"BIT3"/value", "r");
+	gpio4 = fopen("/sys/class/gpio/gpio"BIT4"/value", "r");
+	gpio5 = fopen("/sys/class/gpio/gpio"BIT5"/value", "r");
+	gpio6 = fopen("/sys/class/gpio/gpio"BIT6"/value", "r");	
+	
 	assert(gpioIN != NULL);
 	assert(gpioReset != NULL);
 	assert(gpio0 != NULL);
@@ -80,19 +89,23 @@ void transportDistance(void *transportStruct) {
 	assert(gpio5 != NULL);
 	assert(gpio6 != NULL);
 
-	char bit0;
-	unsigned int in, reset, bit1, bit2, bit3, bit4, bit5, bit6;
-	fprintf(gpioReset, "%d", 0); fflush(gpioReset);	
-	fprintf(gpioReset, "%d", 1); fflush(gpioReset);
-	fprintf(gpioReset, "%d", 0); fflush(gpioReset);
+	//char bit0;
+	unsigned int bit0, bit1, bit2, bit3, bit4, bit5, bit6;
+	system("echo 1 > /sys/class/gpio/gpio69/value");
+	//int ret = fprintf(gpioReset, "%d", 1); 
+	//fflush(gpioReset);	
+	sleep(1);
+	system("echo 0 > /sys/class/gpio/gpio69/value");
+	//ret = fprintf(gpioReset, "%d", 0); 
+	//fflush(gpioReset);
 	//fscanf(gpio0, "%d", &bit0);
 	//printf("START BIT 0 : %d\n", bit0);	
 	fprintf(gpioIN, "%d", 1); fflush(gpioIN);
 	usleep(DELAY);
 	fprintf(gpioIN, "%d", 0); fflush(gpioIN);
 	
-	//if (gpio0) fscanf(gpio0, "%d", &bit0); fflush(gpio0);
-	fread(&bit0, sizeof(bit0), 1, gpio0); fflush(gpio0);
+	if (gpio0) fscanf(gpio0, "%d", &bit0); fflush(gpio0);
+	//fread(&bit0, sizeof(bit0), 1, gpio0); fflush(gpio0);
 	if (gpio1) fscanf(gpio1, "%d", &bit1); fflush(gpio1);
 	if (gpio2) fscanf(gpio2, "%d", &bit2); fflush(gpio2);
 	if (gpio3) fscanf(gpio3, "%d", &bit3); fflush(gpio3);
@@ -146,7 +159,7 @@ void transportDistance(void *transportStruct) {
 	gpioBinary = gpioBinary | (bit5 << 5);
 	gpioBinary = gpioBinary | (bit6 << 6);
 
-	/*
+	
 	printf("%d ", bit6);
 	printf("%d ", bit5);
 	printf("%d ", bit4);
@@ -154,16 +167,17 @@ void transportDistance(void *transportStruct) {
 	printf("%d ", bit2);
 	printf("%d ", bit1);
 	printf("%d\n", bit0);
-	*/
 	
-	printf ("HardwareCounter:  %d\n", gpioBinary);
+	
+	printf ("HardwareCounter:  %d\n\n\n", gpioBinary);
+	usleep(1000000);
 	double time = MICROSEC / DELAY;
 	unsigned int frequency = gpioBinary * time;
-	printf("frequency = %d\n", frequency);
+	//printf("frequency = %d\n", frequency);
 	
 	// some distance equation?
-	double calcDistance = (frequency == 0)? 0:100 / frequency;
-	//double calcDistance = 1500;
+	//double calcDistance = (frequency == 0)? 0:100 / frequency;
+	double calcDistance = 1500;
 	
 	if (calcDistance > 2000) {
 		calcDistance = 2000;
@@ -222,7 +236,7 @@ void transportDistance(void *transportStruct) {
 void initPins() {	
 	
 	system("echo "IN" > /sys/class/gpio/export");
-	system("echo "RESET" > /sys/class/gpio/export");
+	system("echo 69 > /sys/class/gpio/export");
 	system("echo "BIT0" > /sys/class/gpio/export");
 	system("echo "BIT1" > /sys/class/gpio/export");
 	system("echo "BIT2" > /sys/class/gpio/export");
@@ -234,7 +248,7 @@ void initPins() {
 	system("echo out > /sys/class/gpio/gpio"IN"/direction");
 	//system("echo falling > /sys/class/gpio/gpio"IN"/edge");
 	
-	system("echo out > /sys/class/gpio/gpio"RESET"/direction");
+	system("echo out > /sys/class/gpio/gpio69/direction");
 	system("echo in > /sys/class/gpio/gpio"BIT0"/direction");
 	system("echo in > /sys/class/gpio/gpio"BIT1"/direction");
 	system("echo in > /sys/class/gpio/gpio"BIT2"/direction");
@@ -243,14 +257,6 @@ void initPins() {
 	system("echo in > /sys/class/gpio/gpio"BIT5"/direction");
 	system("echo in > /sys/class/gpio/gpio"BIT6"/direction");
 
-	gpioIN = fopen("/sys/class/gpio/gpio"IN"/value", "w");
-	gpioReset = fopen("/sys/class/gpio/gpio"RESET"/value", "w");	
-	gpio0 = fopen("/sys/class/gpio/gpio"BIT0"/value", "r");
-	gpio1 = fopen("/sys/class/gpio/gpio"BIT1"/value", "r");
-	gpio2 = fopen("/sys/class/gpio/gpio"BIT2"/value", "r");
-	gpio3 = fopen("/sys/class/gpio/gpio"BIT3"/value", "r");
-	gpio4 = fopen("/sys/class/gpio/gpio"BIT4"/value", "r");
-	gpio5 = fopen("/sys/class/gpio/gpio"BIT5"/value", "r");
-	gpio6 = fopen("/sys/class/gpio/gpio"BIT6"/value", "r");	
+
 }
 

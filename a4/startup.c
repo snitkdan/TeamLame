@@ -75,6 +75,8 @@ bool fromSolar = false;
 bool fromTransport = false;
 bool stable = false;
 bool endOfTravel = false;
+bool adc_connection = false;
+bool pwm_connection = false;
 
 // Defines some TCBs
 TCB powerSubsystemTCB;
@@ -150,13 +152,14 @@ void Initialize(void) {
      fprintf(led3, "%d", 0); fflush(led3); fclose(led3);
   }
   // 2.1: Initialize the Hardware Perepherals
-  InitHardware();
   #endif
 
 
   // Enable the signals
   signal(SIGINT, sigHandler);
   signal(SIGUSR1, sigHandler);
+  
+  InitHardware();
 
   // 3. Assign shared variables to pointers
   // 3.1: powerSubsystem
@@ -277,10 +280,14 @@ void InitHardware(void) {
     fprintf(stderr, "ADC ERROR\n");
     exit(EXIT_FAILURE);
   }
+  adc_connection = true;
+  raise(SIGUSR1);
   if(!initPWM(PWM_PIN)) {
     fprintf(stderr, "PWM ERROR\n");
     exit(EXIT_FAILURE);
   }
+  pwm_connection = true;
+  raise(SIGUSR1);
 }
 
 void sigHandler(int sig) {
@@ -308,5 +315,13 @@ void sigHandler(int sig) {
   }
   if (sig == SIGINT) {
     snapshot = true;
+  }
+  if(adc_connection) {
+	adc_connection = false;
+	printf("Successfully connected to ADC :P\n");
+  }
+  if(pwm_connection) {
+	pwm_connection = false;
+	printf("Successfully connected to PWM ;)\n");
   }
 }
