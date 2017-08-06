@@ -14,7 +14,7 @@
 #include "thrusterSubsystem.h"
 #include "pwm_utils.h"
 
-#define PWM_PIN "P8_13"
+#define PWM_PIN "P9_14"
 #define HNUM_14 17
 
 #define ON 1
@@ -60,20 +60,21 @@ void thrusterSubsystem(void *thrustStruct) {
 
   // 5. PWM things
   // 5.1: Initialization checks
-  static bool pwm_19_init = false;
-  if(!pwm_19_init) {
-		pwm_19_init = initThrusters();
-    if(!pwm_19_init) {
+  /*
+  static bool thrusterInit = false;
+  if(!thrusterInit) {
+		thrusterInit = initThrusters();
+    if(!thrusterInit) {
       //fprintf(stderr, "PWM_19 Malfunction\n");
       return;
     }
-	}
+	}*/
   // 5.2: Set duty / period
   double duty = (cc.duration > 0) ? (cc.magnitude / cc.duration) : 0;
   double period = cc.magnitude;
   //printf("THRUSTERS: Duty: %f, Period: %f\n", duty, period);
-  setPWMProperty(PWM_PIN, "period", period, HNUM_14);
-  setPWMProperty(PWM_PIN, "duty", duty, HNUM_14);
+  /*setPWMProperty(PWM_PIN, "period", period, HNUM_14);
+  setPWMProperty(PWM_PIN, "duty", duty, HNUM_14);*/
 }
 
 static bool initThrusters() {

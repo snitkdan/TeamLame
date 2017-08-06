@@ -51,6 +51,7 @@ void solarPanelControl(void *solarStruct) {
 	if(!solarPanelInit) {
 		solarPanelInit = initSolarPanel();
 		if(!solarPanelInit) {
+			exit(1);
 			//fprintf(stderr, "PWM_13 Malfunction\n");
 			return;
 		}
