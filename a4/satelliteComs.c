@@ -31,6 +31,8 @@
 #define DEBUG
 int fd = 0;
 
+extern bool warningBattTemp;
+
 void satelliteComs(void *satStruct) {
 	/*
 	// Only runs this function every global cycle
@@ -61,6 +63,7 @@ void satelliteComs(void *satStruct) {
     char *solarPanelString = (*solarPanelState) ? "Deployed":"Retracted";
     char *fuelString = (*fuelLow)? "YES":"NO";
     char *battString = (*batteryLow)? "YES":"NO";
+	char *warnBattString = warningBattTemp? "BATTERY OVERHEATING!":"";
 
 	static int fd1;
 	static int firstTime = 1;
@@ -74,6 +77,7 @@ void satelliteComs(void *satStruct) {
 		dprintf(fd1, "\033[1;1H");
 	    firstTime--;
 	}
+    dprintf(fd1, "\033[2J");	
 	dprintf(fd1, "\033[1;1H");
 	dprintf(fd1, "EARTH DISPLAY TERMINAL\n");
     dprintf(fd1,
@@ -83,9 +87,12 @@ void satelliteComs(void *satStruct) {
 	"Power Consumption: %2hu, "
 	"Power Generation: %2hu\n"
 	"Battery Low: %s "
-	"Fuel Low: %s ",
+	"Fuel Low: %s\n"
+	"%s",
 	 solarPanelString, *batteryLvl, *fuelLvl, *pConsume, *pGenerate,
-	 battString, fuelString);
+	 battString, fuelString, warnBattString);
+	 
+	 //printf("SAT COMS: %s\n", warnBattString);
 
 	 if (strstr(response, "A") || 
 	     strstr(response, "C") || 

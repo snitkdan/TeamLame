@@ -17,8 +17,8 @@
 
 #define ACH1 "AIN1"
 #define ACH2 "AIN2"
-#define HNUM1 16
-#define HNUM2 16
+#define HNUM 15
+
 
 #define BUF_SIZE 16
 
@@ -44,9 +44,9 @@ void batteryTemp(void *temperatureStruct) {
 
 	// 1. Read from the 2 sensors
 	#ifndef DEBUG
-	double battTemp1 = readADC(ACH1, HNUM1); 
+	double battTemp1 = readADC(ACH1, HNUM); 
 	battTemp1 /= 1000;
-	double battTemp2 = readADC(ACH2, HNUM2);
+	double battTemp2 = readADC(ACH2, HNUM);
 	battTemp2 /= 1000;
 	
 	#endif	
@@ -81,8 +81,8 @@ void batteryTemp(void *temperatureStruct) {
 	*batteryTmp2 = temp2;
 	batteryTempBuff1[currTmp] = temp1;
 	batteryTempBuff2[currTmp] = temp2;
-	//printf("callNum: %d, batteryTmp1: %u, batteryTmp2: %u, batteryOverTmp %d\n",
-	//				callNum, *batteryTmp1, *batteryTmp2, *batteryOverTempPtr);
+	printf("callNum: %d, batteryTmp1: %u, batteryTmp2: %u, batteryOverTmp %d\n",
+					callNum, *batteryTmp1, *batteryTmp2, *batteryOverTempPtr);
 	callNum++;
 	currTmp = (currTmp + 1) % 16;
   return;

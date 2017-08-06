@@ -14,9 +14,10 @@
 #include "adc_utils.h"
 
 #define ACH "AIN0"
-#define HNUM 16
+#define HNUM 15
 
 #define BUF_SIZE 16
+#define FULL 36
 //#define DEBUG
 
 extern bool fromPowerSS;
@@ -48,7 +49,7 @@ fromPowerSS = true;
   int next = readADC(ACH, HNUM);
   batteryBuff[current_measurement] = next;
   current_measurement = (current_measurement + 1) % BUF_SIZE;
-  *batteryLvl = next;
+  *batteryLvl = (next * 20) / 1000;
   #endif
   #ifdef DEBUG
   unsigned int batteryBuff[BUF_SIZE] = {60, 10, 5, 10, 30, 95, 100, 50, 30, 10, 5, 0, 30, 50, 95, 100};
@@ -70,7 +71,7 @@ bool useSolarPanels(bool *solarPanelState, bool *solarPanelDeploy, bool *solarPa
     *solarPanelDeploy = true;
     *solarPanelRetract = false;
     // 1.1: If  batteryLvl > 95%
-    if(*batteryLvl > 95) {
+    if(*batteryLvl > 27) {
       // 1.1.1: Retract solar panels
       *solarPanelState = false;
       *pGenerate = 0;
@@ -84,7 +85,7 @@ bool useSolarPanels(bool *solarPanelState, bool *solarPanelDeploy, bool *solarPa
 	  *solarPanelDeploy = false;
 	  *solarPanelRetract = true;
       // 2.1: If batteryLvl <= 10%
-      if(*batteryLvl <= 10) {
+      if(*batteryLvl <= 3) {
         // 2.1.1: Deploy solar panels
         *solarPanelState = true;
       }
@@ -98,9 +99,9 @@ void powerGeneration(unsigned short *pGenerate, unsigned int *batteryLvl) {
   // 1. Define static variables to track function state
   static short numCalls = 0;
   // 2. If battery level <= 95%
-  if(*batteryLvl <= 95) {
+  if(*batteryLvl <= 27) {
     // 2.1: If battery level <= 50%
-    if(*batteryLvl <= 50) {
+    if(*batteryLvl <= 15) {
       *pGenerate += (numCalls % 2 == 0) ? 2 : 1;
        // if even call -> +2; else -> +1
     }

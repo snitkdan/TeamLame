@@ -35,6 +35,7 @@
 #define GC_TEN 100
 #define GC_FIFTEEN 150
 #define GC_10HZ 2
+#define FULL 36
 
 // globally defines the led files here
 FILE *led1 = NULL;
@@ -50,7 +51,7 @@ static int timer_10 = 0;
 int stateled2 = 0;
 int stateled1 = 0;
 
-
+bool warningBattTemp = false;
 
 void warningAlarm(void *warnStruct) {
     // 1.1 Opens the led files and checks they were opened successfully
@@ -88,7 +89,7 @@ void warningAlarm(void *warnStruct) {
 	
 	if (tempFlag != 2) {
 		if (tempFlag == 1) {
-			//printf("BATTERY OVERHEAT!!\n");
+			warningBattTemp = true;
 			if (timer_15 == GC_FIFTEEN) {
 				tempFlag = 2;
 				timer_15 = 0;
@@ -192,6 +193,7 @@ void readAck() {
 		if (consoleModeCmd(c) || motorSpeedCmd(c) || satVehicleCmd(c)) ungetc(c, stdin);
 	} else {
 		//printf("Warning Alarm: Acknowledge Received\n");
+		warningBattTemp = false;		
 		tempFlag = 0;
 		timer_15 = 0;
 	}	
@@ -217,10 +219,10 @@ void checkOpened(FILE *led) {
 }
 
 int checkRegion(unsigned int *lvlPtr, bool *lowPtr) {
-    if (*lvlPtr > 50) {
+    if (*lvlPtr > FULL / 2) {
 	    *lowPtr = false;
 	    return HIGH;
-    } else if (*lvlPtr <= 10) {
+    } else if (*lvlPtr <= 4) { // 3.6 is 10 percent of full, but rounded up to 4 due to error 
 	    *lowPtr = true;
 	    return LOW;
     } else {
