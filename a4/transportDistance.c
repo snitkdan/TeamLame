@@ -63,7 +63,7 @@ void transportDistance(void *transportStruct) {
     // detects a signal from an inbound transport vehicle. The frequency of the incoming signal
     // shall be proportional to the distance between the satellite and an inbound transport vehicle.
 	static int firstTime = 0;
-    //#define DEBUG	
+    #define DEBUG	
     #ifndef DEBUG	
 	if (firstTime == 0) {
         initPins();
@@ -170,14 +170,13 @@ void transportDistance(void *transportStruct) {
 	
 	
 	printf ("HardwareCounter:  %d\n\n\n", gpioBinary);
-	usleep(1000000);
 	double time = MICROSEC / DELAY;
 	unsigned int frequency = gpioBinary * time;
 	//printf("frequency = %d\n", frequency);
 	
 	// some distance equation?
-	//double calcDistance = (frequency == 0)? 0:100 / frequency;
-	double calcDistance = 1500;
+	double calcDistance = (frequency == 0)? 0:100 / frequency;
+	//double calcDistance = 1500;
 	
 	if (calcDistance > 2000) {
 		calcDistance = 2000;
@@ -186,10 +185,10 @@ void transportDistance(void *transportStruct) {
 	}
 	//printf("current distance = %d\n", calcDistance);
 
+	// Call interrupt here
 	fromTransport = true;
 	if (calcDistance <= 100) {
 		raise(SIGUSR1);
-		
 	}
 	fromTransport = false;
 
@@ -207,9 +206,9 @@ void transportDistance(void *transportStruct) {
 	        distanceBuff[currIndex] = calcDistance;	
             *distance = distanceBuff[currIndex];		
      	    currIndex = (currIndex + 1) % 8;			
-		}
-		
+		}	
 	}
+	printf("Distance Buff%d: %d *distance: %d\n", currIndex, distanceBuff[currIndex], *distance);
 
 	#ifdef DEBUG
 	fclose(fp0);
