@@ -47,23 +47,23 @@ void imageCapture(void *imageStruct) {
 		   scaledReading = (voltReading - 900) / 29.0322518;
 		   realBuff[j] = scaledReading;
 		   //printf("VoltReading: %f Scaledreading: %d \n", voltReading, realBuff[i]);
-		   usleep(100); // sampling freq of 1000 Hz
+		   usleep(100); // sampling freq of 10000 Hz
 		}
 		// Brent's FFT
     	signed int imgBuff[256] = {0};	
 		int m_index = optfft(realBuff, imgBuff);
-		//printf("m_index %d\n", m_index);
+		printf("m_index %d\n", m_index);
 		// Bin Wang's Algorithm
 		double fs = 10000;
 		double N = 256;
 		double f;
 		f = fs * m_index / N;
-		//printf("f = %f\n", f);
+		printf("f = %f\n", f);
 		presentationBuffer[i] = f;
 		#endif
 	}
 	
-	#ifdef DEBUG
+	#ifndef DEBUG
 	for (i = 0; i < 16; i++) {
 		printf("presentationbuffer = %d\n", presentationBuffer[i]);
 	}

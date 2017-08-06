@@ -43,21 +43,17 @@ void vehicleComms(void *vehicleStruct) {
     char *request = vData->requestPtr;
     
 	if (*request != '\0') {
-        char buf[MAX_BUF];
-		
-		char * myfifo0 = "/tmp/myfifo0";	
-		mkfifo(myfifo0, 0666);
-
-		/* open the FIFO */	
-		fd0 = open(myfifo0, O_RDWR);		
-	    write(fd0, request, sizeof(request));
-        vehicleEnd(fd0);	         //  read then write to the fifo
-	    read(fd0, buf, MAX_BUF);
-	    response = &buf[0];		
-	    close(fd0);
-
-        /* remove the FIFO */
-        unlink(myfifo0);
+        if (*request == 'T') {
+			*response = 'K';
+	        printf("RESPONSE = %s\n", response);
+			
+		} else if (*request == 'D'){
+		    *response = 'C';
+	        printf("RESPONSE = %s\n", response);
+			
+		} else {
+			printf("Invalid Request in vehicle coms\n");
+		}
 		return;
 	}
 	

@@ -298,6 +298,12 @@ void sigHandler(int sig) {
     }
     if(fromTransport) {
       // RADLEIGH
+	  //printf("fromTransport\n");
+	  request = 'T';
+	  vehicleComms((void*) &vData);
+	  request = 'D';
+	  vehicleComms((void*) &vData);
+	  request = '\0';
     }
   }
   if (sig == SIGINT) {

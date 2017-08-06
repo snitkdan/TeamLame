@@ -4,6 +4,8 @@
  */
 
 #include <stdio.h>
+#include <assert.h>
+#include <signal.h>
 #include <stdbool.h>
 #include <stdint.h>
 #include <fcntl.h>
@@ -41,6 +43,7 @@ FILE *gpio5 = NULL;
 FILE *gpio6 = NULL;
 
 extern unsigned int distanceBuff[BUF_SIZE];
+extern bool fromTransport;
 
 void initPins();
 
@@ -55,33 +58,30 @@ void transportDistance(void *transportStruct) {
 	*/
 	transportData *tData = (transportData*)transportStruct;
     unsigned int *distance = tData->distancePtr;
-
-    /*if (no interrupt) {
-		return;
-	}*/	
 	
 	// The Satellite Management and Control System must support an interface to a sensor that
     // detects a signal from an inbound transport vehicle. The frequency of the incoming signal
     // shall be proportional to the distance between the satellite and an inbound transport vehicle.
 	static int firstTime = 0;
-    //#define DEBUG	
+    #define DEBUG	
     #ifndef DEBUG	
 	if (firstTime == 0) {
         initPins();
 	    firstTime++;
 	}
-	gpioIN = fopen("/sys/class/gpio/gpio"IN"/value", "w");
-	gpioReset = fopen("/sys/class/gpio/gpio"RESET"/value", "w");	
-	gpio0 = fopen("/sys/class/gpio/gpio"BIT0"/value", "r");
-	gpio1 = fopen("/sys/class/gpio/gpio"BIT1"/value", "r");
-	gpio2 = fopen("/sys/class/gpio/gpio"BIT2"/value", "r");
-	gpio3 = fopen("/sys/class/gpio/gpio"BIT3"/value", "r");
-	gpio4 = fopen("/sys/class/gpio/gpio"BIT4"/value", "r");
-	gpio5 = fopen("/sys/class/gpio/gpio"BIT5"/value", "r");
-	gpio6 = fopen("/sys/class/gpio/gpio"BIT6"/value", "r");	
+		
+	assert(gpioIN != NULL);
+	assert(gpioReset != NULL);
+	assert(gpio0 != NULL);
+	assert(gpio1 != NULL);
+	assert(gpio2 != NULL);
+	assert(gpio3 != NULL);
+	assert(gpio4 != NULL);
+	assert(gpio5 != NULL);
+	assert(gpio6 != NULL);
 
-
-	unsigned int in, reset, bit0, bit1, bit2, bit3, bit4, bit5, bit6;
+	char bit0;
+	unsigned int in, reset, bit1, bit2, bit3, bit4, bit5, bit6;
 	fprintf(gpioReset, "%d", 0); fflush(gpioReset);	
 	fprintf(gpioReset, "%d", 1); fflush(gpioReset);
 	fprintf(gpioReset, "%d", 0); fflush(gpioReset);
@@ -91,13 +91,14 @@ void transportDistance(void *transportStruct) {
 	usleep(DELAY);
 	fprintf(gpioIN, "%d", 0); fflush(gpioIN);
 	
-	if (gpio0) fscanf(gpio0, "%d", &bit0);
-	if (gpio1) fscanf(gpio1, "%d", &bit1);
-	if (gpio2) fscanf(gpio2, "%d", &bit2);
-	if (gpio3) fscanf(gpio3, "%d", &bit3);
-	if (gpio4) fscanf(gpio4, "%d", &bit4);
-	if (gpio5) fscanf(gpio5, "%d", &bit5);
-	if (gpio6) fscanf(gpio6, "%d", &bit6);
+	//if (gpio0) fscanf(gpio0, "%d", &bit0); fflush(gpio0);
+	fread(&bit0, sizeof(bit0), 1, gpio0); fflush(gpio0);
+	if (gpio1) fscanf(gpio1, "%d", &bit1); fflush(gpio1);
+	if (gpio2) fscanf(gpio2, "%d", &bit2); fflush(gpio2);
+	if (gpio3) fscanf(gpio3, "%d", &bit3); fflush(gpio3);
+	if (gpio4) fscanf(gpio4, "%d", &bit4); fflush(gpio4);
+	if (gpio5) fscanf(gpio5, "%d", &bit5); fflush(gpio5);
+	if (gpio6) fscanf(gpio6, "%d", &bit6); fflush(gpio6);
     #endif 	
 	
 	// --------------------------------------------
@@ -105,10 +106,10 @@ void transportDistance(void *transportStruct) {
 	#ifdef DEBUG
 	// distance in meters
 	if (firstTime == 0) {
-		system("echo 0 > file0.txt");
-		system("echo 1 > file1.txt");
-		system("echo 1 > file2.txt");
-		system("echo 1 > file3.txt");
+		system("echo 1 > file0.txt");
+		system("echo 0 > file1.txt");
+		system("echo 0 > file2.txt");
+		system("echo 0 > file3.txt");
 		system("echo 0 > file4.txt");
 		system("echo 0 > file5.txt");
 		system("echo 0 > file6.txt");
@@ -123,7 +124,8 @@ void transportDistance(void *transportStruct) {
 	FILE *fp5 = fopen("file5.txt", "r");
 	FILE *fp6 = fopen("file6.txt", "r");
 	
-	unsigned int bit0, bit1, bit2, bit3, bit4, bit5, bit6;
+	char bit0;
+	unsigned int bit1, bit2, bit3, bit4, bit5, bit6;
 	
     fscanf(fp0, "%d", &bit0);
 	fscanf(fp1, "%d", &bit1);
@@ -144,7 +146,7 @@ void transportDistance(void *transportStruct) {
 	gpioBinary = gpioBinary | (bit5 << 5);
 	gpioBinary = gpioBinary | (bit6 << 6);
 
-	
+	/*
 	printf("%d ", bit6);
 	printf("%d ", bit5);
 	printf("%d ", bit4);
@@ -152,7 +154,7 @@ void transportDistance(void *transportStruct) {
 	printf("%d ", bit2);
 	printf("%d ", bit1);
 	printf("%d\n", bit0);
-	
+	*/
 	
 	printf ("HardwareCounter:  %d\n", gpioBinary);
 	double time = MICROSEC / DELAY;
@@ -160,15 +162,22 @@ void transportDistance(void *transportStruct) {
 	printf("frequency = %d\n", frequency);
 	
 	// some distance equation?
-	//double calcDistance = 1500000 / frequency;
-	double calcDistance = 1500;
+	double calcDistance = (frequency == 0)? 0:100 / frequency;
+	//double calcDistance = 1500;
 	
 	if (calcDistance > 2000) {
 		calcDistance = 2000;
-	} else if (calcDistance < 100) {
+	} else if (calcDistance <= 100) {
 		calcDistance = 100;
 	}
-	printf("current distance = %d\n", calcDistance);
+	//printf("current distance = %d\n", calcDistance);
+
+	fromTransport = true;
+	if (calcDistance <= 100) {
+		raise(SIGUSR1);
+		
+	}
+	fromTransport = false;
 
 	
 	static int callNum = 0;
@@ -210,7 +219,8 @@ void transportDistance(void *transportStruct) {
     return;
 }
 
-void initPins() {
+void initPins() {	
+	
 	system("echo "IN" > /sys/class/gpio/export");
 	system("echo "RESET" > /sys/class/gpio/export");
 	system("echo "BIT0" > /sys/class/gpio/export");
@@ -231,6 +241,16 @@ void initPins() {
 	system("echo in > /sys/class/gpio/gpio"BIT3"/direction");
 	system("echo in > /sys/class/gpio/gpio"BIT4"/direction");
 	system("echo in > /sys/class/gpio/gpio"BIT5"/direction");
-	system("echo in > /sys/class/gpio/gpio"BIT6"/direction");	
+	system("echo in > /sys/class/gpio/gpio"BIT6"/direction");
+
+	gpioIN = fopen("/sys/class/gpio/gpio"IN"/value", "w");
+	gpioReset = fopen("/sys/class/gpio/gpio"RESET"/value", "w");	
+	gpio0 = fopen("/sys/class/gpio/gpio"BIT0"/value", "r");
+	gpio1 = fopen("/sys/class/gpio/gpio"BIT1"/value", "r");
+	gpio2 = fopen("/sys/class/gpio/gpio"BIT2"/value", "r");
+	gpio3 = fopen("/sys/class/gpio/gpio"BIT3"/value", "r");
+	gpio4 = fopen("/sys/class/gpio/gpio"BIT4"/value", "r");
+	gpio5 = fopen("/sys/class/gpio/gpio"BIT5"/value", "r");
+	gpio6 = fopen("/sys/class/gpio/gpio"BIT6"/value", "r");	
 }
 
