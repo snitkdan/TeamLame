@@ -51,7 +51,6 @@ void solarPanelControl(void *solarStruct) {
 	if(!solarPanelInit) {
 		solarPanelInit = initSolarPanel();
 		if(!solarPanelInit) {
-			exit(1);
 			//fprintf(stderr, "PWM_13 Malfunction\n");
 			return;
 		}
@@ -89,10 +88,9 @@ void solarPanelControl(void *solarStruct) {
 	//PWM = duty * period;
 
 	// 1.6: Duty cycle and period are in ms.
-	//printf("SOLARPANELS: Duty: %f\n", duty);
-	#ifndef TEST
+	printf("SOLARPANELS: Duty: %f\n", duty);
+
 	setPWMProperty(PWM_PIN, "duty", duty, HNUM);
-	#endif
 	fromSolar = false;
 }
 

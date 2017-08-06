@@ -12,6 +12,8 @@
 #include "nonBlockingKeys.h"
 #define MAX 300
 
+extern bool endOfTravel;
+
 void keyboardConsole(void *keyboardStruct) {
 	// Only run this function every major cycle
 	static unsigned long start = 0;
@@ -29,11 +31,17 @@ void keyboardConsole(void *keyboardStruct) {
     int flags = fcntl(STDIN_FILENO, F_GETFL, 0);
     fcntl(STDIN_FILENO, F_SETFL, flags | O_NONBLOCK);
     char c = getchar();
+	//char c = 'i';
     if (!motorSpeedCmd(c)) {
         if (consoleModeCmd(c) || satVehicleCmd(c)) ungetc(c, stdin);
         *motorInc = false;
         *motorDec = false;
     } else {
+		if (endOfTravel) {
+			printf("Cannot overdrive solar panel motor...\n");
+			return;
+		}
+		
         if (c == SPEEDINC) {
 			printf("Increasing motor speed...\n");
             *motorInc = true;
