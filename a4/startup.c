@@ -289,7 +289,6 @@ void sigHandler(int sig) {
       // 1. Handle connection with ADC Channel (batteryLevel Measurement ON)
       // set stable = true (connected!)
       stable = true;
-      usleep(600);
     }
     if(fromSolar) {
       // 2. Handle connection with solar panel output as well
