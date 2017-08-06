@@ -17,7 +17,7 @@
 #define HNUM 16
 
 #define BUF_SIZE 16
-#define DEBUG
+//#define DEBUG
 
 extern bool fromPowerSS;
 
@@ -58,8 +58,6 @@ fromPowerSS = true;
 
   // 2. Update powerConsumption && powerGeneration
   // TODO:
-  // 1. deployed and retracted bug
-  // 2. updating battery with potentiometer
   // 3. rescaling v to mv
   // 4. Change battery level pointer rescaled!!
   powerConsumption(pConsume);

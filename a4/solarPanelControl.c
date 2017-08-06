@@ -62,12 +62,12 @@ void solarPanelControl(void *solarStruct) {
 	static double duty = DEFAULT_DUTY;
 	//static double period = PERIOD;
 
-  printf("SPS: %d SPD: %d SPR: %d\n", *solarPanelState, *solarPanelDeploy, *solarPanelRetract);
+  //printf("SPS: %d SPD: %d SPR: %d\n", *solarPanelState, *solarPanelDeploy, *solarPanelRetract);
   // 1.4: Check if the solor panel state with what it is requested to do
 	if ((*solarPanelState == 1 && *solarPanelDeploy == 1) || (*solarPanelState == 0 && *solarPanelRetract == 1)){
 		if(!endOfTravel) {
 			raise(SIGUSR1);
-			//setPWMProperty(PWM_PIN, "run", OFF, HNUM);
+			setPWMProperty(PWM_PIN, "run", OFF, HNUM);
 		}
 	} else {
 		if(endOfTravel) {
@@ -88,7 +88,7 @@ void solarPanelControl(void *solarStruct) {
 	//PWM = duty * period;
 
 	// 1.6: Duty cycle and period are in ms.
-	printf("SOLARPANELS: Duty: %f\n", duty);
+	//printf("SOLARPANELS: Duty: %f\n", duty);
 
 	setPWMProperty(PWM_PIN, "duty", duty, HNUM);
 	fromSolar = false;
@@ -98,7 +98,7 @@ static bool initSolarPanel() {
   // 2. Set the period to 500 ms
   setPWMProperty(PWM_PIN, "period", PERIOD, HNUM);
   // 3. Set the duty cycle to 250 ms
-	setPWMProperty(PWM_PIN, "duty", 250000, HNUM);
+	setPWMProperty(PWM_PIN, "duty", DEFAULT_DUTY, HNUM);
   // 4. Turn on the output
   setPWMProperty(PWM_PIN, "run", ON, HNUM);
 	return true;
