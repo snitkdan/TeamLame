@@ -136,14 +136,14 @@ void Initialize(void) {
   distance = &distanceBuff[0];
 
   // 2. Turn off led0 initially
-  #define BEAGLEBONE
+  //#define BEAGLEBONE
   #ifdef BEAGLEBONE
   FILE *led0 = fopen("/sys/class/leds/beaglebone:green:usr0/brightness", "w");
   FILE *led1 = fopen("/sys/class/leds/beaglebone:green:usr1/brightness", "w");
   FILE *led2 = fopen("/sys/class/leds/beaglebone:green:usr2/brightness", "w");
   FILE *led3 = fopen("/sys/class/leds/beaglebone:green:usr3/brightness", "w");
   if (!led0 || !led1 || !led2 || !led3) {
-     fprintf(stderr, "MAIN: Couldn't open led\n");
+     fprintf(stderr, "BEAGLEBONE: Couldn't open led\n");
      return;
   } else {
      fprintf(led0, "%d", 0); fflush(led0); fclose(led0);
@@ -206,6 +206,8 @@ void Initialize(void) {
   cData.pGeneratePtr = &pGenerate;
   cData.distancePtr = distance;
   cData.batteryOverTempPtr = &batteryOverTemp;
+  cData.batteryTmp1 = batteryTmp1;
+  cData.batteryTmp2 = batteryTmp2;
   // 3.8: warningAlarm
   wData.fuelLowPtr = &fuelLow;
   wData.batteryLowPtr = &batteryLow;
@@ -276,9 +278,11 @@ void ActivateTimeBase(void) {
 }
 
 void InitHardware(void) {
+  #ifdef BEAGLEBONE
   if(!initADC()) {
     fprintf(stderr, "ADC ERROR\n");
     exit(EXIT_FAILURE);
+    return;
   }
   adc_connection = true;
   raise(SIGUSR1);
@@ -288,6 +292,7 @@ void InitHardware(void) {
   }
   pwm_connection = true;
   raise(SIGUSR1);
+  #endif
 }
 
 void sigHandler(int sig) {

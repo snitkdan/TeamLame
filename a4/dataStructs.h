@@ -68,6 +68,8 @@ typedef struct consoleDisplayData {
   unsigned short *pConsumePtr;
   unsigned short *pGeneratePtr;
   unsigned int *distancePtr;
+  unsigned int *batteryTmp1;
+  unsigned int *batteryTmp2;
 } consoleData;
 
 typedef struct warningAlarmData {
