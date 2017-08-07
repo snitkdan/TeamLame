@@ -31,6 +31,8 @@
     in the form of satelliteStatus and
     annunciation, passing them to terminalComs.c
 */
+extern bool warningBattTemp;
+
 void consoleDisplay(void *consoleStruct) {
 	// Only run this function every major cycle
 	/*
@@ -52,11 +54,14 @@ void consoleDisplay(void *consoleStruct) {
     unsigned short *pConsume = cData->pConsumePtr;
     unsigned short *pGenerate = cData->pGeneratePtr;
     unsigned int *distance = cData->distancePtr;	
+    unsigned int *batteryTmp1 = cData->batteryTmp1;
+    unsigned int *batteryTmp2 = cData->batteryTmp2;
 
     // 1.2 Define necessary string storage
     char *solarPanelString = (*solarPanelState) ? "Deployed":"Retracted";
     char *fuelString = (*fuelLow)? "YES":"NO";
     char *battString = (*batteryLow)? "YES":"NO";
+    char *tempString = (warningBattTemp)? "OVERHEATING!":"OK";
 
 
     int flags = fcntl(STDIN_FILENO, F_GETFL, 0);
@@ -76,19 +81,24 @@ void consoleDisplay(void *consoleStruct) {
 		if (c == SATELLITESTATUS) {
 			printf("ConsoleDisplay: Showing Satellite Status...\n");
 			sprintf(output, "**Satellite Status\n"
-							"Solar Panels: %9s, "
-							"Battery Level: %3u, "
-							"Fuel Level: %3hu, "
-							"Power Consumption: %2hu, "
-							"Power Generation: %2hu\n",
-							 solarPanelString, *batteryLvl, *fuelLvl, *pConsume, *pGenerate);
+							"Solar Panels:      %s\n"
+							"Battery Level:     %u\n"
+							"Fuel Level:        %hu\n"
+							"Power Consumption: %hu\n"
+							"Power Generation:  %hu\n"
+                                                        "Vehicle Distance:  %d\n"
+                                                        "Battery Temp 1:    %d\n"
+                                                        "Battery Temp 2:    %d\n",
+							 solarPanelString, *batteryLvl, *fuelLvl, *pConsume, *pGenerate,
+                                                         *distance, *batteryTmp1, *batteryTmp2);
 			terminalComs(output);
 		} else if (c == ANNUNCIATION) {
 			printf("ConsoleDisplay: Showing Annunciation Mode...\n");
 			sprintf(output, "Annunciaton\n"
-							"Battery Low: %3s "
-							"Fuel Low: %3s",
-							 battString, fuelString);
+							"Battery Low:         %s\n"
+							"Fuel Low:            %s\n"
+                                                        "Battery Temperature: %s\n",
+							 battString, fuelString, tempString);
 			terminalComs(output);
 		} else {
 			if(satVehicleCmd(c) || motorSpeedCmd(c) || warningCmd(c)) ungetc(c, stdin);
