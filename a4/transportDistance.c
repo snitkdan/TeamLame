@@ -172,8 +172,9 @@ void transportDistance(void *transportStruct) {
 	double time = MICROSEC / DELAY;
 	unsigned int frequency = gpioBinary * time;
 	//printf("frequency = %d\n", frequency);
-	
+        #ifndef DEBUG	
 	double calcDistance  = 2100 - frequency; 
+        #endif
        #ifdef DEBUG
 	static double calcDistance  = 101; 
         calcDistance *= 1.01;

@@ -56,6 +56,10 @@ typedef struct satelliteComsData {
   unsigned int *thrusterCommandPtr;
   char *commandPtr;
   char *responsePtr;
+  char *requestPtr;
+  unsigned int *distancePtr;
+  unsigned int *batteryTmp1;
+  unsigned int *batteryTmp2;
 } satData;
 
 typedef struct consoleDisplayData {

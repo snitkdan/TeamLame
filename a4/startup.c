@@ -196,6 +196,10 @@ void Initialize(void) {
   sData.thrusterCommandPtr = &thrusterCommand;
   sData.commandPtr = &command;
   sData.responsePtr = &response;
+  sData.batteryTmp1 = batteryTmp1;
+  sData.batteryTmp2 = batteryTmp2;
+  sData.distancePtr = distance;
+  sData.requestPtr = &request; 
   // 3.7: consoleDisplay
   cData.fuelLowPtr = &fuelLow;
   cData.batteryLowPtr = &batteryLow;

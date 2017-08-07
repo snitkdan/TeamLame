@@ -80,7 +80,7 @@ void warningAlarm(void *warnStruct) {
     // 2. Determine in what region the battery/fuel level is (high, med, low)
     int battRegion = checkRegion(batteryLvl, batteryLowPtr);
     int fuelRegion = checkRegion(fuelLvl, fuelLowPtr);
-	
+        #ifdef BEAGLEBONE	
 	// 3. Section for controlling the LEDS
 	if (*batteryOverTemp && tempFlag == 0) { // if tempFlag == 2, don't change it to 1
 		tempFlag = 1;
@@ -168,6 +168,7 @@ void warningAlarm(void *warnStruct) {
 			timer_10 = 0;
 		}
 	}	
+        #endif
 }
 
 
@@ -213,8 +214,9 @@ void ledState(FILE *led, int state) {
 // NOTE: function prototype inside dataStructs.h
 void checkOpened(FILE *led) {
     if (!led) {
-        printf("Could not open file\n");
-        exit(EXIT_FAILURE);
+        //printf("Could not open file\n");
+        //exit(EXIT_FAILURE);
+        return;
     }
 }
 

@@ -52,8 +52,12 @@ void satelliteComs(void *satStruct) {
     unsigned short *pConsume = sData->pConsumePtr;
     unsigned short *pGenerate = sData->pGeneratePtr;
     unsigned int *thrusterCommand = sData->thrusterCommandPtr;
-	char *command = sData->commandPtr;
+    char *command = sData->commandPtr;
     char *response = sData->responsePtr;
+    char *request = sData->requestPtr;
+    unsigned int *distance = sData->distancePtr;	
+    unsigned int *batteryTmp1 = sData->batteryTmp1;
+    unsigned int *batteryTmp2 = sData->batteryTmp2;
 
 
     // 2. Retrieve random number, mask and assign thrusterCommand to it
@@ -63,12 +67,12 @@ void satelliteComs(void *satStruct) {
     char *solarPanelString = (*solarPanelState) ? "Deployed":"Retracted";
     char *fuelString = (*fuelLow)? "YES":"NO";
     char *battString = (*batteryLow)? "YES":"NO";
-	char *warnBattString = warningBattTemp? "BATTERY OVERHEATING!":"";
+	char *warnBattString = warningBattTemp? "OVERHEATING!":"OK";
 
 	static int fd1;
 	static int firstTime = 1;
 	if (firstTime == 1) {
-        fd1 = open("/dev/pts/2", O_WRONLY);
+        fd1 = open("/dev/pts/1", O_WRONLY);
 	    if (!fd1) {
 		    fprintf(stderr, "SATCOMS: couldn't open fd1 earth terminal\n");
 		    exit(EXIT_FAILURE);
@@ -78,28 +82,26 @@ void satelliteComs(void *satStruct) {
 	    firstTime--;
 	}
     dprintf(fd1, "\033[2J");	
-	dprintf(fd1, "\033[1;1H");
-	dprintf(fd1, "EARTH DISPLAY TERMINAL\n");
-    dprintf(fd1,
-	"Solar Panels: %9s, "
-	"Battery Level: %3u, "
-	"Fuel Level: %3hu, "
-	"Power Consumption: %2hu, "
-	"Power Generation: %2hu\n"
-	"Battery Low: %s "
-	"Fuel Low: %s\n"
-	"%s",
-	 solarPanelString, *batteryLvl, *fuelLvl, *pConsume, *pGenerate,
-	 battString, fuelString, warnBattString);
-	 
-	 //printf("SAT COMS: %s\n", warnBattString);
+    dprintf(fd1, "\033[1;1H");
+    dprintf(fd1, "EARTH DISPLAY TERMINAL\n");
+    dprintf(fd1, "Solar Panels:      %s\n"
+                 "Battery Level:     %u\n"
+                 "Fuel Level:        %hu\n"
+                 "Power Consumption: %hu\n"
+                 "Power Generation:  %hu\n"
+                 "Vehicle Distance:  %d\n"
+                 "Battery Temp 1:    %d\n"
+                 "Battery Temp 2:    %d\n"
+	         "Battery Low:       %s\n"
+	         "Fuel Low:          %s\n"
+	         "Battery Over Temp: %s\n",
+              solarPanelString, *batteryLvl, *fuelLvl, *pConsume, *pGenerate,
+              *distance, *batteryTmp1, *batteryTmp2, 
+              battString, fuelString, warnBattString);
 
-	 if (strstr(response, "A") || 
-	     strstr(response, "C") || 
-		 strstr(response, "K")) 
-     {
+	 if (strstr(response, "A")) {  
 		 dprintf(fd1, "\nVehicle Response: %c %c\n", *response, *command);
-	 }
+         }
 }
 
 void maskBit(unsigned int *thrusterCommand) {
