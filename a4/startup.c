@@ -323,6 +323,7 @@ void sigHandler(int sig) {
 	  request = 'D';
 	  vehicleComms((void*) &vData);
 	  request = '\0';
+	  snapshot = false;
     }
   }
   if (sig == SIGINT) {

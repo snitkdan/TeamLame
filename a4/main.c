@@ -69,10 +69,10 @@ void main(void) {
           }
         }
       }
-      if(!snapshot) {
+      if(snapshot) {
         if(!ContainsTCB(queue, &transportDistanceTCB) && !ContainsTCB(queue, &imageCaptureTCB))  {
           AppendTCB(queue, &imageCaptureTCB);
-          //AppendTCB(queue, &transportDistanceTCB);
+          AppendTCB(queue, &transportDistanceTCB);
         }
       }
       #endif

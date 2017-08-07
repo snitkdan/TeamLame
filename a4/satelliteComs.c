@@ -73,7 +73,7 @@ void satelliteComs(void *satStruct) {
 	static int fd1;
 	static int firstTime = 1;
 	if (firstTime == 1) {
-        fd1 = open("/dev/pts/6", O_WRONLY);
+        fd1 = open("/dev/pts/1", O_WRONLY);
 	    if (!fd1) {
 		    fprintf(stderr, "SATCOMS: couldn't open fd1 earth terminal\n");
 		    exit(EXIT_FAILURE);
