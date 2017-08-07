@@ -137,7 +137,7 @@ void Initialize(void) {
   request = '\0';
   distance = &distanceBuff[0];
   processImage = &presentationBuffer[0];
-   
+
   // 2. Turn off led0 initially
   //#define BEAGLEBONE
   #ifdef BEAGLEBONE
@@ -161,7 +161,7 @@ void Initialize(void) {
   // Enable the signals
   signal(SIGINT, sigHandler);
   signal(SIGUSR1, sigHandler);
-  
+
   InitHardware();
 
   // 3. Assign shared variables to pointers
@@ -202,7 +202,7 @@ void Initialize(void) {
   sData.batteryTmp1 = batteryTmp1;
   sData.batteryTmp2 = batteryTmp2;
   sData.distancePtr = distance;
-  sData.requestPtr = &request; 
+  sData.requestPtr = &request;
   sData.processImagePtr = processImage;
   // 3.7: consoleDisplay
   cData.fuelLowPtr = &fuelLow;
@@ -225,7 +225,7 @@ void Initialize(void) {
 
   // 3.9: transportDistance
   tranData.distancePtr = distance;
-  
+
   //3.10 imageCapture
   iData.processImagePtr = processImage;
   //3.11 batteryTemp
@@ -237,36 +237,47 @@ void Initialize(void) {
   // 4.1: powerSubsystem
   powerSubsystemTCB.taskDataPtr = (void*)&pData;
   powerSubsystemTCB.myTask = powerSubsystem;
+  powerSubsystemTCB.priority = 3;
   // 4.2: solarPanelControl
   solarPanelControlTCB.taskDataPtr = (void*)&solData;
   solarPanelControlTCB.myTask = solarPanelControl;
+  solarPanelControlTCB.priority = 2;
   // 4.3: keyboardConsole
   keyboardConsoleTCB.taskDataPtr = (void*)&kData;
   keyboardConsoleTCB.myTask = keyboardConsole;
+  keyboardConsoleTCB.priority = 2;
   // 4.4: vehicleComms
   vehicleCommsTCB.taskDataPtr = (void*)&vData;
   vehicleCommsTCB.myTask = vehicleComms;
+  vehicleCommsTCB.priority = 3;
   // 4.5: thrusterSubsystem
   thrusterSubsystemTCB.taskDataPtr = (void*)&tData;
   thrusterSubsystemTCB.myTask = thrusterSubsystem;
+  thrusterSubsystemTCB.priority = 3;
   // 4.6: satelliteComs
   satelliteComsTCB.taskDataPtr = (void*)&sData;
   satelliteComsTCB.myTask = satelliteComs;
+  satelliteComsTCB.priority = 1;
   // 4.7: consoleDisplay
   consoleDisplayTCB.taskDataPtr = (void*)&cData;
   consoleDisplayTCB.myTask = consoleDisplay;
+  satelliteComsTCB.priority = 3;
   // 4.8: warningAlarm
   warningAlarmTCB.taskDataPtr = (void*)&wData;
   warningAlarmTCB.myTask = warningAlarm;
+  warningAlarmTCB.priority = 1;
    // 4.8: transportDistance
   transportDistanceTCB.taskDataPtr = (void*)&tranData;
   transportDistanceTCB.myTask = transportDistance;
+  transportDistanceTCB.priority = 2;
   // 4.8: imageCapture
   imageCaptureTCB.taskDataPtr = (void*)&iData;
   imageCaptureTCB.myTask = imageCapture;
+  imageCaptureTCB.priority = 2;
     // 4.8: batteryTemp
   batteryTempTCB.taskDataPtr = (void*)&temData;
   batteryTempTCB.myTask = batteryTemp;
+  batteryTempTCB.priority = 2;
 
   // 5. Initialize the task queue
   queue = &q;
@@ -277,7 +288,6 @@ void Initialize(void) {
   AppendTCB(queue, &powerSubsystemTCB);
   AppendTCB(queue, &consoleDisplayTCB);
   AppendTCB(queue, &vehicleCommsTCB);
-
 }
 
 void ActivateTimeBase(void) {

@@ -39,8 +39,6 @@ void main(void) {
 
     extern bool snapshot;
 
-    int test_task = 8;
-
 		int i = 0;
 		while (true) {
 
