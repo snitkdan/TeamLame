@@ -92,11 +92,9 @@ void transportDistance(void *transportStruct) {
 	//char bit0;
 	unsigned int bit0, bit1, bit2, bit3, bit4, bit5, bit6;
 	system("echo 1 > /sys/class/gpio/gpio69/value");
-	//int ret = fprintf(gpioReset, "%d", 1); 
 	//fflush(gpioReset);	
 	sleep(1);
 	system("echo 0 > /sys/class/gpio/gpio69/value");
-	//ret = fprintf(gpioReset, "%d", 0); 
 	//fflush(gpioReset);
 	//fscanf(gpio0, "%d", &bit0);
 	//printf("START BIT 0 : %d\n", bit0);	
@@ -105,7 +103,6 @@ void transportDistance(void *transportStruct) {
 	fprintf(gpioIN, "%d", 0); fflush(gpioIN);
 	
 	if (gpio0) fscanf(gpio0, "%d", &bit0); fflush(gpio0);
-	//fread(&bit0, sizeof(bit0), 1, gpio0); fflush(gpio0);
 	if (gpio1) fscanf(gpio1, "%d", &bit1); fflush(gpio1);
 	if (gpio2) fscanf(gpio2, "%d", &bit2); fflush(gpio2);
 	if (gpio3) fscanf(gpio3, "%d", &bit3); fflush(gpio3);
@@ -176,9 +173,8 @@ void transportDistance(void *transportStruct) {
 	double calcDistance  = 2100 - frequency; 
         #endif
        #ifdef DEBUG
-	static double calcDistance  = 101; 
-        calcDistance *= 1.01;
-        
+	double calcDistance  = 200; 
+        calcDistance *= .95;
 	printf("\033[2J");
 	printf("\033[1;1H");
 	printf("current distance = %f\n", calcDistance);
@@ -253,7 +249,6 @@ void initPins() {
 	system("echo "BIT6" > /sys/class/gpio/export");
 	
 	system("echo out > /sys/class/gpio/gpio"IN"/direction");
-	//system("echo falling > /sys/class/gpio/gpio"IN"/edge");
 	
 	system("echo out > /sys/class/gpio/gpio69/direction");
 	system("echo in > /sys/class/gpio/gpio"BIT0"/direction");
