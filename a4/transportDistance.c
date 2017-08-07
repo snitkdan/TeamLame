@@ -18,7 +18,7 @@
 
 // GPIO PIN NUMBERS
 #define IN "66"
-#define RESET "48"
+#define RESET "69"
 #define BIT6 "67"
 #define BIT5 "68"
 #define BIT4 "44"
@@ -119,10 +119,10 @@ void transportDistance(void *transportStruct) {
 	#ifdef DEBUG
 	// distance in meters
 	if (firstTime == 0) {
-		system("echo 1 > file0.txt");
-		system("echo 0 > file1.txt");
+		system("echo 0 > file0.txt");
+		system("echo 1 > file1.txt");
 		system("echo 0 > file2.txt");
-		system("echo 0 > file3.txt");
+		system("echo 1 > file3.txt");
 		system("echo 0 > file4.txt");
 		system("echo 0 > file5.txt");
 		system("echo 0 > file6.txt");
@@ -137,8 +137,7 @@ void transportDistance(void *transportStruct) {
 	FILE *fp5 = fopen("file5.txt", "r");
 	FILE *fp6 = fopen("file6.txt", "r");
 	
-	char bit0;
-	unsigned int bit1, bit2, bit3, bit4, bit5, bit6;
+	unsigned int bit0, bit1, bit2, bit3, bit4, bit5, bit6;
 	
     fscanf(fp0, "%d", &bit0);
 	fscanf(fp1, "%d", &bit1);
@@ -159,7 +158,7 @@ void transportDistance(void *transportStruct) {
 	gpioBinary = gpioBinary | (bit5 << 5);
 	gpioBinary = gpioBinary | (bit6 << 6);
 
-	
+        /*	
 	printf("%d ", bit6);
 	printf("%d ", bit5);
 	printf("%d ", bit4);
@@ -167,23 +166,28 @@ void transportDistance(void *transportStruct) {
 	printf("%d ", bit2);
 	printf("%d ", bit1);
 	printf("%d\n", bit0);
+        */	
 	
-	
-	printf ("HardwareCounter:  %d\n\n\n", gpioBinary);
+	//printf ("HardwareCounter:  %d\n\n\n", gpioBinary);
 	double time = MICROSEC / DELAY;
 	unsigned int frequency = gpioBinary * time;
 	//printf("frequency = %d\n", frequency);
 	
-	// some distance equation?
-	double calcDistance = (frequency == 0)? 0:100 / frequency;
-	//double calcDistance = 1500;
-	
+	double calcDistance  = 2100 - frequency; 
+       #ifdef DEBUG
+	static double calcDistance  = 101; 
+        calcDistance *= 1.01;
+        
+	printf("\033[2J");
+	printf("\033[1;1H");
+	printf("current distance = %f\n", calcDistance);
+       
+	#endif
 	if (calcDistance > 2000) {
 		calcDistance = 2000;
 	} else if (calcDistance <= 100) {
 		calcDistance = 100;
 	}
-	//printf("current distance = %d\n", calcDistance);
 
 	// Call interrupt here
 	fromTransport = true;
@@ -199,6 +203,7 @@ void transportDistance(void *transportStruct) {
 	    distanceBuff[currIndex] = calcDistance;	
         *distance = distanceBuff[currIndex];		
      	currIndex = (currIndex + 1) % 8;
+        callNum++;
 	} else {
 		double diff_high = 1.1 * *distance;
 		double diff_low  = 0.9 * *distance;
@@ -207,8 +212,10 @@ void transportDistance(void *transportStruct) {
             *distance = distanceBuff[currIndex];		
      	    currIndex = (currIndex + 1) % 8;			
 		}	
+        #ifdef DEBUG
+	printf("Distance Buff%d: %d *distance: %d\n\n\n", currIndex, distanceBuff[currIndex - 1], *distance);
+        #endif
 	}
-	printf("Distance Buff%d: %d *distance: %d\n", currIndex, distanceBuff[currIndex], *distance);
 
 	#ifdef DEBUG
 	fclose(fp0);
