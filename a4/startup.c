@@ -56,6 +56,7 @@ unsigned int *batteryTmp1;
 unsigned int *batteryTmp2;
 unsigned int *distance;
 unsigned int distanceBuff[8] = {1000};
+signed int presentationBuffer[BUF_SIZE] = {0};
 bool solarPanelState;
 bool fuelLow;
 bool batteryLow;
@@ -67,6 +68,7 @@ bool batteryOverTemp;
 char command;
 char response;
 char request;
+int *processImage;
 
 // For signals
 bool snapshot = false;
@@ -134,7 +136,8 @@ void Initialize(void) {
   response = '\0';
   request = '\0';
   distance = &distanceBuff[0];
-
+  processImage = &presentationBuffer[0];
+   
   // 2. Turn off led0 initially
   //#define BEAGLEBONE
   #ifdef BEAGLEBONE
@@ -200,6 +203,7 @@ void Initialize(void) {
   sData.batteryTmp2 = batteryTmp2;
   sData.distancePtr = distance;
   sData.requestPtr = &request; 
+  sData.processImagePtr = processImage;
   // 3.7: consoleDisplay
   cData.fuelLowPtr = &fuelLow;
   cData.batteryLowPtr = &batteryLow;
@@ -221,11 +225,10 @@ void Initialize(void) {
 
   // 3.9: transportDistance
   tranData.distancePtr = distance;
-
-  #ifdef INSERT_LAB4_DATA_HERE
-  iData.fooPtr = &foo;
-  #endif
-  //3.10 batteryTemp
+  
+  //3.10 imageCapture
+  iData.processImagePtr = processImage;
+  //3.11 batteryTemp
   temData.batteryOverTempPtr = &batteryOverTemp;
   temData.batteryTmp1 = batteryTmp1;
   temData.batteryTmp2 = batteryTmp2;

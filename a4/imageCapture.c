@@ -19,6 +19,8 @@
 #define HNUM 15
 
 #define BUF_SIZE 16
+#define DEBUG
+extern signed int presentationBuffer[16];
 
 void imageCapture(void *imageStruct) {
 	// Only run this function every major cycle
@@ -28,48 +30,42 @@ void imageCapture(void *imageStruct) {
 	}
 	printf("Inside imageCapture\n");	
     start = GLOBALCOUNTER;
-	signed int presentationBuffer[16];
-	
+    imageData *iData = (imageData*)imageStruct;
+    int *processImage = iData->processImagePtr;
 	signed int realBuff[256];
-	
 	double voltReading;
 	double scaledReading;
-	int i;
+	static int currIndex = 0;
 	int j;
 	
-	for (i = 0; i < 16; i++) {
-		#ifdef DEBUG
-		presentationBuffer[i] = 200;
-		#endif
-		#ifndef DEBUG
-		for (j = 0; j < 256; j++) {
-		   voltReading = readADC(ACH, HNUM);
-		   scaledReading = (voltReading - 900) / 29.0322518;
-		   realBuff[j] = scaledReading;
-		   //printf("VoltReading: %f Scaledreading: %d \n", voltReading, realBuff[i]);
-		   usleep(100); // sampling freq of 10000 Hz
-		}
-		// Brent's FFT
-    	signed int imgBuff[256] = {0};	
-		int m_index = optfft(realBuff, imgBuff);
-		printf("m_index %d\n", m_index);
-		// Bin Wang's Algorithm
-		double fs = 10000;
-		double N = 256;
-		double f;
-		f = fs * m_index / N;
-		printf("f = %f\n", f);
-		presentationBuffer[i] = f;
-		#endif
-	}
-	
-	#ifndef DEBUG
-	for (i = 0; i < 16; i++) {
-		printf("presentationbuffer = %d\n", presentationBuffer[i]);
-	}
-	
-	printf("-----------------------\n\n\n\n");
+    #ifdef DEBUG
+    presentationBuffer[currIndex] = 200 + currIndex;
     #endif
+    #ifndef DEBUG
+    for (j = 0; j < 256; j++) {
+        voltReading = readADC(ACH, HNUM);
+        scaledReading = (voltReading - 900) / 29.0322518;
+        realBuff[j] = scaledReading;
+        //printf("VoltReading: %f Scaledreading: %d \n", voltReading, realBuff[i]);
+        usleep(100); // sampling freq of 10000 Hz
+    }
+    // Brent's FFT
+    signed int imgBuff[256] = {0};	
+    int m_index = optfft(realBuff, imgBuff);
+    printf("m_index %d\n", m_index);
+    // Bin Wang's Algorithm
+    double fs = 10000;
+    double N = 256;
+    double f;
+    f = fs * m_index / N;
+    printf("f = %f\n", f);
+    presentationBuffer[currIndex] = f;
+    #endif
+    *processImage = presentationBuffer[currIndex];
+    printf("presentationBuffer[%d] = %d processImage = %d\n", currIndex, presentationBuffer[currIndex], *processImage);
+    currIndex = (currIndex + 1) % 16;
+	
+	
     return;
 }
 

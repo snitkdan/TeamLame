@@ -47,6 +47,7 @@ void satelliteComs(void *satStruct) {
     bool *fuelLow = sData->fuelLowPtr;
     bool *batteryLow = sData->batteryLowPtr;
     bool *solarPanelState = sData->solarPanelStatePtr;
+    int *processImage = sData->processImagePtr;
     unsigned int *batteryLvl = sData->batteryLvlPtr;
     unsigned short *fuelLvl = sData->fuelLvlPtr;
     unsigned short *pConsume = sData->pConsumePtr;
@@ -72,7 +73,7 @@ void satelliteComs(void *satStruct) {
 	static int fd1;
 	static int firstTime = 1;
 	if (firstTime == 1) {
-        fd1 = open("/dev/pts/1", O_WRONLY);
+        fd1 = open("/dev/pts/6", O_WRONLY);
 	    if (!fd1) {
 		    fprintf(stderr, "SATCOMS: couldn't open fd1 earth terminal\n");
 		    exit(EXIT_FAILURE);
@@ -94,10 +95,11 @@ void satelliteComs(void *satStruct) {
                  "Battery Temp 2:    %d\n"
 	         "Battery Low:       %s\n"
 	         "Fuel Low:          %s\n"
-	         "Battery Over Temp: %s\n",
+	         "Battery Over Temp: %s\n"
+                 "Freq of Image:     %d\n",
               solarPanelString, *batteryLvl, *fuelLvl, *pConsume, *pGenerate,
               *distance, *batteryTmp1, *batteryTmp2, 
-              battString, fuelString, warnBattString);
+              battString, fuelString, warnBattString, *processImage);
 
 	 if (strstr(response, "A")) {  
 		 dprintf(fd1, "\nVehicle Response: %c %c\n", *response, *command);

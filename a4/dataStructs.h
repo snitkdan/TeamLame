@@ -60,6 +60,7 @@ typedef struct satelliteComsData {
   unsigned int *distancePtr;
   unsigned int *batteryTmp1;
   unsigned int *batteryTmp2;
+  int *processImagePtr;
 } satData;
 
 typedef struct consoleDisplayData {
@@ -89,7 +90,7 @@ typedef struct transportDistanceData {
 } transportData;
 
 typedef struct imageCaptureData {
-
+    int *processImagePtr;
 } imageData;
 
 typedef struct batteryTempData {
