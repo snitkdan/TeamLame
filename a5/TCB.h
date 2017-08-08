@@ -30,5 +30,8 @@ void warningAlarm(void *warnStruct);
 void transportDistance(void *tranportStruct);
 void imageCapture(void *imageStruct);
 void batteryTemp(void *temperatureStruct);
+void commandParser(void *cmdStruct);
+void pirateDetection(void *pdStruct);
+void pirateManagement(void *pmStruct);
 
 #endif

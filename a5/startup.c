@@ -26,20 +26,6 @@
 
 void sigHandler(int sig);
 
-//#define COMMENTED
-#ifdef COMMENTED
-int terminalComs(char* output) {}
-// unsigned int randomInteger(unsigned int low, unsigned int high) {}
-void powerSubsystem(void *powerStruct) {}
-void keyboardConsole(void *keyboardStruct) {}
-void vehicleComms(void *vehicleStruct) {}
-void satelliteComs(void *satStruct) {}
-void consoleDisplay(void *consoleStruct) {}
-void warningAlarm(void *warnStruct) {}
-//void solarPanelControl(void *solarStruct) {}
-//void thrusterSubsystem(void *thrustStruct) {}
-#endif
-
 // Define shared variables
 // Thrusters
 unsigned int thrusterCommand;
@@ -92,6 +78,9 @@ TCB warningAlarmTCB;
 TCB transportDistanceTCB;
 TCB imageCaptureTCB;
 TCB batteryTempTCB;
+TCB commandParserTCB;
+TCB pirateDetectionTCB;
+TCB pirateManagementTCB;
 
 // Defines data structures
 powerData pData;
@@ -105,6 +94,9 @@ warnData wData;
 transportData tranData;
 imageData iData;
 tempData temData;
+cmdData cmData;
+dPirateData pdData;
+mPirateData pmData;
 
 // Define the Task Queue
 TQ q;
@@ -232,6 +224,28 @@ void Initialize(void) {
   temData.batteryOverTempPtr = &batteryOverTemp;
   temData.batteryTmp1 = batteryTmp1;
   temData.batteryTmp2 = batteryTmp2;
+  //3.12 commandParser
+  cmData.fuelLowPtr = &fuelLow;
+  cmData.batteryLowPtr = &batteryLow;
+  cmData.solarPanelStatePtr = &solarPanelState;
+  cmData.batteryLvlPtr = batteryLvl;
+  cmData.fuelLvlPtr = &fuelLvl;
+  cmData.pConsumePtr = &pConsume;
+  cmData.pGeneratePtr = &pGenerate;
+  cmData.thrusterCommandPtr = &thrusterCommand;
+  cmData.commandPtr = &command;
+  cmData.responsePtr = &response;
+  cmData.batteryTmp1 = batteryTmp1;
+  cmData.batteryTmp2 = batteryTmp2;
+  cmData.distancePtr = distance;
+  cmData.requestPtr = &request;
+  cmData.processImagePtr = processImage;
+  
+  //3.13 pirateDetection
+  pdData.fuelLowPtr = &fuelLow;
+
+  //3.13 pirateManagement
+  pmData.fuelLowPtr = &fuelLow;
 
   // 4. Initialize the TCBs
   // 4.1: powerSubsystem
@@ -266,18 +280,32 @@ void Initialize(void) {
   warningAlarmTCB.taskDataPtr = (void*)&wData;
   warningAlarmTCB.myTask = warningAlarm;
   warningAlarmTCB.priority = 1;
-   // 4.8: transportDistance
+   // 4.9: transportDistance
   transportDistanceTCB.taskDataPtr = (void*)&tranData;
   transportDistanceTCB.myTask = transportDistance;
   transportDistanceTCB.priority = 2;
-  // 4.8: imageCapture
+  // 4.10: imageCapture
   imageCaptureTCB.taskDataPtr = (void*)&iData;
   imageCaptureTCB.myTask = imageCapture;
   imageCaptureTCB.priority = 2;
-    // 4.8: batteryTemp
+  // 4.11: batteryTemp
   batteryTempTCB.taskDataPtr = (void*)&temData;
   batteryTempTCB.myTask = batteryTemp;
   batteryTempTCB.priority = 2;
+  // 4.12 commandParser
+  commandParserTCB.taskDataPtr = (void*)&cmData;
+  commandParserTCB.myTask = commandParser;
+  commandParserTCB.priority = 1;
+ 
+  // 4.13 pirateDetection
+  pirateDetectionTCB.taskDataPtr = (void*)&pdData;
+  pirateDetectionTCB.myTask = pirateDetection;
+  pirateDetectionTCB.priority = 1;
+
+  // 4.14 pirateManagement
+  pirateManagementTCB.taskDataPtr = (void*)&pmData;
+  pirateManagementTCB.myTask = pirateManagement;
+  pirateManagementTCB.priority = 1;
 
   // 5. Initialize the task queue
   queue = &q;

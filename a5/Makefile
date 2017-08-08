@@ -4,7 +4,8 @@ objects = satelliteComs.o powerSubsystem.o consoleDisplay.o \
           vehicleComms.o nonBlockingKeys.o startup.o \
 	  scheduler.o pwm_utils.o adc_utils.o \
 	  transportDistance.o imageCapture.o batteryTemp.o \
-	  optfft.o \
+	  optfft.o commandParser.o pirateDetection.o \
+	  pirateManagement.o
 	  
 headers = dataStructs.h TCB.h startup.h scheduler.h
 
@@ -12,6 +13,15 @@ all: main
 
 main: main.c $(objects) $(headers)
 	gcc -Wall -g -o main main.c $(objects)
+
+pirateManagement.o: pirateManagement.c
+	gcc -Wall -g -c -o pirateManagement.o pirateManagement.c
+
+pirateDetection.o: pirateDetection.c
+	gcc -Wall -g -c -o pirateDetection.o pirateDetection.c
+
+commandParser.o: commandParser.c 
+	gcc -Wall -g -c -o commandParser.o commandParser.c
 	
 optfft.o: optfft.c optfft.h tables.c
 	gcc -Wall -g -c -o optfft.o optfft.c	
