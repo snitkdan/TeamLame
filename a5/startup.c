@@ -357,8 +357,10 @@ void sigHandler(int sig) {
       // RADLEIGH
 	  //printf("fromTransport\n");
 	  request = 'T';
+	  printf("Received %c...\n", request);
 	  vehicleComms((void*) &vData);
 	  request = 'D';
+	  printf("Received %c...\n", request);	  
 	  vehicleComms((void*) &vData);
 	  request = '\0';
 	  snapshot = false;

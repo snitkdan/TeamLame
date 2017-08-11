@@ -46,7 +46,9 @@ bool satVehicleCmd(char c) {
 		   c == DRILL_DOWN      || 
 		   c == DRILL_UP        ||
 		   c == REQUEST_LIFTOFF || 
-		   c == REQUEST_DOCK;
+		   c == REQUEST_DOCK    ||
+		   c == START_IMAGE     ||
+		   c == SEND_IMAGE;
 }
 
 bool consoleModeCmd(char c) {

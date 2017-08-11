@@ -14,6 +14,7 @@
 #include <unistd.h>
 #include <stdlib.h>
 #include <string.h>
+#include <time.h>
 
 
 #include "TCB.h"
@@ -55,7 +56,6 @@ void satelliteComs(void *satStruct) {
     unsigned int *thrusterCommand = sData->thrusterCommandPtr;
     char *command = sData->commandPtr;
     char *response = sData->responsePtr;
-    char *request = sData->requestPtr;
     unsigned int *distance = sData->distancePtr;	
     unsigned int *batteryTmp1 = sData->batteryTmp1;
     unsigned int *batteryTmp2 = sData->batteryTmp2;
@@ -82,24 +82,31 @@ void satelliteComs(void *satStruct) {
 		dprintf(fd1, "\033[1;1H");
 	    firstTime--;
 	}
+    time_t t = time(NULL);
+    struct tm tm = *localtime(&t);
+
+
     dprintf(fd1, "\033[2J");	
     dprintf(fd1, "\033[1;1H");
     dprintf(fd1, "EARTH DISPLAY TERMINAL\n");
-    dprintf(fd1, "Solar Panels:      %s\n"
+    dprintf(fd1, "%d-%d-%d %d:%d:%d\n", tm.tm_year + 1950, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec);
+    dprintf(fd1, "Operator:          Xxpu$$y$layer69xX\n--------------------------------------\n\n");	
+    dprintf(fd1, "Battery Low:       %s\n"
+	             "Fuel Low:          %s\n"
+    	         "Battery Over Temp: %s\n"			 
+	             "Solar Panels:      %s\n"
                  "Battery Level:     %u\n"
                  "Fuel Level:        %hu\n"
                  "Power Consumption: %hu\n"
                  "Power Generation:  %hu\n"
-                 "Vehicle Distance:  %d\n"
+                 "Transport Dist:    %d\n"
                  "Battery Temp 1:    %d\n"
-                 "Battery Temp 2:    %d\n"
-	         "Battery Low:       %s\n"
-	         "Fuel Low:          %s\n"
-	         "Battery Over Temp: %s\n"
-                 "Freq of Image:     %d\n",
-              solarPanelString, *batteryLvl, *fuelLvl, *pConsume, *pGenerate,
+                 "Battery Temp 2:    %d\n"				 
+                 "Image Data:        %d\n",
+              battString, fuelString, warnBattString, solarPanelString,
+             *batteryLvl, *fuelLvl, *pConsume, *pGenerate,			  
               *distance, *batteryTmp1, *batteryTmp2, 
-              battString, fuelString, warnBattString, *processImage);
+                *processImage);			  
 
 	 if (strstr(response, "A")) {  
 		 dprintf(fd1, "\nVehicle Response: %c %c\n", *response, *command);

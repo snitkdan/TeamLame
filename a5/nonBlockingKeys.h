@@ -16,6 +16,8 @@
 #define DRILL_UP 'H'
 #define REQUEST_LIFTOFF 'T'
 #define REQUEST_DOCK 'D'
+#define START_IMAGE 'S'
+#define SEND_IMAGE 'I'
 
 // commands for warningAlarm
 #define OVERHEAT_ACK 'a'
