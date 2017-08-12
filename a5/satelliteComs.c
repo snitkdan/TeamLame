@@ -88,7 +88,7 @@ void satelliteComs(void *satStruct) {
 
     dprintf(fd1, "\033[2J");	
     dprintf(fd1, "\033[1;1H");
-    dprintf(fd1, "EARTH DISPLAY TERMINAL\n");
+    dprintf(fd1, "EARTH REMOTE TERMINAL\n");
     dprintf(fd1, "%d-%d-%d %d:%d:%d\n", tm.tm_year + 1950, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec);
     dprintf(fd1, "Operator:          Xxpu$$y$layer69xX\n--------------------------------------\n\n");	
     dprintf(fd1, "Battery Low:       %s\n"
@@ -110,7 +110,7 @@ void satelliteComs(void *satStruct) {
 
 	 if (strstr(response, "A")) {  
 		 dprintf(fd1, "\nVehicle Response: %c %c\n", *response, *command);
-         }
+     }
 }
 
 void maskBit(unsigned int *thrusterCommand) {

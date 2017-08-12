@@ -106,3 +106,5 @@ void consoleDisplay(void *consoleStruct) {
 	}
 
 }
+
+
