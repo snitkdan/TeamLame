@@ -1,7 +1,6 @@
 /*
  * commandParser.c - This file contains
- * the implementation of satelliteComs
- * (see satelliteComs.h for specification)
+ * the implementation of commandParser
 */
 
 #include <stdio.h>
@@ -39,6 +38,6 @@ void commandParser(void *cmdStruct) {
     unsigned int *batteryTmp1 = cData->batteryTmp1;
     unsigned int *batteryTmp2 = cData->batteryTmp2;
 
-
+    // Note: These shared variables are placeholders. You'll need to add your own
 }
 

@@ -1,7 +1,6 @@
 /*
- * pirateDetection.c - This file contains
- * the implementation of satelliteComs
- * (see satelliteComs.h for specification)
+ * pirateManagement.c - This file contains
+ * the implementation of pirateManagement
 */
 
 #include <stdio.h>
@@ -22,5 +21,6 @@ void pirateManagement(void *pmStruct) {
     // 1. Assign the data of pData into local variables
     mPirateData *pData = (mPirateData*)pmStruct;
     bool *fuelLow = pData->fuelLowPtr;
+    // Note: Shared variables are not added. Placeholders are added.
 }
 
