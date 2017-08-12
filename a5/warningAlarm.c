@@ -38,6 +38,7 @@
 #define FULL 36
 
 #define BEAGLEBONE
+#define CMD_SIZE 20
 // globally defines the led files here
 FILE *led1 = NULL;
 FILE *led2 = NULL;
@@ -189,10 +190,22 @@ void flipLED(int force, FILE *ledFile, int *state) {
 }
 
 void readAck() {
-	char c = getchar();
-	//char c = 'a';	
-	if (!warningCmd(c)) {
-		if (consoleModeCmd(c) || motorSpeedCmd(c) || satVehicleCmd(c)) ungetc(c, stdin);
+	//char c = getchar();
+	//char c = 'a';
+    char pString[CMD_SIZE];
+    pString[0] = '\0';	
+	if(fgets(pString, CMD_SIZE, stdin) != NULL) {
+       // remove newline
+       pString[strcspn(pString, "\n")] = 0;
+	}	
+	if (!warningCmd(pString[0])) {
+		//if (consoleModeCmd(pString[0]) || motorSpeedCmd(pString[0]) || satVehicleCmd(pString[0])) {
+		if (checkAll(pString[0])) {			
+			int i = 0;
+			for (i = strlen(pString); i >= 0; i--) {
+			   ungetc(pString[i], stdin);
+			}			
+		}
 	} else {
 		//printf("Warning Alarm: Acknowledge Received\n");
 		warningBattTemp = false;		

@@ -17,7 +17,8 @@
 #include "nonBlockingKeys.h"
 #define MAX 300
 #define MAX_BUF 10
-#define DEBUG
+#define CMD_SIZE 20
+
 typedef enum {wrt, rd} rw;
 
 int fd0;    
@@ -58,15 +59,28 @@ void vehicleComms(void *vehicleStruct) {
 	}
 	
     //printf("\033[20;20H");		
-    char c = getchar();
+    //char c = getchar();
+	char pString[CMD_SIZE];
+    pString[0] = '\0';	
+	if(fgets(pString, CMD_SIZE, stdin) != NULL) {
+       // remove newline
+       pString[strcspn(pString, "\n")] = 0;
+	}
     //char c = 'B';	
-    if (!satVehicleCmd(c)) {
-        if (consoleModeCmd(c) || motorSpeedCmd(c) || warningCmd(c)) ungetc(c, stdin);
+    if (!satVehicleCmd(pString[0])) {
+        //if (consoleModeCmd(pString[0]) || motorSpeedCmd(pString[0]) || warningCmd(pString[0])) {
+		if (checkAll(pString[0])) {
+			int i = 0;
+			for (i = strlen(pString); i >= 0; i--) {
+			   ungetc(pString[i], stdin);
+			}		
+		}
         *command = '\0';
 		*response = '\0';
         return;
+		
     } else {
-        *command = c;
+        *command = pString[0];
     }
 	
 
@@ -94,15 +108,8 @@ void vehicleEnd(int fd0) {
      char buf[MAX_BUF];
      read(fd0, buf, MAX_BUF);
      printf("VEHICLE: Received command: %s\n", buf);
-     char responseBuf[10];	 
-	 if (strchr(buf, REQUEST_LIFTOFF)) {
-		snprintf(responseBuf, 10, "K %s", buf);
-	 } else if (strchr(buf, REQUEST_DOCK)) {
-		snprintf(responseBuf, 10, "C %s", buf);
-	 } else {
-		snprintf(responseBuf, 10, "A %s", buf);		 
-		 
-	 }
+     char responseBuf[10];
+	 snprintf(responseBuf, 10, "A %s", buf);
      write(fd0, responseBuf, sizeof(responseBuf));
      return;
 }

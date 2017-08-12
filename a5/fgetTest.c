@@ -25,14 +25,14 @@ void main() {
 }
 
 void test1() {
-    char pString[100];
+    char pString[10];
     char buffer[100]; 
     if(fgets(pString, SIZE, stdin) != NULL) {
-          printf("INBUF1 %s\n\n", pString); 
+          printf("INBUF1 %s", pString); 
        // remove newline
        pString[strcspn(pString, "\n")] = 0;
        if (strstr(pString, "FUCK")) {
-          printf("TEST1: %s\n\n", pString); 
+          printf("TEST1: %s", pString); 
        } else {
            int i;
            for (i = strlen(pString); i >= 0; i--) {
@@ -46,10 +46,10 @@ void test2() {
     char pString[100];
     if(fgets(pString, SIZE, stdin) != NULL) {
        pString[strcspn(pString, "\n")] = 0;
-          printf("INBUF2 %s\n\n", pString); 
+          printf("INBUF2 %s", pString); 
        // remove newline
        if (strstr(pString, "SHIT")) {
-          printf("TEST2: %s\n\n", pString); 
+          printf("TEST2: %s", pString); 
        }  
     }
 }

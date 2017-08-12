@@ -9,6 +9,7 @@
 #include <unistd.h>
 #include<sys/select.h>
 #include<sys/time.h>
+#include <string.h>
 #include "nonBlockingKeys.h"
 #include "dataStructs.h"
 #include "TCB.h"
@@ -18,6 +19,7 @@
 #define MAX 1024
 #define BUF_SIZE 16
 #define SCALE 20
+#define CMD_SIZE 20
 
 //#define OFF
 /*
@@ -68,7 +70,13 @@ void consoleDisplay(void *consoleStruct) {
 	fcntl(STDIN_FILENO, F_SETFL, flags | O_NONBLOCK);
 	//#define DEBUG
 	#ifndef DEBUG
-	char c = getchar();
+	//char c = getchar();
+	char pString[CMD_SIZE];
+    pString[0] = '\0';	
+	if(fgets(pString, CMD_SIZE, stdin) != NULL) {
+       // remove newline
+       pString[strcspn(pString, "\n")] = 0;
+	}
 	#endif
 	
 	#ifdef DEBUG
@@ -77,8 +85,7 @@ void consoleDisplay(void *consoleStruct) {
 	#endif
 	
 	char output[MAX];	
-	if (c != 255) {
-		if (c == SATELLITESTATUS) {
+		if (pString[0] == SATELLITESTATUS) {
 			printf("ConsoleDisplay: Showing Satellite Status...\n");
 			sprintf(output, "**Satellite Status\n"
 							"Solar Panels:      %s\n"
@@ -92,7 +99,7 @@ void consoleDisplay(void *consoleStruct) {
 							 solarPanelString, *batteryLvl, *fuelLvl, *pConsume, *pGenerate,
                                                          *distance, *batteryTmp1, *batteryTmp2);
 			terminalComs(output);
-		} else if (c == ANNUNCIATION) {
+		} else if (pString[0] == ANNUNCIATION) {
 			printf("ConsoleDisplay: Showing Annunciation Mode...\n");
 			sprintf(output, "Annunciaton\n"
 							"Battery Low:         %s\n"
@@ -101,9 +108,14 @@ void consoleDisplay(void *consoleStruct) {
 							 battString, fuelString, tempString);
 			terminalComs(output);
 		} else {
-			if(satVehicleCmd(c) || motorSpeedCmd(c) || warningCmd(c)) ungetc(c, stdin);
+			if(satVehicleCmd(pString[0]) || motorSpeedCmd(pString[0]) || warningCmd(pString[0])) {
+				int i = 0;
+                for (i = strlen(pString); i >= 0; i--) {
+                   ungetc(pString[i], stdin);
+                }
+			}	
 		}
-	}
+	
 
 }
 

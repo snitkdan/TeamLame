@@ -25,6 +25,11 @@
 // commands for keyboardConsole
 #define SPEEDINC 'i'
 #define SPEEDDEC 'd'
+
+// commands for Earth to Satellite
+#define THRUSTER 'T'
+#define MEASURE  'M'
+
 /*
   @param satelliteComs
     Struct containing necessary
@@ -35,7 +40,6 @@
     changes thrusterCommand based
     on random integer from rand2.c
 */
-int kbhit();
 
 /*
   @param thrusterCommand
@@ -47,12 +51,13 @@ int kbhit();
   @effects
     Masks the last 4 bits to be 00XX
 */
-void nonblock(int state);
 
 bool consoleModeCmd(char c);
 bool satVehicleCmd(char c);
 bool motorSpeedCmd(char c);
 bool warningCmd(char c);
+bool payloadCmd(char c);
+bool checkAll(char c);
 
 
 #endif

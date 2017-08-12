@@ -26,6 +26,7 @@
 
 #define MAX 65536 // upper bound for 16 bit
 #define BUF_SIZE 16
+#define CMD_SIZE 20
 //extern unsigned int current_measurement;
 //extern unsigned int batteryBuff[BUF_SIZE];
 
@@ -81,11 +82,33 @@ void satelliteComs(void *satStruct) {
 		dprintf(fd1, "\033[2J");
 		dprintf(fd1, "\033[1;1H");
 	    firstTime--;
+
 	}
+	
+	int flags = fcntl(STDIN_FILENO, F_GETFL, 0);
+    fcntl(STDIN_FILENO, F_SETFL, flags | O_NONBLOCK);
+	char pString[CMD_SIZE];
+    pString[0] = '\0';	
+    if(fgets(pString, CMD_SIZE, stdin) != NULL) {
+       // remove newline
+       pString[strcspn(pString, "\n")] = 0;
+       if (strstr(pString, "T")) {
+          printf("TEST1: %s", pString); 
+       } else if (strstr(pString, "M")) {
+          printf("TEST2: %s", pString);  
+	   } 
+	   else {
+           int i;
+           for (i = strlen(pString); i >= 0; i--) {
+               ungetc(pString[i], stdin);
+           }
+       }  
+    }
+	
+	
+	
     time_t t = time(NULL);
     struct tm tm = *localtime(&t);
-
-
     dprintf(fd1, "\033[2J");	
     dprintf(fd1, "\033[1;1H");
     dprintf(fd1, "EARTH REMOTE TERMINAL\n");
