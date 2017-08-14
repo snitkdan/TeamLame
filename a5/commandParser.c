@@ -22,6 +22,7 @@ extern bool warningBattTemp;
 // CommandParser specific globals
 extern char ack[3];
 
+extern TaskQueue queue;
 extern bool commandOn;
 extern bool display;
 extern unsigned int thrusterCommand;
