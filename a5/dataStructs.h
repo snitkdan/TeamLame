@@ -62,7 +62,8 @@ typedef struct satelliteComsData {
   unsigned int *batteryTmp2;
   int *processImagePtr;
   char *received;
-  char *transmit;  
+  char *transmit; 
+  bool *commandOnPtr;
 } satData;
 
 typedef struct consoleDisplayData {
@@ -119,6 +120,8 @@ typedef struct commandParserData {
   int *processImagePtr;
   char *received;
   char *transmit;
+  bool *commandOnPtr;
+  
 } cmdData;
 
 typedef struct pirateDetectData {

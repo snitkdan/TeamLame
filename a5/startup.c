@@ -60,8 +60,9 @@ bool pirateDetected;
 unsigned int pirateDistance;
 
 //Command Parser
-char *received;
-char *transmit;
+char received[20] = {'\0'};
+char transmit[20] = {'\0'};
+bool commandOn;
 
 // For signals
 bool snapshot = false;
@@ -138,6 +139,7 @@ void Initialize(void) {
   processImage = &presentationBuffer[0];
   pirateDetected = false;
   pirateDistance = 500;
+  commandOn = false;
 
   // 2. Turn off led0 initially
   #define BEAGLEBONE
@@ -206,7 +208,9 @@ void Initialize(void) {
   sData.requestPtr = &request;
   sData.processImagePtr = processImage;
   sData.received = received;
-  sData.transmit = transmit;  
+  sData.transmit = transmit;
+  sData.commandOnPtr = &commandOn;
+  
   // 3.7: consoleDisplay
   cData.fuelLowPtr = &fuelLow;
   cData.batteryLowPtr = &batteryLow;
@@ -253,6 +257,7 @@ void Initialize(void) {
   cmData.processImagePtr = processImage;
   cmData.received = received;
   cmData.transmit = transmit;
+  cmData.commandOnPtr = &commandOn;
   
   
   //3.13 pirateDetection

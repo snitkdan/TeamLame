@@ -32,6 +32,7 @@ void main(void) {
     extern TCB transportDistanceTCB;
     extern TCB imageCaptureTCB;
 	extern TCB pirateManagementTCB;
+	extern TCB commandParserTCB;
 
 
     extern bool solarPanelState;
@@ -39,6 +40,7 @@ void main(void) {
     extern bool solarPanelRetract;
     extern bool snapshot;
 	extern bool pirateDetected;
+	extern bool commandOn;
 
 	int i = 0;
 	while (true) {
@@ -73,7 +75,7 @@ void main(void) {
       }
 	  
 	  // Scheduling Transport Distance and Image Capture
-      if(snapshot) {
+      if (snapshot) {
         if(!ContainsTCB(queue, &transportDistanceTCB) && !ContainsTCB(queue, &imageCaptureTCB))  {
           AppendTCB(queue, &imageCaptureTCB);
           AppendTCB(queue, &transportDistanceTCB);
@@ -86,7 +88,7 @@ void main(void) {
 	  }
 	  
 	  // Scheduling Image Capture
-	  if(pirateDetected) {
+	  if (pirateDetected) {
 		if(!ContainsTCB(queue, &pirateManagementTCB)) {
 			printf("Pirate Detected!!\n");
 			AppendTCB(queue, &pirateManagementTCB);
@@ -94,9 +96,18 @@ void main(void) {
 	  } else {
 		if(ContainsTCB(queue, &pirateManagementTCB)) {
 			RemoveTCB(queue, &pirateManagementTCB);
-			printf("Pirate ran away. (Like a lil bitch lmao)\n");
-			
+			printf("Pirate ran away. (Like a lil bitch lmao)\n");	
 		}  
+	  }
+	  // Scheduling CommandParser
+	  if (commandOn) {
+		if (!ContainsTCB(queue, &commandParserTCB)) {
+			AppendTCB(queue, &commandParserTCB);  
+	    } 
+	  } else {
+		if(ContainsTCB(queue, &commandParserTCB)) {
+			RemoveTCB(queue, &commandParserTCB);
+		} 
 	  }
 
 		  aTCBPtr = PopTCB(queue);

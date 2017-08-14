@@ -60,7 +60,9 @@ void satelliteComs(void *satStruct) {
     unsigned int *distance = sData->distancePtr;	
     unsigned int *batteryTmp1 = sData->batteryTmp1;
     unsigned int *batteryTmp2 = sData->batteryTmp2;
-
+    char *received = sData->received;
+    char *transmit = sData->transmit;
+	bool *commandOn = sData->commandOnPtr;
 
     // 2. Retrieve random number, mask and assign thrusterCommand to it
     *thrusterCommand = randomInteger(0, MAX) % MAX;
@@ -92,12 +94,11 @@ void satelliteComs(void *satStruct) {
     if(fgets(pString, CMD_SIZE, stdin) != NULL) {
        // remove newline
        pString[strcspn(pString, "\n")] = 0;
-       if (strstr(pString, "T")) {
-          printf("TEST1: %s", pString); 
-       } else if (strstr(pString, "M")) {
-          printf("TEST2: %s", pString);  
-	   } 
-	   else {
+       if (pString[0] == 'T' || pString[0] == 'M') {
+		  strcpy(received, pString);
+		  *commandOn = true;
+       } else {
+		   *received = '\0';
            int i;
            for (i = strlen(pString); i >= 0; i--) {
                ungetc(pString[i], stdin);
@@ -114,6 +115,7 @@ void satelliteComs(void *satStruct) {
     dprintf(fd1, "EARTH REMOTE TERMINAL\n");
     dprintf(fd1, "%d-%d-%d %d:%d:%d\n", tm.tm_year + 1950, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec);
     dprintf(fd1, "Operator:          Xxpu$$y$layer69xX\n--------------------------------------\n\n");	
+	/*	
     dprintf(fd1, "Battery Low:       %s\n"
 	             "Fuel Low:          %s\n"
     	         "Battery Over Temp: %s\n"			 
@@ -134,6 +136,7 @@ void satelliteComs(void *satStruct) {
 	 if (strstr(response, "A")) {  
 		 dprintf(fd1, "\nVehicle Response: %c %c\n", *response, *command);
      }
+	*/ 
 }
 
 void maskBit(unsigned int *thrusterCommand) {

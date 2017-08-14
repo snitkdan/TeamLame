@@ -13,9 +13,12 @@
 #include <unistd.h>
 #include <stdlib.h>
 #include <string.h>
+#include <ctype.h> // for tolower
 
 #include "TCB.h"
 #include "dataStructs.h"
+#include "startup.h"
+#include "scheduler.h"
 
 extern bool warningBattTemp;
 
@@ -25,8 +28,12 @@ extern char ack[3];
 extern TaskQueue queue;
 extern bool commandOn;
 extern bool display;
-extern unsigned int thrusterCommand;
+/*
+@DANIEL: thruster command is already in the shared variables
+// extern unsigned int thrusterCommand;
+*/
 
+#ifdef WHEN_YOURE_READY 
 // Initializes Hardware components. True if successful, false otherwise.
 bool InitHardware();
 // Terminates hardware components. True if successful, false otherwise.
@@ -39,7 +46,7 @@ bool RemoveMeasureTasks();
 // Returns true if the payload is valid for either thruster command
 // or measurement, and false otherwise.
 bool isValidPayload(char *payload);
-
+#endif
 
 #ifdef MULTIPLE_DEFINITIONS_ERROR_FYI
 void maskBit(unsigned int *thrusterCommand) {
@@ -56,10 +63,17 @@ void commandParser(void *cmdStruct) {
     cmdData *cData = (cmdData*)cmdStruct;
     char *received = cData->received;
     char *transmit = cData->transmit;
-    // 2. Parse the input
+	unsigned int *thrusterCommand = cData->thrusterCommandPtr;
+	bool *commandOn = cData->commandOnPtr;
+	
+    // 2. Parse the input 
+	// @DANIEL We can format it as F12345, without any spaces?
     char cmd = tolower(received[0]);  // e.g. 'M', 'T', 'D', etc.
-    char *payload = &received[2];  // e.g. '12345', 'F' (for fuel level), etc
-    switch(cmd) {
+    char *payload = &received[1];  // e.g. '12345', 'F' (for fuel level), etc
+	
+	printf("cmd = %c, payload = %s\n", cmd, payload);
+	#ifdef WHEN_YOURE_READY	
+	switch(cmd) {
       case 't':
         // Thruster Command!
         if (isValidPayload(payload)) {
@@ -107,4 +121,7 @@ void commandParser(void *cmdStruct) {
         *transmit = '\0';
         break;
     }
+	#endif
+    *commandOn = false;
+	
   }
