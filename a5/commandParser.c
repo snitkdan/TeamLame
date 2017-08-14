@@ -41,3 +41,11 @@ void commandParser(void *cmdStruct) {
     // Note: These shared variables are placeholders. You'll need to add your own
 }
 
+void maskBit(unsigned int *thrusterCommand) {
+    // 0. Define a mask 1111111111110011
+    uint16_t MASK = 0xFFF3;
+
+    // 1. Mask the bit 2 and 3 to 0
+    *thrusterCommand &= MASK;
+}
+
