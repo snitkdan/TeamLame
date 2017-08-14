@@ -131,7 +131,6 @@ unsigned int NumTasksInTaskQueue(TaskQueue queue) {
   }
 }
 
-
 bool ContainsTCB(TaskQueue queue, TCB_Ptr node) {
   TCB_Ptr curr = queue->head;
   while(curr != NULL && curr != node) {
