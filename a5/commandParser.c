@@ -19,25 +19,64 @@
 
 extern bool warningBattTemp;
 
+// CommandParser specific globals
+extern char ack[3];
+
+extern bool commandOn;
+
+bool InitHardware();
+void CloseHardware();
+bool AddMeasureTasks();
+void RemoveMeasureTasks();
+
 void commandParser(void *cmdStruct) {
     // 1. Assign the data of cData into local variables
     cmdData *cData = (cmdData*)cmdStruct;
-    bool *fuelLow = cData->fuelLowPtr;
-    bool *batteryLow = cData->batteryLowPtr;
-    bool *solarPanelState = cData->solarPanelStatePtr;
-    int *processImage = cData->processImagePtr;
-    unsigned int *batteryLvl = cData->batteryLvlPtr;
-    unsigned short *fuelLvl = cData->fuelLvlPtr;
-    unsigned short *pConsume = cData->pConsumePtr;
-    unsigned short *pGenerate = cData->pGeneratePtr;
-    unsigned int *thrusterCommand = cData->thrusterCommandPtr;
-    char *command = cData->commandPtr;
-    char *response = cData->responsePtr;
-    char *request = cData->requestPtr;
-    unsigned int *distance = cData->distancePtr;	
-    unsigned int *batteryTmp1 = cData->batteryTmp1;
-    unsigned int *batteryTmp2 = cData->batteryTmp2;
+    char *received = cData->received;
+    char *transmit = cData->transmit;
+    // 2. Parse the input
+    char cmd = tolower(input[0]);
+    char *payload = &input[2];
+    switch(cmd) {
+      case 't':
+        ack[0] = isValidPayload(payload) ? 'A' : 'E';
+        ack[2] = 'T';
+        *transmit = '\0';
+        break;
+      case 'm':
+        ack[0] = isValidPayload(payload) ? 'A' : 'E';
+        ack[2] = 'M';
+        *transmit = *payload;
+        break;
+      case 's':
+        ack[0] = (InitHardware() && AddMeasureTasks()) ? 'A' : 'E';
+        ack[2] = 'S';
+        *transmit = '\0';
+        break;
+      case 'p':
+        ack[0] = (CloseHardware() && RemoveMeasureTasks()) ? 'A' : 'E';
+        ack[2] = 'P';
+        *transmit = '\0';
+        break;
+      case 'd':
+        ack[0] = 'A';
+        ack[2] = 'D';
+        *transmit = '\0';
+        display = !display;
+        break;
+      default:
+        ack[0] = 'E';
+        ack[2] = 'X';
+        *transmit = '\0';
+        break;
+    }
 
-    // Note: These shared variables are placeholders. You'll need to add your own
+
+
+
+
+    AppendTCB(queue, &thrusterSubsystemTCB);
+    AppendTCB(queue, &powerSubsystemTCB);
+    AppendTCB(queue, &consoleDisplayTCB);
+    AppendTCB(queue, &vehicleCommsTCB);
 }
-
