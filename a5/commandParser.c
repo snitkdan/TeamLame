@@ -23,6 +23,7 @@ extern bool warningBattTemp;
 extern char ack[3];
 
 extern bool commandOn;
+extern bool display;
 extern unsigned int thrusterCommand;
 
 // Initializes Hardware components. True if successful, false otherwise.
@@ -53,10 +54,11 @@ void commandParser(void *cmdStruct) {
     char *received = cData->received;
     char *transmit = cData->transmit;
     // 2. Parse the input
-    char cmd = tolower(input[0]);
-    char *payload = &input[2];
+    char cmd = tolower(input[0]);  // e.g. 'M', 'T', 'D', etc.
+    char *payload = &input[2];  // e.g. '12345', 'F' (for fuel level), etc
     switch(cmd) {
       case 't':
+        // Thruster Command!
         if (isValidPayload(payload)) {
           ack[0] = 'A';
           maskBit(&thrusterCommand);
@@ -67,27 +69,36 @@ void commandParser(void *cmdStruct) {
         *transmit = '\0';
         break;
       case 'm':
+        // Measurement Command!
         ack[0] = isValidPayload(payload) ? 'A' : 'E';
         ack[2] = 'M';
-        *transmit = *payload;
+        *transmit = *payload;  // e.g. 'F' (fuel level), 'B' (battery level), etc
         break;
       case 's':
+        // Start Command!
         ack[0] = (InitHardware() && AddMeasureTasks()) ? 'A' : 'E';
+            // Attempt to initialize the PWM + ADC and add measurement tasks.
+            // 'A' if successful, 'E' otherwise.
         ack[2] = 'S';
         *transmit = '\0';
         break;
       case 'p':
+        // Pause Command!
         ack[0] = (CloseHardware() && RemoveMeasureTasks()) ? 'A' : 'E';
+          // Attempt to terminate the PWM + ADC and remove measurement tasks.
+          // 'A' if successful, 'E' otherwise.
         ack[2] = 'P';
         *transmit = '\0';
         break;
       case 'd':
-        ack[0] = 'A';
+        // Display Command
+        ack[0] = 'A';  // always successful (?)
         ack[2] = 'D';
         *transmit = '\0';
-        display = !display;
+        display = !display;  // see extern above
         break;
       default:
+        // Bad command (e.g. user enters 'Z' <something>)
         ack[0] = 'E';
         ack[2] = 'X';
         *transmit = '\0';
