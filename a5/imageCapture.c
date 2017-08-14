@@ -16,7 +16,7 @@
 #include "adc_utils.h"
 #include "optfft.h"
 #define ACH "AIN3"
-#define HNUM 15
+//#define HNUM 15
 
 #define BUF_SIZE 16
 //#define DEBUG

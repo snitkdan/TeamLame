@@ -13,6 +13,9 @@
 #define ADC_UTILS
 
 #include <stdbool.h>
+
+#define HNUM 15
+
 /*
     @modifies
       BeagleBone

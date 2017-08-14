@@ -44,10 +44,11 @@ void pirateDetection(void *pdStruct) {
 	*pirateDistance = rawDistance / 9; // Scale from raw measurement of 900 to 100   
 	
 	if (*pirateDistance <= 100) {
-		pirateDetected = true;		
+		*pirateDetected = true;		
 	} else {
-		pirateDetected = false;
+		*pirateDetected = false;
 	}
+	//printf("*pirateProximity = %d  pirateDetected = %d\n", *pirateDistance, *pirateDetected);
 
 }
 

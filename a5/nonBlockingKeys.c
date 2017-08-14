@@ -13,7 +13,8 @@ bool checkAll(char c) {
 	       consoleModeCmd(c)||
 		   motorSpeedCmd(c) ||
 		   warningCmd(c) ||
-		   payloadCmd(c);
+		   payloadCmd(c) ||
+		   piratesCmd(c);
 	
 }
 
@@ -43,10 +44,6 @@ bool motorSpeedCmd(char c) {
 		       c == SPEEDDEC;
 	}
 	return false;
-        /* 
-	return c == SPEEDINC ||
-	       c == SPEEDDEC;
-        */
 }
 
 bool warningCmd(char c) {
@@ -56,5 +53,9 @@ bool warningCmd(char c) {
 bool payloadCmd(char c) {
 	return c == THRUSTER ||
 	       c == MEASURE;
-	
+}
+
+bool piratesCmd(char c) {
+	return c == PHASORS_BITCH ||
+	       c == PHOTONS_BITCH;
 }

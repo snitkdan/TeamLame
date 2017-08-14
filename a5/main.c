@@ -88,15 +88,16 @@ void main(void) {
 	  // Scheduling Image Capture
 	  if(pirateDetected) {
 		if(!ContainsTCB(queue, &pirateManagementTCB)) {
-			printf("appending pirate management\n");
+			printf("Pirate Detected!!\n");
 			AppendTCB(queue, &pirateManagementTCB);
 		}  
 	  } else {
 		if(ContainsTCB(queue, &pirateManagementTCB)) {
 			RemoveTCB(queue, &pirateManagementTCB);
+			printf("Pirate ran away. (Like a lil bitch lmao)\n");
+			
 		}  
 	  }
-      #endif
 
 		  aTCBPtr = PopTCB(queue);
 		  aTCBPtr->myTask((aTCBPtr->taskDataPtr));

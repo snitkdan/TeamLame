@@ -30,6 +30,11 @@
 #define THRUSTER 'T'
 #define MEASURE  'M'
 
+// commands for pirates
+#define PHASORS_BITCH 'p'
+#define PHOTONS_BITCH 'o'
+
+
 /*
   @param satelliteComs
     Struct containing necessary
@@ -57,6 +62,7 @@ bool satVehicleCmd(char c);
 bool motorSpeedCmd(char c);
 bool warningCmd(char c);
 bool payloadCmd(char c);
+bool piratesCmd(char c);
 bool checkAll(char c);
 
 

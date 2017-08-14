@@ -14,7 +14,6 @@
  #include <signal.h>
 
 #define DEVICES "/sys/devices"
-#define HNUM 16
 #define MGRNUM 9
 
 extern bool stable;

@@ -19,7 +19,6 @@
 #include "pwm_utils.h"
 
 #define PWM_PIN "P9_14"
-#define HNUM 17
 
 #define BUF_SIZE 16
 #define OFF 0

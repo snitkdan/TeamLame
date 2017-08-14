@@ -14,7 +14,7 @@
 #include "adc_utils.h"
 
 #define ACH "AIN0"
-#define HNUM 15
+//#define HNUM 15
 
 #define BUF_SIZE 16
 #define FULL 36

@@ -17,7 +17,7 @@
 
 #define ACH1 "AIN1"
 #define ACH2 "AIN2"
-#define HNUM 15
+//#define HNUM 15
 
 
 #define BUF_SIZE 16

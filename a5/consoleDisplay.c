@@ -82,7 +82,6 @@ void sendToPrint(void *consoleStruct) {
     bool *fuelLow = cData->fuelLowPtr;
     bool *batteryLow = cData->batteryLowPtr;
     bool *solarPanelState = cData->solarPanelStatePtr;
-    bool *batteryOverTemp = cData->batteryOverTempPtr;	
     unsigned int *batteryLvl = cData->batteryLvlPtr;
     unsigned short *fuelLvl = cData->fuelLvlPtr;
     unsigned short *pConsume = cData->pConsumePtr;
