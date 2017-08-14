@@ -59,6 +59,10 @@ int *processImage;
 bool pirateDetected;
 unsigned int pirateDistance;
 
+//Command Parser
+char *received;
+char *transmit;
+
 // For signals
 bool snapshot = false;
 bool fromPowerSS = false;
@@ -201,6 +205,8 @@ void Initialize(void) {
   sData.distancePtr = distance;
   sData.requestPtr = &request;
   sData.processImagePtr = processImage;
+  sData.received = received;
+  sData.transmit = transmit;  
   // 3.7: consoleDisplay
   cData.fuelLowPtr = &fuelLow;
   cData.batteryLowPtr = &batteryLow;
@@ -245,6 +251,9 @@ void Initialize(void) {
   cmData.distancePtr = distance;
   cmData.requestPtr = &request;
   cmData.processImagePtr = processImage;
+  cmData.received = received;
+  cmData.transmit = transmit;
+  
   
   //3.13 pirateDetection
   pdData.pirateDetectedPtr = &pirateDetected;

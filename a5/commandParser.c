@@ -57,8 +57,8 @@ void commandParser(void *cmdStruct) {
     char *received = cData->received;
     char *transmit = cData->transmit;
     // 2. Parse the input
-    char cmd = tolower(input[0]);  // e.g. 'M', 'T', 'D', etc.
-    char *payload = &input[2];  // e.g. '12345', 'F' (for fuel level), etc
+    char cmd = tolower(received[0]);  // e.g. 'M', 'T', 'D', etc.
+    char *payload = &received[2];  // e.g. '12345', 'F' (for fuel level), etc
     switch(cmd) {
       case 't':
         // Thruster Command!
