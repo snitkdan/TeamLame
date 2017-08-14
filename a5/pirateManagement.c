@@ -17,10 +17,21 @@
 #include "TCB.h"
 #include "dataStructs.h"
 
+
 void pirateManagement(void *pmStruct) {
     // 1. Assign the data of pData into local variables
     mPirateData *pData = (mPirateData*)pmStruct;
-    bool *fuelLow = pData->fuelLowPtr;
+    bool *pirateDetected = pData->pirateDetectedPtr;
+	unsigned int *pirateDistance = pData->pirateDistancePtr;
     // Note: Shared variables are not added. Placeholders are added.
+	//printf("inside pirate management\n");
+    if (*pirateDistance <= 30) {
+		if (*pirateDistance <= 5) {
+			printf("PHOTONS BITCH\n");
+		} else {
+			printf("PHASORS BITCH\n");
+		}
+	}
+	
 }
 

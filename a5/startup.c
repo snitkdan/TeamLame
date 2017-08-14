@@ -56,6 +56,10 @@ char response;
 char request;
 int *processImage;
 
+//Pirate
+bool pirateDetected;
+unsigned int pirateDistance;
+
 // For signals
 bool snapshot = false;
 bool fromPowerSS = false;
@@ -129,6 +133,8 @@ void Initialize(void) {
   request = '\0';
   distance = &distanceBuff[0];
   processImage = &presentationBuffer[0];
+  pirateDetected = false;
+  pirateDistance = 500;
 
   // 2. Turn off led0 initially
   #define BEAGLEBONE
@@ -242,10 +248,12 @@ void Initialize(void) {
   cmData.processImagePtr = processImage;
   
   //3.13 pirateDetection
-  pdData.fuelLowPtr = &fuelLow;
+  pdData.pirateDetectedPtr = &pirateDetected;
+  pdData.pirateDistancePtr = &pirateDistance;
 
   //3.13 pirateManagement
-  pmData.fuelLowPtr = &fuelLow;
+  pmData.pirateDetectedPtr = &pirateDetected;
+  pmData.pirateDistancePtr = &pirateDistance;
 
   // 4. Initialize the TCBs
   // 4.1: powerSubsystem
@@ -316,6 +324,8 @@ void Initialize(void) {
   AppendTCB(queue, &powerSubsystemTCB);
   AppendTCB(queue, &consoleDisplayTCB);
   AppendTCB(queue, &vehicleCommsTCB);
+  AppendTCB(queue, &pirateDetectionTCB);
+
 }
 
 void ActivateTimeBase(void) {

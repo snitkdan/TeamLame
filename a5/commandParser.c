@@ -23,11 +23,29 @@ extern bool warningBattTemp;
 extern char ack[3];
 
 extern bool commandOn;
+extern unsigned int thrusterCommand;
 
+// Initializes Hardware components. True if successful, false otherwise.
 bool InitHardware();
-void CloseHardware();
+// Terminates hardware components. True if successful, false otherwise.
+bool CloseHardware();
+// Adds measurement tasks. True if successful, false otherwise.
 bool AddMeasureTasks();
-void RemoveMeasureTasks();
+// Removes measurement tasks. True if successful, false otherwise.
+bool RemoveMeasureTasks();
+
+// Returns true if the payload is valid for either thruster command
+// or measurement, and false otherwise.
+bool isValidPayload(char *payload);
+
+
+void maskBit(unsigned int *thrusterCommand) {
+    // 0. Define a mask 1111111111110011
+    uint16_t MASK = 0xFFF3;
+
+    // 1. Mask the bit 2 and 3 to 0
+    *thrusterCommand &= MASK;
+}
 
 void commandParser(void *cmdStruct) {
     // 1. Assign the data of cData into local variables
@@ -39,7 +57,12 @@ void commandParser(void *cmdStruct) {
     char *payload = &input[2];
     switch(cmd) {
       case 't':
-        ack[0] = isValidPayload(payload) ? 'A' : 'E';
+        if (isValidPayload(payload)) {
+          ack[0] = 'A';
+          maskBit(&thrusterCommand);
+        } else {
+          ack[0] = 'E';
+        }
         ack[2] = 'T';
         *transmit = '\0';
         break;
@@ -70,13 +93,4 @@ void commandParser(void *cmdStruct) {
         *transmit = '\0';
         break;
     }
-
-
-
-
-
-    AppendTCB(queue, &thrusterSubsystemTCB);
-    AppendTCB(queue, &powerSubsystemTCB);
-    AppendTCB(queue, &consoleDisplayTCB);
-    AppendTCB(queue, &vehicleCommsTCB);
-}
+  }

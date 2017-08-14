@@ -31,18 +31,22 @@ void main(void) {
     extern TCB batteryTempTCB;
     extern TCB transportDistanceTCB;
     extern TCB imageCaptureTCB;
+	extern TCB pirateManagementTCB;
 
 
     extern bool solarPanelState;
     extern bool solarPanelDeploy;
     extern bool solarPanelRetract;
-
     extern bool snapshot;
+	extern bool pirateDetected;
 
-		int i = 0;
-		while (true) {
-
-      #ifndef TEST
+	int i = 0;
+	while (true) {
+	  
+	  /* 
+      * 1. TODO @DANIEL: You'll need to add else conditions to remove the TCBs
+      *
+      */ 	  
       if(solarPanelState) {
         // SolarPanelState ON
         if(solarPanelDeploy) {
@@ -67,13 +71,31 @@ void main(void) {
           }
         }
       }
+	  
+	  // Scheduling Transport Distance and Image Capture
       if(snapshot) {
         if(!ContainsTCB(queue, &transportDistanceTCB) && !ContainsTCB(queue, &imageCaptureTCB))  {
-		  //printf("APPENDING SHIT\n");
           AppendTCB(queue, &imageCaptureTCB);
           AppendTCB(queue, &transportDistanceTCB);
         }
-      }
+      } else {
+		if(ContainsTCB(queue, &transportDistanceTCB) && ContainsTCB(queue, &imageCaptureTCB))  {
+          RemoveTCB(queue, &transportDistanceTCB); // NOTE: ORDER MATTERS, MAKE SURE REMOVAL IS REVERSED TO APPENDING ORDER          
+		  RemoveTCB(queue, &imageCaptureTCB);
+	    }
+	  }
+	  
+	  // Scheduling Image Capture
+	  if(pirateDetected) {
+		if(!ContainsTCB(queue, &pirateManagementTCB)) {
+			printf("appending pirate management\n");
+			AppendTCB(queue, &pirateManagementTCB);
+		}  
+	  } else {
+		if(ContainsTCB(queue, &pirateManagementTCB)) {
+			RemoveTCB(queue, &pirateManagementTCB);
+		}  
+	  }
       #endif
 
 		  aTCBPtr = PopTCB(queue);
@@ -87,7 +109,7 @@ void main(void) {
 			  GLOBALCOUNTER++;
 		  }
 		  AppendTCB(queue, aTCBPtr);
-			i = (i + 1) % 9;
+			i = (i + 1) % 11;
 		}
 		return;
 }

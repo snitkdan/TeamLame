@@ -118,10 +118,14 @@ typedef struct commandParserData {
 } cmdData;
 
 typedef struct pirateDetectData {
-  bool *fuelLowPtr;
+  bool *pirateDetectedPtr;
+  unsigned int *pirateDistancePtr;
+ 
 } dPirateData;
 
 typedef struct pirateManageData {
-  bool *fuelLowPtr;
+  bool *pirateDetectedPtr;
+  unsigned int *pirateDistancePtr;
+ 
 } mPirateData;
 #endif
