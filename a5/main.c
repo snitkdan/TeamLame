@@ -78,11 +78,11 @@ void main(void) {
       if (snapshot) {
         if(!ContainsTCB(queue, &transportDistanceTCB) && !ContainsTCB(queue, &imageCaptureTCB))  {
           AppendTCB(queue, &imageCaptureTCB);
-          AppendTCB(queue, &transportDistanceTCB);
+          //AppendTCB(queue, &transportDistanceTCB);
         }
       } else {
 		if(ContainsTCB(queue, &transportDistanceTCB) && ContainsTCB(queue, &imageCaptureTCB))  {
-          RemoveTCB(queue, &transportDistanceTCB); // NOTE: ORDER MATTERS, MAKE SURE REMOVAL IS REVERSED TO APPENDING ORDER          
+          //RemoveTCB(queue, &transportDistanceTCB); // NOTE: ORDER MATTERS, MAKE SURE REMOVAL IS REVERSED TO APPENDING ORDER          
 		  RemoveTCB(queue, &imageCaptureTCB);
 	    }
 	  }
