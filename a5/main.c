@@ -92,13 +92,13 @@ void main(void) {
 	  // Scheduling pirates
 	  if (pirateDetected) {
   		if(!ContainsTCB(queue, &pirateManagementTCB)) {
-  			printf("Pirate Detected!!\n");
+  			//printf("Pirate Detected!!\n");
   			AppendTCB(queue, &pirateManagementTCB);
   		}
   	 } else {
   		if(ContainsTCB(queue, &pirateManagementTCB)) {
   			RemoveTCB(queue, &pirateManagementTCB);
-  			printf("Pirate ran away. (Like a lil bitch lmao)\n");
+  			//printf("Pirate ran away. (Like a lil bitch lmao)\n");
   		}
   	}
 	  // Scheduling CommandParser

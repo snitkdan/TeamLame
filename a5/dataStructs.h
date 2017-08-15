@@ -38,6 +38,7 @@ typedef struct vehicleCommsData {
   char *commandPtr;
   char *responsePtr;
   char *requestPtr;
+  int *processImagePtr;  
 } vehicleData;
 
 typedef struct thrusterSubsystemData {

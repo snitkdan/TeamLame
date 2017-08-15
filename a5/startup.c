@@ -192,6 +192,9 @@ void Initialize(void) {
   vData.commandPtr = &command;
   vData.responsePtr = &response;
   vData.requestPtr = &request; //address needed for strings and chars?
+  vData.processImagePtr = processImage;
+  
+  
   // 3.5: thrusterSubsystem
   tData.thrusterCommandPtr = &thrusterCommand;
   tData.fuelLvlPtr = &fuelLvl;

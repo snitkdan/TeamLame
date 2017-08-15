@@ -15,6 +15,7 @@
 #include "TCB.h"
 #include "satelliteVehicle.h"
 #include "nonBlockingKeys.h"
+#include "scheduler.h"
 #define MAX 300
 #define MAX_BUF 10
 #define CMD_SIZE 20
@@ -22,6 +23,9 @@
 typedef enum {wrt, rd} rw;
 
 char buf[MAX_BUF];    
+extern TaskQueue queue;
+extern TCB imageCaptureTCB;
+
 
 void satelliteEnd(int pipeCom, rw coms, char *cmd);
 void vehicleEnd(int pipeCom);
@@ -42,7 +46,7 @@ void vehicleComms(void *vehicleStruct) {
     char *command = vData->commandPtr;
     char *response = vData->responsePtr;
     char *request = vData->requestPtr;
-    
+    int *processImage = vData->processImagePtr;    
 	if (*request != '\0') {
         if (*request == 'T') {
 			*response = 'K';
@@ -64,38 +68,55 @@ void vehicleComms(void *vehicleStruct) {
        // remove newline
        pString[strcspn(pString, "\n")] = 0;
 	}
-    if (!satVehicleCmd(pString[0])) {
+	bool isValidCommand = satVehicleCmd(pString[0]);
+    if (!isValidCommand) {
 		if (checkAll(pString[0])) {
 			int i = 0;
 			for (i = strlen(pString); i >= 0; i--) {
 			   ungetc(pString[i], stdin);
-			}		
+			}
 		}
         *command = '\0';
 		*response = '\0';
-        return;	
     } else {
         *command = pString[0];
     }
-
-    /* create the FIFO (named pipe) */
-    char * myfifo0 = "/tmp/myfifo0";	
-    mkfifo(myfifo0, 0666);
-
-    /* open the FIFO */	
-    pipeCom = open(myfifo0, O_RDWR);
-    char buf[MAX_BUF];
-    write(pipeCom, command, sizeof(command));
-    vehicleEnd(pipeCom);	         //  read then write to the fifo
-	read(pipeCom, buf, MAX_BUF);
-	response = &buf[0];
+	if (*command == START_IMAGE) {
+	    if (!ContainsTCB(queue, &imageCaptureTCB)) {
+			AppendTCB(queue, &imageCaptureTCB);
+		}
+	} else if (*command == SEND_IMAGE) {
+		// get buffer pointer and print 
+		int i;
+		for (i = 0; i < 16; i++) {
+			printf("processImage[%d] = %d\n", i, processImage[i]); 
+		}
+	} else {
+	    if (ContainsTCB(queue, &imageCaptureTCB)) {
+			RemoveTCB(queue, &imageCaptureTCB);
+		}
+	}
 	
-	printf("RESPONSE = %s\n", response);
-	close(pipeCom);
+	if (isValidCommand) {
+		/* create the FIFO (named pipe) */
+		char * myfifo0 = "/tmp/myfifo0";	
+		mkfifo(myfifo0, 0666);
 
-    /* remove the FIFO */
-    unlink(myfifo0);
-    return;
+		/* open the FIFO */	
+		pipeCom = open(myfifo0, O_RDWR);
+		char buf[MAX_BUF];
+		write(pipeCom, command, sizeof(command));
+		vehicleEnd(pipeCom);	         //  read then write to the fifo
+		read(pipeCom, buf, MAX_BUF);
+		response = &buf[0];
+		
+		printf("RESPONSE = %s\n", response);
+		close(pipeCom);
+
+		/* remove the FIFO */
+		unlink(myfifo0);
+		return;	
+	}
 }
 
 void vehicleEnd(int pipeCom) {

@@ -44,7 +44,7 @@ void imageCapture(void *imageStruct) {
 	int max = 0;
 	int i;
 	int j;
-	printf("Running Image Capture...Please be patient\n");
+	printf("Running Image Capture...\n");
 	for (j = 0; j < 16; j++) {
 		for (i = 0; i < 256; i++) {
 			voltReading = readADC(ACH, HNUM);
@@ -71,14 +71,15 @@ void imageCapture(void *imageStruct) {
 		f = fs * m_index / N;
 		presentationBuffer[currIndex] = f;
 		#endif
-		*processImage = presentationBuffer[currIndex];
+		
 		//printf("presentationBuffer[%d] = %d processImage = %d\n", currIndex, presentationBuffer[currIndex], *processImage);
 		currIndex = (currIndex + 1) % 16;
 	}
-	
-	for (i = 0; i < 16; i++) {
-		printf("presentationBuffer[%d] = %d\n", i, presentationBuffer[i]); 
-	}
+    	
+
+	// send W back
+    processImage = presentationBuffer;	
+	printf("W\n");
 	
     return;
 }
