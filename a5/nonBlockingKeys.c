@@ -30,13 +30,18 @@ bool satVehicleCmd(char c) {
 		   c == SEND_IMAGE;
 }
 
-bool consoleModeCmd(char c) {
-	return c == SATELLITESTATUS || 
-	       c == ANNUNCIATION;
-}
-
 extern TaskQueue queue;
+extern TCB consoleDisplayTCB;
 extern TCB solarPanelControlTCB;
+
+bool consoleModeCmd(char c) {
+	if (ContainsTCB(queue, &consoleDisplayTCB)) {
+	    return c == SATELLITESTATUS || 
+	           c == ANNUNCIATION;
+    } else {
+		return false; 
+	}
+
 
 bool motorSpeedCmd(char c) {
         //unsigned int taskQueue = NumTasksInTaskQueue(queue) + 1;
