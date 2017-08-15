@@ -67,6 +67,7 @@ void commandParser(void *cmdStruct) {
   char *payload = &received[1];  // e.g. '12345', 'F' (for fuel level), etc
 	printf("cmd = %c, payload = %s\n", cmd, payload);
 	ack[1] = ' ';
+  ack[3] = '\0';
 	#ifdef WHEN_YOURE_READY
 	switch(cmd) {
       case THRUSTER:
