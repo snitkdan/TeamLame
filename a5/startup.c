@@ -168,8 +168,8 @@ void Initialize(void) {
   signal(SIGINT, sigHandler);
   signal(SIGUSR1, sigHandler);
   InitHardware();
-  signal(SIGINT, sigHandler);
-  signal(SIGUSR1, sigHandler);
+  signal(SIGINT, SIG_DFL);
+  signal(SIGUSR1, SIG_DFL);
 
   // 3. Assign shared variables to pointers
   // 3.1: powerSubsystem

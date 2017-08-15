@@ -58,7 +58,10 @@ bool warningCmd(char c) {
 }
 
 bool payloadCmd(char c) {
-	return c == THRUSTER ||
+	return c == START ||
+	       c == STOP  ||
+		   c == DISPLAY ||
+	       c == THRUSTER ||
 	       c == MEASURE;
 }
 
