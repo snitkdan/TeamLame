@@ -23,15 +23,18 @@
 #include "scheduler.h"
 #include "satComsParse.h"
 
+#define WHEN_YOURE_READY
+
 // CommandParser specific globals
 extern char ack[3];
-extern TaskQueue queue;
 extern bool display;
+extern TaskQueue queue;
 extern void sigHandler(int sig);
 extern TCB powerSubsystemTCB;
 extern TCB vehicleCommsTCB;
 extern TCB thrusterSubsystemTCB;
 extern TCB pirateDetectionTCB;
+extern TCB consoleDisplayTCB;
 
 // Adds measurement tasks. True if successful, false otherwise.
 bool AddMeasureTasks();
@@ -101,7 +104,15 @@ void commandParser(void *cmdStruct) {
         ack[2] = DISPLAY;
         *transmit = SHOW_EMPTY;
         display = !display;  // see extern above
-        // AppendTCB(queue, &consoleDisplayTCB); (?)
+        if (display) {
+          if (ContainsTCB(queue, &consoleDisplayTCB)) {
+            AppendTCB(queue, &consoleDisplayTCB);
+          }
+        } else {
+          if (!ContainsTCB(queue, &consoleDisplayTCB)) {
+            RemoveTCB(queue, &consoleDisplayTCB);
+          }
+        }
         break;
       default:
         // Bad command (e.g. user enters 'Z' or something)

@@ -106,6 +106,9 @@ cmdData cmData;
 dPirateData pdData;
 mPirateData pmData;
 
+char ack[3];
+bool display;
+
 // Define the Task Queue
 TQ q;
 TaskQueue queue;
@@ -210,8 +213,8 @@ void Initialize(void) {
   sData.received = received;
   sData.transmit = transmit;
   sData.commandOnPtr = &commandOn;
-  cData.pirateDistancePtr = &pirateDistance;  
-  
+  cData.pirateDistancePtr = &pirateDistance;
+
   // 3.7: consoleDisplay
   cData.fuelLowPtr = &fuelLow;
   cData.batteryLowPtr = &batteryLow;
@@ -225,7 +228,7 @@ void Initialize(void) {
   cData.batteryTmp1 = batteryTmp1;
   cData.batteryTmp2 = batteryTmp2;
   cData.pirateDistancePtr = &pirateDistance;
-  
+
   // 3.8: warningAlarm
   wData.fuelLowPtr = &fuelLow;
   wData.batteryLowPtr = &batteryLow;
@@ -261,8 +264,8 @@ void Initialize(void) {
   cmData.received = received;
   cmData.transmit = transmit;
   cmData.commandOnPtr = &commandOn;
-  
-  
+
+
   //3.13 pirateDetection
   pdData.pirateDetectedPtr = &pirateDetected;
   pdData.pirateDistancePtr = &pirateDistance;
@@ -320,7 +323,7 @@ void Initialize(void) {
   commandParserTCB.taskDataPtr = (void*)&cmData;
   commandParserTCB.myTask = commandParser;
   commandParserTCB.priority = 1;
- 
+
   // 4.13 pirateDetection
   pirateDetectionTCB.taskDataPtr = (void*)&pdData;
   pirateDetectionTCB.myTask = pirateDetection;
@@ -377,7 +380,7 @@ void sigHandler(int sig) {
       // 2. Handle connection with solar panel output as well
       // a deployment sensor on the solar panel will generate a signaling
       // event to indicate end of travel. (endofTravel = true and read by solarPanelControl)
-      endOfTravel = true;	  
+      endOfTravel = true;
     }
     if(fromTransport) {
       // RADLEIGH
@@ -386,7 +389,7 @@ void sigHandler(int sig) {
 	  printf("Received %c...\n", request);
 	  vehicleComms((void*) &vData);
 	  request = 'D';
-	  printf("Received %c...\n", request);	  
+	  printf("Received %c...\n", request);
 	  vehicleComms((void*) &vData);
 	  request = '\0';
 	  snapshot = false;
@@ -396,11 +399,11 @@ void sigHandler(int sig) {
     snapshot = true;
   }
   if(adc_connection) {
-	adc_connection = false;
-	printf("Successfully connected to ADC :P\n");
+  	adc_connection = false;
+  	printf("Successfully connected to ADC :P\n");
   }
   if(pwm_connection) {
-	pwm_connection = false;
-	printf("Successfully connected to PWM ;)\n");
+  	pwm_connection = false;
+  	printf("Successfully connected to PWM ;)\n");
   }
 }

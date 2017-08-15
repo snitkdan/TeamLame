@@ -6,7 +6,7 @@ objects = satelliteComs.o powerSubsystem.o consoleDisplay.o \
 	  transportDistance.o imageCapture.o batteryTemp.o \
 	  optfft.o commandParser.o pirateDetection.o \
 	  pirateManagement.o
-	  
+
 headers = dataStructs.h TCB.h startup.h scheduler.h
 
 all: main
@@ -22,16 +22,16 @@ pirateDetection.o: pirateDetection.c
 
 commandParser.o: commandParser.c satComsParse.h
 	gcc -Wall -g -c -o commandParser.o commandParser.c
-	
+
 optfft.o: optfft.c optfft.h tables.c
-	gcc -Wall -g -c -o optfft.o optfft.c	
+	gcc -Wall -g -c -o optfft.o optfft.c
 
 transportDistance.o: transportDistance.c
-	gcc -Wall -g -c -o transportDistance.o transportDistance.c	
+	gcc -Wall -g -c -o transportDistance.o transportDistance.c
 
 imageCapture.o: imageCapture.c optfft.h
 	gcc -Wall -g -c -o imageCapture.o imageCapture.c
-	
+
 batteryTemp.o: batteryTemp.c
 	gcc -Wall -g -c -o batteryTemp.o batteryTemp.c
 
@@ -50,7 +50,7 @@ startup.o: startup.c startup.h
 nonBlockingKeys.o: nonBlockingKeys.c nonBlockingKeys.h
 	gcc -Wall -g -c -o nonBlockingKeys.o nonBlockingKeys.c
 
-keyboardConsole.o: keyboardConsole.c 
+keyboardConsole.o: keyboardConsole.c
 	gcc -Wall -g -c -o keyboardConsole.o keyboardConsole.c
 
 solarPanelControl.o: solarPanelControl.c pwm_utils.h
@@ -79,9 +79,9 @@ terminalComs.o: terminalComs.c TCB.h
 
 rand2.o: rand2.c
 	gcc -Wall -g -c -o rand2.o rand2.c
-	
+
 copy:
-	scp -r ../a5 root@192.168.7.2:/dev	
+	scp -r ../a5 root@192.168.7.2:/dev
 
 clean:
-	rm main *.o
+	rm -rf main *.o *.dSYM
