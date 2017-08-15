@@ -91,10 +91,13 @@ void transportDistance(void *transportStruct) {
 
 	//char bit0;
 	unsigned int bit0, bit1, bit2, bit3, bit4, bit5, bit6;
-	system("echo 1 > /sys/class/gpio/gpio69/value");
+	//system("echo 1 > /sys/class/gpio/gpio69/value");
+	fprintf(gpioReset, "%d", 1); fflush(gpioReset);	
+	fprintf(gpioReset, "%d", 0); fflush(gpioReset);
+	
 	//fflush(gpioReset);	
-	sleep(1);
-	system("echo 0 > /sys/class/gpio/gpio69/value");
+	//sleep(1);
+	//system("echo 0 > /sys/class/gpio/gpio69/value");
 	//fflush(gpioReset);
 	//fscanf(gpio0, "%d", &bit0);
 	//printf("START BIT 0 : %d\n", bit0);	
@@ -193,9 +196,9 @@ void transportDistance(void *transportStruct) {
 
 	// Call interrupt here
 	fromTransport = true;
-	if (calcDistance <= 100) {
+	/*if (calcDistance <= 100) {
 		raise(SIGUSR1);
-	}
+	}*/
 	fromTransport = false;
 
 	
@@ -215,9 +218,9 @@ void transportDistance(void *transportStruct) {
      	    currIndex = (currIndex + 1) % 8;			
 		}	
         //#ifdef DEBUG
-	printf("Distance Buff%d: %d *distance: %d\n\n\n", currIndex, distanceBuff[currIndex - 1], *distance);
         //#endif
 	}
+	printf("Distance Buff%d *distance: %d\n\n", currIndex, *distance);
 
 	#ifdef DEBUG
 	fclose(fp0);
@@ -244,7 +247,7 @@ void transportDistance(void *transportStruct) {
 void initPins() {	
 	
 	system("echo "IN" > /sys/class/gpio/export");
-	system("echo 69 > /sys/class/gpio/export");
+	system("echo "RESET" > /sys/class/gpio/export");
 	system("echo "BIT0" > /sys/class/gpio/export");
 	system("echo "BIT1" > /sys/class/gpio/export");
 	system("echo "BIT2" > /sys/class/gpio/export");
@@ -255,7 +258,7 @@ void initPins() {
 	
 	system("echo out > /sys/class/gpio/gpio"IN"/direction");
 	
-	system("echo out > /sys/class/gpio/gpio69/direction");
+	system("echo out > /sys/class/gpio/gpio"RESET"/direction");
 	system("echo in > /sys/class/gpio/gpio"BIT0"/direction");
 	system("echo in > /sys/class/gpio/gpio"BIT1"/direction");
 	system("echo in > /sys/class/gpio/gpio"BIT2"/direction");
