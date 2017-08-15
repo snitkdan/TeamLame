@@ -210,6 +210,7 @@ void Initialize(void) {
   sData.received = received;
   sData.transmit = transmit;
   sData.commandOnPtr = &commandOn;
+  cData.pirateDistancePtr = &pirateDistance;  
   
   // 3.7: consoleDisplay
   cData.fuelLowPtr = &fuelLow;
@@ -223,6 +224,8 @@ void Initialize(void) {
   cData.batteryOverTempPtr = &batteryOverTemp;
   cData.batteryTmp1 = batteryTmp1;
   cData.batteryTmp2 = batteryTmp2;
+  cData.pirateDistancePtr = &pirateDistance;
+  
   // 3.8: warningAlarm
   wData.fuelLowPtr = &fuelLow;
   wData.batteryLowPtr = &batteryLow;

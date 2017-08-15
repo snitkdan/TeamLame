@@ -32,6 +32,8 @@
 #define PHASORS_BITCH 'p'
 #define PHOTONS_BITCH 'o'
 
+// miscellaneous commands
+#define CLEAR 'c'
 
 /*
   @param satelliteComs
@@ -62,6 +64,7 @@ bool warningCmd(char c);
 bool payloadCmd(char c);
 bool piratesCmd(char c);
 bool checkAll(char c);
+bool miscCmd(char c);
 
 
 #endif
