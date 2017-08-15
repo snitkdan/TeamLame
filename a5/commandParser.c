@@ -7,6 +7,7 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include <stdint.h>
+#include <signal.h>
 #include <ctype.h>
 
 #include <fcntl.h>
@@ -29,24 +30,19 @@ extern char ack[3];
 
 extern TaskQueue queue;
 extern bool display;
+extern void sigHandler(int sig);
 
 #ifdef WHEN_YOURE_READY
-// Initializes Hardware components. True if successful, false otherwise.
-bool InitHardware();
-// Terminates hardware components. True if successful, false otherwise.
-bool CloseHardware();
 // Adds measurement tasks. True if successful, false otherwise.
 bool AddMeasureTasks();
 // Removes measurement tasks. True if successful, false otherwise.
 bool RemoveMeasureTasks();
-
 // Returns true if the payload is valid for either thruster command
 // or measurement, and false otherwise. (based on cmd)
 bool isValidPayload(char cmd, char *payload);
 // Returns true if test is a valid measurement command,
 // and false otherwise.
 bool isValidCommand(char test);
-
 #endif
 
 void maskBit(unsigned int *thrusterCommand) {
@@ -109,6 +105,7 @@ void commandParser(void *cmdStruct) {
         ack[2] = 'D';
         *transmit = '\0';
         display = !display;  // see extern above
+        // AppendTCB(queue, &consoleDisplayTCB); (?)
         break;
       default:
         // Bad command (e.g. user enters 'Z' <something>)
@@ -135,6 +132,31 @@ void commandParser(void *cmdStruct) {
         return isValidCommand(test);
       }
     }
+  }
+
+  bool AddMeasureTasks() {
+    // 1. Enable data collecting interrupts
+    signal(SIGINT, sigHandler);
+    signal(SIGUSR1, sigHandler);
+    // 2. Add measurement tasks to the task queue
+    AppendTCB(queue, &thrusterSubsystemTCB);
+    AppendTCB(queue, &powerSubsystemTCB);
+    AppendTCB(queue, &vehicleCommsTCB);
+    AppendTCB(queue, &pirateDetectionTCB);
+    // 3. Initialize Hardware
+    return true;
+  }
+
+  bool RemoveMeasureTasks() {
+    // 1. Disable data collecting interrupts
+    signal(SIGINT, SIG_DFL);
+    signal(SIGUSR1, SIG_DFL);
+    // 2. Add measurement tasks to the task queue
+    RemoveTCB(queue, &thrusterSubsystemTCB);
+    RemoveTCB(queue, &powerSubsystemTCB);
+    RemoveTCB(queue, &vehicleCommsTCB);
+    RemoveTCB(queue, &pirateDetectionTCB);
+    return true;
   }
 
   bool isValidCommand(char test) {
