@@ -60,58 +60,54 @@ void commandParser(void *cmdStruct) {
   unsigned int *thrusterCommand = cData->thrusterCommandPtr;
   bool *commandOn = cData->commandOnPtr;
   // 2. Parse the input
-  char cmd = tolower(received[0]);  // e.g. 'M', 'T', 'D', etc.
+  char cmd = toupper(received[0]);  // e.g. 'M', 'T', 'D', etc.
   char *payload = &received[1];  // e.g. '12345', 'F' (for fuel level), etc
 	printf("cmd = %c, payload = %s\n", cmd, payload);
 	#ifdef WHEN_YOURE_READY
 	switch(cmd) {
-      case 't':
+      case THRUSTER:
         // Thruster Command!
         if (isValidPayload(cmd, payload)) {
-          ack[0] = 'A';
+          ack[0] = OK;
           *thrusterCommand = atoi(payload);
           maskBit(thrusterCommand);
         } else {
-          ack[0] = 'E';
+          ack[0] = ERR;
         }
-        ack[2] = 'T';
-        *transmit = '\0';
+        ack[2] = THRUSTER;
+        *transmit = SHOW_EMPTY;
         break;
-      case 'm':
+      case MEASURE:
         // Measurement Command!
-        ack[0] = isValidPayload(cmd, payload) ? 'A' : 'E';
-        ack[2] = 'M';
-        *transmit = *payload;  // e.g. 'F' (fuel level), 'B' (battery level), etc
+        ack[0] = isValidPayload(cmd, payload) ? OK : ERR;
+        ack[2] = MEASURE;
+        *transmit = toupper(*payload);  // e.g. 'F' (fuel level), 'B' (battery level), etc
         break;
-      case 's':
+      case START:
         // Start Command!
-        ack[0] = (InitHardware() && AddMeasureTasks()) ? 'A' : 'E';
-            // Attempt to initialize the PWM + ADC and add measurement tasks.
-            // 'A' if successful, 'E' otherwise.
-        ack[2] = 'S';
-        *transmit = '\0';
+        ack[0] = AddMeasureTasks() ? OK : ERR;
+        ack[2] = START;
+        *transmit = SHOW_EMPTY;
         break;
-      case 'p':
+      case STOP:
         // Pause Command!
-        ack[0] = (CloseHardware() && RemoveMeasureTasks()) ? 'A' : 'E';
-          // Attempt to terminate the PWM + ADC and remove measurement tasks.
-          // 'A' if successful, 'E' otherwise.
-        ack[2] = 'P';
-        *transmit = '\0';
+        ack[0] = RemoveMeasureTasks() ? OK : ERR;
+        ack[2] = STOP;
+        *transmit = SHOW_EMPTY;
         break;
-      case 'd':
+      case DISPLAY:
         // Display Command
-        ack[0] = 'A';  // always successful (?)
-        ack[2] = 'D';
-        *transmit = '\0';
+        ack[0] = OK;  // always successful (?)
+        ack[2] = DISPLAY;
+        *transmit = SHOW_EMPTY;
         display = !display;  // see extern above
         // AppendTCB(queue, &consoleDisplayTCB); (?)
         break;
       default:
-        // Bad command (e.g. user enters 'Z' <something>)
-        ack[0] = 'E';
-        ack[2] = 'X';
-        *transmit = '\0';
+        // Bad command (e.g. user enters 'Z' or something)
+        ack[0] = ERR;
+        ack[2] = BAD_COMMAND;
+        *transmit = SHOW_EMPTY;
         break;
     }
 	  #endif
@@ -119,7 +115,7 @@ void commandParser(void *cmdStruct) {
   }
 
   bool isValidPayload(char cmd, char *payload) {
-    if (cmd == 't') {
+    if (cmd == THRUSTER) {
       // Check thruster command
       unsigned int test = atoi(payload);
       return (test > 0 && test < 65536);
@@ -128,7 +124,7 @@ void commandParser(void *cmdStruct) {
       if (strlen(payload) > 1) {
         return false;
       } else {
-        char test = tolower(*payload);
+        char test = toupper(*payload);
         return isValidCommand(test);
       }
     }
@@ -136,8 +132,10 @@ void commandParser(void *cmdStruct) {
 
   bool AddMeasureTasks() {
     // 1. Enable data collecting interrupts
-    signal(SIGINT, sigHandler);
-    signal(SIGUSR1, sigHandler);
+    if (signal(SIGINT, sigHandler) == SIG_ERR ||
+        signal(SIGUSR1, sigHandler) == SIG_ERR) {
+      return false;
+    }
     // 2. Add measurement tasks to the task queue
     AppendTCB(queue, &thrusterSubsystemTCB);
     AppendTCB(queue, &powerSubsystemTCB);
@@ -149,8 +147,10 @@ void commandParser(void *cmdStruct) {
 
   bool RemoveMeasureTasks() {
     // 1. Disable data collecting interrupts
-    signal(SIGINT, SIG_DFL);
-    signal(SIGUSR1, SIG_DFL);
+    if (signal(SIGINT, SIG_DFL) == SIG_ERR ||
+        signal(SIGUSR1, SIG_DFL) == SIG_ERR) {
+      return false;
+    }
     // 2. Add measurement tasks to the task queue
     RemoveTCB(queue, &thrusterSubsystemTCB);
     RemoveTCB(queue, &powerSubsystemTCB);
@@ -159,17 +159,13 @@ void commandParser(void *cmdStruct) {
     return true;
   }
 
-  bool isValidCommand(char test) {
-    // t = batteryTemp, i = imageCapture, p = pirateDetection,
-    // b = batteryLevel, s = solarPanelState, d = solarPanelDeploy,
-    // r = solarPanelRetract, f = fuelLvl, o = transportDistance
-    return (test == 't') ||
-           (test == 'i') ||
-           (test == 'p') ||
-           (test == 'b') ||
-           (test == 's') ||
-           (test == 'd') ||
-           (test == 'r') ||
-           (test == 'f') ||
-           (test == 'o');
+  bool isValidMeasurement(char test) {
+    return (test == SHOW_FUEL) ||
+           (test == SHOW_BATT) ||
+           (test == SHOW_PCON) ||
+           (test == SHOW_TEMP) ||
+           (test == SHOW_PANEL) ||
+           (test == SHOW_DIST) ||
+           (test == SHOW_IMAG) ||
+           (test == SHOW_PIRATE);
   }

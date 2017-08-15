@@ -2,16 +2,20 @@
 #define SATPARSE
 
 /* Valid M<payload> commands?
-MF - Fuel Level
-MB - Battery Level
-MC - Power Consumed          (spec doesn't say power generated) 
-MT - Battery Temp            (both of them)
-MS - Solar Panels
-MD - Transport Distance      (if active)
-MI - Image Capture Frequency (if active)
-MP - Pirate Distance       (if active)
-
+  MF - Fuel Level
+  MB - Battery Level
+  MC - Power Consumed          (spec doesn't say power generated)
+  MT - Battery Temp            (both of them)
+  MS - Solar Panels
+  MD - Transport Distance      (if active)
+  MI - Image Capture Frequency (if active)
+  MP - Pirate Distance       (if active)
 */
+
+// Acknowledgements
+#define OK 'A'
+#define ERR 'E'
+#define BAD_COMMAND 'X'
 
 // Valid "Received"
 #define START 'S'
@@ -30,5 +34,6 @@ MP - Pirate Distance       (if active)
 #define SHOW_DIST 'D'
 #define SHOW_IMAG 'I'
 #define SHOW_PIRATE 'P'
+#define SHOW_EMPTY '\0'
 
 #endif
