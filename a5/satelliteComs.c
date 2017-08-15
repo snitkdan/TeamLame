@@ -22,7 +22,7 @@
 #include "satelliteComs.h"
 #include "nonBlockingKeys.h"
 #include "satelliteVehicle.h"
-#include "adc_utils.h"
+#include "satComsParse.h"
 
 #define MAX 65536 // upper bound for 16 bit
 #define BUF_SIZE 16
@@ -66,7 +66,7 @@ void satelliteComs(void *satStruct) {
 
     // 2. Retrieve random number, mask and assign thrusterCommand to it
     *thrusterCommand = randomInteger(0, MAX) % MAX;
-    maskBit(thrusterCommand);
+    //maskBit(thrusterCommand);
 
     char *solarPanelString = (*solarPanelState) ? "Deployed":"Retracted";
     char *fuelString = (*fuelLow)? "YES":"NO";
@@ -84,7 +84,6 @@ void satelliteComs(void *satStruct) {
 		dprintf(fd1, "\033[2J");
 		dprintf(fd1, "\033[1;1H");
 	    firstTime--;
-
 	}
 	
 	int flags = fcntl(STDIN_FILENO, F_GETFL, 0);
@@ -92,18 +91,23 @@ void satelliteComs(void *satStruct) {
 	char pString[CMD_SIZE];
     pString[0] = '\0';	
     if(fgets(pString, CMD_SIZE, stdin) != NULL) {
-       // remove newline
-       pString[strcspn(pString, "\n")] = 0;
-       if (pString[0] == 'T' || pString[0] == 'M') {
+        // remove newline
+        pString[strcspn(pString, "\n")] = 0;
+        if (validCmd(pString[0])) {
 		  strcpy(received, pString);
 		  *commandOn = true;
-       } else {
-		   *received = '\0';
-           int i;
-           for (i = strlen(pString); i >= 0; i--) {
-               ungetc(pString[i], stdin);
-           }
-       }  
+        } else {
+		    *received = '\0';
+			if (checkAll(pString[0])) {
+				int i;
+				for (i = strlen(pString); i >= 0; i--) {
+				  ungetc(pString[i], stdin);
+				}
+			} else {
+				*transmit = 'E';
+				printf("Transmit: %c\n", *transmit);
+			}
+        }  
     }
 	
 	
@@ -139,6 +143,15 @@ void satelliteComs(void *satStruct) {
 	*/ 
 }
 
+bool validCmd(char c) {
+	return c == START ||
+	       c == STOP ||
+		   c == DISPLAY ||
+		   c == THRUSTER ||
+		   c == MEASURE;
+}
+
+/*
 void maskBit(unsigned int *thrusterCommand) {
     // 0. Define a mask 1111111111110011
     uint16_t MASK = 0xFFF3;
@@ -146,3 +159,4 @@ void maskBit(unsigned int *thrusterCommand) {
     // 1. Mask the bit 2 and 3 to 0
     *thrusterCommand &= MASK;
 }
+*/

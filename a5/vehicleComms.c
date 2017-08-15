@@ -68,7 +68,6 @@ void vehicleComms(void *vehicleStruct) {
 	}
     //char c = 'B';	
     if (!satVehicleCmd(pString[0])) {
-        //if (consoleModeCmd(pString[0]) || motorSpeedCmd(pString[0]) || warningCmd(pString[0])) {
 		if (checkAll(pString[0])) {
 			int i = 0;
 			for (i = strlen(pString); i >= 0; i--) {

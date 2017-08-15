@@ -20,7 +20,7 @@ pirateManagement.o: pirateManagement.c
 pirateDetection.o: pirateDetection.c
 	gcc -Wall -g -c -o pirateDetection.o pirateDetection.c
 
-commandParser.o: commandParser.c 
+commandParser.o: commandParser.c satComsParse.h
 	gcc -Wall -g -c -o commandParser.o commandParser.c
 	
 optfft.o: optfft.c optfft.h tables.c
@@ -71,7 +71,7 @@ consoleDisplay.o: consoleDisplay.c nonBlockingKeys.h adc_utils.h
 powerSubsystem.o: powerSubsystem.c powerSubsystem.h
 	gcc -Wall -g -c -o powerSubsystem.o powerSubsystem.c
 
-satelliteComs.o: satelliteComs.c satelliteComs.h nonBlockingKeys.h satelliteVehicle.h adc_utils.h
+satelliteComs.o: satelliteComs.c satelliteComs.h nonBlockingKeys.h satelliteVehicle.h satComsParse.h
 	gcc -Wall -g -c -o satelliteComs.o satelliteComs.c
 
 terminalComs.o: terminalComs.c TCB.h

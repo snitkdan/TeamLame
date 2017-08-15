@@ -19,6 +19,7 @@
 #include "dataStructs.h"
 #include "startup.h"
 #include "scheduler.h"
+#include "satComsParse.h"
 
 extern bool warningBattTemp;
 
