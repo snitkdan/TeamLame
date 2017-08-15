@@ -75,7 +75,7 @@ void commandParser(void *cmdStruct) {
       case THRUSTER:
         // Thruster Command!
         if (isValidPayload(cmd, payload)) {
-		  printf("INSIDE THRUSTER\n");
+		      printf("INSIDE THRUSTER\n");
           ack[0] = OK;
           *thrusterCommand = atoi(payload);
           maskBit(thrusterCommand);
@@ -114,11 +114,11 @@ void commandParser(void *cmdStruct) {
         *transmit = SHOW_EMPTY;
         *display = !(*display);  // see extern above
         if (*display) {
-          if (ContainsTCB(queue, &consoleDisplayTCB)) {
+          if (!ContainsTCB(queue, &consoleDisplayTCB)) {
             AppendTCB(queue, &consoleDisplayTCB);
           }
         } else {
-          if (!ContainsTCB(queue, &consoleDisplayTCB)) {
+          if (ContainsTCB(queue, &consoleDisplayTCB)) {
             RemoveTCB(queue, &consoleDisplayTCB);
           }
         }
