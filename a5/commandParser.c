@@ -35,6 +35,7 @@ extern TCB vehicleCommsTCB;
 extern TCB thrusterSubsystemTCB;
 extern TCB pirateDetectionTCB;
 extern TCB consoleDisplayTCB;
+extern int fd0;
 
 // Adds measurement tasks. True if successful, false otherwise.
 bool AddMeasureTasks();
@@ -119,7 +120,9 @@ void commandParser(void *cmdStruct) {
           }
         } else {
           if (ContainsTCB(queue, &consoleDisplayTCB)) {
-            RemoveTCB(queue, &consoleDisplayTCB);
+	          dprintf(fd0, "\033[2J");
+	          dprintf(fd0, "\033[1;1H");            
+	          RemoveTCB(queue, &consoleDisplayTCB);
           }
         }
         break;

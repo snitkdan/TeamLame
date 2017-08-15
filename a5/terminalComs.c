@@ -15,11 +15,11 @@
 #define MAX 1000
 
 FILE *fp = NULL; // declare file here
+int fd0; // for earth terminal
 
 int terminalComs(char *output) {
     // 1. Declare storage and data to be used
     char buffer[MAX];
-    static int fd0; // for earth terminal
     static int firstTime = 0;
 	
     // 2. open file for reading and writing
