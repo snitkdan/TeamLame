@@ -339,12 +339,13 @@ void Initialize(void) {
   InitializeTaskQueue(queue);
   AppendTCB(queue, &warningAlarmTCB);
   AppendTCB(queue, &satelliteComsTCB);
+  /*
   AppendTCB(queue, &thrusterSubsystemTCB);
   AppendTCB(queue, &powerSubsystemTCB);
   AppendTCB(queue, &consoleDisplayTCB);
   AppendTCB(queue, &vehicleCommsTCB);
   AppendTCB(queue, &pirateDetectionTCB);
-
+  */
 }
 
 void ActivateTimeBase(void) {

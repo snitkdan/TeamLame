@@ -66,6 +66,7 @@ void commandParser(void *cmdStruct) {
   char cmd = toupper(received[0]);  // e.g. 'M', 'T', 'D', etc.
   char *payload = &received[1];  // e.g. '12345', 'F' (for fuel level), etc
 	printf("cmd = %c, payload = %s\n", cmd, payload);
+	ack[1] = ' ';
 	#ifdef WHEN_YOURE_READY
 	switch(cmd) {
       case THRUSTER:
@@ -88,6 +89,7 @@ void commandParser(void *cmdStruct) {
         break;
       case START:
         // Start Command!
+		printf("INSIDE START\n");
         ack[0] = AddMeasureTasks() ? OK : ERR;
         ack[2] = START;
         *transmit = SHOW_EMPTY;
@@ -122,6 +124,7 @@ void commandParser(void *cmdStruct) {
         break;
     }
 	  #endif
+	printf("Ack: %s, Transmit: %s\n", ack, transmit);
     *commandOn = false;
   }
 
