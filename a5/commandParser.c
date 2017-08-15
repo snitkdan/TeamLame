@@ -23,16 +23,16 @@
 #include "scheduler.h"
 #include "satComsParse.h"
 
-extern bool warningBattTemp;
-
 // CommandParser specific globals
 extern char ack[3];
-
 extern TaskQueue queue;
 extern bool display;
 extern void sigHandler(int sig);
+extern TCB powerSubsystemTCB;
+extern TCB vehicleCommsTCB;
+extern TCB thrusterSubsystemTCB;
+extern TCB pirateDetectionTCB;
 
-#ifdef WHEN_YOURE_READY
 // Adds measurement tasks. True if successful, false otherwise.
 bool AddMeasureTasks();
 // Removes measurement tasks. True if successful, false otherwise.
@@ -43,7 +43,7 @@ bool isValidPayload(char cmd, char *payload);
 // Returns true if test is a valid measurement command,
 // and false otherwise.
 bool isValidMeasurement(char test);
-#endif
+
 
 void maskBit(unsigned int *thrusterCommand) {
     // 0. Define a mask 1111111111110011
@@ -159,7 +159,7 @@ void commandParser(void *cmdStruct) {
     return true;
   }
 
-  bool isValidMeasurement(char test) {
+  bool isValidMeasurement(char test){
     return (test == SHOW_FUEL) ||
            (test == SHOW_BATT) ||
            (test == SHOW_PCON) ||
