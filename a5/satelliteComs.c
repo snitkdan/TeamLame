@@ -94,7 +94,7 @@ void satelliteComs(void *satStruct) {
         // remove newline
         pString[strcspn(pString, "\n")] = 0;	
         if (validCmd(pString[0])) {
-		  strcpy(received, pString);
+		  strncpy(received, pString, CMD_SIZE);
 		  *commandOn = true; // Appends command parser next cycle
         } else if (strstr(pString, "clear")) {
 		    printf("\033[2J");
@@ -165,28 +165,13 @@ void satelliteComs(void *satStruct) {
 		    dprintf(fd1, "Pirate Distance: %hu\n", *pirateDistance);
 			break;			
 	}
-	/*	
-    dprintf(fd1, "Battery Low:       %s\n"
-	             "Fuel Low:          %s\n"
-    	         "Battery Over Temp: %s\n"			 
-	             "Solar Panels:      %s\n"
-                 "Battery Level:     %u\n"
-                 "Fuel Level:        %hu\n"
-                 "Power Consumption: %hu\n"
-                 "Power Generation:  %hu\n"
-                 "Transport Dist:    %d\n"
-                 "Battery Temp 1:    %d\n"
-                 "Battery Temp 2:    %d\n"				 
-                 "Image Data:        %d\n",
-              battString, fuelString, warnBattString, solarPanelString,
-             *batteryLvl, *fuelLvl, *pConsume, *pGenerate,			  
-              *distance, *batteryTmp1, *batteryTmp2, 
-                *processImage);			  
-
-	 if (strstr(response, "A")) {  
-		 dprintf(fd1, "\nVehicle Response: %c %c\n", *response, *command);
-     }
-	*/ 
+	if (strstr(response, "A")) {  
+	    dprintf(fd1, "\nVehicle Response: %c %c\n", *response, *command);
+    }
+	if (strstr(ack, "A") || strstr(ack, "E")) {
+		dprintf(fd1, "\n\nFrom Parser: %s\n", ack);
+	}
+	 
 }
 
 bool validCmd(char c) {
@@ -196,13 +181,3 @@ bool validCmd(char c) {
 		   c == THRUSTER ||
 		   c == MEASURE;
 }
-
-/*
-void maskBit(unsigned int *thrusterCommand) {
-    // 0. Define a mask 1111111111110011
-    uint16_t MASK = 0xFFF3;
-
-    // 1. Mask the bit 2 and 3 to 0
-    *thrusterCommand &= MASK;
-}
-*/

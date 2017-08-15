@@ -36,6 +36,7 @@ extern TCB thrusterSubsystemTCB;
 extern TCB pirateDetectionTCB;
 extern TCB consoleDisplayTCB;
 extern int fd0;
+bool vehicleCommsInQueue;
 
 // Adds measurement tasks. True if successful, false otherwise.
 bool AddMeasureTasks();
@@ -163,7 +164,8 @@ void commandParser(void *cmdStruct) {
     // 2. Add measurement tasks to the task queue
     AppendTCB(queue, &thrusterSubsystemTCB);
     AppendTCB(queue, &powerSubsystemTCB);
-    AppendTCB(queue, &vehicleCommsTCB);
+    AppendTCB(queue, &vehicleCommsTCB); 
+	vehicleCommsInQueue = true;
     AppendTCB(queue, &pirateDetectionTCB);
     // 3. Initialize Hardware
     return true;
@@ -179,6 +181,7 @@ void commandParser(void *cmdStruct) {
     RemoveTCB(queue, &thrusterSubsystemTCB);
     RemoveTCB(queue, &powerSubsystemTCB);
     RemoveTCB(queue, &vehicleCommsTCB);
+	vehicleCommsInQueue = false;	
     RemoveTCB(queue, &pirateDetectionTCB);
     return true;
   }

@@ -19,20 +19,28 @@ bool checkAll(char c) {
 	
 }
 
-bool satVehicleCmd(char c) {
-	return c == FORWARD         || 
-	       c == BACK            || 
-		   c == LEFT            || 
-		   c == RIGHT           || 
-		   c == DRILL_DOWN      || 
-		   c == DRILL_UP        ||
-		   c == START_IMAGE     ||
-		   c == SEND_IMAGE;
-}
-
 extern TaskQueue queue;
+extern TCB vehicleCommsTCB;
 extern TCB consoleDisplayTCB;
 extern TCB solarPanelControlTCB;
+extern bool vehicleCommsInQueue;
+
+bool satVehicleCmd(char c) {
+	//if (ContainsTCB(queue, &vehicleCommsTCB)) {
+	if (vehicleCommsInQueue) {	
+		return c == FORWARD         || 
+			   c == BACK            || 
+			   c == LEFT            || 
+			   c == RIGHT           || 
+			   c == DRILL_DOWN      || 
+			   c == DRILL_UP        ||
+			   c == START_IMAGE     ||
+			   c == SEND_IMAGE;
+	} else {
+		return false;
+	}   
+}
+
 
 bool consoleModeCmd(char c) {
 	if (ContainsTCB(queue, &consoleDisplayTCB)) {

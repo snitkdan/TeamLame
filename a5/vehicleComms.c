@@ -21,13 +21,13 @@
 
 typedef enum {wrt, rd} rw;
 
-int fd0;    
 char buf[MAX_BUF];    
 
-void satelliteEnd(int fd0, rw coms, char *cmd);
-void vehicleEnd(int fd0);
+void satelliteEnd(int pipeCom, rw coms, char *cmd);
+void vehicleEnd(int pipeCom);
 
 void vehicleComms(void *vehicleStruct) {
+    int pipeCom;
 	// Only run this function every major cycle
 	/*
 	static unsigned long start = 0;
@@ -36,7 +36,7 @@ void vehicleComms(void *vehicleStruct) {
 	}
     start = GLOBALCOUNTER;
 	*/
-     //printf("INSIDE vehicleComs\n");	  
+    //printf("INSIDE vehicleComs\n");	  
     // 1.1 Assign the data of vehicleStruct into local variables
     vehicleData *vData = (vehicleData*)vehicleStruct;
     char *command = vData->commandPtr;
@@ -66,7 +66,6 @@ void vehicleComms(void *vehicleStruct) {
        // remove newline
        pString[strcspn(pString, "\n")] = 0;
 	}
-    //char c = 'B';	
     if (!satVehicleCmd(pString[0])) {
 		if (checkAll(pString[0])) {
 			int i = 0;
@@ -88,28 +87,28 @@ void vehicleComms(void *vehicleStruct) {
     mkfifo(myfifo0, 0666);
 
     /* open the FIFO */	
-    fd0 = open(myfifo0, O_RDWR);
+    pipeCom = open(myfifo0, O_RDWR);
     char buf[MAX_BUF];
-    write(fd0, command, sizeof(command));
-    vehicleEnd(fd0);	         //  read then write to the fifo
-	read(fd0, buf, MAX_BUF);
+    write(pipeCom, command, sizeof(command));
+    vehicleEnd(pipeCom);	         //  read then write to the fifo
+	read(pipeCom, buf, MAX_BUF);
 	response = &buf[0];
 	
 	printf("RESPONSE = %s\n", response);
-	close(fd0);
+	close(pipeCom);
 
     /* remove the FIFO */
     unlink(myfifo0);
     return;
 }
 
-void vehicleEnd(int fd0) {
+void vehicleEnd(int pipeCom) {
      char buf[MAX_BUF];
-     read(fd0, buf, MAX_BUF);
+     read(pipeCom, buf, MAX_BUF);
      printf("VEHICLE: Received command: %s\n", buf);
      char responseBuf[10];
 	 snprintf(responseBuf, 10, "A %s", buf);
-     write(fd0, responseBuf, sizeof(responseBuf));
+     write(pipeCom, responseBuf, sizeof(responseBuf));
      return;
 }
 
