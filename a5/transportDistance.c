@@ -47,21 +47,17 @@ extern bool fromTransport;
 
 void initPins();
 
+// EMPRICALLY DETERMINED: RANGE BETWEEN 0 to 1.8kHz
 void transportDistance(void *transportStruct) {
 	// Only run this function every major cycle
-	/*
 	static unsigned long start = 0;
 	if((GLOBALCOUNTER - start) % MAJOR_CYCLE != 0) {
       return;
 	}
     start = GLOBALCOUNTER;
-	*/
+	
 	transportData *tData = (transportData*)transportStruct;
     unsigned int *distance = tData->distancePtr;
-	
-	// The Satellite Management and Control System must support an interface to a sensor that
-    // detects a signal from an inbound transport vehicle. The frequency of the incoming signal
-    // shall be proportional to the distance between the satellite and an inbound transport vehicle.
 	static int firstTime = 0;
     //#define DEBUG	
     #ifndef DEBUG	
@@ -196,9 +192,9 @@ void transportDistance(void *transportStruct) {
 
 	// Call interrupt here
 	fromTransport = true;
-	/*if (calcDistance <= 100) {
+	if (calcDistance <= 100) {
 		raise(SIGUSR1);
-	}*/
+	}
 	fromTransport = false;
 
 	
@@ -255,9 +251,7 @@ void initPins() {
 	system("echo "BIT4" > /sys/class/gpio/export");
 	system("echo "BIT5" > /sys/class/gpio/export");
 	system("echo "BIT6" > /sys/class/gpio/export");
-	
 	system("echo out > /sys/class/gpio/gpio"IN"/direction");
-	
 	system("echo out > /sys/class/gpio/gpio"RESET"/direction");
 	system("echo in > /sys/class/gpio/gpio"BIT0"/direction");
 	system("echo in > /sys/class/gpio/gpio"BIT1"/direction");
