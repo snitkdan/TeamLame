@@ -42,7 +42,7 @@ bool RemoveMeasureTasks();
 bool isValidPayload(char cmd, char *payload);
 // Returns true if test is a valid measurement command,
 // and false otherwise.
-bool isValidCommand(char test);
+bool isValidMeasurement(char test);
 #endif
 
 void maskBit(unsigned int *thrusterCommand) {
@@ -125,7 +125,7 @@ void commandParser(void *cmdStruct) {
         return false;
       } else {
         char test = toupper(*payload);
-        return isValidCommand(test);
+        return isValidMeasurement(test);
       }
     }
   }
