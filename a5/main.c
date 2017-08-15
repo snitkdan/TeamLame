@@ -68,7 +68,7 @@ void main(void) {
         }
       } else {
         // SolarPanelState OFF && retracted (may need to remove tasks)
-        if(ContainsTCB(queue, &batteryTempTCB) {
+        if(ContainsTCB(queue, &batteryTempTCB)) {
           RemoveTCB(queue, &batteryTempTCB);
         }
         if (ContainsTCB(queue, &solarPanelControlTCB)) {
