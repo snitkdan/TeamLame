@@ -163,7 +163,13 @@ void Initialize(void) {
   // 2.1: Initialize the Hardware Perepherals
   #endif
 
+
+  // Enable the signals
+  signal(SIGINT, sigHandler);
+  signal(SIGUSR1, sigHandler);
   InitHardware();
+  signal(SIGINT, sigHandler);
+  signal(SIGUSR1, sigHandler);
 
   // 3. Assign shared variables to pointers
   // 3.1: powerSubsystem
