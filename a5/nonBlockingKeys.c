@@ -41,6 +41,7 @@ bool consoleModeCmd(char c) {
     } else {
 		return false; 
 	}
+}
 
 
 bool motorSpeedCmd(char c) {
