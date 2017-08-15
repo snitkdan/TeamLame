@@ -72,6 +72,7 @@ void commandParser(void *cmdStruct) {
       case THRUSTER:
         // Thruster Command!
         if (isValidPayload(cmd, payload)) {
+		  printf("INSIDE THRUSTER\n");
           ack[0] = OK;
           *thrusterCommand = atoi(payload);
           maskBit(thrusterCommand);
@@ -83,6 +84,7 @@ void commandParser(void *cmdStruct) {
         break;
       case MEASURE:
         // Measurement Command!
+	    printf("INSIDE MEASURE\n");
         ack[0] = isValidPayload(cmd, payload) ? OK : ERR;
         ack[2] = MEASURE;
         *transmit = toupper(*payload);  // e.g. 'F' (fuel level), 'B' (battery level), etc
@@ -96,12 +98,14 @@ void commandParser(void *cmdStruct) {
         break;
       case STOP:
         // Pause Command!
+	    printf("INSIDE STOP\n");
         ack[0] = RemoveMeasureTasks() ? OK : ERR;
         ack[2] = STOP;
         *transmit = SHOW_EMPTY;
         break;
       case DISPLAY:
         // Display Command
+		printf("INSIDE DISPLAY\n");
         ack[0] = OK;  // always successful (?)
         ack[2] = DISPLAY;
         *transmit = SHOW_EMPTY;
