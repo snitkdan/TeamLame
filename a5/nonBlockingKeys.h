@@ -25,8 +25,11 @@
 #define SPEEDDEC 'd'
 
 // commands for Earth to Satellite
+#define START 'S'
+#define STOP 'P'
+#define DISPLAY 'D'
 #define THRUSTER 'T'
-#define MEASURE  'M'
+#define MEASURE 'M'
 
 // commands for pirates
 #define PHASORS_BITCH 'p'
