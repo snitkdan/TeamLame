@@ -58,8 +58,6 @@ void vehicleComms(void *vehicleStruct) {
 		return;
 	}
 	
-    //printf("\033[20;20H");		
-    //char c = getchar();
 	char pString[CMD_SIZE];
     pString[0] = '\0';	
 	if(fgets(pString, CMD_SIZE, stdin) != NULL) {
@@ -75,12 +73,10 @@ void vehicleComms(void *vehicleStruct) {
 		}
         *command = '\0';
 		*response = '\0';
-        return;
-		
+        return;	
     } else {
         *command = pString[0];
     }
-	
 
     /* create the FIFO (named pipe) */
     char * myfifo0 = "/tmp/myfifo0";	

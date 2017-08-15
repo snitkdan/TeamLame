@@ -80,17 +80,16 @@ void main(void) {
 
 	  // Scheduling Transport Distance and Image Capture
     if (snapshot) {
-      if(!ContainsTCB(queue, &transportDistanceTCB) && !ContainsTCB(queue, &imageCaptureTCB))  {
-        AppendTCB(queue, &imageCaptureTCB);
-        //AppendTCB(queue, &transportDistanceTCB);
+      if(!ContainsTCB(queue, &transportDistanceTCB))  {
+		    printf("Calculating transport distance...\n");
+            AppendTCB(queue, &transportDistanceTCB);
       }
     } else {
-  		if(ContainsTCB(queue, &transportDistanceTCB) && ContainsTCB(queue, &imageCaptureTCB))  {
-        //RemoveTCB(queue, &transportDistanceTCB); // NOTE: ORDER MATTERS, MAKE SURE REMOVAL IS REVERSED TO APPENDING ORDER
-  		  RemoveTCB(queue, &imageCaptureTCB);
-  	  }
+  		if(ContainsTCB(queue, &transportDistanceTCB))  {
+            RemoveTCB(queue, &transportDistanceTCB);
+  	    }
 	  }
-	  // Scheduling Image Capture
+	  // Scheduling pirates
 	  if (pirateDetected) {
   		if(!ContainsTCB(queue, &pirateManagementTCB)) {
   			printf("Pirate Detected!!\n");

@@ -42,40 +42,43 @@ void imageCapture(void *imageStruct) {
     #endif
     #ifndef DEBUG
 	int max = 0;
-	int i;	
-    for (i = 0; i < 256; i++) {
-        voltReading = readADC(ACH, HNUM);
-        //scaledReading = (voltReading - 900) / 29.0322518;
-		//scaledReading = voltReading;
-        captureBuff[i] = voltReading;
-        //printf("VoltReading: %f Scaledreading: %d \n", voltReading, realBuff[currIndex]);
-        usleep(100); // sampling freq of 10000 Hz
-    }
-	
-	for (i = 0; i < 256; i++) {
-        max = (captureBuff[i] > max) ? captureBuff[i] : max;
-    }
-	
-	for ( i = 0; i < 256; i++) {
-		realBuff[i] = (((captureBuff[i] - (max/2)) * 63) / 1023);
+	int i;
+	int j;
+	printf("Running Image Capture...Please be patient\n");
+	for (j = 0; j < 16; j++) {
+		for (i = 0; i < 256; i++) {
+			voltReading = readADC(ACH, HNUM);
+			captureBuff[i] = voltReading;
+			//printf("VoltReading: %f Scaledreading: %d \n", voltReading, realBuff[currIndex]);
+			usleep(100); // sampling freq of 10000 Hz
+		}
+		
+		for (i = 0; i < 256; i++) {
+			max = (captureBuff[i] > max) ? captureBuff[i] : max;
+		}
+		
+		for ( i = 0; i < 256; i++) {
+			realBuff[i] = (((captureBuff[i] - (max/2)) * 63) / 1023);
+		}
+		
+		// Brent's FFT
+		signed int imgBuff[256] = {0};	
+		int m_index = optfft(realBuff, imgBuff);
+		// Bin Wang's Algorithm
+		double fs = 10000;
+		double N = 256;
+		double f;
+		f = fs * m_index / N;
+		presentationBuffer[currIndex] = f;
+		#endif
+		*processImage = presentationBuffer[currIndex];
+		//printf("presentationBuffer[%d] = %d processImage = %d\n", currIndex, presentationBuffer[currIndex], *processImage);
+		currIndex = (currIndex + 1) % 16;
 	}
 	
-    // Brent's FFT
-    signed int imgBuff[256] = {0};	
-    int m_index = optfft(realBuff, imgBuff);
-    printf("m_index %d\n", m_index);
-    // Bin Wang's Algorithm
-    double fs = 10000;
-    double N = 256;
-    double f;
-    f = fs * m_index / N;
-    printf("f = %f\n", f);
-    presentationBuffer[currIndex] = f;
-    #endif
-    *processImage = presentationBuffer[currIndex];
-    //printf("presentationBuffer[%d] = %d processImage = %d\n", currIndex, presentationBuffer[currIndex], *processImage);
-    currIndex = (currIndex + 1) % 16;
-	
+	for (i = 0; i < 16; i++) {
+		printf("presentationBuffer[%d] = %d\n", i, presentationBuffer[i]); 
+	}
 	
     return;
 }
