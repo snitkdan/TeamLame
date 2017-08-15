@@ -26,8 +26,8 @@
 #define WHEN_YOURE_READY
 
 // CommandParser specific globals
-extern char ack[3];
-extern bool display;
+//extern char ack[3];
+//extern bool display;
 extern TaskQueue queue;
 extern void sigHandler(int sig);
 extern TCB powerSubsystemTCB;
@@ -62,6 +62,8 @@ void commandParser(void *cmdStruct) {
   char *transmit = cData->transmit;
   unsigned int *thrusterCommand = cData->thrusterCommandPtr;
   bool *commandOn = cData->commandOnPtr;
+  char *ack = cData->ack;
+  bool *display = cData->displayPtr;
   // 2. Parse the input
   char cmd = toupper(received[0]);  // e.g. 'M', 'T', 'D', etc.
   char *payload = &received[1];  // e.g. '12345', 'F' (for fuel level), etc
@@ -110,8 +112,8 @@ void commandParser(void *cmdStruct) {
         ack[0] = OK;  // always successful (?)
         ack[2] = DISPLAY;
         *transmit = SHOW_EMPTY;
-        display = !display;  // see extern above
-        if (display) {
+        *display = !(*display);  // see extern above
+        if (*display) {
           if (ContainsTCB(queue, &consoleDisplayTCB)) {
             AppendTCB(queue, &consoleDisplayTCB);
           }

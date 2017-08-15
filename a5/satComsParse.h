@@ -10,6 +10,19 @@
   MD - Transport Distance      (if active)
   MI - Image Capture Frequency (if active)
   MP - Pirate Distance       (if active)
+  
+  S
+  P
+  S
+  W
+  MF
+  MB
+  MC
+  MT
+  MS
+  MD
+  MI
+  MP
 */
 
 // Acknowledgements

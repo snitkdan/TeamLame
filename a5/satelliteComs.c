@@ -63,7 +63,8 @@ void satelliteComs(void *satStruct) {
     char *received = sData->received;
     char *transmit = sData->transmit;
 	bool *commandOn = sData->commandOnPtr;
-	unsigned int *pirateDistance = sData->pirateDistancePtr;	
+	unsigned int *pirateDistance = sData->pirateDistancePtr;
+    char *ack = sData->ack;	
 
     // 2. Retrieve random number, mask and assign thrusterCommand to it
     *thrusterCommand = randomInteger(0, MAX) % MAX;

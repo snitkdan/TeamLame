@@ -63,6 +63,8 @@ unsigned int pirateDistance;
 char received[20] = {'\0'};
 char transmit[20] = {'\0'};
 bool commandOn;
+char ack[20] = {'\0'};
+bool display;
 
 // For signals
 bool snapshot = false;
@@ -106,9 +108,6 @@ cmdData cmData;
 dPirateData pdData;
 mPirateData pmData;
 
-char ack[3];
-bool display;
-
 // Define the Task Queue
 TQ q;
 TaskQueue queue;
@@ -143,6 +142,7 @@ void Initialize(void) {
   pirateDetected = false;
   pirateDistance = 500;
   commandOn = false;
+  display = false;
 
   // 2. Turn off led0 initially
   #define BEAGLEBONE
@@ -208,7 +208,10 @@ void Initialize(void) {
   sData.received = received;
   sData.transmit = transmit;
   sData.commandOnPtr = &commandOn;
-  cData.pirateDistancePtr = &pirateDistance;
+  sData.pirateDistancePtr = &pirateDistance;
+  sData.ack = ack;
+  sData.displayPtr = &display;  
+  
 
   // 3.7: consoleDisplay
   cData.fuelLowPtr = &fuelLow;
@@ -259,6 +262,9 @@ void Initialize(void) {
   cmData.received = received;
   cmData.transmit = transmit;
   cmData.commandOnPtr = &commandOn;
+  cmData.ack = ack;
+  cmData.displayPtr = &display;  
+  
 
 
   //3.13 pirateDetection
