@@ -20,6 +20,7 @@
 #include "dataStructs.h"
 #include "startup.h"
 #include "scheduler.h"
+#include "satComsParse.h"
 
 extern bool warningBattTemp;
 
@@ -48,14 +49,12 @@ bool isValidCommand(char test);
 
 #endif
 
-#ifdef MULTIPLE_DEFINITIONS_ERROR_FYI
 void maskBit(unsigned int *thrusterCommand) {
     // 0. Define a mask 1111111111110011
     uint16_t MASK = 0xFFF3;
     // 1. Mask the bit 2 and 3 to 0
     *thrusterCommand &= MASK;
 }
-#endif
 
 void commandParser(void *cmdStruct) {
   // 1. Assign the data of cData into local variables

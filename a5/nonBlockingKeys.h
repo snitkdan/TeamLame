@@ -12,11 +12,9 @@
 #define BACK 'B'
 #define LEFT 'L'
 #define RIGHT 'R'
-#define DRILL_DOWN 'D'
+#define DRILL_DOWN 'Y' // changed from D to avoid conflict
 #define DRILL_UP 'H'
-#define REQUEST_LIFTOFF 'T'
-#define REQUEST_DOCK 'D'
-#define START_IMAGE 'S'
+#define START_IMAGE 'U' // changed from S to avoid conflict with START
 #define SEND_IMAGE 'I'
 
 // commands for warningAlarm
@@ -34,6 +32,8 @@
 #define PHASORS_BITCH 'p'
 #define PHOTONS_BITCH 'o'
 
+// miscellaneous commands
+#define CLEAR 'c'
 
 /*
   @param satelliteComs
@@ -64,6 +64,7 @@ bool warningCmd(char c);
 bool payloadCmd(char c);
 bool piratesCmd(char c);
 bool checkAll(char c);
+bool miscCmd(char c);
 
 
 #endif

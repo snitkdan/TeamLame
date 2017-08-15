@@ -1,3 +1,5 @@
+#ifndef SATCOMS
+#define SATCOMS
 #include <stdint.h>
 
 
@@ -23,4 +25,6 @@ void satelliteComs(void *sData);
   @effects
     Masks the last 4 bits to be 00XX
 */
-void maskBit(unsigned int *thrusterCommand);
+//void maskBit(unsigned int *thrusterCommand);
+bool validCmd(char c);
+#endif

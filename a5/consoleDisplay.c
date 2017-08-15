@@ -89,6 +89,8 @@ void sendToPrint(void *consoleStruct) {
     unsigned int *distance = cData->distancePtr;	
     unsigned int *batteryTmp1 = cData->batteryTmp1;
     unsigned int *batteryTmp2 = cData->batteryTmp2;
+	unsigned int *pirateDistance = cData->pirateDistancePtr;	
+	
     // 1.2 Define necessary string storage	
     char *solarPanelString = (*solarPanelState) ? "Deployed":"Retracted";
     char *fuelString = (*fuelLow)? "YES":"NO";
@@ -104,9 +106,10 @@ void sendToPrint(void *consoleStruct) {
 					"Power Generation:  %hu\n"
 					"Vehicle Distance:  %d\n"
 					"Battery Temp 1:    %d\n"
-					"Battery Temp 2:    %d\n",
+					"Battery Temp 2:    %d\n"
+					"Pirate Proximity:  %hu\n",
 					 solarPanelString, *batteryLvl, *fuelLvl, *pConsume, *pGenerate,
-												 *distance, *batteryTmp1, *batteryTmp2);
+					 *distance, *batteryTmp1, *batteryTmp2, *pirateDistance);
 	} else if (state == STATE_ANN) {
 		sprintf(output, "Annunciaton\n"
 						"Battery Low:         %s\n"

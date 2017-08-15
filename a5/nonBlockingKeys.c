@@ -14,7 +14,8 @@ bool checkAll(char c) {
 		   motorSpeedCmd(c) ||
 		   warningCmd(c) ||
 		   payloadCmd(c) ||
-		   piratesCmd(c);
+		   piratesCmd(c) ||
+		   miscCmd(c);
 	
 }
 
@@ -58,4 +59,8 @@ bool payloadCmd(char c) {
 bool piratesCmd(char c) {
 	return c == PHASORS_BITCH ||
 	       c == PHOTONS_BITCH;
+}
+
+bool miscCmd(char c) {
+	return c == CLEAR; // for clear
 }

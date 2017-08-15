@@ -24,31 +24,42 @@ extern signed int presentationBuffer[16];
 
 void imageCapture(void *imageStruct) {
 	// Only run this function every major cycle
-	static unsigned long start = 0;
+	/*static unsigned long start = 0;
 	if((GLOBALCOUNTER - start) % MAJOR_CYCLE != 0) {
       return;
 	}
-	//printf("Inside imageCapture\n");	
-    start = GLOBALCOUNTER;
+    start = GLOBALCOUNTER;*/
     imageData *iData = (imageData*)imageStruct;
     int *processImage = iData->processImagePtr;
-	signed int realBuff[256];
+	signed int captureBuff[256];
+	signed int realBuff[256];	
 	double voltReading;
 	double scaledReading;
 	static int currIndex = 0;
-	int j;
 	
     #ifdef DEBUG
     presentationBuffer[currIndex] = 200 + currIndex;
     #endif
     #ifndef DEBUG
-    for (j = 0; j < 256; j++) {
+	int max = 0;
+	int i;	
+    for (i = 0; i < 256; i++) {
         voltReading = readADC(ACH, HNUM);
-        scaledReading = (voltReading - 900) / 29.0322518;
-        realBuff[j] = scaledReading;
+        //scaledReading = (voltReading - 900) / 29.0322518;
+		//scaledReading = voltReading;
+        captureBuff[i] = voltReading;
         //printf("VoltReading: %f Scaledreading: %d \n", voltReading, realBuff[currIndex]);
         usleep(100); // sampling freq of 10000 Hz
     }
+	
+	for (i = 0; i < 256; i++) {
+        max = (captureBuff[i] > max) ? captureBuff[i] : max;
+    }
+	
+	for ( i = 0; i < 256; i++) {
+		realBuff[i] = (((captureBuff[i] - (max/2)) * 63) / 1023);
+	}
+	
     // Brent's FFT
     signed int imgBuff[256] = {0};	
     int m_index = optfft(realBuff, imgBuff);
