@@ -88,7 +88,7 @@ void commandParser(void *cmdStruct) {
 	    printf("INSIDE MEASURE\n");
         ack[0] = isValidPayload(cmd, payload) ? OK : ERR;
         ack[2] = MEASURE;
-        *transmit = toupper(*payload);  // e.g. 'F' (fuel level), 'B' (battery level), etc
+        *transmit = isValidPayload(cmd, payload) ? toupper(*payload) : ERR;  // e.g. 'F' (fuel level), 'B' (battery level), etc
         break;
       case START:
         // Start Command!
