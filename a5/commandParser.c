@@ -31,11 +31,23 @@
 extern TaskQueue queue;
 extern void sigHandler(int sig);
 extern TCB powerSubsystemTCB;
+extern TCB solarPanelControlTCB;
+extern TCB keyboardConsoleTCB;
 extern TCB vehicleCommsTCB;
 extern TCB thrusterSubsystemTCB;
-extern TCB pirateDetectionTCB;
+extern TCB satelliteComsTCB;
 extern TCB consoleDisplayTCB;
+extern TCB warningAlarmTCB;
+extern TCB transportDistanceTCB;
+extern TCB imageCaptureTCB;
+extern TCB batteryTempTCB;
+extern TCB commandParserTCB;
+extern TCB pirateDetectionTCB;
+extern TCB pirateManagementTCB;
+
+
 extern int fd0;
+extern bool isPaused;
 bool vehicleCommsInQueue;
 
 // Adds measurement tasks. True if successful, false otherwise.
@@ -162,27 +174,41 @@ void commandParser(void *cmdStruct) {
       return false;
     }
     // 2. Add measurement tasks to the task queue
+	if (isPaused) {
     AppendTCB(queue, &thrusterSubsystemTCB);
     AppendTCB(queue, &powerSubsystemTCB);
     AppendTCB(queue, &vehicleCommsTCB); 
 	vehicleCommsInQueue = true;
     AppendTCB(queue, &pirateDetectionTCB);
+	}
+	isPaused = false;
+	printf("Number of elements in the queue @ S: %u\n", NumTasksInTaskQueue(queue));  
     // 3. Initialize Hardware
     return true;
   }
 
   bool RemoveMeasureTasks() {
-    // 1. Disable data collecting interrupts
+    // 2. Add measurement tasks to the task queue
+	if (!isPaused) {
+    RemoveTCB(queue, &thrusterSubsystemTCB);
+    RemoveTCB(queue, &solarPanelControlTCB);
+    RemoveTCB(queue, &powerSubsystemTCB);
+    RemoveTCB(queue, &keyboardConsoleTCB);
+	RemoveTCB(queue, &vehicleCommsTCB);
+	RemoveTCB(queue, &transportDistanceTCB);
+	RemoveTCB(queue, &imageCaptureTCB);
+	RemoveTCB(queue, &batteryTempTCB);
+	RemoveTCB(queue, &pirateDetectionTCB);
+	RemoveTCB(queue, &pirateManagementTCB);
+	vehicleCommsInQueue = false;
+	}	
+	printf("Number of elements in the queue @ P: %u\n", NumTasksInTaskQueue(queue));
+	isPaused = true;
+	 // 1. Disable data collecting interrupts
     if (signal(SIGINT, SIG_DFL) == SIG_ERR ||
         signal(SIGUSR1, SIG_DFL) == SIG_ERR) {
       return false;
     }
-    // 2. Add measurement tasks to the task queue
-    RemoveTCB(queue, &thrusterSubsystemTCB);
-    RemoveTCB(queue, &powerSubsystemTCB);
-    RemoveTCB(queue, &vehicleCommsTCB);
-	vehicleCommsInQueue = false;	
-    RemoveTCB(queue, &pirateDetectionTCB);
     return true;
   }
 

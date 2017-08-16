@@ -89,7 +89,17 @@ void satelliteComs(void *satStruct) {
     fcntl(STDIN_FILENO, F_SETFL, flags | O_NONBLOCK);
 	char pString[CMD_SIZE];
     pString[0] = '\0';
-
+	#ifdef TEST
+    static int call = 0;
+	printf("call = %d\n", call);
+	if ((call % 2) == 0) {
+		pString[0] = 'S';
+	} else {
+		pString[0] = 'P';		
+	}
+	printf("pString: %s\n", pString);
+	call++;
+	#endif
     if(fgets(pString, CMD_SIZE, stdin) != NULL) {
         // remove newline
         pString[strcspn(pString, "\n")] = 0;	

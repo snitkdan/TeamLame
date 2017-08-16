@@ -41,9 +41,13 @@ void main(void) {
     extern bool snapshot;
   	extern bool pirateDetected;
   	extern bool commandOn;
+	extern bool isPaused;
 
 	int i = 0;
 	while (true) {
+	if (!isPaused) {
+	//printf("IN PAUSED\n");
+	//usleep(10000000);
     if(solarPanelState) {
       // SolarPanelState ON
       if(solarPanelDeploy) {
@@ -77,7 +81,6 @@ void main(void) {
         }
       }
     }
-
 	  // Scheduling Transport Distance and Image Capture
     if (snapshot) {
       if(!ContainsTCB(queue, &transportDistanceTCB))  {
@@ -101,10 +104,11 @@ void main(void) {
   			//printf("Pirate ran away. (Like a lil bitch lmao)\n");
   		}
   	}
+	}
 	  // Scheduling CommandParser
 	  if (commandOn) {
   		if (!ContainsTCB(queue, &commandParserTCB)) {
-  			AppendTCB(queue, &commandParserTCB);
+  			PushTCB(queue, &commandParserTCB);
   	  }
   	} else {
   		if(ContainsTCB(queue, &commandParserTCB)) {
@@ -122,7 +126,7 @@ void main(void) {
 		  GLOBALCOUNTER++;
 	  }
 	  AppendTCB(queue, aTCBPtr);
-		i = (i + 1) % 11;
+	  i = (i + 1) % 11;
 	}
 	return;
 }

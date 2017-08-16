@@ -65,6 +65,7 @@ char transmit[20] = {'\0'};
 bool commandOn;
 char ack[20] = {'\0'};
 bool display;
+bool isPaused = true;
 
 // For signals
 bool snapshot = false;
@@ -91,6 +92,7 @@ TCB batteryTempTCB;
 TCB commandParserTCB;
 TCB pirateDetectionTCB;
 TCB pirateManagementTCB;
+
 
 // Defines data structures
 powerData pData;
