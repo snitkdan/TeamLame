@@ -10,15 +10,16 @@
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <unistd.h>
-#include <math.h>
 #include "dataStructs.h"
 #include "TCB.h"
 #include "powerSubsystem.h"
 #include "adc_utils.h"
 #include "optfft.h"
-#include "fft.h"
 #define ACH "AIN3"
+//#define HNUM 15
+
 #define BUF_SIZE 16
+//#define DEBUG
 extern signed int presentationBuffer[16];
 
 void imageCapture(void *imageStruct) {
@@ -30,10 +31,9 @@ void imageCapture(void *imageStruct) {
     start = GLOBALCOUNTER;*/
     imageData *iData = (imageData*)imageStruct;
     int *processImage = iData->processImagePtr;
-	COMPLEX samples[256];
-	COMPLEX w[127];
+	signed int captureBuff[256];
 	signed int realBuff[256];	
-	int voltReading;
+	double voltReading;
 	double scaledReading;
 	static int currIndex = 0;
 	
@@ -41,44 +41,31 @@ void imageCapture(void *imageStruct) {
     presentationBuffer[currIndex] = 200 + currIndex;
     #endif
     #ifndef DEBUG
+	int max = 0;
 	int i;
 	int j;
 	printf("Running Image Capture...\n");
-    char adc_val_path[50];
-    //sprintf(adc_val_path, "%s/%s%i/%s", "/sys/devices", "ocp.3/helper.", 15, "AIN3");
-    FILE *adc_val = fopen("/sys/devices/ocp.3/helper.15/AIN3", "r");
-	
-	//float max = 0;
 	for (j = 0; j < 16; j++) {
 		for (i = 0; i < 256; i++) {
-			//voltReading = readADC(ACH, HNUM);
-            fseek(adc_val,0,SEEK_SET);			
-			fscanf(adc_val, "%d", &voltReading);
-			fflush(adc_val);			
-			samples[i].real = voltReading - 847;
-			samples[i].imag = 0;
+			voltReading = readADC(ACH, HNUM);
+			captureBuff[i] = voltReading;
+			//printf("VoltReading: %f Scaledreading: %d \n", voltReading, realBuff[currIndex]);
+			usleep(100); // sampling freq of 10000 Hz
 		}
-        FILE *fp = fopen("measurement.txt", "w+"); 
+		
 		for (i = 0; i < 256; i++) {
-			fprintf(fp, "%f\n", samples[i].real);
+			max = (captureBuff[i] > max) ? captureBuff[i] : max;
 		}
-		fclose(fp);
-    		
-		fft(samples, w, 8);		
-		int m_index = 0;
-		float mag = sqrt(samples[0].real * samples[0].real + samples[0].imag * samples[0].imag);
-		float curr_mag = 0;
-		for (i = 0; i < 128; i++) {
-            curr_mag = sqrt(samples[i].real * samples[i].real + samples[i].imag * samples[i].imag);
-			if (curr_mag > mag) {
-				m_index = i;
-				mag = curr_mag;
-			}
+		
+		for ( i = 0; i < 256; i++) {
+			realBuff[i] = (((captureBuff[i] - (max/2)) * 63) / 1023);
 		}
-
-        printf("m_index = %d\n", m_index);
+		
+		// Brent's FFT
+		signed int imgBuff[256] = {0};	
+		int m_index = optfft(realBuff, imgBuff);
 		// Bin Wang's Algorithm
-		double fs = 950;
+		double fs = 10000;
 		double N = 256;
 		double f;
 		f = fs * m_index / N;
@@ -88,8 +75,7 @@ void imageCapture(void *imageStruct) {
 		//printf("presentationBuffer[%d] = %d processImage = %d\n", currIndex, presentationBuffer[currIndex], *processImage);
 		currIndex = (currIndex + 1) % 16;
 	}
-    fclose(adc_val);
-	
+    	
 
 	// send W back
     processImage = presentationBuffer;	
@@ -97,3 +83,4 @@ void imageCapture(void *imageStruct) {
 	
     return;
 }
+

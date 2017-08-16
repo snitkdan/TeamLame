@@ -92,13 +92,12 @@ void satelliteComs(void *satStruct) {
 	#ifdef TEST
     static int call = 0;
 	printf("call = %d\n", call);
-	if ((call % 2) == 0) {
+	if (call == 0) {
 		pString[0] = 'S';
-	} else {
-		pString[0] = 'P';		
-	}
+			call++;
+		
+	} 
 	printf("pString: %s\n", pString);
-	call++;
 	#endif
     if(fgets(pString, CMD_SIZE, stdin) != NULL) {
         // remove newline

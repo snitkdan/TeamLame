@@ -5,14 +5,14 @@ objects = satelliteComs.o powerSubsystem.o consoleDisplay.o \
 	  scheduler.o pwm_utils.o adc_utils.o \
 	  transportDistance.o imageCapture.o batteryTemp.o \
 	  optfft.o commandParser.o pirateDetection.o \
-	  pirateManagement.o
+	  pirateManagement.o fft.o \
 
 headers = dataStructs.h TCB.h startup.h scheduler.h
 
 all: main
 
 main: main.c $(objects) $(headers)
-	gcc -Wall -g -o main main.c $(objects)
+	gcc -Wall -g -o main main.c $(objects) -lm
 
 pirateManagement.o: pirateManagement.c
 	gcc -Wall -g -c -o pirateManagement.o pirateManagement.c
@@ -25,11 +25,14 @@ commandParser.o: commandParser.c satComsParse.h
 
 optfft.o: optfft.c optfft.h tables.c
 	gcc -Wall -g -c -o optfft.o optfft.c
+	
+fft.o: fft.c fft.h
+	gcc -Wall -g -c -o fft.o fft.c -lm
 
 transportDistance.o: transportDistance.c
 	gcc -Wall -g -c -o transportDistance.o transportDistance.c
 
-imageCapture.o: imageCapture.c optfft.h
+imageCapture.o: imageCapture.c optfft.h fft.h
 	gcc -Wall -g -c -o imageCapture.o imageCapture.c
 
 batteryTemp.o: batteryTemp.c
