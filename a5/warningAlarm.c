@@ -13,6 +13,7 @@
 #include "dataStructs.h"
 #include "warningAlarm.h"
 #include "nonBlockingKeys.h"
+#include "TCB.h"
 
 
 // declares the regions for batteryLvl and fuelLvl
@@ -54,6 +55,7 @@ int stateled2 = 0;
 int stateled1 = 0;
 
 bool warningBattTemp = false;
+bool everythingsMELTING = false;
 
 void warningAlarm(void *warnStruct) {
     // 1.1 Opens the led files and checks they were opened successfully
@@ -153,6 +155,7 @@ void warningAlarm(void *warnStruct) {
             timer_fuel++;
 		}
 	} else {
+		everythingsMELTING = true;		
 		readAck();
 		ledState(led3, OFF);
 		
@@ -199,7 +202,6 @@ void readAck() {
        pString[strcspn(pString, "\n")] = 0;
 	}	
 	if (!warningCmd(pString[0])) {
-		//if (consoleModeCmd(pString[0]) || motorSpeedCmd(pString[0]) || satVehicleCmd(pString[0])) {
 		if (checkAll(pString[0])) {			
 			int i = 0;
 			for (i = strlen(pString); i >= 0; i--) {
@@ -207,8 +209,10 @@ void readAck() {
 			}			
 		}
 	} else {
-		//printf("Warning Alarm: Acknowledge Received\n");
-		warningBattTemp = false;		
+		printf(BLK_BG"\e[H\e[2J"RST);
+		printf("Warning Alarm: "GRN"Acknowledge finally received. "RST"Took you long enough grandpa.\n");
+		warningBattTemp = false;
+		everythingsMELTING = false;
 		tempFlag = 0;
 		timer_15 = 0;
 	}	

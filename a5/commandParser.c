@@ -58,6 +58,8 @@ bool isValidPayload(char cmd, char *payload);
 // Returns true if test is a valid measurement command,
 // and false otherwise.
 bool isValidMeasurement(char test);
+void userPrint(char c);
+
 
 
 void maskBit(unsigned int *thrusterCommand) {
@@ -101,19 +103,22 @@ void commandParser(void *cmdStruct) {
         ack[0] = isValidPayload(cmd, payload) ? OK : ERR;
         ack[2] = MEASURE;
         *transmit = isValidPayload(cmd, payload) ? toupper(*payload) : ERR;  // e.g. 'F' (fuel level), 'B' (battery level), etc
-        break;
+		userPrint(*transmit);
+		break;
       case START:
         // Start Command!
         ack[0] = AddMeasureTasks() ? OK : ERR;
         ack[2] = START;
         *transmit = SHOW_EMPTY;
-		
+        printf(GRN"Starting"RST" embedded tasks...\n");		
         break;
       case STOP:
         // Pause Command!
         ack[0] = RemoveMeasureTasks() ? OK : ERR;
         ack[2] = STOP;
         *transmit = NO_MEASURE;
+        printf(RED"Stopping"RST" embedded tasks...\n");		
+		
         break;
       case DISPLAY:
         // Display Command
@@ -132,6 +137,8 @@ void commandParser(void *cmdStruct) {
 	          RemoveTCB(queue, &consoleDisplayTCB);
           }
         }
+        printf("Turning on/off"MAG" Satellite Display...\n"RST);		
+		
         break;
       default:
         // Bad command (e.g. user enters 'Z' or something)
@@ -203,7 +210,7 @@ void commandParser(void *cmdStruct) {
     return true;
   }
 
-  bool isValidMeasurement(char test){
+bool isValidMeasurement(char test){
     return (test == SHOW_FUEL) ||
            (test == SHOW_BATT) ||
            (test == SHOW_PCON) ||
@@ -213,3 +220,32 @@ void commandParser(void *cmdStruct) {
            (test == SHOW_IMAG) ||
            (test == SHOW_PIRATE);
   }
+void userPrint(char c) {
+	  switch(c) {
+		case SHOW_FUEL:
+            printf("Showing measurements for "CYN"fuel level...\n"RST);
+			break;
+		case SHOW_BATT:
+            printf("Showing measurements for "CYN"battery level...\n"RST);
+			break;			
+		case SHOW_PCON:
+            printf("Showing measurements for "CYN"power consumption...\n"RST);
+			break;			
+		case SHOW_TEMP:
+            printf("Showing measurements for "CYN"battery temperature...\n"RST);
+			break;			
+		case SHOW_PANEL:
+            printf("Showing measurements for "CYN"solar panels\n"RST);	
+			break;			
+		case SHOW_DIST:
+            printf("Showing measurements for "CYN"transport distance...\n"RST);	
+			break;			
+		case SHOW_IMAG:
+            printf("Showing measurements for "CYN"image frequency...\n"RST);
+			break;			
+		case SHOW_PIRATE:		  
+            printf("Showing measurements for "CYN"dem alien piratez...\n"RST);	
+			break;
+	  }
+	  
+}
