@@ -88,6 +88,8 @@ void vehicleComms(void *vehicleStruct) {
 	} else if (*command == SEND_IMAGE) {
 		// get buffer pointer and print 
 		int i;
+		printf("P\n");
+		
 		for (i = 0; i < 16; i++) {
 			printf("processImage[%d] = %d\n", i, processImage[i]); 
 		}

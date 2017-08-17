@@ -27,4 +27,5 @@ void satelliteComs(void *sData);
 */
 //void maskBit(unsigned int *thrusterCommand);
 bool validCmd(char c);
+void clearScreen(int fd1, char c);
 #endif

@@ -37,19 +37,20 @@
     annunciation, passing them to terminalComs.c
 */
 extern bool warningBattTemp;
-void sendToPrint(void *consoleStruct);
+void sendToPrint(char mode, void *consoleStruct);
 static int state;
 
-void consoleDisplay(void *consoleStruct) {
-	// Only run this function every major cycle
-	/*
-	static unsigned long start = 0;
-	if((GLOBALCOUNTER - start) % MAJOR_CYCLE != 0) {
-      return;
-	}
-    start = GLOBALCOUNTER;
-	*/
+#define RED   "\x1B[31m"
+#define GRN   "\x1B[32m"
+#define YEL   "\x1B[33m"
+#define BLU   "\x1B[34m"
+#define MAG   "\x1B[35m"
+#define CYN   "\x1B[36m"
+#define WHT   "\x1B[37m"
+#define RST "\x1B[0m"
 
+
+void consoleDisplay(void *consoleStruct) {
     int flags = fcntl(STDIN_FILENO, F_GETFL, 0);
 	fcntl(STDIN_FILENO, F_SETFL, flags | O_NONBLOCK);
 	
@@ -73,10 +74,10 @@ void consoleDisplay(void *consoleStruct) {
 			}
 		}	
 	}
-	sendToPrint(consoleStruct);
+	sendToPrint(pString[0], consoleStruct);
 }
 
-void sendToPrint(void *consoleStruct) {
+void sendToPrint(char mode, void *consoleStruct) {
     // 1.1 Assign the data of consoleStruct into local variables	
     consoleData *cData = (consoleData*)consoleStruct;	
     bool *fuelLow = cData->fuelLowPtr;
@@ -93,35 +94,35 @@ void sendToPrint(void *consoleStruct) {
 	
     // 1.2 Define necessary string storage	
     char *solarPanelString = (*solarPanelState) ? "Deployed":"Retracted";
-    char *fuelString = (*fuelLow)? "YES":"NO";
-    char *battString = (*batteryLow)? "YES":"NO";
-    char *tempString = (warningBattTemp)? "OVERHEATING!":"OK";	
+    char *fuelString = (*fuelLow)?        RED"YES" RST:GRN"NO"RST;
+    char *battString = (*batteryLow)?     RED"YES" RST:GRN"NO"RST;
+    char *tempString = (warningBattTemp)? RED"HOT!"RST:GRN"OK"RST;	
 	char output[MAX];	
 	if (state == STATE_SAT) {
 	sprintf(output, "**Satellite Status\n"
-					"Solar Panels:      %s\n"
-					"Battery Level:     %u\n"
-					"Fuel Level:        %hu\n"
-					"Power Consumption: %hu\n"
-					"Power Generation:  %hu\n"
-					"Vehicle Distance:  %d\n"
-					"Battery Temp 1:    %d\n"
-					"Battery Temp 2:    %d\n"
-					"Pirate Proximity:  %hu\n",
+					"Solar Panels:      %9s\n"
+					"Battery Level:     %2u\n"
+					"Fuel Level:        %3hu\n"
+					"Power Consumption: %2hu\n"
+					"Power Generation:  %2hu\n"
+					"Vehicle Distance:  %4d\n"
+					"Battery Temp 1:    %2d\n"
+					"Battery Temp 2:    %2d\n"
+					"Pirate Proximity:  %3hu\n",
 					 solarPanelString, *batteryLvl, *fuelLvl, *pConsume, *pGenerate,
 					 *distance, *batteryTmp1, *batteryTmp2, *pirateDistance);
 	} else if (state == STATE_ANN) {
 		sprintf(output, "Annunciaton\n"
-						"Battery Low:         %s\n"
-						"Fuel Low:            %s\n"
-						"Battery Temperature: %s\n",
+						"Battery Low:         %3s\n"
+						"Fuel Low:            %3s\n"
+						"Battery Temperature: %4s\n",
 						 battString, fuelString, tempString);		
 	} else {
 		sprintf(output, "Press %c for Satellite Status\n"
                         "Press %c for Annunciation Mode\n", 
 						SATELLITESTATUS, ANNUNCIATION);				
 	}
-	terminalComs(output);
+	terminalComs(mode, output);
 	
 }
 

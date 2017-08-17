@@ -22,12 +22,6 @@
 extern signed int presentationBuffer[16];
 
 void imageCapture(void *imageStruct) {
-	// Only run this function every major cycle
-	/*static unsigned long start = 0;
-	if((GLOBALCOUNTER - start) % MAJOR_CYCLE != 0) {
-      return;
-	}
-    start = GLOBALCOUNTER;*/
     imageData *iData = (imageData*)imageStruct;
     int *processImage = iData->processImagePtr;
 	COMPLEX samples[256];

@@ -32,6 +32,25 @@
 
 #define DEBUG
 int fd = 0;
+#define RED   "\x1B[31m"
+#define GRN   "\x1B[32m"
+#define YEL   "\x1B[33m"
+#define BLU   "\x1B[34m"
+#define MAG   "\x1B[35m"
+#define CYN   "\x1B[36m"
+#define WHT   "\x1B[37m"
+#define BOLD  "\x1B[1m"
+#define ULINE "\x1B[4m"
+#define RST   "\x1B[0m"
+
+#define BLK_BG  "\x1B[40m"
+#define RED_BG  "\x1B[41m"
+#define GRN_BG  "\x1B[42m"
+#define YEL_BG  "\x1B[43m"
+#define BLU_BG  "\x1B[44m"
+#define MAG_BG  "\x1B[45m"
+#define CYN_BG  "\x1B[46m"
+#define WHT_BG  "\x1B[47m"
 
 extern bool warningBattTemp;
 
@@ -83,6 +102,8 @@ void satelliteComs(void *satStruct) {
 		dprintf(fd1, "\033[2J");
 		dprintf(fd1, "\033[1;1H");
 	    firstTime--;
+	    dprintf(fd1, "\e[?25l"); // hides cursor
+		
 	}
 	
 	int flags = fcntl(STDIN_FILENO, F_GETFL, 0);
@@ -121,66 +142,101 @@ void satelliteComs(void *satStruct) {
 			}
         }  
     }
-	
-    char *fuelString = (*fuelLow)? "YES":"NO";
-    char *battString = (*batteryLow)? "YES":"NO";
-    char *solarPanelString = (*solarPanelState) ? "Deployed":"Retracted";	
-	char *warnBattString = warningBattTemp? "OVERHEATING!":"OK";	
+    clearScreen(fd1, *transmit);
+    char *solarPanelString = (*solarPanelState) ? "Deployed":"Retracted";
+    char *fuelString = (*fuelLow)?        RED"YES" RST:GRN"NO"RST;
+    char *battString = (*batteryLow)?     RED"YES" RST:GRN"NO"RST;
+    char *tempString = (warningBattTemp)? RED"HOT!"RST:GRN"OK"RST;
 	
     time_t t = time(NULL);
     struct tm tm = *localtime(&t);
-    dprintf(fd1, "\033[2J");	
     dprintf(fd1, "\033[1;1H");
-    dprintf(fd1, "EARTH REMOTE TERMINAL\n");
-    dprintf(fd1, "%d-%d-%d %d:%d:%d\n", 
+    dprintf(fd1, BOLD"EARTH REMOTE TERMINAL\n");
+    dprintf(fd1, "%d-%d-%d %d:%d:%2d\n", 
 	             tm.tm_year + 1950, 
 				 tm.tm_mon + 1, 
 				 tm.tm_mday, 
 				 tm.tm_hour, 
 				 tm.tm_min, 
 				 tm.tm_sec);
-    dprintf(fd1, "Operator:          Xxpu$$y$layer69xX\n"
-	             "--------------------------------------\n\n");	
-    dprintf(fd1, "Battery Low:       %s\n"
-	             "Fuel Low:          %s\n"
-    	         "Battery Over Temp: %s\n", 
-				 battString, fuelString, warnBattString);				 
-	
-	switch(*transmit) {
+    dprintf(fd1, "Operator:          Xxpu$$y$layer69xX"RST"\n\n");	
+    dprintf(fd1, "Battery Low:       %3s\n"
+	             "Fuel Low:          %3s\n"
+    	         "Battery Over Temp: %4s\n", 
+				 battString, fuelString, tempString);
+	if (strstr(ack, "A") || strstr(ack, "E")) {
+		dprintf(fd1, BOLD"\nReceived from Parser: %s\nNow displaying....:\n"RST, ack);
+	}	
+    int i;				 
+	switch(*transmit) {	
 		case SHOW_FUEL:
-		    dprintf(fd1, "Fuel Level: %hu\n", *fuelLvl);
+		    if (*fuelLvl > 50) {
+			    dprintf(fd1, "Fuel Level: "GRN"%3hu\n"RST, *fuelLvl);
+			} else if (*fuelLvl < 10) {
+			    dprintf(fd1, "Fuel Level: "RED"%3hu\n"RST, *fuelLvl);				
+			} else {
+			    dprintf(fd1, "Fuel Level: "YEL"%3hu\n"RST, *fuelLvl);
+			}
 			break;
 		case SHOW_BATT:
-		    dprintf(fd1, "Battery Level: %hu\n", *batteryLvl);
+		    if (*batteryLvl > 18) {
+			    dprintf(fd1, "Battery Level: "GRN"%3hu\n"RST, *batteryLvl);
+			} else if (*batteryLvl < 4) {
+			    dprintf(fd1, "Battery Level: "RED"%3hu\n"RST, *batteryLvl);				
+			} else {
+			    dprintf(fd1, "Battery Level: "YEL"%3hu\n"RST, *batteryLvl);
+			}		
 			break;
         case SHOW_PCON:
-		    dprintf(fd1, "Power Consumed: %hu\n", *pConsume);
-            break;			
+		    dprintf(fd1, "Power Consumed: %2hu\n", *pConsume);
+            break;
 		case SHOW_TEMP:		
-		    dprintf(fd1, "Battery Temp 1: %d\n"
-			             "Battery Temp 2: %d\n", 
+		    dprintf(fd1, "Battery Temp 1: %2d\n"
+			             "Battery Temp 2: %2d\n", 
 						 *batteryTmp1, *batteryTmp2);
 			break;					
 		case SHOW_PANEL:
-		    dprintf(fd1, "Solar Panels: %s\n", solarPanelString);
+		    dprintf(fd1, "Solar Panels: %9s\n", solarPanelString);
 			break;			
 		case SHOW_DIST:
-		    dprintf(fd1, "Transport Distance: %d\n", *distance);
+		    if (*distance < 500) {
+		        dprintf(fd1, "Transport Distance: "RED"%4d\n"RST, *distance);
+			} else {
+		        dprintf(fd1, "Transport Distance: %4d\n", *distance);				
+			}
 			break;			
 		case SHOW_IMAG:
-		    dprintf(fd1, "Image Frequency: %hu\n", *processImage);
+  		        dprintf(fd1, "Image Frequencies:\n");		
+		    for (i = 0; i < 16; i++) {
+  		        dprintf(fd1, "%5hu ", processImage[i]);
+                if ((i+1) % 4 == 0) {
+	  		        dprintf(fd1, "\n");
+				}
+			}
 			break;			
 		case SHOW_PIRATE:
-		    dprintf(fd1, "Pirate Distance: %hu\n", *pirateDistance);
+		    if (*pirateDistance < 5) {
+		        dprintf(fd1, "Pirate Distance: "RED"%4hu\n"RST, *pirateDistance);
+			} else if (*pirateDistance < 30) {
+		        dprintf(fd1, "Pirate Distance: "YEL"%4hu\n"RST, *pirateDistance);				
+			} else {
+		        dprintf(fd1, "Pirate Distance: "WHT"%4hu\n"RST, *pirateDistance);								
+			}
 			break;			
 	}
 	if (strstr(response, "A")) {  
 	    dprintf(fd1, "\nVehicle Response: %c %c\n", *response, *command);
     }
-	if (strstr(ack, "A") || strstr(ack, "E")) {
-		dprintf(fd1, "\n\nFrom Parser: %s\n", ack);
+
+}
+
+void clearScreen(int fd1, char c){
+	static char prev;
+	if (prev != c) {
+        dprintf(fd1, "\033[2J");
+        dprintf(fd1, "\033[1;1H");
+	    prev = c;
 	}
-	 
 }
 
 bool validCmd(char c) {

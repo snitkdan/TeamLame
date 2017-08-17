@@ -17,7 +17,9 @@
 FILE *fp = NULL; // declare file here
 int fd0; // for earth terminal
 
-int terminalComs(char *output) {
+void clearTerminal(int fd0, char c);
+
+int terminalComs(char mode, char *output) {
     // 1. Declare storage and data to be used
     char buffer[MAX];
     static int firstTime = 0;
@@ -32,13 +34,14 @@ int terminalComs(char *output) {
             exit(1);
         }		 
         fd0 = open("/dev/pts/2", O_WRONLY);
+	    dprintf(fd0, "\e[?25l"); // hides cursor
+        dprintf(fd0, "\033[2J");
+        dprintf(fd0, "\033[1;1H");		
 	firstTime++;
 	}
 
     // 3. error handling: check if file and terminal ports exist 
     if (fp && fd0) {
-	dprintf(fd0, "\033[2J");
-	dprintf(fd0, "\033[1;1H");
 
 	// 3.1 Write data to the file
         fseek(fp, 0, SEEK_SET);	 		
@@ -49,10 +52,21 @@ int terminalComs(char *output) {
         fread(buffer, 1, MAX, fp);
 	
         // 3.3 Transmit buffer to terminal
+        clearTerminal(fd0, mode);
+        dprintf(fd0, "\033[1;1H");		
         dprintf(fd0, "%s\n", buffer);
 		return (0);
 	} else {
 		fprintf(stderr, "ERROR, fp, fd0 and/or fd1 not opened correctly\n");
 		exit(1);
+	}
+}
+
+void clearTerminal(int fd0, char c){
+	static char prev;
+	if (prev != c && (c == 'z' || c == 'x')) {
+        dprintf(fd0, "\033[2J");
+        dprintf(fd0, "\033[1;1H");
+	    prev = c;
 	}
 }
