@@ -181,6 +181,11 @@ void commandParser(void *cmdStruct) {
   }
 
   bool RemoveMeasureTasks() {
+    // 1. Disable data collecting interrupts
+     if (signal(SIGINT, SIG_DFL) == SIG_ERR ||
+         signal(SIGUSR1, SIG_DFL) == SIG_ERR) {
+       return false;
+     }
     // 2. Add measurement tasks to the task queue
 	if (!isPaused) {
     RemoveTCB(queue, &thrusterSubsystemTCB);
@@ -196,11 +201,7 @@ void commandParser(void *cmdStruct) {
 	vehicleCommsInQueue = false;
 	}
 	isPaused = true;
-	 // 1. Disable data collecting interrupts
-    if (signal(SIGINT, SIG_DFL) == SIG_ERR ||
-        signal(SIGUSR1, SIG_DFL) == SIG_ERR) {
-      return false;
-    }
+
     return true;
   }
 
