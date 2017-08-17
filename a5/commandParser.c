@@ -82,7 +82,6 @@ void commandParser(void *cmdStruct) {
   // 2. Parse the input
   char cmd = toupper(received[0]);  // e.g. 'M', 'T', 'D', etc.
   char *payload = &received[1];  // e.g. '12345', 'F' (for fuel level), etc
-	printf("cmd = %c, payload = %s\n", cmd, payload);
 	ack[1] = ' ';
   ack[3] = '\0';
 	#ifdef WHEN_YOURE_READY
@@ -130,7 +129,7 @@ void commandParser(void *cmdStruct) {
         } else {
           if (ContainsTCB(queue, &consoleDisplayTCB)) {
 	          dprintf(fd0, "\033[2J");
-	          dprintf(fd0, "\033[1;1H");            
+	          dprintf(fd0, "\033[1;1H");
 	          RemoveTCB(queue, &consoleDisplayTCB);
           }
         }
@@ -143,7 +142,6 @@ void commandParser(void *cmdStruct) {
         break;
     }
 	  #endif
-	printf("Ack: %s, Transmit: %s\n", ack, transmit);
     *commandOn = false;
   }
 
@@ -173,12 +171,11 @@ void commandParser(void *cmdStruct) {
 	if (isPaused) {
     AppendTCB(queue, &thrusterSubsystemTCB);
     AppendTCB(queue, &powerSubsystemTCB);
-    AppendTCB(queue, &vehicleCommsTCB); 
+    AppendTCB(queue, &vehicleCommsTCB);
 	vehicleCommsInQueue = true;
     AppendTCB(queue, &pirateDetectionTCB);
 	}
 	isPaused = false;
-	printf("Number of elements in the queue @ S: %u\n", NumTasksInTaskQueue(queue));  
     // 3. Initialize Hardware
     return true;
   }
@@ -197,8 +194,7 @@ void commandParser(void *cmdStruct) {
 	RemoveTCB(queue, &pirateDetectionTCB);
 	RemoveTCB(queue, &pirateManagementTCB);
 	vehicleCommsInQueue = false;
-	}	
-	printf("Number of elements in the queue @ P: %u\n", NumTasksInTaskQueue(queue));
+	}
 	isPaused = true;
 	 // 1. Disable data collecting interrupts
     if (signal(SIGINT, SIG_DFL) == SIG_ERR ||
