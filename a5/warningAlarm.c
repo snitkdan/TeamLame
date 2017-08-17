@@ -14,6 +14,7 @@
 #include "warningAlarm.h"
 #include "nonBlockingKeys.h"
 #include "TCB.h"
+#include "pwm_utils.h"
 
 
 // declares the regions for batteryLvl and fuelLvl
@@ -40,6 +41,13 @@
 
 #define BEAGLEBONE
 #define CMD_SIZE 20
+#define PWM_PIN "P8_19"
+#define HNUM 17
+
+#define PERIOD 500000
+#define DUTY_OFF 0
+#define DUTY_ON 10000
+
 // globally defines the led files here
 FILE *led1 = NULL;
 FILE *led2 = NULL;
@@ -94,6 +102,7 @@ void warningAlarm(void *warnStruct) {
 	if (tempFlag != 2) {
 		// 3.1.1 If overheating and under 15 seconds unacknowledged
 		if (tempFlag == 1) {
+	        setPWMProperty(PWM_PIN, "duty", DUTY_ON, HNUM);
 			warningBattTemp = true;
 			if (timer_15 == GC_FIFTEEN) {
 				tempFlag = 2;
@@ -205,6 +214,7 @@ void readAck() {
 			}			
 		}
 	} else {
+	    setPWMProperty(PWM_PIN, "duty", DUTY_OFF, HNUM);		
 		printf(BLK_BG"\e[H\e[2J"RST);
 		printf("Warning Alarm: "GRN"Acknowledge finally received. "RST"Took you long enough grandpa.\n");
 		warningBattTemp = false;

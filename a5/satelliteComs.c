@@ -34,12 +34,14 @@ extern bool everythingsMELTING;
 extern bool getFrequencies;
 
 void satelliteComs(void *satStruct) {
+	/*
 	// Only runs this function every global cycle
 	static unsigned long start = 0;
 	if((GLOBALCOUNTER - start) % MAJOR_CYCLE != 0) {
       return;
 	}
     start = GLOBALCOUNTER;
+	*/
     // 1. Assign the data of sData into local variables
     satData *sData = (satData*)satStruct;
     bool *fuelLow = sData->fuelLowPtr;
