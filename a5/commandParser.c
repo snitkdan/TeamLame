@@ -81,7 +81,6 @@ void commandParser(void *cmdStruct) {
   // 2. Parse the input
   char cmd = toupper(received[0]);  // e.g. 'M', 'T', 'D', etc.
   char *payload = &received[1];  // e.g. '12345', 'F' (for fuel level), etc
-	printf("cmd = %c, payload = %s\n", cmd, payload);
 	ack[1] = ' ';
   ack[3] = '\0';
 	#ifdef WHEN_YOURE_READY
@@ -89,7 +88,6 @@ void commandParser(void *cmdStruct) {
       case THRUSTER:
         // Thruster Command!
         if (isValidPayload(cmd, payload)) {
-		      printf("INSIDE THRUSTER\n");
           ack[0] = OK;
           *thrusterCommand = atoi(payload);
           maskBit(thrusterCommand);
@@ -101,28 +99,24 @@ void commandParser(void *cmdStruct) {
         break;
       case MEASURE:
         // Measurement Command!
-	    printf("INSIDE MEASURE\n");
         ack[0] = isValidPayload(cmd, payload) ? OK : ERR;
         ack[2] = MEASURE;
         *transmit = isValidPayload(cmd, payload) ? toupper(*payload) : ERR;  // e.g. 'F' (fuel level), 'B' (battery level), etc
         break;
       case START:
         // Start Command!
-		printf("INSIDE START\n");
         ack[0] = AddMeasureTasks() ? OK : ERR;
         ack[2] = START;
         *transmit = SHOW_EMPTY;
         break;
       case STOP:
         // Pause Command!
-	    printf("INSIDE STOP\n");
         ack[0] = RemoveMeasureTasks() ? OK : ERR;
         ack[2] = STOP;
         *transmit = SHOW_EMPTY;
         break;
       case DISPLAY:
         // Display Command
-		printf("INSIDE DISPLAY\n");
         ack[0] = OK;  // always successful (?)
         ack[2] = DISPLAY;
         *transmit = SHOW_EMPTY;
@@ -134,7 +128,7 @@ void commandParser(void *cmdStruct) {
         } else {
           if (ContainsTCB(queue, &consoleDisplayTCB)) {
 	          dprintf(fd0, "\033[2J");
-	          dprintf(fd0, "\033[1;1H");            
+	          dprintf(fd0, "\033[1;1H");
 	          RemoveTCB(queue, &consoleDisplayTCB);
           }
         }
@@ -147,7 +141,6 @@ void commandParser(void *cmdStruct) {
         break;
     }
 	  #endif
-	printf("Ack: %s, Transmit: %s\n", ack, transmit);
     *commandOn = false;
   }
 
@@ -177,12 +170,11 @@ void commandParser(void *cmdStruct) {
 	if (isPaused) {
     AppendTCB(queue, &thrusterSubsystemTCB);
     AppendTCB(queue, &powerSubsystemTCB);
-    AppendTCB(queue, &vehicleCommsTCB); 
+    AppendTCB(queue, &vehicleCommsTCB);
 	vehicleCommsInQueue = true;
     AppendTCB(queue, &pirateDetectionTCB);
 	}
 	isPaused = false;
-	printf("Number of elements in the queue @ S: %u\n", NumTasksInTaskQueue(queue));  
     // 3. Initialize Hardware
     return true;
   }
@@ -201,8 +193,7 @@ void commandParser(void *cmdStruct) {
 	RemoveTCB(queue, &pirateDetectionTCB);
 	RemoveTCB(queue, &pirateManagementTCB);
 	vehicleCommsInQueue = false;
-	}	
-	printf("Number of elements in the queue @ P: %u\n", NumTasksInTaskQueue(queue));
+	}
 	isPaused = true;
 	 // 1. Disable data collecting interrupts
     if (signal(SIGINT, SIG_DFL) == SIG_ERR ||
