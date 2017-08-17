@@ -23,6 +23,7 @@
 
 #define STATE_SAT 1
 #define STATE_ANN 2
+#define ONLY_ANN 3
 
 //#define OFF
 /*
@@ -37,6 +38,8 @@
     annunciation, passing them to terminalComs.c
 */
 extern bool warningBattTemp;
+extern bool isPaused;
+void returnToBuffer(char *pString);
 void sendToPrint(char mode, void *consoleStruct);
 static int state;
 
@@ -50,21 +53,32 @@ void consoleDisplay(void *consoleStruct) {
        // remove newline
        pString[strcspn(pString, "\n")] = 0;
 	}
-	if (pString[0] == SATELLITESTATUS) {
+	if (isPaused) {
+		state = ONLY_ANN;
+		if (pString[0] == SATELLITESTATUS || pString[0] == ANNUNCIATION) {
+			printf(YEL"ConsoleDisplay: Cannot switch modes, measurements inactive...\n"RST);
+		} else {
+		    returnToBuffer(pString);
+		}
+	} else if (pString[0] == SATELLITESTATUS) {
 		printf("ConsoleDisplay: Showing Satellite Status...\n");
         state = STATE_SAT;
 	} else if (pString[0] == ANNUNCIATION) {
 		printf("ConsoleDisplay: Showing Annunciation Mode...\n");
         state = STATE_ANN;
 	} else {
-		if(checkAll(pString[0])) {
-			int i = 0;
-			for (i = strlen(pString); i >= 0; i--) {
-			   ungetc(pString[i], stdin);
-			}
-		}	
+		returnToBuffer(pString);	
 	}
 	sendToPrint(pString[0], consoleStruct);
+}
+
+void returnToBuffer(char *pString) {
+	if(checkAll(pString[0])) {
+		int i = 0;
+		for (i = strlen(pString); i >= 0; i--) {
+			ungetc(pString[i], stdin);
+		}
+	}		
 }
 
 void sendToPrint(char mode, void *consoleStruct) {
@@ -84,13 +98,14 @@ void sendToPrint(char mode, void *consoleStruct) {
 	
     // 1.2 Define necessary string storage	
     char *solarPanelString = (*solarPanelState) ? "Deployed":"Retracted";
-    char *fuelString = (*fuelLow)?        RED"YES" RST:GRN"NO"RST;
-    char *battString = (*batteryLow)?     RED"YES" RST:GRN"NO"RST;
-    char *tempString = (warningBattTemp)? RED"HOT!"RST:GRN"OK"RST;	
+    char *fuelString = (*fuelLow)?         RED"YES" RST:GRN"NO"RST;
+    char *battString = (*batteryLow)?      RED"YES" RST:GRN"NO"RST;
+    char *tempString = (warningBattTemp)?  RED"HOT!"RST:GRN"OK"RST;	
 	char output[MAX];	
 	if (state == STATE_SAT) {
-	sprintf(output, "**Satellite Status\n"
-					"Solar Panels:      %9s\n"
+
+	sprintf(output, WHT_BG BLK BOLD"Satellite Status\n"RST
+			  WHT_BG BLK"Solar Panels:      %9s\n"
 					"Battery Level:     %2u\n"
 					"Fuel Level:        %3hu\n"
 					"Power Consumption: %2hu\n"
@@ -102,13 +117,21 @@ void sendToPrint(char mode, void *consoleStruct) {
 					 solarPanelString, *batteryLvl, *fuelLvl, *pConsume, *pGenerate,
 					 *distance, *batteryTmp1, *batteryTmp2, *pirateDistance);
 	} else if (state == STATE_ANN) {
-		sprintf(output, "Annunciaton\n"
-						"Battery Low:         %3s    \n"
-						"Fuel Low:            %3s    \n"
-						"Battery Temperature: %4s    \n",
-						 battString, fuelString, tempString);		
+		sprintf(output, WHT_BG BLK BOLD"Annunciaton\n"RST
+				  WHT_BG BLK"Battery Low:         %3s"WHT_BG"    \n"
+				  WHT_BG BLK"Fuel Low:            %3s"WHT_BG"    \n"
+				  WHT_BG BLK"Battery Temperature: %4s"WHT_BG"    \n",
+						 battString, fuelString, tempString);
+	} else if (state == ONLY_ANN) {	
+		sprintf(output, WHT_BG BOLD BLK"Annunciaton\n"RST
+				  WHT_BG BLK"Battery Low:         %3s"WHT_BG"    \n"
+				  WHT_BG BLK"Fuel Low:            %3s"WHT_BG"    \n"
+				  WHT_BG BLK"Battery Temperature: %4s"WHT_BG"    \n"
+				  WHT_BG MAG"NOTE: Measurement tasks are inactive.\n"
+						 "Start measurements to show satellite status\n"RST,
+						 battString, fuelString, tempString);	
 	} else {
-		sprintf(output, "Press %c for Satellite Status\n"
+		sprintf(output, WHT_BG BLK"Press %c for Satellite Status\n"
                         "Press %c for Annunciation Mode\n", 
 						SATELLITESTATUS, ANNUNCIATION);				
 	}
