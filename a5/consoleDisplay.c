@@ -61,10 +61,10 @@ void consoleDisplay(void *consoleStruct) {
 		    returnToBuffer(pString);
 		}
 	} else if (pString[0] == SATELLITESTATUS) {
-		printf("ConsoleDisplay: Showing Satellite Status...\n");
+		printf("ConsoleDisplay: Showing "MAG"Satellite Status...\n"RST);
         state = STATE_SAT;
 	} else if (pString[0] == ANNUNCIATION) {
-		printf("ConsoleDisplay: Showing Annunciation Mode...\n");
+		printf("ConsoleDisplay: Showing "CYN"Annunciation Mode...\n"RST);
         state = STATE_ANN;
 	} else {
 		returnToBuffer(pString);	

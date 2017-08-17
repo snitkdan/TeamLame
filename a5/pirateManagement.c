@@ -44,9 +44,18 @@ void pirateManagement(void *pmStruct) {
 			return;
 		}
 		if (*pirateDistance <= 5 && pString[0] == 'o') {
-			printf("PHOTONS BITCH\n");		    
+			dprintf(fd0, "\e[H\e[2J");
+			int i = 0;
+			printf(RED BOLD"Photons initiating...\n"RST);			
+            for (i = 0; i < 100; i++) { 			
+			    printf(BOLD"EAT "RED"P"YEL"H"GRN"O"CYN"T"MAG"O"WHT"N"RED"S "WHT "BITCHES "RST);
+            }
+			printf("\n\n");
+		    
 		} else if (*pirateDistance > 5 && pString[0] == 'p') {
-			printf("PHASORS BITCH\n");
+			dprintf(fd0, "\e[H\e[2J");			
+			printf(YEL BOLD"Phasors initiated.\n\n"RST);
+			
 		}
 	}
 	
