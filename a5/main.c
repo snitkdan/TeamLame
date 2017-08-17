@@ -30,10 +30,8 @@ void main(void) {
     extern TCB keyboardConsoleTCB;
     extern TCB batteryTempTCB;
     extern TCB transportDistanceTCB;
-    extern TCB imageCaptureTCB;
   	extern TCB pirateManagementTCB;
   	extern TCB commandParserTCB;
-
 
     extern bool solarPanelState;
     extern bool solarPanelDeploy;

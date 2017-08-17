@@ -37,22 +37,28 @@
     in the form of satelliteStatus and
     annunciation, passing them to terminalComs.c
 */
+// From warning Alarm
 extern bool warningBattTemp;
+// From startup (and commandParser)
 extern bool isPaused;
+// Function Prototypes
 void returnToBuffer(char *pString);
 void sendToPrint(char mode, void *consoleStruct);
-static int state;
+static int state; // Holds three states: STATE_SAT, STATE_ANN, ONLY_ANN
 
 void consoleDisplay(void *consoleStruct) {
+	// 1. Sets reading userinput to nonblocking
     int flags = fcntl(STDIN_FILENO, F_GETFL, 0);
 	fcntl(STDIN_FILENO, F_SETFL, flags | O_NONBLOCK);
 	
+	// 1.2 Reads user input
 	char pString[CMD_SIZE];
     pString[0] = '\0';	
 	if(fgets(pString, CMD_SIZE, stdin) != NULL) {
        // remove newline
        pString[strcspn(pString, "\n")] = 0;
 	}
+	// 2. Only prints annunciation mode with a note saying measurements are inactive
 	if (isPaused) {
 		state = ONLY_ANN;
 		if (pString[0] == SATELLITESTATUS || pString[0] == ANNUNCIATION) {
@@ -60,11 +66,13 @@ void consoleDisplay(void *consoleStruct) {
 		} else {
 		    returnToBuffer(pString);
 		}
+	// 2.2 Prints satellite status
 	} else if (pString[0] == SATELLITESTATUS) {
-		printf("ConsoleDisplay: Showing Satellite Status...\n");
+		printf("ConsoleDisplay: Showing "MAG"Satellite Status...\n"RST);
         state = STATE_SAT;
+	// 2.3 Prints annunciation
 	} else if (pString[0] == ANNUNCIATION) {
-		printf("ConsoleDisplay: Showing Annunciation Mode...\n");
+		printf("ConsoleDisplay: Showing "CYN"Annunciation Mode...\n"RST);
         state = STATE_ANN;
 	} else {
 		returnToBuffer(pString);	
@@ -102,8 +110,8 @@ void sendToPrint(char mode, void *consoleStruct) {
     char *battString = (*batteryLow)?      RED"YES" RST:GRN"NO"RST;
     char *tempString = (warningBattTemp)?  RED"HOT!"RST:GRN"OK"RST;	
 	char output[MAX];	
+    // 1.3 Store the necessary output based on the state
 	if (state == STATE_SAT) {
-
 	sprintf(output, WHT_BG BLK BOLD"Satellite Status\n"RST
 			  WHT_BG BLK"Solar Panels:      %s     \n"
 					"Battery Level:     %u     \n"
@@ -135,6 +143,7 @@ void sendToPrint(char mode, void *consoleStruct) {
                         "Press %c for Annunciation Mode\n", 
 						SATELLITESTATUS, ANNUNCIATION);				
 	}
+	// 1.4 Send to satellite to be displayed
 	terminalComs(mode, output);
 	
 }

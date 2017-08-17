@@ -248,5 +248,4 @@ void userPrint(char c) {
             printf("Showing measurements for "CYN"dem alien piratez...\n"RST);	
 			break;
 	  }
-	  
 }
