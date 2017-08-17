@@ -7,7 +7,6 @@
 #include <stdio.h>
 #include <stdbool.h>
 #include <stdint.h>
-
 #include <fcntl.h>
 #include <sys/stat.h>
 #include <sys/types.h>
@@ -15,7 +14,6 @@
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
-
 
 #include "TCB.h"
 #include "dataStructs.h"
@@ -27,26 +25,21 @@
 #define MAX 65536 // upper bound for 16 bit
 #define BUF_SIZE 16
 #define CMD_SIZE 20
-//extern unsigned int current_measurement;
-//extern unsigned int batteryBuff[BUF_SIZE];
 
-#define DEBUG
-int fd = 0;
-
-
+// from warningAlarm
 extern bool warningBattTemp;
-extern bool getFrequencies;
 extern bool everythingsMELTING;
 
+// from vehicleComs
+extern bool getFrequencies;
+
 void satelliteComs(void *satStruct) {
-	/*
 	// Only runs this function every global cycle
 	static unsigned long start = 0;
 	if((GLOBALCOUNTER - start) % MAJOR_CYCLE != 0) {
       return;
 	}
     start = GLOBALCOUNTER;
-	*/
     // 1. Assign the data of sData into local variables
     satData *sData = (satData*)satStruct;
     bool *fuelLow = sData->fuelLowPtr;
@@ -68,12 +61,7 @@ void satelliteComs(void *satStruct) {
 	unsigned int *pirateDistance = sData->pirateDistancePtr;
     char *ack = sData->ack;	
 
-    // 2. Retrieve random number, mask and assign thrusterCommand to it
-    *thrusterCommand = randomInteger(0, MAX) % MAX;
-    //maskBit(thrusterCommand);
-
-
-
+    // 2. Opens psuedoterminal for earth display terminal
 	static int fd1;
 	static int firstTime = 1;
 	if (firstTime == 1) {
@@ -82,13 +70,14 @@ void satelliteComs(void *satStruct) {
 		    fprintf(stderr, "SATCOMS: couldn't open fd1 earth terminal\n");
 		    exit(EXIT_FAILURE);
 	    }
-		dprintf(fd1, "\033[2J");
-		dprintf(fd1, "\033[1;1H");
+		dprintf(fd1, "\033[2J"); // clears display
+		dprintf(fd1, "\033[1;1H"); //sets cursor to top left
 	    firstTime--;
 	    dprintf(fd1, "\e[?25l"); // hides cursor
 		
 	}
 	
+	// 3. Reads user input
 	int flags = fcntl(STDIN_FILENO, F_GETFL, 0);
     fcntl(STDIN_FILENO, F_SETFL, flags | O_NONBLOCK);
 	char pString[CMD_SIZE];
@@ -125,6 +114,7 @@ void satelliteComs(void *satStruct) {
 			}
         }  
     }
+    // 3. Writes necessary information to terminal
     clearScreen(fd1, *transmit);
     char *solarPanelString = (*solarPanelState) ? "Deployed":"Retracted";
     char *fuelString = (*fuelLow)?        RED"YES" RST:GRN"NO"RST;
@@ -147,12 +137,14 @@ void satelliteComs(void *satStruct) {
 	             "Fuel Low:          %3s     \n"
     	         "Battery Over Temp: %4s     \n", 
 				 battString, fuelString, tempString);
-				 
+	
+    // 4. Checks if measurements are active, if not, returns	
 	if (*transmit == 'Q') {
 		dprintf(fd1, YEL"Measurements are currently inactive. Press %c to activate.\n"RST, START);
 		return;
 	}
 	
+	// 5.1 Checks if in stage 2 of overheating, flashes terminal window red and yellow
 	if (everythingsMELTING) {
 	    static int flash = 0;
 		if (flash == 1) {
@@ -162,16 +154,19 @@ void satelliteComs(void *satStruct) {
 		}
 	    printf(BLK"Lmao whatever dude. The satellite's melting now. Feel free to press 'a'.\n"RST);		
 		flash = 1 - flash;
+	// 5.2 Checks if in stage 1 of overheating, colors terminal window yellow
 	} else if (warningBattTemp) {
 		printf(YEL_BG"\e[H\e[2J");
 		printf(BLK"Battery overheating! Press 'a' to acknowledge!\n"RST);
 	}
 	
+	// 6. Checks and prints what commandParser sends back
 	if (strstr(ack, "A") || strstr(ack, "E")) {
 		dprintf(fd1, BOLD"\nReceived from Parser: %s\nNow displaying....:\n"RST, ack);
-	}	
-    int i;
-    	
+	}
+	
+	// 7. Checks and prints to terminal the information requested by user
+    int i;	
 	switch(*transmit) {	
 		case SHOW_FUEL:
 		    if (*fuelLvl > 50) {
@@ -233,12 +228,15 @@ void satelliteComs(void *satStruct) {
 			}
 			break;			
 	}
+	
+	// 8. Prints vehicle response 
 	if (strstr(response, "A")) {  
 	    dprintf(fd1, "\nVehicle Response: %c %c\n", *response, *command);
     }
 
 }
 
+// Clears screen (but only for a different input)
 void clearScreen(int fd1, char c){
 	static char prev;
 	if (prev != c) {
@@ -248,6 +246,7 @@ void clearScreen(int fd1, char c){
 	}
 }
 
+// Checks if the command is a valid "received" command for commandParser
 bool validCmd(char c) {
 	return c == START ||
 	       c == STOP ||

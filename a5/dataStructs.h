@@ -107,21 +107,7 @@ typedef struct batteryTempData {
 } tempData;
 
 typedef struct commandParserData {
-  bool *fuelLowPtr;
-  bool *batteryLowPtr;
-  bool *solarPanelStatePtr;
-  unsigned int *batteryLvlPtr;
-  unsigned short *fuelLvlPtr;
-  unsigned short *pConsumePtr;
-  unsigned short *pGeneratePtr;
   unsigned int *thrusterCommandPtr;
-  char *commandPtr;
-  char *responsePtr;
-  char *requestPtr;
-  unsigned int *distancePtr;
-  unsigned int *batteryTmp1;
-  unsigned int *batteryTmp2;
-  int *processImagePtr;
   char *received;
   char *transmit;
   bool *commandOnPtr;

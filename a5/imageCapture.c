@@ -39,28 +39,33 @@ void imageCapture(void *imageStruct) {
 	int i;
 	int j;
 	printf(BLU_BG BOLD"Running Image Capture...\n"RST);
-	fputs("\e[?25l", stdout); // hides cursor	
+	fputs("\e[?25l", stdout); // hides cursor
+
+    // Have to do my own custom ADC reading since readADC is too slow	
     char adc_val_path[50];
-    //sprintf(adc_val_path, "%s/%s%i/%s", "/sys/devices", "ocp.3/helper.", 15, "AIN3");
     FILE *adc_val = fopen("/sys/devices/ocp.3/helper.15/AIN3", "r");
-	
-	//float max = 0;
+	// 1. Measure a frequency (16 total)
 	for (j = 0; j < 16; j++) {
+		// 2. Read 256 samples from ADC 
 		for (i = 0; i < 256; i++) {
-			//voltReading = readADC(ACH, HNUM);
             fseek(adc_val,0,SEEK_SET);			
 			fscanf(adc_val, "%d", &voltReading);
 			fflush(adc_val);			
 			samples[i].real = voltReading - 847;
 			samples[i].imag = 0;
 		}
+		#ifdef STORE_MEASUREMENTS
         FILE *fp = fopen("measurement.txt", "w+"); 
 		for (i = 0; i < 256; i++) {
 			fprintf(fp, "%f\n", samples[i].real);
 		}
 		fclose(fp);
-    		
-		fft(samples, w, 8);		
+		#endif
+    	
+		// 3. Send samples to Float FFT
+		fft(samples, w, 8);
+
+        // 4. Find index of maximum magnitude (max mag^2 = real^2 + imag^2)		
 		int m_index = 0;
 		float mag = sqrt(samples[0].real * samples[0].real + samples[0].imag * samples[0].imag);
 		float curr_mag = 0;
@@ -72,15 +77,17 @@ void imageCapture(void *imageStruct) {
 			}
 		}
 
-		// Bin Wang's Algorithm
-		double fs = 950;
-		double N = 256;
-		double f;
+		// 5. Use Bin Wang's Algorithm
+		double fs = 950; // speed of the sysfs 
+		double N = 256; // length of samples
+		double f; 
 		f = fs * m_index / N;
+		
+		// 6. Store into buffer
 		presentationBuffer[currIndex] = f;
 		
+		// 7. Serve as loading screen for the users 
         printf("\rFrequencies Capture = %d / 16", j + 1); fflush(stdout);
-		
 		#endif
 		
 		//printf("presentationBuffer[%d] = %d processImage = %d\n", currIndex, presentationBuffer[currIndex], *processImage);
@@ -89,10 +96,10 @@ void imageCapture(void *imageStruct) {
     fclose(adc_val);
 	
 
-	// send W back
+	// 8. send W back
     processImage = presentationBuffer;	
-	printf("\nW\n");
-    fputs("\e[?25h", stdout);	
+	printf("\nImage Status: "GRN"W\n"RST);
+    fputs("\e[?25h", stdout); // make cursor reappear	
 	
     return;
 }

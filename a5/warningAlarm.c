@@ -46,11 +46,12 @@ FILE *led2 = NULL;
 FILE *led3 = NULL;
 
 static int tempFlag = 0; // 0: normal, 1: battery was over temperature waiting for acknowledge print onto terminal, 2: no acknowledge after 15 sec, flash lights 
+// Internal clocks based on the global counter
 static int timer_batt = 0;
 static int timer_fuel = 0;
 static int timer_15 = 0;
 static int timer_10 = 0;
-
+// Tracks if led is on or off
 int stateled2 = 0;
 int stateled1 = 0;
 
@@ -79,7 +80,6 @@ void warningAlarm(void *warnStruct) {
     unsigned int *batteryLvl = wData->batteryLvlPtr;
     unsigned int *fuelLvl = (unsigned int*) wData->fuelLvlPtr;
     bool *batteryOverTemp = wData->batteryOverTempPtr;
-
 	
     // 2. Determine in what region the battery/fuel level is (high, med, low)
     int battRegion = checkRegion(batteryLvl, batteryLowPtr);
@@ -88,10 +88,11 @@ void warningAlarm(void *warnStruct) {
 	// 3. Section for controlling the LEDS
 	if (*batteryOverTemp && tempFlag == 0) { // if tempFlag == 2, don't change it to 1
 		tempFlag = 1;
-		//tempFlag = 0;
 	}
 	
+	// 3.1 Section for normal led operation
 	if (tempFlag != 2) {
+		// 3.1.1 If overheating and under 15 seconds unacknowledged
 		if (tempFlag == 1) {
 			warningBattTemp = true;
 			if (timer_15 == GC_FIFTEEN) {
@@ -102,16 +103,13 @@ void warningAlarm(void *warnStruct) {
 			}
 			readAck();			
 		}
-	
 		if (battRegion == HIGH && fuelRegion == HIGH) {
-			// 3.1 both battery and fuel level are high
+			// 3.1.2 both battery and fuel level are high
 			ledState(led3, ON);
 			ledState(led2, OFF);
 			ledState(led1, OFF);
 		} else {
 			ledState(led3, OFF);
-
-
 			// 3.2.1 Declare statics to track the states
 			//       for LED2 and its relationship with Battery
 			if (battRegion == MED) {
@@ -136,7 +134,6 @@ void warningAlarm(void *warnStruct) {
 			}
 		    timer_batt++;
 			
-
 			// NOTE: the logic here is the same as the battery's
 			if (fuelRegion == MED) {
 				if (timer_fuel % GC_TWO == 0) {
@@ -155,6 +152,7 @@ void warningAlarm(void *warnStruct) {
             timer_fuel++;
 		}
 	} else {
+		// 4. 15 seconds has passed unacknowledged 
 		everythingsMELTING = true;		
 		readAck();
 		ledState(led3, OFF);
@@ -193,8 +191,6 @@ void flipLED(int force, FILE *ledFile, int *state) {
 }
 
 void readAck() {
-	//char c = getchar();
-	//char c = 'a';
     char pString[CMD_SIZE];
     pString[0] = '\0';	
 	if(fgets(pString, CMD_SIZE, stdin) != NULL) {

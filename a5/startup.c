@@ -117,7 +117,8 @@ TaskQueue queue;
 unsigned long GLOBALCOUNTER;
 
 void Initialize(void) {
-  printf("\x1B[40m""\e[H\e[2J""\x1B[0m");
+  // sets terminal to default black background, white text	
+  printf("\x1B[40m""\e[H\e[2J""\x1B[0m"); 
 
   // 1. Assign initial values to shared variables
   thrusterCommand = 0;
@@ -257,29 +258,13 @@ void Initialize(void) {
   temData.batteryTmp1 = batteryTmp1;
   temData.batteryTmp2 = batteryTmp2;
   //3.12 commandParser
-  cmData.fuelLowPtr = &fuelLow;
-  cmData.batteryLowPtr = &batteryLow;
-  cmData.solarPanelStatePtr = &solarPanelState;
-  cmData.batteryLvlPtr = batteryLvl;
-  cmData.fuelLvlPtr = &fuelLvl;
-  cmData.pConsumePtr = &pConsume;
-  cmData.pGeneratePtr = &pGenerate;
   cmData.thrusterCommandPtr = &thrusterCommand;
-  cmData.commandPtr = &command;
-  cmData.responsePtr = &response;
-  cmData.batteryTmp1 = batteryTmp1;
-  cmData.batteryTmp2 = batteryTmp2;
-  cmData.distancePtr = distance;
-  cmData.requestPtr = &request;
-  cmData.processImagePtr = processImage;
   cmData.received = received;
   cmData.transmit = transmit;
   cmData.commandOnPtr = &commandOn;
   cmData.ack = ack;
   cmData.displayPtr = &display;  
   
-
-
   //3.13 pirateDetection
   pdData.pirateDetectedPtr = &pirateDetected;
   pdData.pirateDistancePtr = &pirateDistance;
