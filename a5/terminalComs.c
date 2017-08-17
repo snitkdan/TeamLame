@@ -35,8 +35,10 @@ int terminalComs(char mode, char *output) {
         }		 
         fd0 = open("/dev/pts/2", O_WRONLY);
 	    dprintf(fd0, "\e[?25l"); // hides cursor
-        dprintf(fd0, "\033[2J");
-        dprintf(fd0, "\033[1;1H");		
+        dprintf(fd0, WHT_BG);
+		dprintf(fd0, "\e[H\e[2J");		
+        //dprintf(fd0, "\033[2J");
+        dprintf(fd0, "\033[1;1H");
 	firstTime++;
 	}
 
@@ -65,7 +67,8 @@ int terminalComs(char mode, char *output) {
 void clearTerminal(int fd0, char c){
 	static char prev;
 	if (prev != c && (c == 'z' || c == 'x')) {
-        dprintf(fd0, "\033[2J");
+        dprintf(fd0, WHT_BG);		
+		dprintf(fd0, "\e[H\e[2J");		
         dprintf(fd0, "\033[1;1H");
 	    prev = c;
 	}

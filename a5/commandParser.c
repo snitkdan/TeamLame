@@ -26,8 +26,6 @@
 #define WHEN_YOURE_READY
 
 // CommandParser specific globals
-//extern char ack[3];
-//extern bool display;
 extern TaskQueue queue;
 extern void sigHandler(int sig);
 extern TCB powerSubsystemTCB;
@@ -109,6 +107,7 @@ void commandParser(void *cmdStruct) {
         ack[0] = AddMeasureTasks() ? OK : ERR;
         ack[2] = START;
         *transmit = SHOW_EMPTY;
+		
         break;
       case STOP:
         // Pause Command!
