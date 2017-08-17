@@ -82,7 +82,7 @@ void main(void) {
 	  // Scheduling Transport Distance and Image Capture
     if (snapshot) {
       if(!ContainsTCB(queue, &transportDistanceTCB))  {
-		    printf("Calculating transport distance...\n");
+		    printf("\nCalculating "CYN"transport distance...\n"RST);
             AppendTCB(queue, &transportDistanceTCB);
       }
     } else {

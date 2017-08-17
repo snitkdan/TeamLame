@@ -87,13 +87,13 @@ void transportDistance(void *transportStruct) {
 
 	//char bit0;
 	unsigned int bit0, bit1, bit2, bit3, bit4, bit5, bit6;
-	//system("echo 1 > /sys/class/gpio/gpio69/value");
-	fprintf(gpioReset, "%d", 1); fflush(gpioReset);	
-	fprintf(gpioReset, "%d", 0); fflush(gpioReset);
+	system("echo 1 > /sys/class/gpio/gpio69/value");
+	//fprintf(gpioReset, "%d", 1); fflush(gpioReset);	
+	//fprintf(gpioReset, "%d", 0); fflush(gpioReset);
 	
 	//fflush(gpioReset);	
 	//sleep(1);
-	//system("echo 0 > /sys/class/gpio/gpio69/value");
+	system("echo 0 > /sys/class/gpio/gpio69/value");
 	//fflush(gpioReset);
 	//fscanf(gpio0, "%d", &bit0);
 	//printf("START BIT 0 : %d\n", bit0);	
@@ -154,7 +154,7 @@ void transportDistance(void *transportStruct) {
 	gpioBinary = gpioBinary | (bit5 << 5);
 	gpioBinary = gpioBinary | (bit6 << 6);
 
-       
+    /*   
 	printf("%d ", bit6);
 	printf("%d ", bit5);
 	printf("%d ", bit4);
@@ -162,9 +162,9 @@ void transportDistance(void *transportStruct) {
 	printf("%d ", bit2);
 	printf("%d ", bit1);
 	printf("%d\n", bit0);
-        
+    */    
 	
-	printf ("HardwareCounter:  %d\n\n\n", gpioBinary);
+	//printf ("HardwareCounter:  %d\n\n\n", gpioBinary);
 	double time = MICROSEC / DELAY;
 	unsigned int frequency = gpioBinary * time;
 	//printf("frequency = %d\n", frequency);
@@ -216,7 +216,7 @@ void transportDistance(void *transportStruct) {
         //#ifdef DEBUG
         //#endif
 	}
-	printf("Distance Buff%d *distance: %d\n\n", currIndex, *distance);
+	printf(MAG"Latest distance measurement:"RST" %d\n", *distance);
 
 	#ifdef DEBUG
 	fclose(fp0);
