@@ -74,16 +74,17 @@ void solarPanelControl(void *solarStruct) {
 		if(endOfTravel) {
 			setPWMProperty(PWM_PIN, "run", ON, HNUM);
 			endOfTravel = false;
+		} else {
 			*solarPanelDeploy = !(*solarPanelDeploy);
 			*solarPanelRetract = !(*solarPanelRetract);
 		}
 		//if need speed to increase then duty (run time ) should decrease
 		if(*motorInc == 1) {
-			duty += ((5 * duty) / 100);
+			duty += ((25 * duty) / 100);
 			duty = (duty > PERIOD) ? PERIOD : duty;
 		} else if (*motorDec == 1) {
 			//if need speed to decrease then duty (run time ) should increase
-			duty -= ((5*duty) / 100);
+			duty -= ((25 * duty) / 100);
 			duty = (duty < 0) ? 0 : duty;
 		}
 	}

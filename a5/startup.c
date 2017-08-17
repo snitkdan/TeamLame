@@ -117,8 +117,8 @@ TaskQueue queue;
 unsigned long GLOBALCOUNTER;
 
 void Initialize(void) {
-  // sets terminal to default black background, white text	
-  printf("\x1B[40m""\e[H\e[2J""\x1B[0m"); 
+  // sets terminal to default black background, white text
+  printf("\x1B[40m""\e[H\e[2J""\x1B[0m");
 
   // 1. Assign initial values to shared variables
   thrusterCommand = 0;
@@ -135,7 +135,7 @@ void Initialize(void) {
   fuelLow = false;
   batteryLow = false;
   solarPanelDeploy = false;
-  solarPanelRetract = false;
+  solarPanelRetract = true;
   motorInc = false;
   motorDec = false;
   batteryOverTemp = false;
@@ -198,8 +198,8 @@ void Initialize(void) {
   vData.responsePtr = &response;
   vData.requestPtr = &request; //address needed for strings and chars?
   vData.processImagePtr = processImage;
-  
-  
+
+
   // 3.5: thrusterSubsystem
   tData.thrusterCommandPtr = &thrusterCommand;
   tData.fuelLvlPtr = &fuelLvl;
@@ -224,8 +224,8 @@ void Initialize(void) {
   sData.commandOnPtr = &commandOn;
   sData.pirateDistancePtr = &pirateDistance;
   sData.ack = ack;
-  sData.displayPtr = &display;  
-  
+  sData.displayPtr = &display;
+
 
   // 3.7: consoleDisplay
   cData.fuelLowPtr = &fuelLow;
@@ -263,8 +263,8 @@ void Initialize(void) {
   cmData.transmit = transmit;
   cmData.commandOnPtr = &commandOn;
   cmData.ack = ack;
-  cmData.displayPtr = &display;  
-  
+  cmData.displayPtr = &display;
+
   //3.13 pirateDetection
   pdData.pirateDetectedPtr = &pirateDetected;
   pdData.pirateDistancePtr = &pirateDistance;
