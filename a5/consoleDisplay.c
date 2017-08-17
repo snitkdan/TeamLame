@@ -105,15 +105,15 @@ void sendToPrint(char mode, void *consoleStruct) {
 	if (state == STATE_SAT) {
 
 	sprintf(output, WHT_BG BLK BOLD"Satellite Status\n"RST
-			  WHT_BG BLK"Solar Panels:      %9s\n"
-					"Battery Level:     %2u\n"
-					"Fuel Level:        %3hu\n"
-					"Power Consumption: %2hu\n"
-					"Power Generation:  %2hu\n"
-					"Vehicle Distance:  %4d\n"
-					"Battery Temp 1:    %2d\n"
-					"Battery Temp 2:    %2d\n"
-					"Pirate Proximity:  %3hu\n",
+			  WHT_BG BLK"Solar Panels:      %s     \n"
+					"Battery Level:     %u     \n"
+					"Fuel Level:        %hu    \n"
+					"Power Consumption: %hu    \n"
+					"Power Generation:  %hu    \n"
+					"Vehicle Distance:  %d     \n"
+					"Battery Temp 1:    %d     \n"
+					"Battery Temp 2:    %d     \n"
+					"Pirate Proximity:  %hu    \n",
 					 solarPanelString, *batteryLvl, *fuelLvl, *pConsume, *pGenerate,
 					 *distance, *batteryTmp1, *batteryTmp2, *pirateDistance);
 	} else if (state == STATE_ANN) {

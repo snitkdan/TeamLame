@@ -117,6 +117,8 @@ TaskQueue queue;
 unsigned long GLOBALCOUNTER;
 
 void Initialize(void) {
+  printf("\x1B[40m""\e[H\e[2J""\x1B[0m");
+
   // 1. Assign initial values to shared variables
   thrusterCommand = 0;
   batteryLvl = &batteryBuff[0];

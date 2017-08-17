@@ -36,6 +36,7 @@ int fd = 0;
 
 extern bool warningBattTemp;
 extern bool getFrequencies;
+extern bool everythingsMELTING;
 
 void satelliteComs(void *satStruct) {
 	/*
@@ -55,7 +56,6 @@ void satelliteComs(void *satStruct) {
     unsigned int *batteryLvl = sData->batteryLvlPtr;
     unsigned short *fuelLvl = sData->fuelLvlPtr;
     unsigned short *pConsume = sData->pConsumePtr;
-    unsigned short *pGenerate = sData->pGeneratePtr;
     unsigned int *thrusterCommand = sData->thrusterCommandPtr;
     char *command = sData->commandPtr;
     char *response = sData->responsePtr;
@@ -149,9 +149,24 @@ void satelliteComs(void *satStruct) {
 				 battString, fuelString, tempString);
 				 
 	if (*transmit == 'Q') {
-		dprintf(fd1, YEL"Measurements are currently inactive. Press %c to activate\n"RST, START);
+		dprintf(fd1, YEL"Measurements are currently inactive. Press %c to activate.\n"RST, START);
 		return;
 	}
+	
+	if (everythingsMELTING) {
+	    static int flash = 0;
+		if (flash == 1) {
+		    printf(RED_BG"\e[H\e[2J");
+		} else {
+			printf(YEL_BG"\e[H\e[2J");
+		}
+	    printf(BLK"Lmao whatever dude. The satellite's melting now. Feel free to press 'a'.\n"RST);		
+		flash = 1 - flash;
+	} else if (warningBattTemp) {
+		printf(YEL_BG"\e[H\e[2J");
+		printf(BLK"Battery overheating! Press 'a' to acknowledge!\n"RST);
+	}
+	
 	if (strstr(ack, "A") || strstr(ack, "E")) {
 		dprintf(fd1, BOLD"\nReceived from Parser: %s\nNow displaying....:\n"RST, ack);
 	}	
@@ -199,7 +214,6 @@ void satelliteComs(void *satStruct) {
 		        dprintf(fd1, YEL"No image captured\n"RST);
 				
 			} else {
-			
 				dprintf(fd1, "Image Frequencies:\n");		
 				for (i = 0; i < 16; i++) {
 					dprintf(fd1, "%5hu ", processImage[i]);
