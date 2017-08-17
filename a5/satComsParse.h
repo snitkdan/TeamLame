@@ -48,5 +48,6 @@
 #define SHOW_IMAG 'I'
 #define SHOW_PIRATE 'P'
 #define SHOW_EMPTY '\0'
+#define NO_MEASURE 'Q';
 
 #endif
