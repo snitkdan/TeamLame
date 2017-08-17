@@ -61,7 +61,7 @@ unsigned int pirateDistance;
 
 //Command Parser
 char received[20] = {'\0'};
-char transmit[20] = {'\0'};
+char transmit[20] = {'Q'};
 bool commandOn;
 char ack[20] = {'\0'};
 bool display;

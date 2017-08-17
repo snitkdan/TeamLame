@@ -19,6 +19,7 @@
 #include "fft.h"
 #define ACH "AIN3"
 #define BUF_SIZE 16
+
 extern signed int presentationBuffer[16];
 
 void imageCapture(void *imageStruct) {
@@ -37,7 +38,8 @@ void imageCapture(void *imageStruct) {
     #ifndef DEBUG
 	int i;
 	int j;
-	printf("Running Image Capture...\n");
+	printf(BLU_BG BOLD"Running Image Capture...\n"RST);
+	fputs("\e[?25l", stdout); // hides cursor	
     char adc_val_path[50];
     //sprintf(adc_val_path, "%s/%s%i/%s", "/sys/devices", "ocp.3/helper.", 15, "AIN3");
     FILE *adc_val = fopen("/sys/devices/ocp.3/helper.15/AIN3", "r");
@@ -70,13 +72,15 @@ void imageCapture(void *imageStruct) {
 			}
 		}
 
-        printf("m_index = %d\n", m_index);
 		// Bin Wang's Algorithm
 		double fs = 950;
 		double N = 256;
 		double f;
 		f = fs * m_index / N;
 		presentationBuffer[currIndex] = f;
+		
+        printf("\rFrequencies Capture = %d / 16", j + 1); fflush(stdout);
+		
 		#endif
 		
 		//printf("presentationBuffer[%d] = %d processImage = %d\n", currIndex, presentationBuffer[currIndex], *processImage);
@@ -87,7 +91,8 @@ void imageCapture(void *imageStruct) {
 
 	// send W back
     processImage = presentationBuffer;	
-	printf("W\n");
+	printf("\nW\n");
+    fputs("\e[?25h", stdout);	
 	
     return;
 }

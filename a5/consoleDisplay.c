@@ -40,16 +40,6 @@ extern bool warningBattTemp;
 void sendToPrint(char mode, void *consoleStruct);
 static int state;
 
-#define RED   "\x1B[31m"
-#define GRN   "\x1B[32m"
-#define YEL   "\x1B[33m"
-#define BLU   "\x1B[34m"
-#define MAG   "\x1B[35m"
-#define CYN   "\x1B[36m"
-#define WHT   "\x1B[37m"
-#define RST "\x1B[0m"
-
-
 void consoleDisplay(void *consoleStruct) {
     int flags = fcntl(STDIN_FILENO, F_GETFL, 0);
 	fcntl(STDIN_FILENO, F_SETFL, flags | O_NONBLOCK);
@@ -113,9 +103,9 @@ void sendToPrint(char mode, void *consoleStruct) {
 					 *distance, *batteryTmp1, *batteryTmp2, *pirateDistance);
 	} else if (state == STATE_ANN) {
 		sprintf(output, "Annunciaton\n"
-						"Battery Low:         %3s\n"
-						"Fuel Low:            %3s\n"
-						"Battery Temperature: %4s\n",
+						"Battery Low:         %3s    \n"
+						"Fuel Low:            %3s    \n"
+						"Battery Temperature: %4s    \n",
 						 battString, fuelString, tempString);		
 	} else {
 		sprintf(output, "Press %c for Satellite Status\n"

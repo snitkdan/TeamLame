@@ -32,27 +32,10 @@
 
 #define DEBUG
 int fd = 0;
-#define RED   "\x1B[31m"
-#define GRN   "\x1B[32m"
-#define YEL   "\x1B[33m"
-#define BLU   "\x1B[34m"
-#define MAG   "\x1B[35m"
-#define CYN   "\x1B[36m"
-#define WHT   "\x1B[37m"
-#define BOLD  "\x1B[1m"
-#define ULINE "\x1B[4m"
-#define RST   "\x1B[0m"
 
-#define BLK_BG  "\x1B[40m"
-#define RED_BG  "\x1B[41m"
-#define GRN_BG  "\x1B[42m"
-#define YEL_BG  "\x1B[43m"
-#define BLU_BG  "\x1B[44m"
-#define MAG_BG  "\x1B[45m"
-#define CYN_BG  "\x1B[46m"
-#define WHT_BG  "\x1B[47m"
 
 extern bool warningBattTemp;
+extern bool getFrequencies;
 
 void satelliteComs(void *satStruct) {
 	/*
@@ -160,39 +143,45 @@ void satelliteComs(void *satStruct) {
 				 tm.tm_min, 
 				 tm.tm_sec);
     dprintf(fd1, "Operator:          Xxpu$$y$layer69xX"RST"\n\n");	
-    dprintf(fd1, "Battery Low:       %3s\n"
-	             "Fuel Low:          %3s\n"
-    	         "Battery Over Temp: %4s\n", 
+    dprintf(fd1, "Battery Low:       %3s     \n"
+	             "Fuel Low:          %3s     \n"
+    	         "Battery Over Temp: %4s     \n", 
 				 battString, fuelString, tempString);
+				 
+	if (*transmit == 'Q') {
+		dprintf(fd1, YEL"Measurements are currently inactive. Press %c to activate\n"RST, START);
+		return;
+	}
 	if (strstr(ack, "A") || strstr(ack, "E")) {
 		dprintf(fd1, BOLD"\nReceived from Parser: %s\nNow displaying....:\n"RST, ack);
 	}	
-    int i;				 
+    int i;
+    	
 	switch(*transmit) {	
 		case SHOW_FUEL:
 		    if (*fuelLvl > 50) {
-			    dprintf(fd1, "Fuel Level: "GRN"%3hu\n"RST, *fuelLvl);
+			    dprintf(fd1, "Fuel Level: "GRN"%3hu      \n"RST, *fuelLvl);
 			} else if (*fuelLvl < 10) {
-			    dprintf(fd1, "Fuel Level: "RED"%3hu\n"RST, *fuelLvl);				
+			    dprintf(fd1, "Fuel Level: "RED"%3hu      \n"RST, *fuelLvl);				
 			} else {
-			    dprintf(fd1, "Fuel Level: "YEL"%3hu\n"RST, *fuelLvl);
+			    dprintf(fd1, "Fuel Level: "YEL"%3hu      \n"RST, *fuelLvl);
 			}
 			break;
 		case SHOW_BATT:
 		    if (*batteryLvl > 18) {
-			    dprintf(fd1, "Battery Level: "GRN"%3hu\n"RST, *batteryLvl);
+			    dprintf(fd1, "Battery Level: "GRN"%3hu     \n"RST, *batteryLvl);
 			} else if (*batteryLvl < 4) {
-			    dprintf(fd1, "Battery Level: "RED"%3hu\n"RST, *batteryLvl);				
+			    dprintf(fd1, "Battery Level: "RED"%3hu     \n"RST, *batteryLvl);				
 			} else {
-			    dprintf(fd1, "Battery Level: "YEL"%3hu\n"RST, *batteryLvl);
+			    dprintf(fd1, "Battery Level: "YEL"%3hu     \n"RST, *batteryLvl);
 			}		
 			break;
         case SHOW_PCON:
-		    dprintf(fd1, "Power Consumed: %2hu\n", *pConsume);
+		    dprintf(fd1, "Power Consumed: %2hu  \n", *pConsume);
             break;
 		case SHOW_TEMP:		
-		    dprintf(fd1, "Battery Temp 1: %2d\n"
-			             "Battery Temp 2: %2d\n", 
+		    dprintf(fd1, "Battery Temp 1: %2d    \n"
+			             "Battery Temp 2: %2d    \n", 
 						 *batteryTmp1, *batteryTmp2);
 			break;					
 		case SHOW_PANEL:
@@ -206,11 +195,17 @@ void satelliteComs(void *satStruct) {
 			}
 			break;			
 		case SHOW_IMAG:
-  		        dprintf(fd1, "Image Frequencies:\n");		
-		    for (i = 0; i < 16; i++) {
-  		        dprintf(fd1, "%5hu ", processImage[i]);
-                if ((i+1) % 4 == 0) {
-	  		        dprintf(fd1, "\n");
+		    if (!getFrequencies) {
+		        dprintf(fd1, YEL"No image captured\n"RST);
+				
+			} else {
+			
+				dprintf(fd1, "Image Frequencies:\n");		
+				for (i = 0; i < 16; i++) {
+					dprintf(fd1, "%5hu ", processImage[i]);
+					if ((i+1) % 4 == 0) {
+						dprintf(fd1, "\n");
+					}
 				}
 			}
 			break;			

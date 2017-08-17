@@ -26,9 +26,10 @@ char buf[MAX_BUF];
 extern TaskQueue queue;
 extern TCB imageCaptureTCB;
 
-
 void satelliteEnd(int pipeCom, rw coms, char *cmd);
 void vehicleEnd(int pipeCom);
+
+bool getFrequencies;
 
 void vehicleComms(void *vehicleStruct) {
     int pipeCom;
@@ -85,14 +86,13 @@ void vehicleComms(void *vehicleStruct) {
 	    if (!ContainsTCB(queue, &imageCaptureTCB)) {
 			AppendTCB(queue, &imageCaptureTCB);
 		}
+		getFrequencies = false;
 	} else if (*command == SEND_IMAGE) {
 		// get buffer pointer and print 
-		int i;
 		printf("P\n");
-		
-		for (i = 0; i < 16; i++) {
-			printf("processImage[%d] = %d\n", i, processImage[i]); 
-		}
+		getFrequencies = true;
+
+
 	} else {
 	    if (ContainsTCB(queue, &imageCaptureTCB)) {
 			RemoveTCB(queue, &imageCaptureTCB);

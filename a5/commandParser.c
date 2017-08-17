@@ -78,6 +78,7 @@ void commandParser(void *cmdStruct) {
   bool *commandOn = cData->commandOnPtr;
   char *ack = cData->ack;
   bool *display = cData->displayPtr;
+
   // 2. Parse the input
   char cmd = toupper(received[0]);  // e.g. 'M', 'T', 'D', etc.
   char *payload = &received[1];  // e.g. '12345', 'F' (for fuel level), etc
@@ -113,7 +114,7 @@ void commandParser(void *cmdStruct) {
         // Pause Command!
         ack[0] = RemoveMeasureTasks() ? OK : ERR;
         ack[2] = STOP;
-        *transmit = SHOW_EMPTY;
+        *transmit = NO_MEASURE;
         break;
       case DISPLAY:
         // Display Command
