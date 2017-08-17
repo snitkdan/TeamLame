@@ -85,7 +85,7 @@ void commandParser(void *cmdStruct) {
 	ack[1] = ' ';
   ack[3] = '\0';
 	#ifdef WHEN_YOURE_READY
-	switch(cmd)
+	switch(cmd) {
       case THRUSTER:
         // Thruster Command!
         if (isValidPayload(cmd, payload)) {
