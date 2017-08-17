@@ -74,6 +74,8 @@ void solarPanelControl(void *solarStruct) {
 		if(endOfTravel) {
 			setPWMProperty(PWM_PIN, "run", ON, HNUM);
 			endOfTravel = false;
+			*solarPanelDeploy = !(*solarPanelDeploy);
+			*solarPanelRetract = !(*solarPanelRetract);
 		}
 		//if need speed to increase then duty (run time ) should decrease
 		if(*motorInc == 1) {
