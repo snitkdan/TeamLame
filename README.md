@@ -4,10 +4,10 @@ This repository hosts the project files for CSE/EE 474: Embedded Systems @ the U
 ## Project write-ups
 See below for the write-ups detailing the implemented components of each project: 
 
-* [report1.pdf](Project 1: Getting Started w/ C + Beagleboard)
-* [report2.pdf](Project 2: Overall Control Flow)
-* [report3.pdf](Project 3: Adding peripherals and Comms)
-* [report4.pdf](Project 4/5: Battery, Image, Docking, Pirate Detection, and More)
+* (report1.pdf)[Project 1: Getting Started w/ C + Beagleboard]
+* (report2.pdf)[Project 2: Overall Control Flow]
+* (report3.pdf)[Project 3: Adding peripherals and Comms]
+* (report4.pdf)[Project 4/5: Battery, Image, Docking, Pirate Detection, and More]
 
 # Team Members
 Daniel Snitkovskiy | Abdul Katani | Radleigh Ang
